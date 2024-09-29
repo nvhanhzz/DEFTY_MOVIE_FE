@@ -1,13 +1,13 @@
-import { useAppSelector } from '../../shared/hooks/useAppSelector';
-import { useAppDispatch } from '../../shared/hooks/useAppDispatch';
+import { useAdminDispatch } from './useAdminDispatch';
+import { useAdminSelector } from './useAdminSelector';
 import { useEffect } from 'react';
 import { getCurrentAdmin } from '../services/authService';
-import { setCurrentUser } from '../../shared/redux/actions/currentUser';
+import { setCurrentAccount } from '../redux/actions/account';
 import { getCookie } from '../../shared/utils/cookies';
 
 export const useAuth = () => {
-    const dispatch = useAppDispatch();
-    const currentUser = useAppSelector((state) => state.currentUser);
+    const dispatch = useAdminDispatch();
+    const currentUser = useAdminSelector((state) => state.currentAccount);
 
     useEffect(() => {
         const checkLoggedIn = async () => {
@@ -18,16 +18,16 @@ export const useAuth = () => {
 
             const response = await getCurrentAdmin(token);
             if (response.status !== 200) {
-                dispatch(setCurrentUser(null));
+                dispatch(setCurrentAccount(null));
                 return;
             }
 
             const result = await response.json();
             if (result.status !== 200) {
-                dispatch(setCurrentUser(null));
+                dispatch(setCurrentAccount(null));
                 return;
             }
-            dispatch(setCurrentUser(result.data));
+            dispatch(setCurrentAccount(result.data));
         }
 
         checkLoggedIn();

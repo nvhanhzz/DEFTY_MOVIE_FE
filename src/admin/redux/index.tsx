@@ -1,12 +1,15 @@
 import { combineReducers, createStore } from 'redux';
-import CurrentUserReducer, { currentUserState } from '../../shared/redux/reducers/currentUser';
+import accountReducer, { accountState } from './reducers/account';
+import alertReducer, { AlertState } from './reducers/alert';
 
 export interface AdminRootState {
-    currentUser: currentUserState;
+    currentAccount: accountState;
+    alert: AlertState
 }
 
 const rootReducer = combineReducers({
-    currentUser: CurrentUserReducer,
+    currentAccount: accountReducer,
+    alert: alertReducer
 });
 
 const adminStore = createStore(rootReducer);
