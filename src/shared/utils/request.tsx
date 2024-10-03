@@ -1,13 +1,16 @@
 const DOMAIN: string = import.meta.env.VITE_DOMAIN as string;
 const PREFIX_API: string = import.meta.env.VITE_PREFIX_API as string;
 
-export const get = async (path: string, token: string): Promise<Response> => {
+export const get = async (path: string, token?: string): Promise<Response> => {
     try {
+        const headers: Record<string, string> = {};
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const response = await fetch(DOMAIN + PREFIX_API + path, {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
+            headers,
         });
         return response;
     } catch (error) {
@@ -16,14 +19,18 @@ export const get = async (path: string, token: string): Promise<Response> => {
     }
 };
 
-export const postJson = async (path: string, data: Record<string, any>, token: string): Promise<Response> => {
+export const postJson = async (path: string, data: Record<string, any>, token?: string): Promise<Response> => {
     try {
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const response = await fetch(DOMAIN + PREFIX_API + path, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
+            headers,
             body: JSON.stringify(data),
         });
         return response;
@@ -33,7 +40,7 @@ export const postJson = async (path: string, data: Record<string, any>, token: s
     }
 };
 
-export const postFormData = async (path: string, data: Record<string, any>, token: string): Promise<Response> => {
+export const postFormData = async (path: string, data: Record<string, any>, token?: string): Promise<Response> => {
     const formData = new FormData();
     for (const key in data) {
         if (data.hasOwnProperty(key)) {
@@ -42,11 +49,14 @@ export const postFormData = async (path: string, data: Record<string, any>, toke
     }
 
     try {
+        const headers: Record<string, string> = {};
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const response = await fetch(DOMAIN + PREFIX_API + path, {
             method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
+            headers,
             body: formData,
         });
         return response;
@@ -56,14 +66,18 @@ export const postFormData = async (path: string, data: Record<string, any>, toke
     }
 };
 
-export const patchJson = async (path: string, data: Record<string, any>, token: string): Promise<Response> => {
+export const patchJson = async (path: string, data: Record<string, any>, token?: string): Promise<Response> => {
     try {
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const response = await fetch(DOMAIN + PREFIX_API + path, {
             method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
+            headers,
             body: JSON.stringify(data),
         });
         return response;
@@ -73,7 +87,7 @@ export const patchJson = async (path: string, data: Record<string, any>, token: 
     }
 };
 
-export const patchFormData = async (path: string, data: Record<string, any>, token: string): Promise<Response> => {
+export const patchFormData = async (path: string, data: Record<string, any>, token?: string): Promise<Response> => {
     const formData = new FormData();
     for (const key in data) {
         if (data.hasOwnProperty(key)) {
@@ -82,11 +96,14 @@ export const patchFormData = async (path: string, data: Record<string, any>, tok
     }
 
     try {
+        const headers: Record<string, string> = {};
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const response = await fetch(DOMAIN + PREFIX_API + path, {
             method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
+            headers,
             body: formData,
         });
         return response;
@@ -96,13 +113,16 @@ export const patchFormData = async (path: string, data: Record<string, any>, tok
     }
 };
 
-export const del = async (path: string, token: string): Promise<Response> => {
+export const del = async (path: string, token?: string): Promise<Response> => {
     try {
+        const headers: Record<string, string> = {};
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const response = await fetch(DOMAIN + PREFIX_API + path, {
             method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
+            headers,
         });
         return response;
     } catch (error) {

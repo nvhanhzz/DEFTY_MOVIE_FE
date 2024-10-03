@@ -1,0 +1,17 @@
+{
+    "login": {
+        "title": "Defty Admin Portal",
+        "buttonName": "Login",
+        "usernamePlaceholder": "Username",
+        "passwordPlaceholder": "Password",
+        "usernameRequired": "Please input your Username!",
+        "passwordRequired": "Please input your Password!",
+        "errorTitle": "Failure",
+        "errorMessage": "Login failed",
+        "successTitle": "Success",
+        "successMessage": "Login success"
+    },
+    "dashboard": {
+        "title": "Dashboard page"
+    }
+}

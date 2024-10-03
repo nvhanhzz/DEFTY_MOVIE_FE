@@ -4,26 +4,35 @@ import './LoginPage.scss';
 import { useAdminDispatch } from '../../hooks/useAdminDispatch';
 import { setCurrentAccount } from '../../redux/actions/account';
 import { addAlert } from '../../redux/actions/alert';
+import { postLogin } from '../../services/authService';
+import { setCookie } from '../../../shared/utils/cookies';
+import { setCurrentAccountHelper } from '../../helpers/Account';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 
 const Login: React.FC = () => {
+    const { t } = useTranslation();
     const dispatch = useAdminDispatch();
 
-    const onFinish = (values: { username: string; password: string }) => {
-        if (values.username === 'admin' && values.password === '123') {
-            dispatch(setCurrentAccount({
-                _id: '1',
-                avatar: '1',
-                email: '1',
-                fullName: '1',
-                phone: '1',
-                userName: '1'
-            }));
-            dispatch(addAlert("success", "success", 5));
-        } else {
-            console.log("123");
-            dispatch(addAlert("fail", "fail", 5));
+    const onFinish = async (values: { username: string; password: string }): Promise<void> => {
+        const response = await postLogin(values);
+
+        const result = await response.json();
+        if (!response.ok || result.status !== 200) {
+            dispatch(addAlert(t('login.errorTitle'), t('login.errorMessage'), 5));
+            return;
+        }
+
+        const data = result.data;
+        setCookie('admin_token', data.token, 60 * 60);
+        try {
+            const account = await setCurrentAccountHelper();
+            dispatch(setCurrentAccount(account));
+            dispatch(addAlert(t('login.successTitle'), t('login.successMessage'), 5));
+        } catch (error) {
+            console.error("Error checking logged in status:", error);
+            dispatch(setCurrentAccount(null));
         }
     };
 
@@ -35,7 +44,7 @@ const Login: React.FC = () => {
         <div className="login-page">
             <div className="login-container">
                 <Title level={2} className="login-title">
-                    Defty Admin Portal
+                    {t('login.title')}
                 </Title>
                 <Form
                     name="login"
@@ -46,21 +55,21 @@ const Login: React.FC = () => {
                 >
                     <Form.Item
                         name="username"
-                        rules={[{ required: true, message: 'Please input your Username!' }]}
+                        rules={[{ required: true, message: t('login.usernameRequired') }]}
                     >
-                        <Input placeholder="Username" />
+                        <Input placeholder={t('login.usernamePlaceholder')} />
                     </Form.Item>
 
                     <Form.Item
                         name="password"
-                        rules={[{ required: true, message: 'Please input your Password!' }]}
+                        rules={[{ required: true, message: t('login.passwordRequired') }]}
                     >
-                        <Input.Password placeholder="Password" />
+                        <Input.Password placeholder={t('login.passwordPlaceholder')} />
                     </Form.Item>
 
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className="login-form-button">
-                            Log in
+                            {t('login.buttonName')}
                         </Button>
                     </Form.Item>
                 </Form>

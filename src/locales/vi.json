@@ -1,0 +1,17 @@
+{
+    "login": {
+        "title": "Trang quản trị Defty",
+        "buttonName": "Đăng nhập",
+        "usernamePlaceholder": "Tên đăng nhập",
+        "passwordPlaceholder": "Mật khẩu",
+        "usernameRequired": "Vui lòng nhập tên đăng nhập của bạn!",
+        "passwordRequired": "Vui lòng nhập mật khẩu của bạn!",
+        "errorTitle": "Thất bại",
+        "errorMessage": "Đăng nhập thất bại",
+        "successTitle": "Thành công",
+        "successMessage": "Đăng nhập thành công"
+    },
+    "dashboard": {
+        "title": "Trang tổng quan"
+    }
+}

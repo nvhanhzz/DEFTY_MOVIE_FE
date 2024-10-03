@@ -1,12 +1,14 @@
 export const SET_CURRENT_ACCOUNT = 'SET_CURRENT_ACCOUNT';
 
 export interface Account {
-    _id: string,
+    id: string,
     avatar: string,
     fullName: string,
-    userName: string,
+    username: string,
     email: string,
-    phone: string
+    phone: string,
+    status: string,
+    roleId: string
 }
 
 export const setCurrentAccount = (account: Account | null) => ({

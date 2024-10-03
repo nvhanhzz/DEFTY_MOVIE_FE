@@ -1,6 +1,15 @@
-function Dashboard() {
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../../../shared/components/LanguageSwitcher';
+
+const Dashboard: React.FC = () => {
+    const { t } = useTranslation();
+
     return (
-        <h1>Dashboard page</h1>
+        <>
+            <LanguageSwitcher />
+            <h1>{t('dashboard.title')}</h1>
+        </>
     );
 }
 
