@@ -1,17 +1,104 @@
 {
-    "login": {
-        "title": "Trang quản trị Defty",
-        "buttonName": "Đăng nhập",
-        "usernamePlaceholder": "Tên đăng nhập",
-        "passwordPlaceholder": "Mật khẩu",
-        "usernameRequired": "Vui lòng nhập tên đăng nhập của bạn!",
-        "passwordRequired": "Vui lòng nhập mật khẩu của bạn!",
-        "errorTitle": "Thất bại",
-        "errorMessage": "Đăng nhập thất bại",
-        "successTitle": "Thành công",
-        "successMessage": "Đăng nhập thành công"
+    "admin": {
+        "login": {
+            "title": "Trang quản trị Defty",
+            "buttonName": "Đăng nhập",
+            "usernamePlaceholder": "Tên đăng nhập",
+            "passwordPlaceholder": "Mật khẩu",
+            "usernameRequired": "Vui lòng nhập tên đăng nhập của bạn!",
+            "passwordRequired": "Vui lòng nhập mật khẩu của bạn!",
+            "errorTitle": "Thất bại",
+            "errorMessage": "Đăng nhập thất bại",
+            "successTitle": "Thành công",
+            "successMessage": "Đăng nhập thành công"
+        },
+        "dashboard": {
+            "title": "Tổng quan"
+        },
+        "role": {
+            "title": "Nhóm quyền",
+            "createNewRoleButton": "Tạo nhóm quyền mới",
+            "deleteSelectedButton": "Xóa các nhóm quyền đã chọn",
+            "updateButton": "Cập nhật",
+            "deleteButton": "Xóa",
+            "deleteConfirmMessage": "Bạn có chắc muốn xóa nhóm quyền này không?",
+            "deleteSuccessMessage": "Nhóm quyền đã được xóa thành công",
+            "deleteSelectedSuccessMessage": "Các nhóm quyền đã được xóa thành công",
+            "roleColumn": "Nhóm quyền",
+            "descriptionColumn": "Mô tả",
+            "actionColumn": "Hành động",
+            "searchPlaceholder": "Tìm kiếm theo {{column}}",
+            "searchButton": "Tìm kiếm",
+            "resetButton": "Đặt lại",
+            "filterButton": "Lọc",
+            "closeButton": "Đóng",
+            "create": {
+                "title": "Tạo nhóm quyền mới",
+                "createRoleButton": "Tạo nhóm quyền",
+                "createRoleSuccessMessage": "Nhóm quyền đã được tạo thành công!",
+                "createRoleErrorMessage": "Tạo nhóm quyền thất bại",
+                "roleName": "Tên nhóm quyền",
+                "description": "Mô tả",
+                "messageRequire": "Vui lòng không nhập thiếu trường này",
+                "permissionsLabel": "Quyền"
+            },
+            "update": {
+                "title": "Cập nhật nhóm quyền",
+                "roleName": "Tên nhóm quyền",
+                "description": "Mô tả",
+                "permissionsLabel": "Quyền",
+                "updateRoleButton": "Cập nhật nhóm quyền",
+                "updateRoleSuccessMessage": "Cập nhật nhóm quyền thành công!",
+                "updateRoleErrorMessage": "Cập nhật nhóm quyền thất bại",
+                "messageRequire": "Vui lòng điền thông tin vào trường này",
+                "loadingMessage": "Đang tải dữ liệu nhóm quyền..."
+            }
+        },
+        "permission": {
+            "title": "Quyền",
+            "createNewPermissionButton": "Tạo quyền mới",
+            "deleteSelectedButton": "Xóa quyền đã chọn",
+            "updateButton": "Cập nhật",
+            "deleteButton": "Xóa",
+            "deleteConfirmMessage": "Bạn có chắc chắn muốn xóa quyền này?",
+            "deleteSuccessMessage": "Xóa quyền thành công",
+            "deleteSelectedSuccessMessage": "Xóa các quyền đã chọn thành công",
+            "nameColumn": "Tên quyền",
+            "descriptionColumn": "Mô tả",
+            "actionColumn": "Hành động",
+            "searchButton": "Tìm kiếm",
+            "resetButton": "Đặt lại",
+            "filterButton": "Lọc",
+            "closeButton": "Đóng",
+            "searchPlaceholder": "Tìm kiếm {column}",
+            "updatePermissionSuccessMessage": "Cập nhật quyền thành công!",
+            "createPermissionSuccessMessage": "Tạo quyền mới thành công!",
+            "errorPermissionMessage": "Xử lý quyền thất bại",
+            "create": {
+                "title": "Tạo quyền mới",
+                "permissionName": "Tên quyền",
+                "description": "Mô tả",
+                "messageRequire": "Vui lòng nhập tên quyền!",
+                "createPermissionButton": "Tạo quyền",
+                "createPermissionSuccessMessage": "Tạo quyền thành công!"
+            },
+            "update": {
+                "title": "Cập nhật quyền",
+                "permissionName": "Tên quyền",
+                "description": "Mô tả",
+                "messageRequire": "Vui lòng nhập tên quyền!",
+                "updatePermissionButton": "Cập nhật quyền",
+                "updatePermissionSuccessMessage": "Cập nhật quyền thành công!"
+            }
+        },
+        "setting": {
+            "title": "Cài đặt",
+            "language": "Ngôn ngữ"
+        },
+        "header": {
+            "profile": "Thông tin cá nhân",
+            "logout": "Đăng xuất"
+        }
     },
-    "dashboard": {
-        "title": "Trang tổng quan"
-    }
+    "client": {}
 }

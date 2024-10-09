@@ -1,0 +1,11 @@
+.app-sider {
+    min-height: 100vh;
+    width: 300px;
+
+    .logo {
+        height: 32px;
+        margin: 16px;
+        background: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+    }
+}

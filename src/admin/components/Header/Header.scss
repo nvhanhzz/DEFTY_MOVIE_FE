@@ -1,0 +1,18 @@
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 64px;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .collapse-button {
+        font-size: 18px;
+    }
+
+    .avatar-button {
+        cursor: pointer;
+        margin-left: auto; // Đẩy avatar về phía cuối của header
+    }
+}

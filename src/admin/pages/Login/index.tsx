@@ -44,7 +44,7 @@ const Login: React.FC = () => {
         <div className="login-page">
             <div className="login-container">
                 <Title level={2} className="login-title">
-                    {t('login.title')}
+                    {t('admin.login.title')}
                 </Title>
                 <Form
                     name="login"
@@ -55,21 +55,21 @@ const Login: React.FC = () => {
                 >
                     <Form.Item
                         name="username"
-                        rules={[{ required: true, message: t('login.usernameRequired') }]}
+                        rules={[{ required: true, message: t('admin.login.usernameRequired') }]}
                     >
-                        <Input placeholder={t('login.usernamePlaceholder')} />
+                        <Input placeholder={t('admin.login.usernamePlaceholder')} />
                     </Form.Item>
 
                     <Form.Item
                         name="password"
-                        rules={[{ required: true, message: t('login.passwordRequired') }]}
+                        rules={[{ required: true, message: t('admin.login.passwordRequired') }]}
                     >
-                        <Input.Password placeholder={t('login.passwordPlaceholder')} />
+                        <Input.Password placeholder={t('admin.login.passwordPlaceholder')} />
                     </Form.Item>
 
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className="login-form-button">
-                            {t('login.buttonName')}
+                            {t('admin.login.buttonName')}
                         </Button>
                     </Form.Item>
                 </Form>

@@ -1,14 +1,8 @@
 import { getCurrentAccount } from "../services/authService";
 import { Account } from "../redux/actions/account";
-import { getCookie } from "../../shared/utils/cookies";
 
 export const setCurrentAccountHelper = async (): Promise<Account | null> => {
-    const token = getCookie("admin_token");
-    if (!token) {
-        return null;
-    }
-
-    const response = await getCurrentAccount(token);
+    const response = await getCurrentAccount();
     const result = await response.json();
     if (!response.ok || result.status !== 200) {
         return null;

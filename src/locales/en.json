@@ -1,17 +1,104 @@
 {
-    "login": {
-        "title": "Defty Admin Portal",
-        "buttonName": "Login",
-        "usernamePlaceholder": "Username",
-        "passwordPlaceholder": "Password",
-        "usernameRequired": "Please input your Username!",
-        "passwordRequired": "Please input your Password!",
-        "errorTitle": "Failure",
-        "errorMessage": "Login failed",
-        "successTitle": "Success",
-        "successMessage": "Login success"
+    "admin": {
+        "login": {
+            "title": "Defty Admin Portal",
+            "buttonName": "Login",
+            "usernamePlaceholder": "Username",
+            "passwordPlaceholder": "Password",
+            "usernameRequired": "Please input your Username!",
+            "passwordRequired": "Please input your Password!",
+            "errorTitle": "Failure",
+            "errorMessage": "Login failed",
+            "successTitle": "Success",
+            "successMessage": "Login success"
+        },
+        "dashboard": {
+            "title": "Dashboard"
+        },
+        "role": {
+            "title": "Roles",
+            "createNewRoleButton": "Create New Role",
+            "deleteSelectedButton": "Delete Selected",
+            "updateButton": "Update",
+            "deleteButton": "Delete",
+            "deleteConfirmMessage": "Are you sure to delete this role?",
+            "deleteSuccessMessage": "Role deleted successfully",
+            "deleteSelectedSuccessMessage": "Selected roles deleted successfully",
+            "roleColumn": "Role",
+            "descriptionColumn": "Description",
+            "actionColumn": "Action",
+            "searchPlaceholder": "Search by {{column}}",
+            "searchButton": "Search",
+            "resetButton": "Reset",
+            "filterButton": "Filter",
+            "closeButton": "Close",
+            "create": {
+                "title": "Create New Role",
+                "createRoleButton": "Create Role",
+                "createRoleSuccessMessage": "Role created successfully!",
+                "createRoleErrorMessage": "Failed to create role",
+                "roleName": "Role name",
+                "description": "Description",
+                "messageRequire": "Please input thís field!",
+                "permissionsLabel": "Permission"
+            },
+            "update": {
+                "title": "Update Role",
+                "roleName": "Role Name",
+                "description": "Description",
+                "permissionsLabel": "Permissions",
+                "updateRoleButton": "Update Role",
+                "updateRoleSuccessMessage": "Role updated successfully!",
+                "updateRoleErrorMessage": "Failed to update role",
+                "messageRequire": "Please fill out this field",
+                "loadingMessage": "Loading role data..."
+            }
+        },
+        "permission": {
+            "title": "Permissions",
+            "createNewPermissionButton": "Create New Permission",
+            "deleteSelectedButton": "Delete Selected",
+            "updateButton": "Update",
+            "deleteButton": "Delete",
+            "deleteConfirmMessage": "Are you sure to delete this permission?",
+            "deleteSuccessMessage": "Permission deleted successfully",
+            "deleteSelectedSuccessMessage": "Selected permissions deleted successfully",
+            "nameColumn": "Permission Name",
+            "descriptionColumn": "Description",
+            "actionColumn": "Action",
+            "searchButton": "Search",
+            "resetButton": "Reset",
+            "filterButton": "Filter",
+            "closeButton": "Close",
+            "searchPlaceholder": "Search {column}",
+            "updatePermissionSuccessMessage": "Permission updated successfully!",
+            "createPermissionSuccessMessage": "Permission created successfully!",
+            "errorPermissionMessage": "Failed to process permission",
+            "create": {
+                "title": "Create New Permission",
+                "permissionName": "Permission Name",
+                "description": "Description",
+                "messageRequire": "Please input the permission name!",
+                "createPermissionButton": "Create Permission",
+                "createPermissionSuccessMessage": "Permission created successfully!"
+            },
+            "update": {
+                "title": "Update Permission",
+                "permissionName": "Permission Name",
+                "description": "Description",
+                "messageRequire": "Please input the permission name!",
+                "updatePermissionButton": "Update Permission",
+                "updatePermissionSuccessMessage": "Permission updated successfully!"
+            }
+        },
+        "setting": {
+            "title": "Settings",
+            "language": "Language"
+        },
+        "header": {
+            "profile": "Profile",
+            "logout": "Logout"
+        }
     },
-    "dashboard": {
-        "title": "Dashboard page"
-    }
+    "client": {}
 }
