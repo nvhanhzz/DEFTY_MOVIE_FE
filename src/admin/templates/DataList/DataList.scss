@@ -1,0 +1,62 @@
+@import "../../../styles/Variable.scss";
+
+.data-list {
+    &__header {
+        margin: 10px 0;
+    }
+
+    &__create-button {
+        background-color: #1890ff;
+
+        &:hover {
+            background-color: #40a9ff !important;
+        }
+    }
+
+    &__action-button {
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+        color: #595959;
+        transition: color 0.3s;
+
+        &:hover,
+        &:focus {
+            background: none;
+            color: #40a9ff;
+        }
+
+        &--edit {
+            color: #1890ff;
+
+            &:hover {
+                color: #0050b3;
+            }
+        }
+
+        &--delete {
+            color: #ff4d4f;
+
+            &:hover {
+                color: #d9363e;
+            }
+        }
+    }
+
+    &__table {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ddd;
+
+        .ant-table-cell {
+            border-bottom: 1px solid #ddd; // Viền mỏng cho mỗi ô
+        }
+
+        .ant-table-tbody>tr:nth-child(odd) {
+            background-color: $main_light_color; // Màu nền cho hàng lẻ
+        }
+
+        .ant-table-tbody>tr:nth-child(even) {
+            background-color: #fafafa; // Màu nền cho hàng chẵn
+        }
+    }
+}

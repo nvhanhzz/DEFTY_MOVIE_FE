@@ -78,8 +78,8 @@ const DefaultRoutes: RouteType[] = [
 ];
 
 function AdminRoutes() {
-    // const isLoggedIn = useAuth();
-    const isLoggedIn = true;
+    const isLoggedIn = useAuth();
+    // const isLoggedIn = false;
 
     return [
         {

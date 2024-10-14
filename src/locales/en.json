@@ -1,5 +1,19 @@
 {
     "admin": {
+        "dataList": {
+            "actionColumn": "Action",
+            "deleteConfirm": "Are you sure you want to delete this item?",
+            "deleteSelectedButton": "Delete Selected",
+            "createNewButton": "Create New",
+            "searchPlaceholder": "Search by name",
+            "assignPermissionConfirm": "Yes",
+            "assignPermissionCancel": "No",
+            "loadingMessage": "Loading data...",
+            "deleteSuccessMessage": "Item deleted successfully!",
+            "deleteErrorMessage": "Failed to delete the item.",
+            "deleteSelectedSuccessMessage": "Selected items deleted successfully!",
+            "deleteSelectedErrorMessage": "Failed to delete selected items."
+        },
         "login": {
             "title": "Defty Admin Portal",
             "buttonName": "Login",
@@ -11,6 +25,12 @@
             "errorMessage": "Login failed",
             "successTitle": "Success",
             "successMessage": "Login success"
+        },
+        "logout": {
+            "errorTitle": "Failure",
+            "errorMessage": "Logout failed",
+            "successTitle": "Success",
+            "successMessage": "Logout success"
         },
         "dashboard": {
             "title": "Dashboard"
@@ -40,18 +60,35 @@
                 "roleName": "Role name",
                 "description": "Description",
                 "messageRequire": "Please input thís field!",
-                "permissionsLabel": "Permission"
+                "permissionsLabel": "Asign permission"
             },
             "update": {
                 "title": "Update Role",
                 "roleName": "Role Name",
                 "description": "Description",
-                "permissionsLabel": "Permissions",
+                "permissionsLabel": "Asign permission",
                 "updateRoleButton": "Update Role",
                 "updateRoleSuccessMessage": "Role updated successfully!",
                 "updateRoleErrorMessage": "Failed to update role",
                 "messageRequire": "Please fill out this field",
-                "loadingMessage": "Loading role data..."
+                "loadingMessage": "Loading role data...",
+                "assignPermission": "Assign Permission",
+                "confirmTransferMessage": "Are you sure you want to transfer these permissions?",
+                "assignPermissionConfirm": "Yes",
+                "assignPermissionCancel": "No",
+                "permissions": {
+                    "permissionAvailable": "Permissions available",
+                    "rolePermission": "Role permissions",
+                    "confirmTransferMessage": "Are you sure you want to transfer these permissions?",
+                    "assignPermissionConfirm": "Yes",
+                    "assignPermissionCancel": "No",
+                    "loadingMessage": "Loading role data...",
+                    "updateRoleButton": "Update Role",
+                    "updateRoleSuccessMessage": "Role updated successfully!",
+                    "updateRoleErrorMessage": "Failed to update role",
+                    "messageRequire": "Please fill out this field",
+                    "searchPlaceholder": "Search..."
+                }
             }
         },
         "permission": {
@@ -70,7 +107,7 @@
             "resetButton": "Reset",
             "filterButton": "Filter",
             "closeButton": "Close",
-            "searchPlaceholder": "Search {column}",
+            "searchPlaceholder": "Search by title",
             "updatePermissionSuccessMessage": "Permission updated successfully!",
             "createPermissionSuccessMessage": "Permission created successfully!",
             "errorPermissionMessage": "Failed to process permission",
@@ -78,9 +115,10 @@
                 "title": "Create New Permission",
                 "permissionName": "Permission Name",
                 "description": "Description",
-                "messageRequire": "Please input the permission name!",
+                "messageRequire": "Please enter the permission name!",
                 "createPermissionButton": "Create Permission",
-                "createPermissionSuccessMessage": "Permission created successfully!"
+                "createPermissionSuccessMessage": "Permission created successfully!",
+                "createPermissionErrorMessage": "An error occurred while creating the permission. Please try again."
             },
             "update": {
                 "title": "Update Permission",

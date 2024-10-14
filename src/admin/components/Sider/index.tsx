@@ -79,8 +79,21 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
     }));
 
     return (
-        <Sider trigger={null} collapsible collapsed={collapsed} className="app-sider">
-            <div className="logo" onClick={handleLogoClick} />
+        <Sider
+            trigger={null}
+            collapsible
+            collapsed={collapsed}
+            className="app-sider"
+            width={250}
+            collapsedWidth={80}
+            style={{
+                width: collapsed ? 80 : 250,
+                minWidth: collapsed ? 80 : 250,
+                maxWidth: collapsed ? 80 : 250,
+                transition: 'width 0.2s',
+            }}
+        >
+            <div className="logo" onClick={handleLogoClick}></div>
             <Menu
                 theme="dark"
                 mode="inline"

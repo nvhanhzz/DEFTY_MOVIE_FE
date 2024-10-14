@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, message } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import Title from 'antd/es/typography/Title';
 
 interface Permission {
     name: string;
@@ -47,7 +48,7 @@ const EditPermission: React.FC = () => {
 
     return (
         <Form onFinish={handleUpdatePermission} layout="vertical" initialValues={permission}>
-            <h1>{t('admin.permission.update.title')}</h1>
+            <Title level={2}>{t('admin.permission.update.title')}</Title>
             <Form.Item
                 label={t('admin.permission.update.permissionName')}
                 name="name"

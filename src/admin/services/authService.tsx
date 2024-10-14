@@ -21,3 +21,13 @@ export const postLogin = async (option: Record<string, any>): Promise<Response> 
         throw error;
     }
 };
+
+export const postLogout = async (): Promise<Response> => {
+    try {
+        const response = await postJson(`${PREFIX_AUTH}/logout`, {});
+        return response;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};

@@ -15,4 +15,24 @@
         cursor: pointer;
         margin-left: auto; // Đẩy avatar về phía cuối của header
     }
+
+    .logout-icon {
+        display: flex;
+        align-items: center;
+
+        &.loading {
+            animation: spin 1s linear infinite; // Thêm animation xoay
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
 }

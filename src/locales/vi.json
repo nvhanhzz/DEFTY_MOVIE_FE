@@ -1,5 +1,19 @@
 {
     "admin": {
+        "dataList": {
+            "actionColumn": "Hành động",
+            "deleteConfirm": "Bạn có chắc chắn muốn xóa mục này không?",
+            "deleteSelectedButton": "Xóa đã chọn",
+            "createNewButton": "Tạo mới",
+            "searchPlaceholder": "Tìm kiếm theo tên",
+            "assignPermissionConfirm": "Có",
+            "assignPermissionCancel": "Không",
+            "loadingMessage": "Đang tải dữ liệu...",
+            "deleteSuccessMessage": "Đã xóa mục thành công!",
+            "deleteErrorMessage": "Xóa mục không thành công.",
+            "deleteSelectedSuccessMessage": "Đã xóa các mục đã chọn thành công!",
+            "deleteSelectedErrorMessage": "Xóa các mục đã chọn không thành công."
+        },
         "login": {
             "title": "Trang quản trị Defty",
             "buttonName": "Đăng nhập",
@@ -11,6 +25,12 @@
             "errorMessage": "Đăng nhập thất bại",
             "successTitle": "Thành công",
             "successMessage": "Đăng nhập thành công"
+        },
+        "logout": {
+            "errorTitle": "Thất bại",
+            "errorMessage": "Đăng xuất thất bại",
+            "successTitle": "Thành công",
+            "successMessage": "Đăng xuất thành công"
         },
         "dashboard": {
             "title": "Tổng quan"
@@ -40,18 +60,35 @@
                 "roleName": "Tên nhóm quyền",
                 "description": "Mô tả",
                 "messageRequire": "Vui lòng không nhập thiếu trường này",
-                "permissionsLabel": "Quyền"
+                "permissionsLabel": "Phân quyền"
             },
             "update": {
                 "title": "Cập nhật nhóm quyền",
                 "roleName": "Tên nhóm quyền",
                 "description": "Mô tả",
-                "permissionsLabel": "Quyền",
+                "permissionsLabel": "Phân quyền",
                 "updateRoleButton": "Cập nhật nhóm quyền",
                 "updateRoleSuccessMessage": "Cập nhật nhóm quyền thành công!",
                 "updateRoleErrorMessage": "Cập nhật nhóm quyền thất bại",
                 "messageRequire": "Vui lòng điền thông tin vào trường này",
-                "loadingMessage": "Đang tải dữ liệu nhóm quyền..."
+                "loadingMessage": "Đang tải dữ liệu nhóm quyền...",
+                "assignPermission": "Phân quyền",
+                "confirmTransferMessage": "Bạn có chắc chắn muốn chuyển các quyền này không?",
+                "assignPermissionConfirm": "Có",
+                "assignPermissionCancel": "Không",
+                "permissions": {
+                    "permissionAvailable": "Các quyền khả dụng",
+                    "rolePermission": "Các quyền đã gán",
+                    "confirmTransferMessage": "Bạn có chắc chắn muốn chuyển các quyền này không?",
+                    "assignPermissionConfirm": "Có",
+                    "assignPermissionCancel": "Không",
+                    "loadingMessage": "Đang tải dữ liệu vai trò...",
+                    "updateRoleButton": "Cập nhật vai trò",
+                    "updateRoleSuccessMessage": "Cập nhật vai trò thành công!",
+                    "updateRoleErrorMessage": "Cập nhật vai trò không thành công",
+                    "messageRequire": "Vui lòng điền vào trường này",
+                    "searchPlaceholder": "Tìm kiếm..."
+                }
             }
         },
         "permission": {
@@ -70,17 +107,18 @@
             "resetButton": "Đặt lại",
             "filterButton": "Lọc",
             "closeButton": "Đóng",
-            "searchPlaceholder": "Tìm kiếm {column}",
+            "searchPlaceholder": "Tìm kiếm theo tên",
             "updatePermissionSuccessMessage": "Cập nhật quyền thành công!",
             "createPermissionSuccessMessage": "Tạo quyền mới thành công!",
             "errorPermissionMessage": "Xử lý quyền thất bại",
             "create": {
-                "title": "Tạo quyền mới",
-                "permissionName": "Tên quyền",
-                "description": "Mô tả",
+                "title": "Tạo Quyền Mới",
+                "permissionName": "Tên Quyền",
+                "description": "Mô Tả",
                 "messageRequire": "Vui lòng nhập tên quyền!",
-                "createPermissionButton": "Tạo quyền",
-                "createPermissionSuccessMessage": "Tạo quyền thành công!"
+                "createPermissionButton": "Tạo Quyền",
+                "createPermissionSuccessMessage": "Tạo quyền thành công!",
+                "createPermissionErrorMessage": "Đã xảy ra lỗi trong quá trình tạo quyền. Vui lòng thử lại."
             },
             "update": {
                 "title": "Cập nhật quyền",

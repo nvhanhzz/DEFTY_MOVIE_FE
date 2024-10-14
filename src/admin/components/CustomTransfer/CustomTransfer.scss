@@ -1,0 +1,123 @@
+.custom-transfer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; // Canh lề theo chiều dọc
+    width: 100%;
+    margin: 0 auto;
+
+    .transfer-list {
+        width: 45%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        overflow-y: auto; // Cho phép cuộn nếu danh sách quá dài
+        height: 400px; // Giới hạn chiều cao của danh sách
+
+        h3 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .search-input {
+            &:focus {
+                outline: none;
+            }
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+
+            li {
+                display: flex; // Sử dụng flexbox để hiển thị checkbox và nội dung trên cùng một hàng
+                align-items: center; // Canh giữa theo chiều dọc
+                padding: 5px 10px;
+                margin: 5px 0;
+                border: 1px solid #e0e0e0;
+                border-radius: 4px;
+                background-color: #fff;
+                overflow: hidden; // Ẩn nội dung tràn
+
+                .permission-title {
+                    margin-left: 10px; // Khoảng cách giữa checkbox và tên
+                    white-space: nowrap; // Ngăn không cho tên bị xuống dòng
+                    overflow: hidden; // Ẩn nội dung tràn
+                    text-overflow: ellipsis; // Hiển thị dấu "..." khi tên quá dài
+                }
+
+                .info-icon {
+                    margin-left: 10px; // Khoảng cách giữa tên và biểu tượng thông tin
+                    cursor: pointer;
+                    color: #007bff;
+
+                    &:hover {
+                        text-decoration: underline; // Gạch chân khi hover
+                    }
+                }
+
+                input[type="checkbox"] {
+                    margin-right: 10px; // Khoảng cách giữa checkbox và nội dung
+                }
+            }
+        }
+
+        button {
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+            width: 100%; // Đặt chiều rộng cho nút
+
+            &:hover {
+                background-color: #0056b3;
+            }
+
+            &:disabled {
+                background-color: #ccc; // Màu cho nút disabled
+                cursor: not-allowed; // Con trỏ cho nút disabled
+            }
+        }
+    }
+
+    .transfer-buttons {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0 10px;
+        margin-top: 150px;
+
+        button {
+            margin: 5px 0;
+            width: 50px;
+            padding: 7px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+                background-color: #0056b3;
+            }
+
+            &:disabled {
+                background-color: #ccc; // Màu cho nút disabled
+                cursor: not-allowed; // Con trỏ cho nút disabled
+            }
+        }
+    }
+}

@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, Typography } from 'antd';
 import './LoginPage.scss';
 import { useAdminDispatch } from '../../hooks/useAdminDispatch';
 import { setCurrentAccount } from '../../redux/actions/account';
 import { addAlert } from '../../redux/actions/alert';
 import { postLogin } from '../../services/authService';
-import { setCookie } from '../../../shared/utils/cookies';
 import { setCurrentAccountHelper } from '../../helpers/Account';
 import { useTranslation } from 'react-i18next';
 
@@ -14,25 +13,28 @@ const { Title } = Typography;
 const Login: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useAdminDispatch();
+    const [loading, setLoading] = useState<boolean>(false); // Thêm trạng thái loading
 
     const onFinish = async (values: { username: string; password: string }): Promise<void> => {
+        setLoading(true); // Bắt đầu loading khi bắt đầu đăng nhập
         const response = await postLogin(values);
 
         const result = await response.json();
         if (!response.ok || result.status !== 200) {
-            dispatch(addAlert(t('login.errorTitle'), t('login.errorMessage'), 5));
+            dispatch(addAlert(t('admin.login.errorTitle'), t('admin.login.errorMessage'), 5));
+            setLoading(false); // Kết thúc loading nếu có lỗi
             return;
         }
 
-        const data = result.data;
-        setCookie('admin_token', data.token, 60 * 60);
         try {
             const account = await setCurrentAccountHelper();
             dispatch(setCurrentAccount(account));
-            dispatch(addAlert(t('login.successTitle'), t('login.successMessage'), 5));
+            dispatch(addAlert(t('admin.login.successTitle'), t('admin.login.successMessage'), 5));
         } catch (error) {
             console.error("Error checking logged in status:", error);
             dispatch(setCurrentAccount(null));
+        } finally {
+            setLoading(false); // Kết thúc loading sau khi hoàn tất
         }
     };
 
@@ -68,8 +70,8 @@ const Login: React.FC = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-form-button">
-                            {t('admin.login.buttonName')}
+                        <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}>
+                            {loading ? null : t('admin.login.buttonName')}
                         </Button>
                     </Form.Item>
                 </Form>
