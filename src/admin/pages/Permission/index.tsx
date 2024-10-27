@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { message, Spin } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getAllPermission, deletePermissions } from '../../services/permissionService';
+import { getPermissions, deletePermissions } from '../../services/permissionService';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
+import { LoadingOutlined } from '@ant-design/icons';
 
 export interface Permission {
     id: string;
@@ -15,47 +16,60 @@ export interface Permission {
 
 const PermissionsPage: React.FC = () => {
     const [data, setData] = useState<Permission[]>([]);
-    const [, setSelectedPermissionIds] = useState<React.Key[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false); // Trạng thái loading cho việc fetch
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [totalItems, setTotalItems] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
     const navigate = useNavigate();
+    const location = useLocation();
     const { t } = useTranslation();
 
+    const fetchData = async (page: number, pageSize: number) => {
+        setIsLoading(true);
+        try {
+            const response = await getPermissions(page, pageSize);
+            const result = await response.json();
+            const content: Permission[] = result.data.content;
+            const permissions = content.map((item: any) => ({
+                ...item,
+                key: item.id,
+            }));
+            setTotalItems(result.data.totalElements);
+            setData(permissions);
+        } catch (error) {
+            message.error(t('admin.message.fetchError'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            setIsLoading(true); // Bắt đầu loading
-            try {
-                const response = await getAllPermission();
-                const result = await response.json();
-                const dataWithKeys = result.data.map((item: any) => ({
-                    ...item,
-                    key: item.id,
-                }));
-                setData(dataWithKeys);
-            } catch (error) {
-                message.error(t('admin.permission.fetchError'));
-            } finally {
-                setIsLoading(false); // Kết thúc loading
-            }
-        };
-        fetchData();
-    }, [t]);
+        const searchParams = new URLSearchParams(location.search);
+        const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
+        const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
+        setCurrentPage(pageFromUrl);
+        setPageSize(pageSizeFromUrl);
+    }, [location.search]);
+
+    useEffect(() => {
+        fetchData(currentPage, pageSize);
+    }, [currentPage, pageSize]);
 
     const handleDelete = async (id: string) => {
-        setIsLoading(true); // Bắt đầu loading
+        setIsLoading(true);
         try {
-            const response = await deletePermissions([id]); // Gọi API xóa quyền
+            const response = await deletePermissions([id]);
             if (response.ok) {
                 setData(prevData => prevData.filter(item => item.id !== id));
-                message.success(t('admin.permission.deleteSuccessMessage'));
+                message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa thành công
             } else {
                 const result = await response.json();
-                message.error(result.message || t('admin.permission.deleteErrorMessage'));
+                message.error(result.message || t('admin.message.deleteError')); // Thông báo khi có lỗi xóa
             }
         } catch (error) {
-            console.error("Error deleting permission:", error);
-            message.error(t('admin.permission.deleteErrorMessage'));
+            message.error(t('admin.message.deleteError')); // Thông báo khi xóa thất bại
         } finally {
-            setIsLoading(false); // Kết thúc loading
+            setIsLoading(false);
         }
     };
 
@@ -68,24 +82,28 @@ const PermissionsPage: React.FC = () => {
     };
 
     const handleDeleteSelected = async (ids: React.Key[]) => {
-        setIsLoading(true); // Bắt đầu loading
+        setIsLoading(true);
         try {
-            const response = await deletePermissions(ids as string[]); // Gọi API xóa nhiều quyền
+            const response = await deletePermissions(ids as string[]);
             if (response.ok) {
-                const newData = data.filter(item => !ids.includes(item.id));
-                setData(newData);
-                setSelectedPermissionIds([]);
-                message.success(t('admin.permission.deleteSelectedSuccessMessage'));
+                setData(prevData => prevData.filter(item => !ids.includes(item.id)));
+                message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa nhiều thành công
             } else {
                 const result = await response.json();
-                message.error(result.message || t('admin.permission.deleteErrorMessage'));
+                message.error(result.message || t('admin.message.deleteError')); // Thông báo khi xóa nhiều lỗi
             }
         } catch (error) {
-            console.error("Error deleting selected permissions:", error);
-            message.error(t('admin.permission.deleteErrorMessage'));
+            message.error(t('admin.message.deleteError')); // Thông báo khi xóa nhiều thất bại
         } finally {
-            setIsLoading(false); // Kết thúc loading
+            setIsLoading(false);
         }
+    };
+
+    // Hàm xử lý khi thay đổi trang
+    const onPageChange = (page: number, pageSize?: number) => {
+        setCurrentPage(page);
+        setPageSize(pageSize || 10);
+        navigate(`?page=${page}&pageSize=${pageSize || 10}`); // Cập nhật URL với `page` và `pageSize`
     };
 
     const dataListConfig: DataListConfig<Permission> = {
@@ -93,8 +111,8 @@ const PermissionsPage: React.FC = () => {
             {
                 title: 'No.',
                 key: 'no',
-                render: (_, __, index) => index + 1, // Hiển thị số thứ tự tăng dần
-                sorter: (a: Permission, b: Permission) => Number(a.id) - Number(b.id), // Không cần thiết cho cột này
+                render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
+                sorter: (a: Permission, b: Permission) => Number(a.id) - Number(b.id),
             },
             {
                 title: t('admin.permission.nameColumn'),
@@ -115,6 +133,12 @@ const PermissionsPage: React.FC = () => {
         onUpdate: handleUpdate,
         onDelete: handleDelete,
         onDeleteSelected: handleDeleteSelected,
+        pagination: {
+            currentPage: currentPage,
+            totalItems: totalItems,
+            pageSize: pageSize,
+            onPaginationChange: onPageChange,
+        }
     };
 
     return (
@@ -125,8 +149,8 @@ const PermissionsPage: React.FC = () => {
             ]}
         >
             {isLoading ? (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}> {/* Căn giữa spinner */}
-                    <Spin tip={t('admin.role.update.loadingMessage')} />
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
+                    <Spin indicator={<LoadingOutlined spin />} />
                 </div>
             ) : (
                 <DataListTemplate config={dataListConfig} />

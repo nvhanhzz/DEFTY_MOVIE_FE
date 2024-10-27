@@ -24,20 +24,20 @@ const CreatePermission: React.FC = () => {
             const result = await response.json();
             if (!response.ok) {
                 // Hiển thị thông báo lỗi nếu phản hồi không thành công
-                message.error(result.message || t('admin.permission.create.createPermissionErrorMessage'));
+                message.error(result.message || t('admin.message.createError')); // Sử dụng message chung từ admin.message
                 return;
             }
             if (result.status !== 201) {
                 // Thông báo lỗi nếu status không phải 201
-                message.error(result.message || t('admin.permission.create.createPermissionErrorMessage'));
+                message.error(result.message || t('admin.message.createError')); // Sử dụng message chung từ admin.message
                 return;
             }
 
             // Hiển thị thông báo thành công
-            message.success(t('admin.permission.create.createPermissionSuccessMessage'));
+            message.success(t('admin.message.createSuccess')); // Sử dụng message thành công từ admin.message
             navigate(`${PREFIX_URL_ADMIN}/permissions`); // Điều hướng về trang danh sách quyền
         } catch (error) {
-            message.error(t('admin.permission.errorPermissionMessage'));
+            message.error(t('admin.message.fetchError')); // Sử dụng message lỗi khi gặp lỗi khác
         } finally {
             setLoading(false);
         }
@@ -55,14 +55,14 @@ const CreatePermission: React.FC = () => {
                 <Form.Item
                     label={t('admin.permission.create.permissionName')}
                     name="name"
-                    rules={[{ required: true, message: t('admin.permission.create.messageRequire') }]}
+                    rules={[{ required: true, message: t('admin.message.requiredMessage') }]} // Sử dụng thông báo yêu cầu chung từ admin.message
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     label={t('admin.permission.create.description')}
                     name="description"
-                    rules={[{ required: true, message: t('admin.permission.create.messageRequire') }]}
+                    rules={[{ required: true, message: t('admin.message.requiredMessage') }]} // Sử dụng thông báo yêu cầu chung từ admin.message
                 >
                     <Input.TextArea />
                 </Form.Item>

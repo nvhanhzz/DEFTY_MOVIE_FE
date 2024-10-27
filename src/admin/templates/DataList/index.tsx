@@ -14,7 +14,12 @@ export interface DataListConfig<T> {
     onUpdate: (id: string) => void;
     onDelete: (id: string) => void;
     onDeleteSelected: (ids: React.Key[]) => void;
-    onPaginationChange?: (page: number, pageSize: number) => void;
+    pagination: {
+        totalItems: number;
+        currentPage: number;
+        pageSize: number; // Thêm pageSize
+        onPaginationChange?: (page: number, pageSize: number) => void;
+    }
 }
 
 const DataListTemplate = <T extends { id: string }>({
@@ -29,8 +34,7 @@ const DataListTemplate = <T extends { id: string }>({
         _filters: Record<string, FilterValue | null>,
         _sorter: SorterResult<T> | SorterResult<T>[],
         _extra: TableCurrentDataSource<T>
-    ) => {
-    };
+    ) => { };
 
     const actionColumn: ColumnType<T> = {
         title: t('admin.dataList.actionColumn'),
@@ -102,11 +106,16 @@ const DataListTemplate = <T extends { id: string }>({
                 </Col>
                 <Col>
                     <Pagination
-                        className="data-list__pagination"
-                        defaultCurrent={1}
-                        total={config.data.length}
+                        current={config.pagination.currentPage || 1}
+                        total={config.pagination.totalItems}
+                        pageSize={config.pagination.pageSize} // Cập nhật pageSize
                         showSizeChanger
-                        onChange={config.onPaginationChange}
+                        pageSizeOptions={['5', '10', '20', '50', '100']}
+                        onChange={(page, pageSize) => {
+                            if (config.pagination.onPaginationChange) {
+                                config.pagination.onPaginationChange(page, pageSize || config.pagination.pageSize);
+                            }
+                        }}
                     />
                 </Col>
             </Row>

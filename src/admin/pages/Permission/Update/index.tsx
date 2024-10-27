@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, message } from 'antd';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Button, Form, Input, message, Spin } from 'antd';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Title from 'antd/es/typography/Title';
+import { getPermissionById, updatePermissionById } from '../../../services/permissionService';
+import OutletTemplate from '../../../templates/Outlet';
+import { LoadingOutlined } from '@ant-design/icons';
 
 interface Permission {
     name: string;
@@ -13,62 +15,78 @@ const EditPermission: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [permission, setPermission] = useState<Permission | null>(null);
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
     const { t } = useTranslation();
 
     useEffect(() => {
         const fetchPermission = async () => {
-            // Giả lập dữ liệu quyền - thực tế bạn sẽ lấy từ API
-            const fetchedPermission = {
-                name: 'Read',
-                description: 'Permission to read data',
-            };
-            setPermission(fetchedPermission);
+            try {
+                const response = await getPermissionById(id as string);
+                const result = await response.json();
+                if (!response.ok || result.status !== 200) {
+                    message.error(t('admin.message.fetchError')); // Sử dụng thông báo lỗi chung khi lấy dữ liệu
+                    return;
+                }
+                setPermission(result.data);
+            } catch (error) {
+                message.error(t('admin.message.fetchError')); // Hiển thị thông báo lỗi khi không lấy được dữ liệu
+            }
         };
 
         fetchPermission();
-    }, [id]);
+    }, [id, t]);
 
     const handleUpdatePermission = async (values: Permission) => {
         setLoading(true);
         try {
-            // Gửi yêu cầu cập nhật quyền đến API
-            console.log('Updating Permission:', values);
-            // Gọi API thực tế ở đây
-            message.success(t('admin.permission.updatePermissionSuccessMessage'));
-            navigate('/permissions'); // Điều hướng về trang danh sách quyền
+            const response = await updatePermissionById(id as string, values);
+            if (response.ok) {
+                message.success(t('admin.message.updateSuccess')); // Thông báo thành công
+            } else {
+                const result = await response.json();
+                message.error(result.message || t('admin.message.updateError')); // Thông báo lỗi
+            }
         } catch (error) {
-            message.error(t('admin.permission.errorPermissionMessage'));
+            message.error(t('admin.message.updateError')); // Hiển thị lỗi khi có lỗi xảy ra trong quá trình cập nhật
         } finally {
             setLoading(false);
         }
     };
 
-    if (!permission) return <div>Loading...</div>; // Hiển thị khi đang tải dữ liệu
-
     return (
-        <Form onFinish={handleUpdatePermission} layout="vertical" initialValues={permission}>
-            <Title level={2}>{t('admin.permission.update.title')}</Title>
-            <Form.Item
-                label={t('admin.permission.update.permissionName')}
-                name="name"
-                rules={[{ required: true, message: t('admin.permission.update.messageRequire') }]}
-            >
-                <Input />
-            </Form.Item>
-            <Form.Item
-                label={t('admin.permission.update.description')}
-                name="description"
-                rules={[{ required: true, message: t('admin.permission.update.messageRequire') }]}
-            >
-                <Input.TextArea />
-            </Form.Item>
-            <Form.Item>
-                <Button type="primary" htmlType="submit" loading={loading}>
-                    {t('admin.permission.update.updatePermissionButton')}
-                </Button>
-            </Form.Item>
-        </Form>
+        <OutletTemplate
+            breadcrumbItems={[
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/permissions`, name: t('admin.permission.title') },
+                { path: ``, name: t('admin.permission.create.title') },
+            ]}
+        >
+            {!permission ?
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
+                    <Spin indicator={<LoadingOutlined spin />} />
+                </div> :
+                <Form onFinish={handleUpdatePermission} layout="vertical" initialValues={permission}>
+                    <Form.Item
+                        label={t('admin.permission.update.permissionName')}
+                        name="name"
+                        rules={[{ required: true, message: t('admin.message.requiredMessage') }]} // Thông báo yêu cầu nhập chung
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label={t('admin.permission.update.description')}
+                        name="description"
+                        rules={[{ required: true, message: t('admin.message.requiredMessage') }]} // Thông báo yêu cầu nhập chung
+                    >
+                        <Input.TextArea />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" loading={loading}>
+                            {t('admin.permission.update.updatePermissionButton')}
+                        </Button>
+                    </Form.Item>
+                </Form>
+            }
+        </OutletTemplate>
     );
 };
 

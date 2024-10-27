@@ -1,11 +1,21 @@
 import { Permission } from "../pages/Permission/Create";
-import { del, get, postJson } from "../utils/request";
+import { del, get, patchJson, postJson } from "../utils/request";
 
 const PREFIX_PERMISSION: string = import.meta.env.VITE_PREFIX_PERMISSION as string;
 
-export const getAllPermission = async (): Promise<Response> => {
+export const getPermissions = async (page?: number, pageSize?: number): Promise<Response> => {
     try {
-        const response = await get(`${PREFIX_PERMISSION}/all`);
+        let url = `${PREFIX_PERMISSION}/`;
+
+        const queryParams = new URLSearchParams();
+        if (page !== undefined) queryParams.append("page", (page - 1).toString());
+        if (pageSize !== undefined) queryParams.append("size", pageSize.toString());
+
+        if (queryParams.toString()) {
+            url += `?${queryParams.toString()}`;
+        }
+
+        const response = await get(url);
         return response;
     } catch (error) {
         console.error(error);
@@ -34,3 +44,23 @@ export const deletePermissions = async (ids: string[]): Promise<Response> => {
         throw error;
     }
 };
+
+export const getPermissionById = async (id: string): Promise<Response> => {
+    try {
+        const response = await get(`${PREFIX_PERMISSION}/${id}`);
+        return response;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export const updatePermissionById = async (id: string, option: Permission): Promise<Response> => {
+    try {
+        const response = await patchJson(`${PREFIX_PERMISSION}/${id}`, option);
+        return response;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './CreateRole.scss';
 import OutletTemplate from '../../../templates/Outlet';
 import { createRole } from '../../../services/roleSevice';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -17,21 +18,16 @@ const CreateRole: React.FC = () => {
         setIsLoading(true); // Bắt đầu loading
         try {
             const response = await createRole(role);
-            if (!response.ok) {
-                const result = await response.json();
-                message.error(result.message || t('admin.role.create.createRoleErrorMessage')); // Hiển thị thông báo lỗi nếu có
-                return;
-            }
             const result = await response.json();
-            if (result.status !== 201) {
-                message.error(result.message || t('admin.role.create.createRoleErrorMessage')); // Hiển thị thông báo lỗi nếu có
+            if (!response.ok || result.status !== 201) {
+                message.error(result.message || t('admin.message.createError')); // Hiển thị thông báo lỗi nếu có
                 return;
             }
-            message.success(t('admin.role.create.createRoleSuccessMessage'));
+            message.success(t('admin.message.createSuccess')); // Thông báo tạo thành công
             navigate(`${PREFIX_URL_ADMIN}/roles`); // Chuyển hướng về trang danh sách Role
         } catch (error) {
             console.error("Error creating role:", error);
-            message.error(t('admin.role.create.createRoleErrorMessage')); // Thông báo lỗi chung
+            message.error(t('admin.message.createError')); // Thông báo lỗi chung
         } finally {
             setIsLoading(false); // Kết thúc loading
         }
@@ -47,16 +43,16 @@ const CreateRole: React.FC = () => {
         >
             <Form onFinish={handleCreateRole} layout="vertical">
                 <Form.Item
-                    label={t('admin.role.create.roleName')}
+                    label={t('admin.role.roleColumn')}
                     name="name"
-                    rules={[{ required: true, message: t('admin.role.create.messageRequire') }]}
+                    rules={[{ required: true, message: t('admin.message.requiredMessage') }]} // Sử dụng thông báo yêu cầu chung
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label={t('admin.role.create.description')}
+                    label={t('admin.role.descriptionColumn')}
                     name="description"
-                    rules={[{ required: true, message: t('admin.role.create.messageRequire') }]}
+                    rules={[{ required: true, message: t('admin.message.requiredMessage') }]} // Sử dụng thông báo yêu cầu chung
                 >
                     <Input.TextArea />
                 </Form.Item>
@@ -67,8 +63,8 @@ const CreateRole: React.FC = () => {
                 </Form.Item>
             </Form>
             {isLoading && (
-                <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                    <Spin tip={t('admin.role.create.loadingMessage')} /> {/* Hiển thị loading */}
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
+                    <Spin indicator={<LoadingOutlined spin />} />
                 </div>
             )}
         </OutletTemplate>

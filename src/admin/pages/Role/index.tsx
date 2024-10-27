@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { message, Spin } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getAllRole } from '../../services/roleSevice';
+import { getRoles } from '../../services/roleSevice';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { Permission } from '../Permission';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -19,35 +20,52 @@ export interface Role {
 
 const RolePage: React.FC = () => {
     const [data, setData] = useState<Role[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false); // Trạng thái loading
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [totalItems, setTotalItems] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
     const navigate = useNavigate();
+    const location = useLocation();
     const { t } = useTranslation();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setIsLoading(true); // Bắt đầu loading
-            try {
-                const response = await getAllRole();
-                if (!response.ok) return;
-
-                const result = await response.json();
-                const dataWithKeys = result.data.map((item: any, index: number) => ({
-                    ...item,
-                    key: (index + 1).toString(),
-                }));
-                setData(dataWithKeys);
-            } catch (error) {
-                message.error(t('admin.role.fetchError'));
-            } finally {
-                setIsLoading(false); // Kết thúc loading
+    const fetchData = async (page: number, pageSize: number) => {
+        setIsLoading(true);
+        try {
+            const response = await getRoles(page, pageSize); // Cập nhật để gọi đúng hàm
+            if (!response.ok) {
+                message.error(t('admin.message.fetchError')); // Hiển thị thông báo lỗi khi lấy dữ liệu
+                return;
             }
-        };
-        fetchData();
-    }, [t]);
+            const result = await response.json();
+            const content: Role[] = result.data.content;
+            const roles = content.map((item: any) => ({
+                ...item,
+                key: item.id,
+            }));
+            setTotalItems(result.data.totalElements);
+            setData(roles);
+        } catch (error) {
+            message.error(t('admin.message.fetchError')); // Thông báo khi lỗi xảy ra
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
+        const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
+        setCurrentPage(pageFromUrl);
+        setPageSize(pageSizeFromUrl);
+    }, [location.search]);
+
+    useEffect(() => {
+        fetchData(currentPage, pageSize);
+    }, [currentPage, pageSize]);
 
     const handleDelete = (id: string) => {
         setData(prevData => prevData.filter(item => item.id !== id));
-        message.success(t('admin.role.deleteSuccessMessage'));
+        message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa thành công
     };
 
     const handleUpdate = (id: string) => {
@@ -59,9 +77,14 @@ const RolePage: React.FC = () => {
     };
 
     const handleDeleteSelected = (ids: React.Key[]) => {
-        const newData = data.filter(item => !ids.includes(item.id));
-        setData(newData);
-        message.success(t('admin.role.deleteSelectedSuccessMessage'));
+        setData(prevData => prevData.filter(item => !ids.includes(item.id)));
+        message.success(t('admin.message.deleteSuccess')); // Sử dụng cùng thông báo xóa thành công
+    };
+
+    const onPageChange = (page: number, pageSize?: number) => {
+        setCurrentPage(page);
+        setPageSize(pageSize || 10);
+        navigate(`?page=${page}&pageSize=${pageSize || 10}`); // Cập nhật URL với page và pageSize
     };
 
     const dataListConfig: DataListConfig<Role> = {
@@ -91,18 +114,24 @@ const RolePage: React.FC = () => {
         onUpdate: handleUpdate,
         onDelete: handleDelete,
         onDeleteSelected: handleDeleteSelected,
+        pagination: {
+            currentPage: currentPage,
+            totalItems: totalItems,
+            pageSize: pageSize,
+            onPaginationChange: onPageChange,
+        }
     };
 
     return (
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
-                { path: ``, name: t('admin.role.title') },
+                { path: `${PREFIX_URL_ADMIN}/roles`, name: t('admin.role.title') },
             ]}
         >
             {isLoading ? (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}> {/* Căn giữa spinner */}
-                    <Spin tip={t('admin.role.update.loadingMessage')} />
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
+                    <Spin indicator={<LoadingOutlined spin />} />
                 </div>
             ) : (
                 <DataListTemplate config={dataListConfig} />

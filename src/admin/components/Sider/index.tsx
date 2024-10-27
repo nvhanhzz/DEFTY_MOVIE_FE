@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu } from 'antd';
-import { DashboardOutlined, SettingOutlined, SafetyOutlined, KeyOutlined } from '@ant-design/icons';
+import { DashboardOutlined, SettingOutlined, SafetyOutlined, KeyOutlined, ReadOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Sider.scss';
 import { useTranslation } from 'react-i18next';
@@ -41,6 +41,12 @@ const menuItems: MenuItem[] = [
     },
     {
         key: '4',
+        icon: <ReadOutlined />,
+        label: 'admin.article.title',
+        linkTo: 'articles',
+    },
+    {
+        key: '5',
         icon: <SettingOutlined />,
         label: 'admin.setting.title',
         linkTo: 'settings',

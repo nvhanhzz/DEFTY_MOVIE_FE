@@ -13,28 +13,28 @@ const { Title } = Typography;
 const Login: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useAdminDispatch();
-    const [loading, setLoading] = useState<boolean>(false); // Thêm trạng thái loading
+    const [loading, setLoading] = useState<boolean>(false);
 
     const onFinish = async (values: { username: string; password: string }): Promise<void> => {
-        setLoading(true); // Bắt đầu loading khi bắt đầu đăng nhập
+        setLoading(true); // Bắt đầu loading khi đăng nhập
         const response = await postLogin(values);
 
         const result = await response.json();
         if (!response.ok || result.status !== 200) {
-            dispatch(addAlert(t('admin.login.errorTitle'), t('admin.login.errorMessage'), 5));
-            setLoading(false); // Kết thúc loading nếu có lỗi
+            dispatch(addAlert(t('admin.login.errorTitle'), t('admin.login.errorMessage'), 5)); // Thông báo khi lỗi
+            setLoading(false); // Dừng loading khi có lỗi
             return;
         }
 
         try {
             const account = await setCurrentAccountHelper();
             dispatch(setCurrentAccount(account));
-            dispatch(addAlert(t('admin.login.successTitle'), t('admin.login.successMessage'), 5));
+            dispatch(addAlert(t('admin.login.successTitle'), t('admin.login.successMessage'), 5)); // Thông báo khi đăng nhập thành công
         } catch (error) {
             console.error("Error checking logged in status:", error);
             dispatch(setCurrentAccount(null));
         } finally {
-            setLoading(false); // Kết thúc loading sau khi hoàn tất
+            setLoading(false); // Dừng loading sau khi xử lý
         }
     };
 
@@ -71,7 +71,7 @@ const Login: React.FC = () => {
 
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}>
-                            {loading ? null : t('admin.login.buttonName')}
+                            {t('admin.login.buttonName')}
                         </Button>
                     </Form.Item>
                 </Form>
