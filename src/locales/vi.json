@@ -21,8 +21,11 @@
         "dataList": {
             "actionColumn": "Hành động",
             "createNewButton": "Tạo mới",
-            "searchPlaceholder": "Tìm kiếm theo tên",
-            "deleteSelectedButton": "Xóa các mục đã chọn"
+            "searchPlaceholder": "Tìm kiếm ...",
+            "deleteSelectedButton": "Xóa các mục đã chọn",
+            "deleteConfirm": "Bạn có chắc chắn muốn xóa mục này không?",
+            "deleteSelectedConfirm": "Xóa",
+            "deleteSelectedCancel": "Hủy"
         },
         "login": {
             "title": "Trang quản trị Defty",
@@ -44,6 +47,17 @@
         },
         "dashboard": {
             "title": "Tổng quan"
+        },
+        "account": {
+            "title": "Tài khoản",
+            "username": "Tên đăng nhập",
+            "email": "Email",
+            "fullName": "Họ và tên",
+            "phone": "Số điện thoại",
+            "gender": "Giới tính",
+            "role": "Vai trò",
+            "actionColumn": "Hành động",
+            "searchPlaceholder": "Tìm kiếm theo ..."
         },
         "role": {
             "title": "Nhóm quyền",

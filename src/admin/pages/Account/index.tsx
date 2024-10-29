@@ -2,51 +2,58 @@ import React, { useEffect, useState } from 'react';
 import { message, Spin } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getRoles } from '../../services/roleSevice';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
-import { Permission } from '../Permission';
 import { LoadingOutlined } from '@ant-design/icons';
+import { getAccounts } from '../../services/accountService.tsx';
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
-export interface Role {
+export interface Account {
     id: string;
-    name: string;
-    description: string;
-    rolePermissions: Permission[];
+    username: string;
+    email: string;
+    fullName: string;
+    phone: string;
+    gender: string;
+    address: string;
+    avatar: string;
+    dateOfBirth: Date;
+    role: string;
 }
 
-const RolePage: React.FC = () => {
-    const [data, setData] = useState<Role[]>([]);
+const AccountPage: React.FC = () => {
+    const [data, setData] = useState<Account[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
-    const [searchKeyword, setSearchKeyword] = useState<string>(''); // State cho từ khóa tìm kiếm
+    const [searchKeyword, setSearchKeyword] = useState<string>(''); // Thêm state lưu từ khóa tìm kiếm
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
 
-    const fetchData = async (page: number, pageSize: number, keyword: string) => {
+    // Hàm fetch dữ liệu, bao gồm cả tìm kiếm
+    const fetchData = async (page: number, pageSize: number, keyword?: string) => {
         setIsLoading(true);
         try {
-            const response = await getRoles(page, pageSize, 'name', keyword); // Gọi API với từ khóa
+            const response = await getAccounts(page, pageSize, 'username', keyword);
             if (!response.ok) {
-                message.error(t('admin.message.fetchError')); // Thông báo khi lỗi
+                message.error(t('admin.message.fetchError'));
                 return;
             }
             const result = await response.json();
-            const content: Role[] = result.data.content;
-            const roles = content.map((item: any) => ({
+            const content: Account[] = result.data.content;
+            const accounts = content.map((item) => ({
                 ...item,
                 key: item.id,
             }));
             setTotalItems(result.data.totalElements);
-            setData(roles);
+            setData(accounts);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
-            message.error(t('admin.message.fetchError')); // Thông báo khi có lỗi
+            message.error(t('admin.message.fetchError'));
         } finally {
             setIsLoading(false);
         }
@@ -60,88 +67,108 @@ const RolePage: React.FC = () => {
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
-        setSearchKeyword(keywordFromUrl); // Cập nhật từ khóa tìm kiếm
-    }, [location.search]);
+        setSearchKeyword(keywordFromUrl); // Đặt từ khóa tìm kiếm trong state
 
-    useEffect(() => {
-        fetchData(currentPage, pageSize, searchKeyword); // Gọi fetchData với từ khóa tìm kiếm
-    }, [currentPage, pageSize, searchKeyword]);
+        // Fetch dữ liệu ban đầu
+        fetchData(pageFromUrl, pageSizeFromUrl, keywordFromUrl);
+    }, [location.search]);
 
     const handleDelete = (id: string) => {
         setData(prevData => prevData.filter(item => item.id !== id));
-        message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa thành công
+        message.success(t('admin.message.deleteSuccess'));
     };
 
     const handleUpdate = (id: string) => {
         navigate(`update/${id}`);
     };
 
-    const handleCreateNewRole = () => {
+    const handleCreateNewAccount = () => {
         navigate('create');
     };
 
     const handleDeleteSelected = (ids: React.Key[]) => {
         setData(prevData => prevData.filter(item => !ids.includes(item.id)));
-        message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa nhiều thành công
+        message.success(t('admin.message.deleteSuccess'));
     };
 
     const onPageChange = (page: number, pageSize?: number) => {
+        const keyword = searchKeyword || '';
         setCurrentPage(page);
         setPageSize(pageSize || 10);
-        navigate(`?page=${page}&pageSize=${pageSize || 10}&keyword=${searchKeyword}`); // Cập nhật URL với page, pageSize và từ khóa
+        navigate(`?page=${page}&pageSize=${pageSize || 10}&keyword=${keyword}`);
     };
 
-    // Hàm xử lý tìm kiếm
     const handleSearch = (keyword: string) => {
         setSearchKeyword(keyword);
-        setCurrentPage(1); // Reset về trang 1 khi tìm kiếm
-        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`); // Cập nhật URL khi tìm kiếm
+        setCurrentPage(1); // Reset lại trang hiện tại về trang 1 khi tìm kiếm
+        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`);
     };
 
-    const dataListConfig: DataListConfig<Role> = {
+    const dataListConfig: DataListConfig<Account> = {
         columns: [
             {
                 title: 'No.',
                 dataIndex: 'key',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
-                sorter: (a: Role, b: Role) => Number(a.id) - Number(b.id),
+                sorter: (a: Account, b: Account) => Number(a.id) - Number(b.id),
             },
             {
-                title: t('admin.role.roleColumn'),
-                dataIndex: 'name',
-                key: 'name',
-                sorter: (a: Role, b: Role) => a.name.localeCompare(b.name),
+                title: t('admin.account.username'),
+                dataIndex: 'username',
+                key: 'username',
+                sorter: (a: Account, b: Account) => a.username.localeCompare(b.username),
             },
             {
-                title: t('admin.role.descriptionColumn'),
-                dataIndex: 'description',
-                key: 'description',
-                sorter: (a: Role, b: Role) => a.description.localeCompare(b.description),
+                title: t('admin.account.email'),
+                dataIndex: 'email',
+                key: 'email',
+                sorter: (a: Account, b: Account) => a.email.localeCompare(b.email),
+            },
+            {
+                title: t('admin.account.fullName'),
+                dataIndex: 'fullName',
+                key: 'fullName',
+                sorter: (a: Account, b: Account) => a.fullName.localeCompare(b.fullName),
+            },
+            {
+                title: t('admin.account.phone'),
+                dataIndex: 'phone',
+                key: 'phone',
+            },
+            {
+                title: t('admin.account.gender'),
+                dataIndex: 'gender',
+                key: 'gender',
+            },
+            {
+                title: t('admin.account.role'),
+                dataIndex: 'role',
+                key: 'role',
             },
         ],
         data: data,
         rowKey: 'id',
-        onCreateNew: handleCreateNewRole,
+        onCreateNew: handleCreateNewAccount,
         onUpdate: handleUpdate,
         onDelete: handleDelete,
         onDeleteSelected: handleDeleteSelected,
         search: {
-            keyword: searchKeyword, // Truyền từ khóa tìm kiếm vào cấu hình
-            onSearch: handleSearch, // Hàm tìm kiếm
+            keyword: searchKeyword,
+            onSearch: handleSearch,
         },
         pagination: {
             currentPage: currentPage,
             totalItems: totalItems,
             pageSize: pageSize,
             onPaginationChange: onPageChange,
-        }
+        },
     };
 
     return (
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
-                { path: `${PREFIX_URL_ADMIN}/roles`, name: t('admin.role.title') },
+                { path: `${PREFIX_URL_ADMIN}/accounts`, name: t('admin.account.title') },
             ]}
         >
             {isLoading ? (
@@ -155,4 +182,4 @@ const RolePage: React.FC = () => {
     );
 };
 
-export default RolePage;
+export default AccountPage;

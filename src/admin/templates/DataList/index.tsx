@@ -14,19 +14,23 @@ export interface DataListConfig<T> {
     onUpdate: (id: string) => void;
     onDelete: (id: string) => void;
     onDeleteSelected: (ids: React.Key[]) => void;
+    search?: {
+        keyword?: string; // Từ khóa tìm kiếm
+        onSearch: (value: string) => void; // Hàm tìm kiếm
+    };
     pagination: {
         totalItems: number;
         currentPage: number;
-        pageSize: number; // Thêm pageSize
-        onPaginationChange?: (page: number, pageSize: number) => void;
-    }
+        pageSize: number;
+        onPaginationChange?: (page: number, pageSize: number, keyword?: string) => void; // Hàm thay đổi phân trang
+    };
 }
 
 const DataListTemplate = <T extends { id: string }>({
-    config,
-}: { config: DataListConfig<T> }): JSX.Element => {
-    const [searchText, setSearchText] = useState('');
+                                                        config,
+                                                    }: { config: DataListConfig<T> }): JSX.Element => {
     const [selectedIds, setSelectedIds] = useState<React.Key[]>([]);
+    const [searchKeyword, setSearchKeyword] = useState<string>(config.search?.keyword || ''); // State cho từ khóa tìm kiếm
     const { t } = useTranslation();
 
     const handleTableChange = (
@@ -35,6 +39,12 @@ const DataListTemplate = <T extends { id: string }>({
         _sorter: SorterResult<T> | SorterResult<T>[],
         _extra: TableCurrentDataSource<T>
     ) => { };
+
+    const handleSearchEnter = () => {
+        if (config.search) {
+            config.search.onSearch(searchKeyword); // Gọi hàm onSearch khi nhấn Enter
+        }
+    };
 
     const actionColumn: ColumnType<T> = {
         title: t('admin.dataList.actionColumn'),
@@ -45,8 +55,8 @@ const DataListTemplate = <T extends { id: string }>({
                 <Popconfirm
                     title={t('admin.dataList.deleteConfirm')}
                     onConfirm={() => config.onDelete(record.id)}
-                    okText={t('admin.dataList.assignPermissionConfirm')}
-                    cancelText={t('admin.dataList.assignPermissionCancel')}
+                    okText={t('admin.dataList.deleteSelectedConfirm')}
+                    cancelText={t('admin.dataList.deleteSelectedCancel')}
                 >
                     <Button className="data-list__action-button data-list__action-button--delete" icon={<DeleteOutlined />} danger />
                 </Popconfirm>
@@ -63,13 +73,16 @@ const DataListTemplate = <T extends { id: string }>({
                     </Button>
                 </Col>
                 <Col>
-                    <Input
-                        className="data-list__search-input"
-                        placeholder={t('admin.dataList.searchPlaceholder')}
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value)}
-                        prefix={<SearchOutlined />}
-                    />
+                    {config.search && (
+                        <Input
+                            className="data-list__search-input"
+                            placeholder={t('admin.dataList.searchPlaceholder')}
+                            value={searchKeyword} // Hiển thị từ khóa tìm kiếm hiện tại
+                            onPressEnter={handleSearchEnter} // Xử lý sự kiện nhấn Enter
+                            onChange={(e) => setSearchKeyword(e.target.value)} // Cập nhật từ khóa khi người dùng nhập
+                            prefix={<SearchOutlined />}
+                        />
+                    )}
                 </Col>
             </Row>
 
@@ -91,8 +104,8 @@ const DataListTemplate = <T extends { id: string }>({
                     <Popconfirm
                         title={t('admin.dataList.deleteConfirm')}
                         onConfirm={() => config.onDeleteSelected(selectedIds)}
-                        okText={t('admin.dataList.assignPermissionConfirm')}
-                        cancelText={t('admin.dataList.assignPermissionCancel')}
+                        okText={t('admin.dataList.deleteSelectedConfirm')}
+                        cancelText={t('admin.dataList.deleteSelectedCancel')}
                     >
                         <Button
                             className="data-list__delete-selected-button"
@@ -108,12 +121,12 @@ const DataListTemplate = <T extends { id: string }>({
                     <Pagination
                         current={config.pagination.currentPage || 1}
                         total={config.pagination.totalItems}
-                        pageSize={config.pagination.pageSize} // Cập nhật pageSize
+                        pageSize={config.pagination.pageSize}
                         showSizeChanger
                         pageSizeOptions={['5', '10', '20', '50', '100']}
                         onChange={(page, pageSize) => {
                             if (config.pagination.onPaginationChange) {
-                                config.pagination.onPaginationChange(page, pageSize || config.pagination.pageSize);
+                                config.pagination.onPaginationChange(page, pageSize || config.pagination.pageSize, searchKeyword); // Thêm từ khóa tìm kiếm khi phân trang
                             }
                         }}
                     />
