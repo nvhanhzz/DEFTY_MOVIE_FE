@@ -6,7 +6,7 @@ const PREFIX_PERMISSION: string = import.meta.env.VITE_PREFIX_PERMISSION as stri
 
 export const getPermissions = async (page?: number, pageSize?: number, searchKey?: string, searchValue?: string): Promise<Response> => {
     try {
-        const url = `${PREFIX_PERMISSION}/`;
+        const url = `${PREFIX_PERMISSION}`;
         return getWithParams(url, page, pageSize, searchKey, searchValue);
     } catch (error) {
         console.error(error);

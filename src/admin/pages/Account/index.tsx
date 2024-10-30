@@ -6,7 +6,7 @@ import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
-import { getAccounts } from '../../services/accountService.tsx';
+import {deleteAccounts, getAccounts} from '../../services/accountService.tsx';
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -73,9 +73,24 @@ const AccountPage: React.FC = () => {
         fetchData(pageFromUrl, pageSizeFromUrl, keywordFromUrl);
     }, [location.search]);
 
-    const handleDelete = (id: string) => {
-        setData(prevData => prevData.filter(item => item.id !== id));
-        message.success(t('admin.message.deleteSuccess'));
+    const handleDelete = async (id: string) => {
+        console.log(id);
+        setIsLoading(true);
+        try {
+            const response = await deleteAccounts([id]);
+            if (response.ok) {
+                setData(prevData => prevData.filter(item => item.id !== id));
+                message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa thành công
+            } else {
+                const result = await response.json();
+                message.error(result.message || t('admin.message.deleteError')); // Thông báo khi có lỗi xóa
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            message.error(t('admin.message.deleteError')); // Thông báo khi xóa thất bại
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleUpdate = (id: string) => {
@@ -86,9 +101,23 @@ const AccountPage: React.FC = () => {
         navigate('create');
     };
 
-    const handleDeleteSelected = (ids: React.Key[]) => {
-        setData(prevData => prevData.filter(item => !ids.includes(item.id)));
-        message.success(t('admin.message.deleteSuccess'));
+    const handleDeleteSelected = async (ids: React.Key[]) => {
+        setIsLoading(true);
+        try {
+            const response = await deleteAccounts(ids as string[]);
+            if (response.ok) {
+                setData(prevData => prevData.filter(item => !ids.includes(item.id)));
+                message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa nhiều thành công
+            } else {
+                const result = await response.json();
+                message.error(result.message || t('admin.message.deleteError')); // Thông báo khi xóa nhiều lỗi
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            message.error(t('admin.message.deleteError')); // Thông báo khi xóa nhiều thất bại
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const onPageChange = (page: number, pageSize?: number) => {
@@ -122,13 +151,13 @@ const AccountPage: React.FC = () => {
                 title: t('admin.account.email'),
                 dataIndex: 'email',
                 key: 'email',
-                sorter: (a: Account, b: Account) => a.email.localeCompare(b.email),
+                sorter: (a: Account, b: Account) => (a.email || '').localeCompare(b.email || ''),
             },
             {
                 title: t('admin.account.fullName'),
                 dataIndex: 'fullName',
                 key: 'fullName',
-                sorter: (a: Account, b: Account) => a.fullName.localeCompare(b.fullName),
+                sorter: (a: Account, b: Account) => (a.fullName || '').localeCompare(b.fullName || ''),
             },
             {
                 title: t('admin.account.phone'),
@@ -136,12 +165,12 @@ const AccountPage: React.FC = () => {
                 key: 'phone',
             },
             {
-                title: t('admin.account.gender'),
+                title: t('admin.account.gender.title'),
                 dataIndex: 'gender',
                 key: 'gender',
             },
             {
-                title: t('admin.account.role'),
+                title: t('admin.account.role.title'),
                 dataIndex: 'role',
                 key: 'role',
             },

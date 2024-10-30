@@ -18,6 +18,10 @@
             "fetchSuccess": "Data fetched successfully!",
             "fetchError": "Failed to fetch data."
         },
+        "form": {
+            "reset": "Reset",
+            "submit": "Submit"
+        },
         "dataList": {
             "actionColumn": "Action",
             "createNewButton": "Create New",
@@ -50,14 +54,49 @@
         },
         "account": {
             "title": "Accounts",
+            "avatar": "Avatar",
             "username": "Username",
             "email": "Email",
             "fullName": "Full Name",
             "phone": "Phone",
-            "gender": "Gender",
-            "role": "Role",
+            "password": "Password",
+            "dateOfBirth": "Date of birth",
+            "address": "Address",
+            "gender": {
+                "title": "Gender",
+                "placeholder": "Select gender",
+                "male": "Male",
+                "female": "Female",
+                "other": "Other"
+            },
+            "role": {
+                "title": "Role",
+                "placeholder": "Select role"
+            },
             "actionColumn": "Action",
-            "searchPlaceholder": "Search by ..."
+            "searchPlaceholder": "Search by ...",
+            "create": {
+                "title": "Create New Account"
+            },
+            "update": {
+                "title": "Update Account"
+            },
+            "validation": {
+                "fullName": "Full Name is required.",
+                "email": {
+                    "required": "Email is required.",
+                    "invalid": "The email format is incorrect."
+                },
+                "username": "Username is required.",
+                "phone": "Phone number is required.",
+                "password": {
+                    "required": "Password is required.",
+                    "minLength": "Password must be at least 6 characters."
+                },
+                "dateOfBirth": "Date of Birth is required.",
+                "gender": "Gender is required.",
+                "role": "Role is required."
+            }
         },
         "role": {
             "title": "Roles",

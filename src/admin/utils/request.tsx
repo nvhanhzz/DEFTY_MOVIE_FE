@@ -69,7 +69,7 @@ export const postJson = async (path: string, data: Record<string, any>): Promise
 export const postFormData = async (path: string, data: Record<string, any>): Promise<Response> => {
     const formData = new FormData();
     for (const key in data) {
-        if (data.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
             formData.append(key, data[key]);
         }
     }

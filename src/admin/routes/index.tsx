@@ -14,6 +14,8 @@ import EditPermission from "../pages/Permission/Update";
 import ArticlesPage from "../pages/Article";
 import AccountPage from "../pages/Account";
 import React from "react";
+import CreateAccount from "../pages/Account/Create";
+import UpdateAccount from "../pages/Account/Update";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -73,6 +75,14 @@ const DefaultRoutes: RouteType[] = [
     {
       path: 'accounts',
       element: <AccountPage />,
+    },
+    {
+        path: 'accounts/create',
+        element: <CreateAccount />,
+    },
+    {
+        path: 'accounts/update/:id',
+        element: <UpdateAccount />,
     },
     {
         path: 'settings',

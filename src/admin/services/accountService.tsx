@@ -1,6 +1,5 @@
-import {del, get, patchJson, postJson} from "../utils/request";
+import {del, get, patchFormData, postFormData} from "../utils/request";
 import {getWithParams} from "../utils/getWithParams.tsx";
-import {Account} from "../pages/Account";
 
 const PREFIX_ACCOUNT: string = import.meta.env.VITE_PREFIX_ACCOUNT as string;
 
@@ -14,9 +13,9 @@ export const getAccounts = async (page?: number, pageSize?: number, searchKey?: 
     }
 };
 
-export const postAccount = async (option: Account): Promise<Response> => {
+export const postAccount = async (option: FormData): Promise<Response> => {
     try {
-        return await postJson(`${PREFIX_ACCOUNT}`, option);
+        return await postFormData(`${PREFIX_ACCOUNT}/create-account`, option);
     } catch (error) {
         console.error(error);
         throw error;
@@ -43,9 +42,9 @@ export const getAccountById = async (id: string): Promise<Response> => {
     }
 }
 
-export const updateAccountById = async (id: string, option: Account): Promise<Response> => {
+export const updateAccountById = async (id: string, option: FormData): Promise<Response> => {
     try {
-        return await patchJson(`${PREFIX_ACCOUNT}/${id}`, option);
+        return await patchFormData(`${PREFIX_ACCOUNT}/${id}`, option);
     } catch (error) {
         console.error(error);
         throw error;
