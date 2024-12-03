@@ -3,7 +3,6 @@ import AdminLayoutDefault from "../layouts/AdminLayoutDefault";
 import AdminAuthLayout from "../layouts/AdminAuthLayout";
 import LoginPage from "../pages/Login";
 import DashboardPage from "../pages/Dashboard";
-import Test from "../pages/Test";
 import RolePage from "../pages/Role";
 import CreateRole from "../pages/Role/Create"; // Import trang tạo mới Role
 import EditRole from "../pages/Role/Update"; // Import trang sửa Role
@@ -36,10 +35,6 @@ const AuthRoutes: RouteType[] = [
 ];
 
 const DefaultRoutes: RouteType[] = [
-    {
-        path: 'test',
-        element: <Test />,
-    },
     {
         path: 'dashboard',
         element: <DashboardPage />,
@@ -109,6 +104,6 @@ function AdminRoutes() {
             children: isLoggedIn ? DefaultRoutes : AuthRoutes, // Chỉ giữ children ở đây
         }
     ];
-};
+}
 
 export default AdminRoutes;

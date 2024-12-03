@@ -1,52 +1,32 @@
-import {del, get, patchFormData, postFormData} from "../utils/request";
-import {getWithParams} from "../utils/getWithParams.tsx";
+import {del, get, patchJson, postJson} from "../utils/request";
+import { getWithParams } from "../utils/getWithParams.tsx";
+import handleRequest from "../utils/handleRequest.tsx";
+import {AccountFormValues} from "../pages/Account/Create";
 
-const PREFIX_ACCOUNT: string = import.meta.env.VITE_PREFIX_ACCOUNT as string;
+const PREFIX_ACCOUNT = import.meta.env.VITE_PREFIX_ACCOUNT as string;
 
-export const getAccounts = async (page?: number, pageSize?: number, searchKey?: string, searchValue?: string): Promise<Response> => {
-    try {
-        const url = `${PREFIX_ACCOUNT}`;
-        return getWithParams(url, page, pageSize, searchKey, searchValue);
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+export const getAccounts = (page?: number, pageSize?: number, searchKey?: string, searchValue?: string): Promise<Response> => {
+    const url = `${PREFIX_ACCOUNT}`;
+    const params = { page, pageSize, [searchKey || '']: searchValue }; // Optional search parameters
+    return handleRequest(getWithParams(url, params));
 };
 
-export const postAccount = async (option: FormData): Promise<Response> => {
-    try {
-        return await postFormData(`${PREFIX_ACCOUNT}/create-account`, option);
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-}
-
-export const deleteAccounts = async (ids: string[]): Promise<Response> => {
-    try {
-        const idString = ids.join(',');
-        const url = `${PREFIX_ACCOUNT}/${idString}`;
-        return await del(url);
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+export const postAccount = (option: AccountFormValues): Promise<Response> => {
+    const url = `${PREFIX_ACCOUNT}`;
+    return handleRequest(postJson(url, option));
 };
 
-export const getAccountById = async (id: string): Promise<Response> => {
-    try {
-        return await get(`${PREFIX_ACCOUNT}/${id}`);
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-}
+export const deleteAccounts = (ids: string[]): Promise<Response> => {
+    const url = `${PREFIX_ACCOUNT}/${ids.join(',')}`;
+    return handleRequest(del(url));
+};
 
-export const updateAccountById = async (id: string, option: FormData): Promise<Response> => {
-    try {
-        return await patchFormData(`${PREFIX_ACCOUNT}/${id}`, option);
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-}
+export const getAccountById = (id: string): Promise<Response> => {
+    const url = `${PREFIX_ACCOUNT}/${id}`;
+    return handleRequest(get(url));
+};
+
+export const updateAccountById = (id: string, option: AccountFormValues): Promise<Response> => {
+    const url = `${PREFIX_ACCOUNT}/${id}`;
+    return handleRequest(patchJson(url, option));
+};

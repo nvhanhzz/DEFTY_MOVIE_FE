@@ -1,7 +1,7 @@
 const DOMAIN: string = import.meta.env.VITE_DOMAIN as string;
 const PREFIX_API: string = import.meta.env.VITE_PREFIX_API as string;
-const PREFIX_ADMIN: string = import.meta.env.VITE_PREFIX_ADMIN as string;
 const PREFIX_AUTH: string = import.meta.env.VITE_PREFIX_AUTH as string;
+const PREFIX_ADMIN: string = import.meta.env.VITE_PREFIX_ADMIN as string;
 
 const refreshToken = async (): Promise<boolean> => {
     try {
