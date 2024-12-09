@@ -12,34 +12,35 @@ export interface DataListConfig<T> {
     rowKey: string;
     onCreateNew: () => void;
     onUpdate: (id: string) => void;
-    onDelete: (id: string) => void;
-    onDeleteSelected: (ids: React.Key[]) => void;
+    onDeleteSelected: (ids: React.Key[]) => void; // Xóa nhiều mục
     search?: {
-        keyword?: string; // Từ khóa tìm kiếm
-        onSearch: (value: string) => void; // Hàm tìm kiếm
+        keyword?: string;
+        onSearch: (value: string) => void;
     };
     pagination: {
         totalItems: number;
         currentPage: number;
         pageSize: number;
-        onPaginationChange?: (page: number, pageSize: number, keyword?: string) => void; // Hàm thay đổi phân trang
+        onPaginationChange?: (page: number, pageSize: number, keyword?: string) => void;
     };
 }
 
-const DataListTemplate = <T extends { id: string }>({
-                                                        config,
-                                                    }: { config: DataListConfig<T> }): JSX.Element => {
+const DataListTemplate = <T extends { id: string }>( { config }: { config: DataListConfig<T> }): JSX.Element => {
     const [selectedIds, setSelectedIds] = useState<React.Key[]>([]);
-    const [searchKeyword, setSearchKeyword] = useState<string>(config.search?.keyword || ''); // State cho từ khóa tìm kiếm
+    const [searchKeyword, setSearchKeyword] = useState<string>(config.search?.keyword || '');
     const { t } = useTranslation();
 
+    // Xử lý sự kiện thay đổi bảng (không thay đổi gì trong phần này)
     const handleTableChange = (
         _pagination: TablePaginationConfig,
         _filters: Record<string, FilterValue | null>,
         _sorter: SorterResult<T> | SorterResult<T>[],
         _extra: TableCurrentDataSource<T>
-    ) => { };
+    ) => {
+        // Nếu cần, có thể xử lý thêm logic phân trang hoặc sắp xếp tại đây
+    };
 
+    // Xử lý sự kiện tìm kiếm khi nhấn Enter
     const handleSearchEnter = () => {
         if (config.search) {
             config.search.onSearch(searchKeyword); // Gọi hàm onSearch khi nhấn Enter
@@ -54,7 +55,7 @@ const DataListTemplate = <T extends { id: string }>({
                 <Button className="data-list__action-button data-list__action-button--edit" icon={<EditOutlined />} onClick={() => config.onUpdate(record.id)} />
                 <Popconfirm
                     title={t('admin.dataList.deleteConfirm')}
-                    onConfirm={() => config.onDelete(record.id)}
+                    onConfirm={() => config.onDeleteSelected([record.id])} // Sử dụng onDeleteSelected thay vì onDelete
                     okText={t('admin.dataList.deleteSelectedConfirm')}
                     cancelText={t('admin.dataList.deleteSelectedCancel')}
                 >
@@ -77,9 +78,9 @@ const DataListTemplate = <T extends { id: string }>({
                         <Input
                             className="data-list__search-input"
                             placeholder={t('admin.dataList.searchPlaceholder')}
-                            value={searchKeyword} // Hiển thị từ khóa tìm kiếm hiện tại
-                            onPressEnter={handleSearchEnter} // Xử lý sự kiện nhấn Enter
-                            onChange={(e) => setSearchKeyword(e.target.value)} // Cập nhật từ khóa khi người dùng nhập
+                            value={searchKeyword}
+                            onPressEnter={handleSearchEnter}
+                            onChange={(e) => setSearchKeyword(e.target.value)}
                             prefix={<SearchOutlined />}
                         />
                     )}
@@ -92,7 +93,7 @@ const DataListTemplate = <T extends { id: string }>({
                 dataSource={config.data}
                 rowKey={config.rowKey}
                 pagination={false}
-                onChange={handleTableChange}
+                onChange={handleTableChange} // Vẫn giữ nguyên logic phân trang và sắp xếp
                 rowSelection={{
                     selectedRowKeys: selectedIds,
                     onChange: (keys) => setSelectedIds(keys),
@@ -103,7 +104,7 @@ const DataListTemplate = <T extends { id: string }>({
                 <Col>
                     <Popconfirm
                         title={t('admin.dataList.deleteConfirm')}
-                        onConfirm={() => config.onDeleteSelected(selectedIds)}
+                        onConfirm={() => config.onDeleteSelected(selectedIds)}  // Xóa nhiều mục khi chọn checkbox
                         okText={t('admin.dataList.deleteSelectedConfirm')}
                         cancelText={t('admin.dataList.deleteSelectedCancel')}
                     >
@@ -126,7 +127,7 @@ const DataListTemplate = <T extends { id: string }>({
                         pageSizeOptions={['5', '10', '20', '50', '100']}
                         onChange={(page, pageSize) => {
                             if (config.pagination.onPaginationChange) {
-                                config.pagination.onPaginationChange(page, pageSize || config.pagination.pageSize, searchKeyword); // Thêm từ khóa tìm kiếm khi phân trang
+                                config.pagination.onPaginationChange(page, pageSize || config.pagination.pageSize, searchKeyword);
                             }
                         }}
                     />

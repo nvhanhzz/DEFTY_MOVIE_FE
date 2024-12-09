@@ -20,7 +20,8 @@
         },
         "form": {
             "reset": "Reset",
-            "submit": "Submit"
+            "create": "Create",
+            "update": "Update"
         },
         "dataList": {
             "actionColumn": "Action",
@@ -155,7 +156,14 @@
             "title": "Articles",
             "titleColumn": "Title",
             "thumbnail": "Thumbnail",
-            "author": "Author"
+            "author": "Author",
+            "content": "Content",
+            "create": {
+                "title": "Create article"
+            },
+            "update": {
+                "title": "Update article"
+            }
         }
     },
     "client": {}

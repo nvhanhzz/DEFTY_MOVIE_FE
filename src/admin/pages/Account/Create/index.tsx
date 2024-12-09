@@ -106,7 +106,7 @@ const CreateAccount: React.FC = () => {
             breadcrumbItems={[
                 { path: `${PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
                 { path: `${PREFIX_URL_ADMIN}/accounts`, name: t('admin.account.title') },
-                { path: ``, name: t('admin.account.create.title') },
+                { path: ``, name: t('admin.account.Create.title') },
             ]}
         >
             <Form
@@ -240,7 +240,7 @@ const CreateAccount: React.FC = () => {
                         loading={loading}
                         className="submit-button"
                     >
-                        {t('admin.form.submit')}
+                        {t('admin.form.create')}
                     </Button>
                 </div>
             </Form>

@@ -66,17 +66,10 @@ export const postJson = async (path: string, data: Record<string, any>): Promise
     });
 };
 
-export const postFormData = async (path: string, data: Record<string, any>): Promise<Response> => {
-    const formData = new FormData();
-    for (const key in data) {
-        if (Object.prototype.hasOwnProperty.call(data, key)) {
-            formData.append(key, data[key]);
-        }
-    }
-
+export const postFormData = async (path: string, data: FormData): Promise<Response> => {
     return requestWithRefresh(path, {
         method: 'POST',
-        body: formData,
+        body: data,
     });
 };
 
@@ -90,17 +83,10 @@ export const patchJson = async (path: string, data: Record<string, any>): Promis
     });
 };
 
-export const patchFormData = async (path: string, data: Record<string, any>): Promise<Response> => {
-    const formData = new FormData();
-    for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-            formData.append(key, data[key]);
-        }
-    }
-
+export const patchFormData = async (path: string, data: FormData): Promise<Response> => {
     return requestWithRefresh(path, {
         method: 'PATCH',
-        body: formData,
+        body: data,
     });
 };
 

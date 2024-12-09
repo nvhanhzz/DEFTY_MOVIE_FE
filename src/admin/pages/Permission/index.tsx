@@ -59,24 +59,6 @@ const PermissionsPage: React.FC = () => {
         fetchData(currentPage, pageSize, searchKeyword); // Gọi fetchData với từ khóa tìm kiếm
     }, [currentPage, pageSize, searchKeyword]);
 
-    const handleDelete = async (id: string) => {
-        setIsLoading(true);
-        try {
-            const response = await deletePermissions([id]);
-            if (response.ok) {
-                setData(prevData => prevData.filter(item => item.id !== id));
-                message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa thành công
-            } else {
-                const result = await response.json();
-                message.error(result.message || t('admin.message.deleteError')); // Thông báo khi có lỗi xóa
-            }
-        } catch (error) {
-            message.error(t('admin.message.deleteError')); // Thông báo khi xóa thất bại
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     const handleUpdate = (id: string) => {
         navigate(`update/${id}`);
     };
@@ -89,6 +71,7 @@ const PermissionsPage: React.FC = () => {
         setIsLoading(true);
         try {
             const response = await deletePermissions(ids as string[]);
+            console.log(response);
             if (response.ok) {
                 setData(prevData => prevData.filter(item => !ids.includes(item.id)));
                 message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa nhiều thành công
@@ -142,8 +125,7 @@ const PermissionsPage: React.FC = () => {
         rowKey: 'id',
         onCreateNew: handleCreateNewPermission,
         onUpdate: handleUpdate,
-        onDelete: handleDelete,
-        onDeleteSelected: handleDeleteSelected,
+        onDeleteSelected: handleDeleteSelected, // Sử dụng onDeleteSelected thay vì onDelete
         search: {
             keyword: searchKeyword, // Truyền từ khóa tìm kiếm vào cấu hình
             onSearch: handleSearch, // Hàm tìm kiếm

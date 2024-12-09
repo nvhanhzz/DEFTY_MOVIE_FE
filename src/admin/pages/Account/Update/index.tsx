@@ -122,7 +122,7 @@ const UpdateAccount: React.FC = () => {
             breadcrumbItems={[
                 { path: `${PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
                 { path: `${PREFIX_URL_ADMIN}/accounts`, name: t('admin.account.title') },
-                { path: ``, name: t('admin.account.update.title') },
+                { path: ``, name: t('admin.account.Update.title') },
             ]}
         >
             <Form
@@ -253,7 +253,7 @@ const UpdateAccount: React.FC = () => {
                         loading={loading}
                         className="submit-button"
                     >
-                        {t('admin.form.submit')}
+                        {t('admin.form.Update')}
                     </Button>
                 </div>
             </Form>

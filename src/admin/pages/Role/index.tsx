@@ -24,34 +24,33 @@ const RolePage: React.FC = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
-    const [searchKeyword, setSearchKeyword] = useState<string>(''); // State cho từ khóa tìm kiếm
+    const [searchKeyword, setSearchKeyword] = useState<string>('');
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
 
+    // Hàm fetch dữ liệu với API
     const fetchData = async (page: number, pageSize: number, keyword: string) => {
         setIsLoading(true);
         try {
             const response = await getRoles(page, pageSize, 'name', keyword); // Gọi API với từ khóa
             if (!response.ok) {
-                message.error(t('admin.message.fetchError')); // Thông báo khi lỗi
+                message.error(t('admin.message.fetchError'));
                 return;
             }
             const result = await response.json();
             const content: Role[] = result.data.content;
-            const roles = content.map((item: any) => ({
-                ...item,
-                key: item.id,
-            }));
+            const roles = content.map((item: any) => ({ ...item, key: item.id }));
             setTotalItems(result.data.totalElements);
             setData(roles);
         } catch (error) {
-            message.error(t('admin.message.fetchError')); // Thông báo khi có lỗi
+            message.error(t('admin.message.fetchError'));
         } finally {
             setIsLoading(false);
         }
     };
 
+    // Xử lý URLSearchParams để theo dõi các tham số page, pageSize và keyword
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
@@ -60,44 +59,39 @@ const RolePage: React.FC = () => {
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
-        setSearchKeyword(keywordFromUrl); // Cập nhật từ khóa tìm kiếm
+        setSearchKeyword(keywordFromUrl);
+
+        fetchData(pageFromUrl, pageSizeFromUrl, keywordFromUrl); // Gọi dữ liệu mỗi khi URL thay đổi
     }, [location.search]);
 
-    useEffect(() => {
-        fetchData(currentPage, pageSize, searchKeyword); // Gọi fetchData với từ khóa tìm kiếm
-    }, [currentPage, pageSize, searchKeyword]);
-
-    const handleDelete = (id: string) => {
-        setData(prevData => prevData.filter(item => item.id !== id));
-        message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa thành công
-    };
-
-    const handleUpdate = (id: string) => {
-        navigate(`update/${id}`);
-    };
-
-    const handleCreateNewRole = () => {
-        navigate('create');
-    };
-
+    // Hàm xử lý xóa các mục
     const handleDeleteSelected = (ids: React.Key[]) => {
-        setData(prevData => prevData.filter(item => !ids.includes(item.id)));
-        message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa nhiều thành công
-    };
-
-    const onPageChange = (page: number, pageSize?: number) => {
-        setCurrentPage(page);
-        setPageSize(pageSize || 10);
-        navigate(`?page=${page}&pageSize=${pageSize || 10}&keyword=${searchKeyword}`); // Cập nhật URL với page, pageSize và từ khóa
+        setIsLoading(true);
+        try {
+            setData(prevData => prevData.filter(item => !ids.includes(item.id)));
+            message.success(t('admin.message.deleteSuccess'));
+        } catch (error) {
+            message.error(t('admin.message.deleteError'));
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     // Hàm xử lý tìm kiếm
     const handleSearch = (keyword: string) => {
         setSearchKeyword(keyword);
-        setCurrentPage(1); // Reset về trang 1 khi tìm kiếm
-        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`); // Cập nhật URL khi tìm kiếm
+        setCurrentPage(1); // Reset lại trang hiện tại khi tìm kiếm
+        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`); // Cập nhật URL với từ khóa tìm kiếm
     };
 
+    // Hàm thay đổi trang
+    const onPageChange = (page: number, pageSize?: number) => {
+        setCurrentPage(page);
+        setPageSize(pageSize || 10);
+        navigate(`?page=${page}&pageSize=${pageSize || 10}&keyword=${searchKeyword}`);
+    };
+
+    // Cấu hình dữ liệu cho DataListTemplate
     const dataListConfig: DataListConfig<Role> = {
         columns: [
             {
@@ -121,13 +115,12 @@ const RolePage: React.FC = () => {
         ],
         data: data,
         rowKey: 'id',
-        onCreateNew: handleCreateNewRole,
-        onUpdate: handleUpdate,
-        onDelete: handleDelete,
+        onCreateNew: () => navigate('create'),
+        onUpdate: (id: string) => navigate(`update/${id}`),
         onDeleteSelected: handleDeleteSelected,
         search: {
-            keyword: searchKeyword, // Truyền từ khóa tìm kiếm vào cấu hình
-            onSearch: handleSearch, // Hàm tìm kiếm
+            keyword: searchKeyword,
+            onSearch: handleSearch,
         },
         pagination: {
             currentPage: currentPage,

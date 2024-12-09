@@ -91,7 +91,7 @@ const EditRole: React.FC = () => {
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/roles`, name: t('admin.role.title') },
-                { path: ``, name: t('admin.role.update.title') },
+                { path: ``, name: t('admin.role.Update.title') },
             ]}
         >
             {!role ? (
@@ -117,13 +117,13 @@ const EditRole: React.FC = () => {
                         </Form.Item>
                         <Form.Item>
                             <Popconfirm
-                                title={t('admin.role.update.confirmUpdateMessage')}
+                                title={t('admin.role.Update.confirmUpdateMessage')}
                                 onConfirm={form.submit}
                                 okText={t('admin.message.assignPermissionConfirm')}
                                 cancelText={t('admin.message.assignPermissionCancel')}
                             >
                                 <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                                    {t('admin.role.update.updateRoleButton')}
+                                    {t('admin.role.Update.updateRoleButton')}
                                 </Button>
                             </Popconfirm>
                         </Form.Item>

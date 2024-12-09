@@ -6,7 +6,7 @@ import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
-import {deleteAccounts, getAccounts} from '../../services/accountService.tsx';
+import { deleteAccounts, getAccounts } from '../../services/accountService.tsx';
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -51,7 +51,6 @@ const AccountPage: React.FC = () => {
             }));
             setTotalItems(result.data.totalElements);
             setData(accounts);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
@@ -73,26 +72,6 @@ const AccountPage: React.FC = () => {
         fetchData(pageFromUrl, pageSizeFromUrl, keywordFromUrl);
     }, [location.search]);
 
-    const handleDelete = async (id: string) => {
-        console.log(id);
-        setIsLoading(true);
-        try {
-            const response = await deleteAccounts([id]);
-            if (response.ok) {
-                setData(prevData => prevData.filter(item => item.id !== id));
-                message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa thành công
-            } else {
-                const result = await response.json();
-                message.error(result.message || t('admin.message.deleteError')); // Thông báo khi có lỗi xóa
-            }
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (error) {
-            message.error(t('admin.message.deleteError')); // Thông báo khi xóa thất bại
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     const handleUpdate = (id: string) => {
         navigate(`update/${id}`);
     };
@@ -101,20 +80,20 @@ const AccountPage: React.FC = () => {
         navigate('create');
     };
 
+    // Hàm xóa tài khoản (cả xóa đơn lẫn xóa nhiều mục)
     const handleDeleteSelected = async (ids: React.Key[]) => {
         setIsLoading(true);
         try {
             const response = await deleteAccounts(ids as string[]);
             if (response.ok) {
                 setData(prevData => prevData.filter(item => !ids.includes(item.id)));
-                message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa nhiều thành công
+                message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa thành công
             } else {
                 const result = await response.json();
-                message.error(result.message || t('admin.message.deleteError')); // Thông báo khi xóa nhiều lỗi
+                message.error(result.message || t('admin.message.deleteError')); // Thông báo khi có lỗi xóa
             }
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
-            message.error(t('admin.message.deleteError')); // Thông báo khi xóa nhiều thất bại
+            message.error(t('admin.message.deleteError')); // Thông báo khi xóa thất bại
         } finally {
             setIsLoading(false);
         }
@@ -179,7 +158,7 @@ const AccountPage: React.FC = () => {
         rowKey: 'id',
         onCreateNew: handleCreateNewAccount,
         onUpdate: handleUpdate,
-        onDelete: handleDelete,
+        // Bỏ onDelete đi vì xóa tất cả thông qua onDeleteSelected
         onDeleteSelected: handleDeleteSelected,
         search: {
             keyword: searchKeyword,

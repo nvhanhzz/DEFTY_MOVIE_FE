@@ -20,7 +20,8 @@
         },
         "form": {
             "reset": "Làm mới",
-            "submit": "Gửi"
+            "create": "Tạo",
+            "update": "Cập nhật"
         },
         "dataList": {
             "actionColumn": "Hành động",
@@ -154,8 +155,15 @@
         "article": {
             "title": "Bài viết",
             "titleColumn": "Tiêu đề",
-            "thumbnail": "Ảnh thu nhỏ",
-            "author": "Tác giả"
+            "thumbnail": "Ảnh chính",
+            "author": "Tác giả",
+            "content": "Nội dung",
+            "create": {
+                "title": "Tạo bài viết"
+            },
+            "update": {
+                "title": "Cập nhật bài viết"
+            }
         }
     },
     "client": {}

@@ -15,6 +15,8 @@ import AccountPage from "../pages/Account";
 import React from "react";
 import CreateAccount from "../pages/Account/Create";
 import UpdateAccount from "../pages/Account/Update";
+import CreateArticle from "../pages/Article/Create";
+import UpdateArticle from "../pages/Article/Update";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -40,11 +42,11 @@ const DefaultRoutes: RouteType[] = [
         element: <DashboardPage />,
     },
     {
-        path: 'roles/create', // Route cho tạo mới Role
+        path: 'roles/Create', // Route cho tạo mới Role
         element: <CreateRole />,
     },
     {
-        path: 'roles/update/:id', // Route cho sửa Role
+        path: 'roles/Update/:id', // Route cho sửa Role
         element: <EditRole />,
     },
     {
@@ -52,11 +54,11 @@ const DefaultRoutes: RouteType[] = [
         element: <RolePage />,
     },
     {
-        path: 'permissions/create', // Route cho tạo mới Role
+        path: 'permissions/Create', // Route cho tạo mới Role
         element: <CreatePermission />,
     },
     {
-        path: 'permissions/update/:id', // Route cho sửa Role
+        path: 'permissions/Update/:id', // Route cho sửa Role
         element: <EditPermission />,
     },
     {
@@ -68,15 +70,23 @@ const DefaultRoutes: RouteType[] = [
         element: <ArticlesPage />,
     },
     {
+        path: 'articles/create',
+        element: <CreateArticle />,
+    },
+    {
+        path: 'articles/update/:id',
+        element: <UpdateArticle />,
+    },
+    {
       path: 'accounts',
       element: <AccountPage />,
     },
     {
-        path: 'accounts/create',
+        path: 'accounts/Create',
         element: <CreateAccount />,
     },
     {
-        path: 'accounts/update/:id',
+        path: 'accounts/Update/:id',
         element: <UpdateAccount />,
     },
     {
