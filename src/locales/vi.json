@@ -18,11 +18,19 @@
             "fetchSuccess": "Lấy dữ liệu thành công!",
             "fetchError": "Lấy dữ liệu không thành công."
         },
+        "form": {
+            "reset": "Làm mới",
+            "create": "Tạo",
+            "update": "Cập nhật"
+        },
         "dataList": {
             "actionColumn": "Hành động",
             "createNewButton": "Tạo mới",
-            "searchPlaceholder": "Tìm kiếm theo tên",
-            "deleteSelectedButton": "Xóa các mục đã chọn"
+            "searchPlaceholder": "Tìm kiếm ...",
+            "deleteSelectedButton": "Xóa các mục đã chọn",
+            "deleteConfirm": "Bạn có chắc chắn muốn xóa mục này không?",
+            "deleteSelectedConfirm": "Xóa",
+            "deleteSelectedCancel": "Hủy"
         },
         "login": {
             "title": "Trang quản trị Defty",
@@ -44,6 +52,52 @@
         },
         "dashboard": {
             "title": "Tổng quan"
+        },
+        "account": {
+            "title": "Tài khoản",
+            "avatar": "Ảnh đại diện",
+            "username": "Tên đăng nhập",
+            "email": "Email",
+            "fullName": "Họ và tên",
+            "phone": "Số điện thoại",
+            "password": "Mật khẩu",
+            "dateOfBirth": "Ngày sinh",
+            "address": "Địa chỉ",
+            "gender": {
+                "title": "Giới tính",
+                "placeholder": "Chọn giới tính",
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            },
+            "role": {
+                "title": "Nhóm quyền",
+                "placeholder": "Chọn nhóm quyền"
+            },
+            "actionColumn": "Hành động",
+            "searchPlaceholder": "Tìm kiếm theo ...",
+            "create": {
+                "title": "Tạo tài khoản quản trị viên"
+            },
+            "update": {
+                "title": "Cập nhật tài khoản"
+            },
+            "validation": {
+                "fullName": "Họ và tên là bắt buộc.",
+                "email": {
+                    "required": "Email là bắt buộc.",
+                    "invalid": "Định dạng email không hợp lệ."
+                },
+                "username": "Tên đăng nhập là bắt buộc.",
+                "phone": "Số điện thoại là bắt buộc.",
+                "password": {
+                    "required": "Mật khẩu là bắt buộc.",
+                    "minLength": "Mật khẩu phải có ít nhất 6 ký tự."
+                },
+                "dateOfBirth": "Ngày sinh là bắt buộc.",
+                "gender": "Giới tính là bắt buộc.",
+                "role": "Vai trò là bắt buộc."
+            }
         },
         "role": {
             "title": "Nhóm quyền",
@@ -101,8 +155,15 @@
         "article": {
             "title": "Bài viết",
             "titleColumn": "Tiêu đề",
-            "thumbnail": "Ảnh thu nhỏ",
-            "author": "Tác giả"
+            "thumbnail": "Ảnh chính",
+            "author": "Tác giả",
+            "content": "Nội dung",
+            "create": {
+                "title": "Tạo bài viết"
+            },
+            "update": {
+                "title": "Cập nhật bài viết"
+            }
         }
     },
     "client": {}

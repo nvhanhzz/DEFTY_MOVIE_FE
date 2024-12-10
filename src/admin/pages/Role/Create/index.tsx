@@ -38,7 +38,7 @@ const CreateRole: React.FC = () => {
             breadcrumbItems={[
                 { path: `${PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
                 { path: `${PREFIX_URL_ADMIN}/roles`, name: t('admin.role.title') },
-                { path: ``, name: t('admin.role.create.title') },
+                { path: ``, name: t('admin.role.Create.title') },
             ]}
         >
             <Form onFinish={handleCreateRole} layout="vertical">
@@ -58,7 +58,7 @@ const CreateRole: React.FC = () => {
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" loading={isLoading}>
-                        {t('admin.role.create.createRoleButton')}
+                        {t('admin.role.Create.createRoleButton')}
                     </Button>
                 </Form.Item>
             </Form>

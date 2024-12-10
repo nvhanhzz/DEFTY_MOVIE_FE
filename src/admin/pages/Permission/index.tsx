@@ -20,14 +20,15 @@ const PermissionsPage: React.FC = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
+    const [searchKeyword, setSearchKeyword] = useState<string>(''); // State cho từ khóa tìm kiếm
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
 
-    const fetchData = async (page: number, pageSize: number) => {
+    const fetchData = async (page: number, pageSize: number, keyword: string) => {
         setIsLoading(true);
         try {
-            const response = await getPermissions(page, pageSize);
+            const response = await getPermissions(page, pageSize, 'name', keyword); // Gọi API với từ khóa
             const result = await response.json();
             const content: Permission[] = result.data.content;
             const permissions = content.map((item: any) => ({
@@ -47,31 +48,16 @@ const PermissionsPage: React.FC = () => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
         const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
+        const keywordFromUrl = searchParams.get('keyword') || ''; // Lấy từ khóa tìm kiếm từ URL
+
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
+        setSearchKeyword(keywordFromUrl); // Cập nhật từ khóa tìm kiếm
     }, [location.search]);
 
     useEffect(() => {
-        fetchData(currentPage, pageSize);
-    }, [currentPage, pageSize]);
-
-    const handleDelete = async (id: string) => {
-        setIsLoading(true);
-        try {
-            const response = await deletePermissions([id]);
-            if (response.ok) {
-                setData(prevData => prevData.filter(item => item.id !== id));
-                message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa thành công
-            } else {
-                const result = await response.json();
-                message.error(result.message || t('admin.message.deleteError')); // Thông báo khi có lỗi xóa
-            }
-        } catch (error) {
-            message.error(t('admin.message.deleteError')); // Thông báo khi xóa thất bại
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        fetchData(currentPage, pageSize, searchKeyword); // Gọi fetchData với từ khóa tìm kiếm
+    }, [currentPage, pageSize, searchKeyword]);
 
     const handleUpdate = (id: string) => {
         navigate(`update/${id}`);
@@ -85,6 +71,7 @@ const PermissionsPage: React.FC = () => {
         setIsLoading(true);
         try {
             const response = await deletePermissions(ids as string[]);
+            console.log(response);
             if (response.ok) {
                 setData(prevData => prevData.filter(item => !ids.includes(item.id)));
                 message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa nhiều thành công
@@ -103,7 +90,14 @@ const PermissionsPage: React.FC = () => {
     const onPageChange = (page: number, pageSize?: number) => {
         setCurrentPage(page);
         setPageSize(pageSize || 10);
-        navigate(`?page=${page}&pageSize=${pageSize || 10}`); // Cập nhật URL với `page` và `pageSize`
+        navigate(`?page=${page}&pageSize=${pageSize || 10}&keyword=${searchKeyword}`); // Cập nhật URL với từ khóa tìm kiếm
+    };
+
+    // Hàm xử lý tìm kiếm
+    const handleSearch = (keyword: string) => {
+        setSearchKeyword(keyword);
+        setCurrentPage(1); // Reset lại trang về 1 khi tìm kiếm
+        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`); // Cập nhật URL khi tìm kiếm
     };
 
     const dataListConfig: DataListConfig<Permission> = {
@@ -131,8 +125,11 @@ const PermissionsPage: React.FC = () => {
         rowKey: 'id',
         onCreateNew: handleCreateNewPermission,
         onUpdate: handleUpdate,
-        onDelete: handleDelete,
-        onDeleteSelected: handleDeleteSelected,
+        onDeleteSelected: handleDeleteSelected, // Sử dụng onDeleteSelected thay vì onDelete
+        search: {
+            keyword: searchKeyword, // Truyền từ khóa tìm kiếm vào cấu hình
+            onSearch: handleSearch, // Hàm tìm kiếm
+        },
         pagination: {
             currentPage: currentPage,
             totalItems: totalItems,
