@@ -5,16 +5,13 @@ const PREFIX_PERMISSION: string = import.meta.env.VITE_PREFIX_PERMISSION as stri
 
 export const getPermissions = async (page?: number, pageSize?: number): Promise<Response> => {
     try {
-        let url = `${PREFIX_PERMISSION}/`;
-
-        const queryParams = new URLSearchParams();
-        if (page !== undefined) queryParams.append("page", (page - 1).toString());
-        if (pageSize !== undefined) queryParams.append("size", pageSize.toString());
-
-        if (queryParams.toString()) {
+        let url = `${PREFIX_PERMISSION}`;
+        if (page !== undefined && pageSize !== undefined) {
+            const queryParams = new URLSearchParams();
+            queryParams.append("page", (page - 1).toString());
+            queryParams.append("size", pageSize.toString());
             url += `?${queryParams.toString()}`;
         }
-
         const response = await get(url);
         return response;
     } catch (error) {
@@ -22,6 +19,7 @@ export const getPermissions = async (page?: number, pageSize?: number): Promise<
         throw error;
     }
 };
+
 
 export const postPermission = async (option: Permission): Promise<Response> => {
     try {
