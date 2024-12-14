@@ -90,11 +90,11 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
     return (
         <div className="custom-transfer">
             <div className="transfer-list">
-                <h3>{t("admin.role.Update.permissions.permissionAvailable")}</h3>
+                <h3>{t("admin.role.update.permissions.permissionAvailable")}</h3>
                 <input
                     className='search-input'
                     type="text"
-                    placeholder={t("admin.role.Update.permissions.searchPlaceholder")}
+                    placeholder={t("admin.role.update.permissions.searchPlaceholder")}
                     value={sourceSearch}
                     onChange={e => setSourceSearch(e.target.value)}
                 />
@@ -133,11 +133,11 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
             </div>
 
             <div className="transfer-list">
-                <h3>{t("admin.role.Update.permissions.rolePermission")}</h3>
+                <h3>{t("admin.role.update.permissions.rolePermission")}</h3>
                 <input
                     className='search-input'
                     type="text"
-                    placeholder={t("admin.role.Update.permissions.searchPlaceholder")}
+                    placeholder={t("admin.role.update.permissions.searchPlaceholder")}
                     value={targetSearch}
                     onChange={e => setTargetSearch(e.target.value)}
                 />
@@ -159,20 +159,20 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
 
             {/* Modal Confirm */}
             <Modal
-                title={action === 'add' ? t("admin.role.Update.permissions.confirmTransferMessage") : t("admin.role.Update.permissions.confirmTransferMessage")}
+                title={action === 'add' ? t("admin.role.update.permissions.confirmTransferMessage") : t("admin.role.update.permissions.confirmTransferMessage")}
                 visible={isConfirmVisible}
                 onOk={confirmAction}
                 onCancel={cancelAction}
                 footer={[
                     <Button key="back" onClick={cancelAction}>
-                        {t("admin.role.Update.permissions.assignPermissionCancel")}
+                        {t("admin.role.update.permissions.assignPermissionCancel")}
                     </Button>,
                     <Button key="submit" type="primary" loading={isLoading} onClick={confirmAction}>
-                        {t("admin.role.Update.permissions.assignPermissionConfirm")}
+                        {t("admin.role.update.permissions.assignPermissionConfirm")}
                     </Button>,
                 ]}
             >
-                <p>{t("admin.role.Update.permissions.confirmTransferMessage")}</p>
+                <p>{t("admin.role.update.permissions.confirmTransferMessage")}</p>
             </Modal>
         </div>
     );

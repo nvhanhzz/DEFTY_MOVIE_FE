@@ -23,6 +23,12 @@ export const updateRoleById = (id: string, option: Role): Promise<Response> => {
     return handleRequest(patchJson(`${PREFIX_ROLE}/${id}`, option));
 };
 
+export const deleteRole = (ids: string[]): Promise<Response> => {
+    const idString = ids.join(',');
+    const url = `${PREFIX_ROLE}/${idString}`;
+    return handleRequest(del(url));
+};
+
 export const assignPermission = (ids: string[], roleId: string): Promise<Response> => {
     const idString = ids.join(',');
     const url = `${PREFIX_ROLE}/assignment/${idString}?roleId=${roleId}`;

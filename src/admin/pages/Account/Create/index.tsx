@@ -38,6 +38,7 @@ const CreateAccount: React.FC = () => {
             try {
                 const response = await getRoles(1, 999999999);
                 const data = await response.json();
+                console.log(data)
                 if (response.ok) {
                     setRoles(data.data.content);
                 } else {
@@ -50,7 +51,7 @@ const CreateAccount: React.FC = () => {
         };
 
         fetchRoles();
-    }, []);  // Chỉ chạy một lần khi component được mount
+    }, []);
 
     const handleCreateAccount = async (values: AccountFormValues) => {
         console.log(values);
@@ -65,7 +66,7 @@ const CreateAccount: React.FC = () => {
             formData.append('address', values.address);
             formData.append('dateOfBirth', values.dateOfBirth);
             formData.append('password', values.password);
-            formData.append('role', values.role);  // Gửi role người dùng chọn
+            formData.append('role', values.role);
             if (file) {
                 formData.append('avatar', file);
             }
@@ -90,15 +91,13 @@ const CreateAccount: React.FC = () => {
         }
     };
 
-    // Hàm xử lý khi chọn avatar
     const handleAvatarChange = ({ file }: { file: RcFile }) => {
         setFile(file);
     };
 
-    // Hàm xử lý khi reset form, bao gồm reset avatar
     const handleResetForm = () => {
-        form.resetFields();  // Reset các trường trong form
-        setFile(null);       // Reset avatar về null
+        form.resetFields();
+        setFile(null);
     };
 
     return (
@@ -106,7 +105,7 @@ const CreateAccount: React.FC = () => {
             breadcrumbItems={[
                 { path: `${PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
                 { path: `${PREFIX_URL_ADMIN}/accounts`, name: t('admin.account.title') },
-                { path: ``, name: t('admin.account.Create.title') },
+                { path: ``, name: t('admin.account.create.title') },
             ]}
         >
             <Form
@@ -129,6 +128,14 @@ const CreateAccount: React.FC = () => {
                             label={t('admin.account.email')}
                             name="email"
                             rules={[{ required: true, message: t('admin.account.validation.email') }]}
+                        >
+                            <Input />
+                        </Form.Item>
+
+                        <Form.Item
+                            label={t('admin.account.address')}
+                            name="address"
+                            rules={[{ required: true, message: t('admin.account.validation.address') }]}
                         >
                             <Input />
                         </Form.Item>

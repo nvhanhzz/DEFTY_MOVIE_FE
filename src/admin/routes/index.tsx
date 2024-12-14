@@ -17,6 +17,9 @@ import CreateAccount from "../pages/Account/Create";
 import UpdateAccount from "../pages/Account/Update";
 import CreateArticle from "../pages/Article/Create";
 import UpdateArticle from "../pages/Article/Update";
+import MoviePage from "../pages/Movie";
+import CreateMovie from "../pages/Movie/Create";
+import UpdateMovie from "../pages/Movie/Update";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -76,6 +79,18 @@ const DefaultRoutes: RouteType[] = [
     {
         path: 'articles/update/:id',
         element: <UpdateArticle />,
+    },
+    {
+        path: 'movies',
+        element: <MoviePage />,
+    },
+    {
+        path: 'movies/create',
+        element: <CreateMovie />,
+    },
+    {
+        path: 'movies/update/:id',
+        element: <UpdateMovie />,
     },
     {
       path: 'accounts',

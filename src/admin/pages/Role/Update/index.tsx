@@ -95,7 +95,7 @@ const EditRole: React.FC = () => {
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/roles`, name: t('admin.role.title') },
-                { path: ``, name: t('admin.role.Update.title') },
+                { path: ``, name: t('admin.role.update.title') },
             ]}
         >
             {!role ? (
