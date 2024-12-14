@@ -6,7 +6,7 @@ import handleRequest from "../utils/handleRequest.tsx";
 const PREFIX_PERMISSION = import.meta.env.VITE_PREFIX_PERMISSION as string;
 
 export const getPermissions = (page?: number, pageSize?: number, searchKey?: string, searchValue?: string): Promise<Response> => {
-    const url = `${PREFIX_PERMISSION}/`;
+    const url = `${PREFIX_PERMISSION}`;
     const params = { page, pageSize, [searchKey || '']: searchValue };
     return handleRequest(getWithParams(url, params));
 };
