@@ -100,30 +100,34 @@
             }
         },
         "role": {
-            "title": "Nhóm quyền",
-            "createNewRoleButton": "Tạo nhóm quyền mới",
-            "deleteSelectedButton": "Xóa các nhóm quyền đã chọn",
-            "roleColumn": "Nhóm quyền",
+            "title": "Vai trò",
+            "createNewRoleButton": "Tạo vai trò mới",
+            "deleteSelectedButton": "Xóa các vai trò đã chọn",
+            "roleColumn": "Vai trò",
             "descriptionColumn": "Mô tả",
             "actionColumn": "Hành động",
             "searchPlaceholder": "Tìm kiếm theo tên",
             "create": {
-                "title": "Tạo nhóm quyền mới",
-                "createRoleButton": "Tạo nhóm quyền",
-                "permissionsLabel": "Phân quyền"
+                "title": "Tạo vai trò mới",
+                "createRoleButton": "Tạo vai trò",
+                "permissionsLabel": "Gán quyền"
             },
             "update": {
-                "title": "Cập nhật nhóm quyền",
-                "updateRoleButton": "Cập nhật nhóm quyền",
-                "assignPermission": "Phân quyền",
-                "confirmUpdateMessage": "Bạn có chắc chắn muốn cập nhật nhóm quyền này không?",
+                "title": "Cập nhật vai trò",
+                "updateRoleButton": "Cập nhật vai trò",
+                "assignPermission": "Gán quyền",
+                "confirmUpdateMessage": "Bạn có chắc chắn muốn cập nhật vai trò này không?",
                 "permissions": {
-                    "permissionAvailable": "Các quyền khả dụng",
-                    "rolePermission": "Quyền của nhóm",
-                    "searchPlaceholder": "Tìm kiếm quyền..."
+                    "permissionAvailable": "Quyền có sẵn",
+                    "rolePermission": "Quyền của vai trò",
+                    "searchPlaceholder": "Tìm kiếm quyền...",
+                    "assignPermissionCancel": "Hủy",
+                    "assignPermissionConfirm": "Xác Nhận",
+                    "confirmTransferMessage": "Bạn có chắc chắn muốn chuyển quyền này không?"
                 }
             }
         },
+
         "permission": {
             "title": "Quyền",
             "createNewPermissionButton": "Tạo quyền mới",
@@ -163,6 +167,26 @@
             },
             "update": {
                 "title": "Cập nhật bài viết"
+            }
+        },
+        "movie": {
+            "title": "Phim",
+            "createNewPermissionButton": "Tạo phim mới",
+            "nameColumn": "Tên phim",
+            "descriptionColumn": "Mô tả",
+            "actionColumn": "Hành động",
+            "searchPlaceholder": "Tìm kiếm theo tên",
+            "create": {
+                "title": "Tạo phim mới",
+                "permissionName": "Tên phim",
+                "description": "Mô tả",
+                "createPermissionButton": "Tạo phim"
+            },
+            "update": {
+                "title": "Cập nhật phim",
+                "permissionName": "Tên phim",
+                "description": "Mô tả",
+                "updatePermissionButton": "Cập nhật phim"
             }
         }
     },

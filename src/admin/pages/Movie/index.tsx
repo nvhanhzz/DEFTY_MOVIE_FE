@@ -2,47 +2,40 @@ import React, { useEffect, useState } from 'react';
 import { message, Spin } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {deleteRole, getRoles} from '../../services/roleSevice';
+import { getMovie, deleteMovie } from '../../services/movieService';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
-import { Permission } from '../Permission';
 import { LoadingOutlined } from '@ant-design/icons';
 
-const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
-
-export interface Role {
+export interface Movie {
     id: string;
-    name: string;
-    description: string;
-    rolePermissions: Permission[];
+    title: string;
+    content: string;
+    author: string;
+    thumbnail: string;
+    slug: string;
 }
 
-const RolePage: React.FC = () => {
-    const [data, setData] = useState<Role[]>([]);
+const MoviePage: React.FC = () => {
+    const [data, setData] = useState<Movie[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
-    const [searchKeyword, setSearchKeyword] = useState<string>('');
+    const [searchKeyword, setSearchKeyword] = useState<string>(''); // State cho từ khóa tìm kiếm
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
 
-    // Hàm fetch dữ liệu với API
-    const fetchData = async (page: number, pageSize: number, keyword: string) => {
+    const fetchData = async () => {
         setIsLoading(true);
         try {
-            const response = await getRoles(page, pageSize, 'name', keyword); // Gọi API với từ khóa
-            if (!response.ok) {
-                message.error(t('admin.message.fetchError'));
-                return;
-            }
+            const response = await getMovie();
             const result = await response.json();
-            const content: Role[] = result.data.content;
-            const roles = content.map((item: any) => ({ ...item, key: item.id }));
-            setTotalItems(result.data.totalElements);
-            setData(roles);
+            const movie: Movie[] = result;
+            setTotalItems(result.size);
+            setData(movie.map(item => ({ ...item, key: item.id })));
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
@@ -50,26 +43,33 @@ const RolePage: React.FC = () => {
         }
     };
 
-    // Xử lý URLSearchParams để theo dõi các tham số page, pageSize và keyword
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
-        const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
+        const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
         const keywordFromUrl = searchParams.get('keyword') || ''; // Lấy từ khóa tìm kiếm từ URL
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
-        setSearchKeyword(keywordFromUrl);
-
-        fetchData(pageFromUrl, pageSizeFromUrl, keywordFromUrl); // Gọi dữ liệu mỗi khi URL thay đổi
+        setSearchKeyword(keywordFromUrl); // Cập nhật từ khóa tìm kiếm
     }, [location.search]);
 
-    // Hàm xử lý xóa các mục
+    useEffect(() => {
+        fetchData(currentPage, pageSize, searchKeyword); // Gọi fetchData với từ khóa tìm kiếm
+    }, [currentPage, pageSize, searchKeyword]);
+
+    const handleUpdate = (id: string) => {
+        navigate(`update/${id}`);
+    };
+
+    const handleCreateNewMovie = () => {
+        navigate('create');
+    };
+
     const handleDeleteSelected = async (ids: React.Key[]) => {
         setIsLoading(true);
         try {
-            const response = await deleteRole(ids as string[]);
-            console.log(response);
+            const response = await deleteMovie(ids as string[]);
             if (response.ok) {
                 setData(prevData => prevData.filter(item => !ids.includes(item.id)));
                 message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa nhiều thành công
@@ -84,50 +84,57 @@ const RolePage: React.FC = () => {
         }
     };
 
-    // Hàm xử lý tìm kiếm
-    const handleSearch = (keyword: string) => {
-        setSearchKeyword(keyword);
-        setCurrentPage(1); // Reset lại trang hiện tại khi tìm kiếm
-        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`); // Cập nhật URL với từ khóa tìm kiếm
-    };
-
-    // Hàm thay đổi trang
+    // Hàm xử lý khi thay đổi trang
     const onPageChange = (page: number, pageSize?: number) => {
         setCurrentPage(page);
         setPageSize(pageSize || 10);
-        navigate(`?page=${page}&pageSize=${pageSize || 10}&keyword=${searchKeyword}`);
+        navigate(`?page=${page}&size=${pageSize || 10}&keyword=${searchKeyword}`); // Cập nhật URL với từ khóa tìm kiếm
     };
 
-    // Cấu hình dữ liệu cho DataListTemplate
-    const dataListConfig: DataListConfig<Role> = {
+    // Hàm xử lý tìm kiếm
+    const handleSearch = (keyword: string) => {
+        setSearchKeyword(keyword);
+        setCurrentPage(1); // Reset lại trang về 1 khi tìm kiếm
+        navigate(`?page=1&size=${pageSize}&keyword=${keyword}`); // Cập nhật URL khi tìm kiếm
+    };
+
+    const dataListConfig: DataListConfig<Movie> = {
         columns: [
             {
                 title: 'No.',
-                dataIndex: 'key',
+                key: 'no',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
-                sorter: (a: Role, b: Role) => Number(a.id) - Number(b.id),
+                sorter: (a: Movie, b: Movie) => Number(a.id) - Number(b.id),
             },
             {
-                title: t('admin.role.roleColumn'),
-                dataIndex: 'name',
-                key: 'name',
-                sorter: (a: Role, b: Role) => a.name.localeCompare(b.name),
+                title: t('admin.movie.titleColumn'),
+                dataIndex: 'title',
+                key: 'title',
+                sorter: (a: Movie, b: Movie) => a.title.localeCompare(b.title),
             },
             {
-                title: t('admin.role.descriptionColumn'),
-                dataIndex: 'description',
-                key: 'description',
-                sorter: (a: Role, b: Role) => a.description.localeCompare(b.description),
+                title: t('admin.movie.thumbnail'),
+                dataIndex: 'thumbnail',
+                key: 'thumbnail',
+                render: (thumbnail: string) => (
+                    <img src={thumbnail} alt="thumbnail" style={{ width: '100px', height: 'auto', borderRadius: '4px' }} />
+                ),
+            },
+            {
+                title: t('admin.movie.author'),
+                dataIndex: 'author',
+                key: 'author',
+                sorter: (a: Movie, b: Movie) => a.author.localeCompare(b.author),
             },
         ],
         data: data,
         rowKey: 'id',
-        onCreateNew: () => navigate('create'),
-        onUpdate: (id: string) => navigate(`update/${id}`),
-        onDeleteSelected: handleDeleteSelected,
+        onCreateNew: handleCreateNewMovie,
+        onUpdate: handleUpdate,
+        onDeleteSelected: handleDeleteSelected, // Sử dụng onDeleteSelected thay vì onDelete
         search: {
-            keyword: searchKeyword,
-            onSearch: handleSearch,
+            keyword: searchKeyword, // Truyền từ khóa tìm kiếm vào cấu hình
+            onSearch: handleSearch, // Hàm tìm kiếm
         },
         pagination: {
             currentPage: currentPage,
@@ -140,8 +147,8 @@ const RolePage: React.FC = () => {
     return (
         <OutletTemplate
             breadcrumbItems={[
-                { path: `${PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
-                { path: `${PREFIX_URL_ADMIN}/roles`, name: t('admin.role.title') },
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}`, name: t('admin.dashboard.title') },
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/movie`, name: t('admin.movie.title') }
             ]}
         >
             {isLoading ? (
@@ -155,4 +162,4 @@ const RolePage: React.FC = () => {
     );
 };
 
-export default RolePage;
+export default MoviePage;

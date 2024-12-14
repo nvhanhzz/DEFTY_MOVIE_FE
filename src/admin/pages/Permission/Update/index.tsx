@@ -57,7 +57,7 @@ const EditPermission: React.FC = () => {
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/permissions`, name: t('admin.permission.title') },
-                { path: ``, name: t('admin.permission.Create.title') },
+                { path: ``, name: t('admin.permission.create.title') },
             ]}
         >
             {!permission ?
@@ -66,14 +66,14 @@ const EditPermission: React.FC = () => {
                 </div> :
                 <Form onFinish={handleUpdatePermission} layout="vertical" initialValues={permission}>
                     <Form.Item
-                        label={t('admin.permission.Update.permissionName')}
+                        label={t('admin.permission.update.permissionName')}
                         name="name"
                         rules={[{ required: true, message: t('admin.message.requiredMessage') }]} // Thông báo yêu cầu nhập chung
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        label={t('admin.permission.Update.description')}
+                        label={t('admin.permission.update.description')}
                         name="description"
                         rules={[{ required: true, message: t('admin.message.requiredMessage') }]} // Thông báo yêu cầu nhập chung
                     >
@@ -81,7 +81,7 @@ const EditPermission: React.FC = () => {
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" loading={loading}>
-                            {t('admin.permission.Update.updatePermissionButton')}
+                            {t('admin.permission.update.updatePermissionButton')}
                         </Button>
                     </Form.Item>
                 </Form>

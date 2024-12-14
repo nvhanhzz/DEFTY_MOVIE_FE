@@ -6,7 +6,9 @@ import {
     SafetyOutlined,
     KeyOutlined,
     ReadOutlined,
-    UserOutlined
+    UserOutlined,
+    LinuxOutlined
+
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Sider.scss';
@@ -33,6 +35,11 @@ const menuItems: MenuItem[] = [
         linkTo: 'dashboard',
     },
     {
+        icon: <LinuxOutlined />,
+        label: 'admin.movie.title',
+        linkTo: 'movies',
+    },
+    {
         icon: <UserOutlined />,
         label: 'admin.account.title',
         linkTo: 'accounts',
@@ -52,6 +59,7 @@ const menuItems: MenuItem[] = [
         label: 'admin.article.title',
         linkTo: 'articles',
     },
+
     {
         icon: <SettingOutlined />,
         label: 'admin.setting.title',

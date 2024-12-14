@@ -31,22 +31,27 @@ const UpdateAccount: React.FC = () => {
                 const result = await response.json();
                 if (response.ok && result.status === 200) {
                     const data: Account = result.data;
+                    console.log(data)
                     form.setFieldsValue({
                         fullName: data.fullName,
                         email: data.email,
                         username: data.username,
                         phone: data.phone,
                         gender: data.gender,
+                        address: data.address,
                         role: data.role,
                         dateOfBirth: data.dateOfBirth,
-                        datePicker: data.dateOfBirth ? dayjs(data.dateOfBirth) : null,  // Chuyển thành đối tượng dayjs nếu có
+                        datePicker: data.dateOfBirth ? dayjs(data.dateOfBirth) : null,
                     });
+                    if (data.avatar) {
+                        // setFile(null);
+                        form.setFieldsValue({ avatar: data.avatar });
+                    }
                 }
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (e) {
                 message.error('Error fetching account data');
             }
-        }
+        };
 
         const fetchRoles = async () => {
             try {
@@ -89,15 +94,15 @@ const UpdateAccount: React.FC = () => {
             const response = await updateAccountById(id as string, formData);
             const result = await response.json();
             if (!response.ok) {
-                message.error(result.message || t('admin.message.createError'));
+                message.error(result.message || t('admin.message.updateError'));
                 return;
             }
-            if (result.status !== 201) {
-                message.error(result.message || t('admin.message.createError'));
+            if (result.status !== 200) {
+                message.error(result.message || t('admin.message.updateError'));
                 return;
             }
 
-            message.success(t('admin.message.createSuccess'));
+            message.success(t('admin.message.updateSuccess'));
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
@@ -108,6 +113,7 @@ const UpdateAccount: React.FC = () => {
 
     // Hàm xử lý khi chọn avatar
     const handleAvatarChange = ({ file }: { file: RcFile }) => {
+        console.log(file)
         setFile(file);
     };
 
@@ -122,7 +128,7 @@ const UpdateAccount: React.FC = () => {
             breadcrumbItems={[
                 { path: `${PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
                 { path: `${PREFIX_URL_ADMIN}/accounts`, name: t('admin.account.title') },
-                { path: ``, name: t('admin.account.Update.title') },
+                { path: ``, name: t('admin.account.update.title') },
             ]}
         >
             <Form
@@ -145,6 +151,14 @@ const UpdateAccount: React.FC = () => {
                             label={t('admin.account.email')}
                             name="email"
                             rules={[{ required: true, message: t('admin.account.validation.email') }]}
+                        >
+                            <Input />
+                        </Form.Item>
+
+                        <Form.Item
+                            label={t('admin.account.address')}
+                            name="address"
+                            rules={[{ required: true, message: t('admin.account.validation.address') }]}
                         >
                             <Input />
                         </Form.Item>
@@ -228,6 +242,13 @@ const UpdateAccount: React.FC = () => {
                                 >
                                     <img
                                         src={file ? URL.createObjectURL(file as Blob) : 'https://th.bing.com/th/id/OIP.lMA6AEzLnoPpw177nVhYZgHaHa?pid=ImgDet&w=184&h=184&c=7&dpr=1.3'}
+                                        // src={
+                                        //     file
+                                        //         ? URL.createObjectURL(file as Blob) // Hiển thị file người dùng upload
+                                        //         : form.getFieldValue('avatar') // Hiển thị avatar sẵn có từ tài khoản
+                                        //             ? form.getFieldValue('avatar')
+                                        //             : 'https://via.placeholder.com/150' // URL mặc định nếu không có avatar
+                                        // }
                                         alt="avatar"
                                         className="avatar-image"
                                     />
@@ -253,7 +274,7 @@ const UpdateAccount: React.FC = () => {
                         loading={loading}
                         className="submit-button"
                     >
-                        {t('admin.form.Update')}
+                        {t('admin.form.update')}
                     </Button>
                 </div>
             </Form>

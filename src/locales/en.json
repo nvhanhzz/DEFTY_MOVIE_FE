@@ -120,7 +120,10 @@
                 "permissions": {
                     "permissionAvailable": "Available Permissions",
                     "rolePermission": "Role Permissions",
-                    "searchPlaceholder": "Search permissions..."
+                    "searchPlaceholder": "Search permissions...",
+                    "assignPermissionCancel": "Cancel",
+                    "assignPermissionConfirm": "Confirm",
+                    "confirmTransferMessage": "Are you sure you want to transfer this permission?"
                 }
             }
         },
@@ -164,7 +167,28 @@
             "update": {
                 "title": "Update article"
             }
+        },
+        "movie": {
+            "title": "Movie",
+            "createNewPermissionButton": "Create New Movie",
+            "nameColumn": "Movie Name",
+            "descriptionColumn": "Description",
+            "actionColumn": "Actions",
+            "searchPlaceholder": "Search by name",
+            "create": {
+                "title": "Create New Movie",
+                "permissionName": "Movie Name",
+                "description": "Description",
+                "createPermissionButton": "Create Movie"
+            },
+            "update": {
+                "title": "Update Movie",
+                "permissionName": "Movie Name",
+                "description": "Description",
+                "updatePermissionButton": "Update Movie"
+            }
         }
+
     },
     "client": {}
 }

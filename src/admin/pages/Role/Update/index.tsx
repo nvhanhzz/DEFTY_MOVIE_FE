@@ -52,7 +52,7 @@ const EditRole: React.FC = () => {
                 if (response.ok) {
                     const result = await response.json();
                     if (result.status === 200) {
-                        const listPermission: Permission[] = result.data.content.map((item: Permission) => ({
+                        const listPermission: Permission[] = result.data.map((item: Permission) => ({
                             ...item,
                             key: item.id.toString(),
                         }));
@@ -86,12 +86,16 @@ const EditRole: React.FC = () => {
         }
     };
 
+    const handleConfirmUpdate = () => {
+        form.submit();
+    };
+
     return (
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/roles`, name: t('admin.role.title') },
-                { path: ``, name: t('admin.role.Update.title') },
+                { path: ``, name: t('admin.role.update.title') },
             ]}
         >
             {!role ? (
@@ -117,13 +121,13 @@ const EditRole: React.FC = () => {
                         </Form.Item>
                         <Form.Item>
                             <Popconfirm
-                                title={t('admin.role.Update.confirmUpdateMessage')}
-                                onConfirm={form.submit}
+                                title={t('admin.role.update.confirmUpdateMessage')}
+                                onConfirm={handleConfirmUpdate}
                                 okText={t('admin.message.assignPermissionConfirm')}
                                 cancelText={t('admin.message.assignPermissionCancel')}
                             >
-                                <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                                    {t('admin.role.Update.updateRoleButton')}
+                                <Button type="primary" loading={isSubmitting}>
+                                    {t('admin.role.update.updateRoleButton')}
                                 </Button>
                             </Popconfirm>
                         </Form.Item>
