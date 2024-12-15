@@ -171,8 +171,41 @@
         },
         "director": {
             "title": "Đạo diễn",
+            "fullName": "Họ và tên",
+            "dateOfBirth": "Ngày sinh",
+            "gender": {
+                "title": "Giới tính",
+                "placeholder": "Chọn giới tính",
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            },
+            "weight": "Cân nặng",
+            "height": "Chiều cao",
+            "nationality": "Quốc tịch",
+            "description": "Mô tả",
+            "avatar": "Ảnh đại diện",
             "create": {
-                "title": "Tạo mới đạo diễn"
+                "title": "Tạo đạo diễn",
+                "form": {
+                    "reset": "Đặt lại",
+                    "create": "Tạo"
+                },
+                "validation": {
+                    "fullName": "Vui lòng nhập họ và tên!",
+                    "dateOfBirth": "Vui lòng chọn ngày sinh!",
+                    "gender": "Vui lòng chọn giới tính!",
+                    "weight": "Vui lòng nhập cân nặng!",
+                    "height": "Vui lòng nhập chiều cao!",
+                    "nationality": "Vui lòng nhập quốc tịch!",
+                    "description": "Vui lòng nhập mô tả!"
+                },
+                "message": {
+                    "createError": "Đã xảy ra lỗi khi tạo đạo diễn. Vui lòng thử lại.",
+                    "createSuccess": "Tạo đạo diễn thành công.",
+                    "fetchError": "Lỗi khi lấy dữ liệu. Vui lòng thử lại sau."
+                },
+                "upload": "Tải lên ảnh đại diện"
             },
             "update": {
                 "title": "Cập nhật đạo diễn"
