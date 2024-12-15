@@ -168,6 +168,48 @@
                 "title": "Update article"
             }
         },
+        "director": {
+            "title": "Director",
+            "fullName": "Full name",
+            "dateOfBirth": "Date of birth",
+            "gender": {
+                "title": "Gender",
+                "placeholder": "Select gender",
+                "male": "Male",
+                "female": "Female",
+                "other": "Other"
+            },
+            "weight": "Weight",
+            "height": "Height",
+            "nationality": "Nationality",
+            "description": "Description",
+            "avatar": "Avatar",
+            "create": {
+                "title": "Create director",
+                "form": {
+                    "reset": "Reset",
+                    "create": "Create"
+                },
+                "validation": {
+                    "fullName": "Please input the full name!",
+                    "dateOfBirth": "Please select the date of birth!",
+                    "gender": "Please select gender!",
+                    "weight": "Please input the weight!",
+                    "height": "Please input the height!",
+                    "nationality": "Please input the nationality!",
+                    "description": "Please input the description!"
+                },
+                "message": {
+                    "createError": "An error occurred while creating the director. Please try again.",
+                    "createSuccess": "Director created successfully.",
+                    "fetchError": "Error fetching data. Please try again later."
+                },
+                "upload": "Upload Avatar"
+            },
+            "update": {
+                "title": "Update director"
+            }
+        },
         "movie": {
             "title": "Movie",
             "createNewPermissionButton": "Create New Movie",

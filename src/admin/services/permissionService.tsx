@@ -19,7 +19,6 @@ export const getPermissions = async (page?: number, pageSize?: number): Promise<
     }
 };
 
-
 export const postPermission = async (option: Permission): Promise<Response> => {
     try {
         return await postJson(`${PREFIX_PERMISSION}`, option);

@@ -49,6 +49,8 @@
 
         .ant-table-cell {
             border-bottom: 1px solid #ddd; // Viền mỏng cho mỗi ô
+            vertical-align: middle; // Căn giữa theo chiều dọc
+            text-align: center; // Căn giữa nội dung theo chiều ngang (nếu cần)
         }
 
         .ant-table-tbody>tr:nth-child(odd) {
