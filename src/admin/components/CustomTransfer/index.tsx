@@ -66,7 +66,7 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
             }
         } catch (error) {
             console.error("Error updating permissions:", error);
-            message.error(t("admin.role.update.permissions.errorMessage")); // Hiển thị thông báo lỗi
+            message.error(t("admin.role.Update.permissions.errorMessage")); // Hiển thị thông báo lỗi
         } finally {
             setIsConfirmVisible(false);
             setIsLoading(false); // Kết thúc loading

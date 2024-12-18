@@ -12,29 +12,40 @@ export interface DataListConfig<T> {
     rowKey: string;
     onCreateNew: () => void;
     onUpdate: (id: string) => void;
-    onDelete: (id: string) => void;
-    onDeleteSelected: (ids: React.Key[]) => void;
+    onDeleteSelected: (ids: React.Key[]) => void; // Xóa nhiều mục
+    search?: {
+        keyword?: string;
+        onSearch: (value: string) => void;
+    };
     pagination: {
         totalItems: number;
         currentPage: number;
-        pageSize: number; // Thêm pageSize
-        onPaginationChange?: (page: number, pageSize: number) => void;
-    }
+        pageSize: number;
+        onPaginationChange?: (page: number, pageSize: number, keyword?: string) => void;
+    };
 }
 
-const DataListTemplate = <T extends { id: string }>({
-    config,
-}: { config: DataListConfig<T> }): JSX.Element => {
-    const [searchText, setSearchText] = useState('');
+const DataListTemplate = <T extends { id: string }>( { config }: { config: DataListConfig<T> }): JSX.Element => {
     const [selectedIds, setSelectedIds] = useState<React.Key[]>([]);
+    const [searchKeyword, setSearchKeyword] = useState<string>(config.search?.keyword || '');
     const { t } = useTranslation();
 
+    // Xử lý sự kiện thay đổi bảng (không thay đổi gì trong phần này)
     const handleTableChange = (
         _pagination: TablePaginationConfig,
         _filters: Record<string, FilterValue | null>,
         _sorter: SorterResult<T> | SorterResult<T>[],
         _extra: TableCurrentDataSource<T>
-    ) => { };
+    ) => {
+        // Nếu cần, có thể xử lý thêm logic phân trang hoặc sắp xếp tại đây
+    };
+
+    // Xử lý sự kiện tìm kiếm khi nhấn Enter
+    const handleSearchEnter = () => {
+        if (config.search) {
+            config.search.onSearch(searchKeyword); // Gọi hàm onSearch khi nhấn Enter
+        }
+    };
 
     const actionColumn: ColumnType<T> = {
         title: t('admin.dataList.actionColumn'),
@@ -44,9 +55,9 @@ const DataListTemplate = <T extends { id: string }>({
                 <Button className="data-list__action-button data-list__action-button--edit" icon={<EditOutlined />} onClick={() => config.onUpdate(record.id)} />
                 <Popconfirm
                     title={t('admin.dataList.deleteConfirm')}
-                    onConfirm={() => config.onDelete(record.id)}
-                    okText={t('admin.dataList.assignPermissionConfirm')}
-                    cancelText={t('admin.dataList.assignPermissionCancel')}
+                    onConfirm={() => config.onDeleteSelected([record.id])} // Sử dụng onDeleteSelected thay vì onDelete
+                    okText={t('admin.dataList.deleteSelectedConfirm')}
+                    cancelText={t('admin.dataList.deleteSelectedCancel')}
                 >
                     <Button className="data-list__action-button data-list__action-button--delete" icon={<DeleteOutlined />} danger />
                 </Popconfirm>
@@ -63,13 +74,16 @@ const DataListTemplate = <T extends { id: string }>({
                     </Button>
                 </Col>
                 <Col>
-                    <Input
-                        className="data-list__search-input"
-                        placeholder={t('admin.dataList.searchPlaceholder')}
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value)}
-                        prefix={<SearchOutlined />}
-                    />
+                    {config.search && (
+                        <Input
+                            className="data-list__search-input"
+                            placeholder={t('admin.dataList.searchPlaceholder')}
+                            value={searchKeyword}
+                            onPressEnter={handleSearchEnter}
+                            onChange={(e) => setSearchKeyword(e.target.value)}
+                            prefix={<SearchOutlined />}
+                        />
+                    )}
                 </Col>
             </Row>
 
@@ -79,7 +93,7 @@ const DataListTemplate = <T extends { id: string }>({
                 dataSource={config.data}
                 rowKey={config.rowKey}
                 pagination={false}
-                onChange={handleTableChange}
+                onChange={handleTableChange} // Vẫn giữ nguyên logic phân trang và sắp xếp
                 rowSelection={{
                     selectedRowKeys: selectedIds,
                     onChange: (keys) => setSelectedIds(keys),
@@ -90,9 +104,9 @@ const DataListTemplate = <T extends { id: string }>({
                 <Col>
                     <Popconfirm
                         title={t('admin.dataList.deleteConfirm')}
-                        onConfirm={() => config.onDeleteSelected(selectedIds)}
-                        okText={t('admin.dataList.assignPermissionConfirm')}
-                        cancelText={t('admin.dataList.assignPermissionCancel')}
+                        onConfirm={() => config.onDeleteSelected(selectedIds)}  // Xóa nhiều mục khi chọn checkbox
+                        okText={t('admin.dataList.deleteSelectedConfirm')}
+                        cancelText={t('admin.dataList.deleteSelectedCancel')}
                     >
                         <Button
                             className="data-list__delete-selected-button"
@@ -108,12 +122,12 @@ const DataListTemplate = <T extends { id: string }>({
                     <Pagination
                         current={config.pagination.currentPage || 1}
                         total={config.pagination.totalItems}
-                        pageSize={config.pagination.pageSize} // Cập nhật pageSize
+                        pageSize={config.pagination.pageSize}
                         showSizeChanger
                         pageSizeOptions={['5', '10', '20', '50', '100']}
                         onChange={(page, pageSize) => {
                             if (config.pagination.onPaginationChange) {
-                                config.pagination.onPaginationChange(page, pageSize || config.pagination.pageSize);
+                                config.pagination.onPaginationChange(page, pageSize || config.pagination.pageSize, searchKeyword);
                             }
                         }}
                     />

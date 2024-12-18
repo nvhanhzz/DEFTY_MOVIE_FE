@@ -2,20 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { message, Spin } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getPermissions, deletePermissions } from '../../services/permissionService';
+import { getMovie, deleteMovie } from '../../services/movieService';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
 
-export interface Permission {
+export interface Movie {
     id: string;
-    name: string;
-    description: string;
+    title: string;
+    content: string;
+    author: string;
+    thumbnail: string;
+    slug: string;
 }
 
-const PermissionsPage: React.FC = () => {
-    const [data, setData] = useState<Permission[]>([]);
+const MoviePage: React.FC = () => {
+    const [data, setData] = useState<Movie[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -25,18 +28,14 @@ const PermissionsPage: React.FC = () => {
     const location = useLocation();
     const { t } = useTranslation();
 
-    const fetchData = async (page: number, pageSize: number, keyword: string) => {
+    const fetchData = async () => {
         setIsLoading(true);
         try {
-            const response = await getPermissions(page, pageSize, 'name', keyword); // Gọi API với từ khóa
+            const response = await getMovie();
             const result = await response.json();
-            const content: Permission[] = result.data.content;
-            const permissions = content.map((item: any) => ({
-                ...item,
-                key: item.id,
-            }));
-            setTotalItems(result.data.totalElements);
-            setData(permissions);
+            const movie: Movie[] = result;
+            setTotalItems(result.size);
+            setData(movie.map(item => ({ ...item, key: item.id })));
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
@@ -47,7 +46,7 @@ const PermissionsPage: React.FC = () => {
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
-        const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
+        const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
         const keywordFromUrl = searchParams.get('keyword') || ''; // Lấy từ khóa tìm kiếm từ URL
 
         setCurrentPage(pageFromUrl);
@@ -63,15 +62,14 @@ const PermissionsPage: React.FC = () => {
         navigate(`update/${id}`);
     };
 
-    const handleCreateNewPermission = () => {
+    const handleCreateNewMovie = () => {
         navigate('create');
     };
 
     const handleDeleteSelected = async (ids: React.Key[]) => {
         setIsLoading(true);
         try {
-            const response = await deletePermissions(ids as string[]);
-            console.log(response);
+            const response = await deleteMovie(ids as string[]);
             if (response.ok) {
                 setData(prevData => prevData.filter(item => !ids.includes(item.id)));
                 message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa nhiều thành công
@@ -90,40 +88,48 @@ const PermissionsPage: React.FC = () => {
     const onPageChange = (page: number, pageSize?: number) => {
         setCurrentPage(page);
         setPageSize(pageSize || 10);
-        navigate(`?page=${page}&pageSize=${pageSize || 10}&keyword=${searchKeyword}`); // Cập nhật URL với từ khóa tìm kiếm
+        navigate(`?page=${page}&size=${pageSize || 10}&keyword=${searchKeyword}`); // Cập nhật URL với từ khóa tìm kiếm
     };
 
     // Hàm xử lý tìm kiếm
     const handleSearch = (keyword: string) => {
         setSearchKeyword(keyword);
         setCurrentPage(1); // Reset lại trang về 1 khi tìm kiếm
-        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`); // Cập nhật URL khi tìm kiếm
+        navigate(`?page=1&size=${pageSize}&keyword=${keyword}`); // Cập nhật URL khi tìm kiếm
     };
 
-    const dataListConfig: DataListConfig<Permission> = {
+    const dataListConfig: DataListConfig<Movie> = {
         columns: [
             {
                 title: 'No.',
                 key: 'no',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
-                sorter: (a: Permission, b: Permission) => Number(a.id) - Number(b.id),
+                sorter: (a: Movie, b: Movie) => Number(a.id) - Number(b.id),
             },
             {
-                title: t('admin.permission.nameColumn'),
-                dataIndex: 'name',
-                key: 'name',
-                sorter: (a: Permission, b: Permission) => a.name.localeCompare(b.name),
+                title: t('admin.movie.titleColumn'),
+                dataIndex: 'title',
+                key: 'title',
+                sorter: (a: Movie, b: Movie) => a.title.localeCompare(b.title),
             },
             {
-                title: t('admin.permission.descriptionColumn'),
-                dataIndex: 'description',
-                key: 'description',
-                sorter: (a: Permission, b: Permission) => a.description.localeCompare(b.description),
+                title: t('admin.movie.thumbnail'),
+                dataIndex: 'thumbnail',
+                key: 'thumbnail',
+                render: (thumbnail: string) => (
+                    <img src={thumbnail} alt="thumbnail" style={{ width: '100px', height: 'auto', borderRadius: '4px' }} />
+                ),
+            },
+            {
+                title: t('admin.movie.author'),
+                dataIndex: 'author',
+                key: 'author',
+                sorter: (a: Movie, b: Movie) => a.author.localeCompare(b.author),
             },
         ],
         data: data,
         rowKey: 'id',
-        onCreateNew: handleCreateNewPermission,
+        onCreateNew: handleCreateNewMovie,
         onUpdate: handleUpdate,
         onDeleteSelected: handleDeleteSelected, // Sử dụng onDeleteSelected thay vì onDelete
         search: {
@@ -142,7 +148,7 @@ const PermissionsPage: React.FC = () => {
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}`, name: t('admin.dashboard.title') },
-                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/permissions`, name: t('admin.permission.title') }
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/movie`, name: t('admin.movie.title') }
             ]}
         >
             {isLoading ? (
@@ -156,4 +162,4 @@ const PermissionsPage: React.FC = () => {
     );
 };
 
-export default PermissionsPage;
+export default MoviePage;

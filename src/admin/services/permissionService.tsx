@@ -1,5 +1,5 @@
-import { Permission } from "../pages/Permission/Create";
-import { del, get, patchJson, postJson } from "../utils/request";
+import {Permission} from "../pages/Permission/Create";
+import {del, get, patchJson, postJson} from "../utils/request";
 
 const PREFIX_PERMISSION: string = import.meta.env.VITE_PREFIX_PERMISSION as string;
 
@@ -7,16 +7,13 @@ export const getPermissions = async (page?: number, pageSize?: number): Promise<
     try {
         let url = `${PREFIX_PERMISSION}`;
 
-        const queryParams = new URLSearchParams();
-        if (page !== undefined) queryParams.append("page", (page - 1).toString());
-        if (pageSize !== undefined) queryParams.append("size", pageSize.toString());
-
-        if (queryParams.toString()) {
+        if (page !== undefined && pageSize !== undefined) {
+            const queryParams = new URLSearchParams();
+            queryParams.append("page", (page - 1).toString());
+            queryParams.append("size", pageSize.toString());
             url += `?${queryParams.toString()}`;
         }
-
-        const response = await get(url);
-        return response;
+        return await get(url);
     } catch (error) {
         console.error(error);
         throw error;
@@ -25,8 +22,7 @@ export const getPermissions = async (page?: number, pageSize?: number): Promise<
 
 export const postPermission = async (option: Permission): Promise<Response> => {
     try {
-        const response = await postJson(`${PREFIX_PERMISSION}`, option);
-        return response;
+        return await postJson(`${PREFIX_PERMISSION}`, option);
     } catch (error) {
         console.error(error);
         throw error;
@@ -37,8 +33,7 @@ export const deletePermissions = async (ids: string[]): Promise<Response> => {
     try {
         const idString = ids.join(',');
         const url = `${PREFIX_PERMISSION}/${idString}`;
-        const response = await del(url);
-        return response;
+        return await del(url);
     } catch (error) {
         console.error(error);
         throw error;
@@ -47,8 +42,7 @@ export const deletePermissions = async (ids: string[]): Promise<Response> => {
 
 export const getPermissionById = async (id: string): Promise<Response> => {
     try {
-        const response = await get(`${PREFIX_PERMISSION}/${id}`);
-        return response;
+        return await get(`${PREFIX_PERMISSION}/${id}`);
     } catch (error) {
         console.error(error);
         throw error;
@@ -57,8 +51,7 @@ export const getPermissionById = async (id: string): Promise<Response> => {
 
 export const updatePermissionById = async (id: string, option: Permission): Promise<Response> => {
     try {
-        const response = await patchJson(`${PREFIX_PERMISSION}/${id}`, option);
-        return response;
+        return await patchJson(`${PREFIX_PERMISSION}/${id}`, option);
     } catch (error) {
         console.error(error);
         throw error;

@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu } from 'antd';
-import { DashboardOutlined, SettingOutlined, SafetyOutlined, KeyOutlined, ReadOutlined } from '@ant-design/icons';
+import {
+    DashboardOutlined,
+    SettingOutlined,
+    SafetyOutlined,
+    KeyOutlined,
+    ReadOutlined,
+    UserOutlined,
+    LinuxOutlined,
+    CameraOutlined
+} from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Sider.scss';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +23,6 @@ interface SiderProps {
 }
 
 interface MenuItem {
-    key: string;
     icon: React.ReactNode;
     label: string;
     linkTo: string;
@@ -22,31 +30,41 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
     {
-        key: '1',
         icon: <DashboardOutlined />,
         label: 'admin.dashboard.title',
         linkTo: 'dashboard',
     },
     {
-        key: '2',
+        icon: <LinuxOutlined />,
+        label: 'admin.movie.title',
+        linkTo: 'movies',
+    },
+    {
+        icon: <CameraOutlined />,
+        label: 'admin.director.title',
+        linkTo: 'directors',
+    },
+    {
+        icon: <UserOutlined />,
+        label: 'admin.account.title',
+        linkTo: 'accounts',
+    },
+    {
         icon: <SafetyOutlined />,
         label: 'admin.role.title',
         linkTo: 'roles',
     },
     {
-        key: '3',
         icon: <KeyOutlined />,
         label: 'admin.permission.title',
         linkTo: 'permissions',
     },
     {
-        key: '4',
         icon: <ReadOutlined />,
         label: 'admin.article.title',
         linkTo: 'articles',
     },
     {
-        key: '5',
         icon: <SettingOutlined />,
         label: 'admin.setting.title',
         linkTo: 'settings',
@@ -63,7 +81,7 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
     useEffect(() => {
         const matchingItem = menuItems.find(item => item.linkTo === location.pathname.split('/')[2]);
         if (matchingItem) {
-            setSelectedKey(matchingItem.key);
+            setSelectedKey(menuItems.indexOf(matchingItem).toString());
         }
     }, [location.pathname]);
 
@@ -77,11 +95,11 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
         setSelectedKey('1');
     };
 
-    const items = menuItems.map(item => ({
-        key: item.key,
+    const items = menuItems.map((item, index) => ({
+        key: index.toString(),
         icon: item.icon,
         label: t(item.label),
-        onClick: () => handleItemClick(item.linkTo, item.key),
+        onClick: () => handleItemClick(item.linkTo, index.toString()),
     }));
 
     return (

@@ -52,7 +52,7 @@ const EditRole: React.FC = () => {
                 if (response.ok) {
                     const result = await response.json();
                     if (result.status === 200) {
-                        const listPermission: Permission[] = result.data.content.map((item: Permission) => ({
+                        const listPermission: Permission[] = result.data.map((item: Permission) => ({
                             ...item,
                             key: item.id.toString(),
                         }));
@@ -84,6 +84,10 @@ const EditRole: React.FC = () => {
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    const handleConfirmUpdate = () => {
+        form.submit();
     };
 
     return (
@@ -118,11 +122,11 @@ const EditRole: React.FC = () => {
                         <Form.Item>
                             <Popconfirm
                                 title={t('admin.role.update.confirmUpdateMessage')}
-                                onConfirm={form.submit}
+                                onConfirm={handleConfirmUpdate}
                                 okText={t('admin.message.assignPermissionConfirm')}
                                 cancelText={t('admin.message.assignPermissionCancel')}
                             >
-                                <Button type="primary" htmlType="submit" loading={isSubmitting}>
+                                <Button type="primary" loading={isSubmitting}>
                                     {t('admin.role.update.updateRoleButton')}
                                 </Button>
                             </Popconfirm>

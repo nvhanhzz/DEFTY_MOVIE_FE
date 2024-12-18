@@ -18,11 +18,19 @@
             "fetchSuccess": "Lấy dữ liệu thành công!",
             "fetchError": "Lấy dữ liệu không thành công."
         },
+        "form": {
+            "reset": "Làm mới",
+            "create": "Tạo",
+            "update": "Cập nhật"
+        },
         "dataList": {
             "actionColumn": "Hành động",
             "createNewButton": "Tạo mới",
-            "searchPlaceholder": "Tìm kiếm theo tên",
-            "deleteSelectedButton": "Xóa các mục đã chọn"
+            "searchPlaceholder": "Tìm kiếm ...",
+            "deleteSelectedButton": "Xóa các mục đã chọn",
+            "deleteConfirm": "Bạn có chắc chắn muốn xóa mục này không?",
+            "deleteSelectedConfirm": "Xóa",
+            "deleteSelectedCancel": "Hủy"
         },
         "login": {
             "title": "Trang quản trị Defty",
@@ -45,31 +53,81 @@
         "dashboard": {
             "title": "Tổng quan"
         },
+        "account": {
+            "title": "Tài khoản",
+            "avatar": "Ảnh đại diện",
+            "username": "Tên đăng nhập",
+            "email": "Email",
+            "fullName": "Họ và tên",
+            "phone": "Số điện thoại",
+            "password": "Mật khẩu",
+            "dateOfBirth": "Ngày sinh",
+            "address": "Địa chỉ",
+            "gender": {
+                "title": "Giới tính",
+                "placeholder": "Chọn giới tính",
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            },
+            "role": {
+                "title": "Nhóm quyền",
+                "placeholder": "Chọn nhóm quyền"
+            },
+            "actionColumn": "Hành động",
+            "searchPlaceholder": "Tìm kiếm theo ...",
+            "create": {
+                "title": "Tạo tài khoản quản trị viên"
+            },
+            "update": {
+                "title": "Cập nhật tài khoản"
+            },
+            "validation": {
+                "fullName": "Họ và tên là bắt buộc.",
+                "email": {
+                    "required": "Email là bắt buộc.",
+                    "invalid": "Định dạng email không hợp lệ."
+                },
+                "username": "Tên đăng nhập là bắt buộc.",
+                "phone": "Số điện thoại là bắt buộc.",
+                "password": {
+                    "required": "Mật khẩu là bắt buộc.",
+                    "minLength": "Mật khẩu phải có ít nhất 6 ký tự."
+                },
+                "dateOfBirth": "Ngày sinh là bắt buộc.",
+                "gender": "Giới tính là bắt buộc.",
+                "role": "Vai trò là bắt buộc."
+            }
+        },
         "role": {
-            "title": "Nhóm quyền",
-            "createNewRoleButton": "Tạo nhóm quyền mới",
-            "deleteSelectedButton": "Xóa các nhóm quyền đã chọn",
-            "roleColumn": "Nhóm quyền",
+            "title": "Vai trò",
+            "createNewRoleButton": "Tạo vai trò mới",
+            "deleteSelectedButton": "Xóa các vai trò đã chọn",
+            "roleColumn": "Vai trò",
             "descriptionColumn": "Mô tả",
             "actionColumn": "Hành động",
             "searchPlaceholder": "Tìm kiếm theo tên",
             "create": {
-                "title": "Tạo nhóm quyền mới",
-                "createRoleButton": "Tạo nhóm quyền",
-                "permissionsLabel": "Phân quyền"
+                "title": "Tạo vai trò mới",
+                "createRoleButton": "Tạo vai trò",
+                "permissionsLabel": "Gán quyền"
             },
             "update": {
-                "title": "Cập nhật nhóm quyền",
-                "updateRoleButton": "Cập nhật nhóm quyền",
-                "assignPermission": "Phân quyền",
-                "confirmUpdateMessage": "Bạn có chắc chắn muốn cập nhật nhóm quyền này không?",
+                "title": "Cập nhật vai trò",
+                "updateRoleButton": "Cập nhật vai trò",
+                "assignPermission": "Gán quyền",
+                "confirmUpdateMessage": "Bạn có chắc chắn muốn cập nhật vai trò này không?",
                 "permissions": {
-                    "permissionAvailable": "Các quyền khả dụng",
-                    "rolePermission": "Quyền của nhóm",
-                    "searchPlaceholder": "Tìm kiếm quyền..."
+                    "permissionAvailable": "Quyền có sẵn",
+                    "rolePermission": "Quyền của vai trò",
+                    "searchPlaceholder": "Tìm kiếm quyền...",
+                    "assignPermissionCancel": "Hủy",
+                    "assignPermissionConfirm": "Xác Nhận",
+                    "confirmTransferMessage": "Bạn có chắc chắn muốn chuyển quyền này không?"
                 }
             }
         },
+
         "permission": {
             "title": "Quyền",
             "createNewPermissionButton": "Tạo quyền mới",
@@ -101,8 +159,77 @@
         "article": {
             "title": "Bài viết",
             "titleColumn": "Tiêu đề",
-            "thumbnail": "Ảnh thu nhỏ",
-            "author": "Tác giả"
+            "thumbnail": "Ảnh chính",
+            "author": "Tác giả",
+            "content": "Nội dung",
+            "create": {
+                "title": "Tạo bài viết"
+            },
+            "update": {
+                "title": "Cập nhật bài viết"
+            }
+        },
+        "director": {
+            "title": "Đạo diễn",
+            "fullName": "Họ và tên",
+            "dateOfBirth": "Ngày sinh",
+            "gender": {
+                "title": "Giới tính",
+                "placeholder": "Chọn giới tính",
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            },
+            "weight": "Cân nặng",
+            "height": "Chiều cao",
+            "nationality": "Quốc tịch",
+            "description": "Mô tả",
+            "avatar": "Ảnh đại diện",
+            "create": {
+                "title": "Tạo đạo diễn",
+                "form": {
+                    "reset": "Đặt lại",
+                    "create": "Tạo"
+                },
+                "validation": {
+                    "fullName": "Vui lòng nhập họ và tên!",
+                    "dateOfBirth": "Vui lòng chọn ngày sinh!",
+                    "gender": "Vui lòng chọn giới tính!",
+                    "weight": "Vui lòng nhập cân nặng!",
+                    "height": "Vui lòng nhập chiều cao!",
+                    "nationality": "Vui lòng nhập quốc tịch!",
+                    "description": "Vui lòng nhập mô tả!"
+                },
+                "message": {
+                    "createError": "Đã xảy ra lỗi khi tạo đạo diễn. Vui lòng thử lại.",
+                    "createSuccess": "Tạo đạo diễn thành công.",
+                    "fetchError": "Lỗi khi lấy dữ liệu. Vui lòng thử lại sau."
+                },
+                "upload": "Tải lên ảnh đại diện"
+            },
+            "update": {
+                "title": "Cập nhật đạo diễn"
+            }
+        },
+        "movie": {
+            "title": "Phim",
+            "createNewPermissionButton": "Tạo phim mới",
+            "nameColumn": "Tên phim",
+            "descriptionColumn": "Mô tả",
+            "actionColumn": "Hành động",
+            "searchPlaceholder": "Tìm kiếm theo tên",
+            "create": {
+                "title": "Tạo phim mới",
+                "permissionName": "Tên phim",
+                "description": "Mô tả",
+                "createPermissionButton": "Tạo phim"
+            },
+            "update": {
+                "title": "Cập nhật phim",
+                "permissionName": "Tên phim",
+                "description": "Mô tả",
+                "updatePermissionButton": "Cập nhật phim"
+            }
         }
     },
     "client": {}
