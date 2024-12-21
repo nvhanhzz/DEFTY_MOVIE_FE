@@ -45,9 +45,13 @@ const CreateDirector: React.FC = () => {
             }
 
             const response = await postDirector(formData);
-            console.log(response);
+            const result = await response.json();
             if (!response.ok) {
-                message.error(t('admin.message.createError'));
+                message.error(result.message || t('admin.message.createError'));
+                return;
+            }
+            if (result.status !== 201) {
+                message.error(result.message || t('admin.message.createError'));
                 return;
             }
 

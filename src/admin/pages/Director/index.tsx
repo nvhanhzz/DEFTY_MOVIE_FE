@@ -37,12 +37,12 @@ const DirectorPage: React.FC = () => {
         try {
             const response = await getDirectors(page, pageSize); // Gọi API với từ khóa
             const result = await response.json();
-            const content: Director[] = result.responses;
+            const content: Director[] = result.data.content;
             const directors = content.map((item: Director) => ({
                 ...item,
                 key: item.id,
             }));
-            setTotalItems(result.totalElements);
+            setTotalItems(result.data.totalElements);
             setData(directors);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
@@ -79,6 +79,7 @@ const DirectorPage: React.FC = () => {
         setIsLoading(true);
         try {
             const response = await deleteDirectors(ids as string[]);
+            console.log(response, await response.json());
             if (response.ok) {
                 setData(prevData => prevData.filter(item => !ids.includes(item.id)));
                 message.success(t('admin.message.deleteSuccess'));  // Dùng t() cho thông báo

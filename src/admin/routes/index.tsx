@@ -22,6 +22,7 @@ import CreateMovie from "../pages/Movie/Create";
 import UpdateMovie from "../pages/Movie/Update";
 import DirectorPage from "../pages/Director";
 import CreateDirector from "../pages/Director/Create";
+import UpdateDirector from "../pages/Director/Update";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -113,6 +114,10 @@ const DefaultRoutes: RouteType[] = [
     {
         path: 'directors/create',
         element: <CreateDirector />,
+    },
+    {
+        path: 'directors/update/:id',
+        element: <UpdateDirector />,
     },
     {
         path: 'settings',
