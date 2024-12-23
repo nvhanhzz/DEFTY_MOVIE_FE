@@ -33,7 +33,7 @@ const ArticlesPage: React.FC = () => {
         try {
             const response = await getArticles(page, pageSize, keyword);
             const result = await response.json();
-            const articles: Article[] = result.data.articleResponses;
+            const articles: Article[] = result.data.content;
             setTotalItems(result.data.totalElements);
             setData(articles.map(item => ({ ...item, key: item.id })));
         } catch (error) {
