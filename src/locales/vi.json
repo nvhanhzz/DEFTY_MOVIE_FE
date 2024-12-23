@@ -230,6 +230,60 @@
                 "description": "Mô tả",
                 "updatePermissionButton": "Cập nhật phim"
             }
+        },"episode": {
+            "title": "Tập phim",
+            "number": "Số tập",
+            "description": "Mô tả",
+            "thumbnail": "Hình thu nhỏ",
+            "video": "Video",
+            "movie": "Phim",
+            "create": {
+                "title": "Tạo tập phim",
+                "uploadThumbnail": "Tải lên hình thu nhỏ",
+                "uploadVideo": "Tải lên video",
+                "form": {
+                    "reset": "Làm lại",
+                    "create": "Tạo mới"
+                },
+                "validation": {
+                    "number": "Vui lòng nhập số tập!",
+                    "description": "Vui lòng nhập mô tả!",
+                    "thumbnail": "Vui lòng tải lên hình thu nhỏ!",
+                    "link": "Vui lòng tải lên video!",
+                    "movieId": "Vui lòng chọn một bộ phim!"
+                },
+                "message": {
+                    "createError": "Đã xảy ra lỗi khi tạo tập phim. Vui lòng thử lại.",
+                    "createSuccess": "Tập phim được tạo thành công.",
+                    "fetchError": "Lỗi khi tải dữ liệu. Vui lòng thử lại sau."
+                },
+                "upload": "Tải lên hình thu nhỏ"
+            },
+            "update": {
+                "title": "Cập nhật tập phim",
+                "form": {
+                    "reset": "Làm lại",
+                    "update": "Cập nhật"
+                },
+                "validation": {
+                    "number": "Vui lòng nhập số tập!",
+                    "description": "Vui lòng nhập mô tả!",
+                    "thumbnail": "Vui lòng tải lên hình thu nhỏ!",
+                    "link": "Vui lòng tải lên video!",
+                    "movieId": "Vui lòng chọn một bộ phim!"
+                },
+                "message": {
+                    "updateError": "Đã xảy ra lỗi khi cập nhật tập phim. Vui lòng thử lại.",
+                    "updateSuccess": "Tập phim được cập nhật thành công."
+                },
+                "upload": "Tải lên hình thu nhỏ"
+            },
+            "delete": {
+                "title": "Xóa tập phim",
+                "confirm": "Bạn có chắc chắn muốn xóa tập phim này không?",
+                "success": "Tập phim đã được xóa thành công.",
+                "error": "Không thể xóa tập phim."
+            }
         }
     },
     "client": {}

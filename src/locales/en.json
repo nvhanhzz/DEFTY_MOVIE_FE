@@ -229,7 +229,63 @@
                 "description": "Description",
                 "updatePermissionButton": "Update Movie"
             }
+        },
+        "episode": {
+            "title": "Episodes",
+            "number": "Episode Number",
+            "description": "Description",
+            "thumbnail": "Thumbnail",
+            "video": "Video",
+            "movie": "Movie",
+            "create": {
+                "title": "Create Episode",
+                "uploadThumbnail": "Upload thumbnail",
+                "uploadVideo": "Upload video",
+                "form": {
+                    "reset": "Reset",
+                    "create": "Create"
+                },
+                "validation": {
+                    "number": "Please input the episode number!",
+                    "description": "Please input the description!",
+                    "thumbnail": "Please upload a thumbnail!",
+                    "link": "Please input the video link!",
+                    "movieId": "Please select a movie!"
+                },
+                "message": {
+                    "createError": "An error occurred while creating the episode. Please try again.",
+                    "createSuccess": "Episode created successfully.",
+                    "fetchError": "Error fetching data. Please try again later."
+                },
+                "upload": "Upload Thumbnail"
+            },
+            "update": {
+                "title": "Update Episode",
+                "form": {
+                    "reset": "Reset",
+                    "update": "Update"
+                },
+                "validation": {
+                    "number": "Please input the episode number!",
+                    "description": "Please input the description!",
+                    "thumbnail": "Please upload a thumbnail!",
+                    "link": "Please input the video link!",
+                    "movieId": "Please select a movie!"
+                },
+                "message": {
+                    "updateError": "An error occurred while updating the episode. Please try again.",
+                    "updateSuccess": "Episode updated successfully."
+                },
+                "upload": "Upload Thumbnail"
+            },
+            "delete": {
+                "title": "Delete Episode",
+                "confirm": "Are you sure you want to delete this episode?",
+                "success": "Episode deleted successfully.",
+                "error": "Failed to delete episode."
+            }
         }
+
 
     },
     "client": {}

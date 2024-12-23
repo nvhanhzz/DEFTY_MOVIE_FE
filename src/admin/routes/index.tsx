@@ -23,6 +23,9 @@ import UpdateMovie from "../pages/Movie/Update";
 import DirectorPage from "../pages/Director";
 import CreateDirector from "../pages/Director/Create";
 import UpdateDirector from "../pages/Director/Update";
+import EpisodePage from "../pages/Episode";
+import CreateEpisode from "../pages/Episode/Create";
+import UpdateEpisode from "../pages/Episode/Update";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -94,6 +97,18 @@ const DefaultRoutes: RouteType[] = [
     {
         path: 'movies/update/:id',
         element: <UpdateMovie />,
+    },
+    {
+        path: 'movies/:id/episodes',
+        element: <EpisodePage />,
+    },
+    {
+        path: 'movies/:id/episodes/create',
+        element: <CreateEpisode />,
+    },
+    {
+        path: 'movies/:movieId/episodes/update/:id',
+        element: <UpdateEpisode />,
     },
     {
       path: 'accounts',
