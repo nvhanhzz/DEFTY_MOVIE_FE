@@ -6,6 +6,7 @@ const PREFIX_PERMISSION: string = import.meta.env.VITE_PREFIX_PERMISSION as stri
 export const getPermissions = async (page?: number, pageSize?: number): Promise<Response> => {
     try {
         let url = `${PREFIX_PERMISSION}`;
+
         if (page !== undefined && pageSize !== undefined) {
             const queryParams = new URLSearchParams();
             queryParams.append("page", (page - 1).toString());
