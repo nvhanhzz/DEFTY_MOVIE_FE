@@ -51,6 +51,7 @@ const AccountPage: React.FC = () => {
             }));
             setTotalItems(result.data.totalElements);
             setData(accounts);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {

@@ -84,6 +84,7 @@ const CreateAccount: React.FC = () => {
 
             message.success(t('admin.message.createSuccess'));
             navigate(`${PREFIX_URL_ADMIN}/accounts`);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {

@@ -213,22 +213,57 @@
         "movie": {
             "title": "Movie",
             "createNewPermissionButton": "Create New Movie",
-            "nameColumn": "Movie Name",
-            "descriptionColumn": "Description",
+            "titleColumn": "Movie name",
+            "description": "Description",
             "actionColumn": "Actions",
+            "director": "Director",
+            "nation": "Nation",
+            "membershipType": "Membership type",
+            "releaseDate": "Release date",
+            "ranking": "Ranking",
+            "thumbnail": "Thumbnail",
+            "trailer": "Trailer",
             "searchPlaceholder": "Search by name",
+            "directorPlaceholder": "Select director",
+            "membershipTypePlaceholder": "Select membership type",
+            "addNewOption": "Add new",
+            "addNewMembershipType": "Add new membership type",
+            "newMembershipType": "New membership type",
+            "newMembershipTypePlaceholder": "Enter new membership type",
             "create": {
-                "title": "Create New Movie",
-                "permissionName": "Movie Name",
-                "description": "Description",
-                "createPermissionButton": "Create Movie"
+                "title": "Create movie",
+                "titleMovie": "Title movie",
+                "coverImage": "Cover image"
+            },
+            "placeholder": {
+                "nation": "Select a country",
+                "title": "Enter the movie title",
+                "trailer": "Enter the trailer link",
+                "description": "Enter the movie description",
+                "ranking": "Enter the ranking"
             },
             "update": {
                 "title": "Update Movie",
-                "permissionName": "Movie Name",
-                "description": "Description",
+                "description": "Movie Name",
+                "trailer": "Description",
                 "updatePermissionButton": "Update Movie"
+            },
+            "validation": {
+                "title": "Title movie is required.",
+                "description": "Description is required.",
+                "trailer": "Trailer is required.",
+                "nation": "Nation is required.",
+                "director": "Director is required.",
+                "releaseDate": {
+                    "required": "Release date is required.",
+                    "invalid": "The release date format is incorrect."
+                },
+                "raking": "Raking is required.",
+                "membershipType": "Membership type is required.",
+                "thumbnail": "Thumbnail is required.",
+                "coverImage": "Cover image is required."
             }
+
         }
 
     },
