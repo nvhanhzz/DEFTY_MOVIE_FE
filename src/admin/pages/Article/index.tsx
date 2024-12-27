@@ -7,6 +7,7 @@ import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
+import SearchFormTemplate from "../../templates/Search";
 
 export interface Article {
     id: string;
@@ -23,15 +24,24 @@ const ArticlesPage: React.FC = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
-    const [searchKeyword, setSearchKeyword] = useState<string>(''); // State cho từ khóa tìm kiếm
+    const [filters, setFilters] = useState<Record<string, string>>({});
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
 
-    const fetchData = async (page: number, pageSize: number, keyword: string) => {
+    const searchFields = [
+        {
+            type: 'input',
+            label: t('admin.article.titleColumn'),
+            name: 'title',
+            placeholder: t('admin.article.titleColumn'),
+        }
+    ];
+
+    const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
         setIsLoading(true);
         try {
-            const response = await getArticles(page, pageSize, keyword);
+            const response = await getArticles(page, pageSize, filters);
             const result = await response.json();
             const articles: Article[] = result.data.content;
             setTotalItems(result.data.totalElements);
@@ -47,23 +57,44 @@ const ArticlesPage: React.FC = () => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
         const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
-        const keywordFromUrl = searchParams.get('keyword') || ''; // Lấy từ khóa tìm kiếm từ URL
+        const filtersFromUrl: Record<string, string> = {};
+
+        searchParams.forEach((value, key) => {
+            if (key !== 'page' && key !== 'size') {
+                filtersFromUrl[key] = value;
+            }
+        });
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
-        setSearchKeyword(keywordFromUrl); // Cập nhật từ khóa tìm kiếm
+        setFilters(filtersFromUrl);
     }, [location.search]);
 
     useEffect(() => {
-        fetchData(currentPage, pageSize, searchKeyword); // Gọi fetchData với từ khóa tìm kiếm
-    }, [currentPage, pageSize, searchKeyword]);
+        fetchData(currentPage, pageSize, filters);
+    }, [currentPage, pageSize, filters]);
 
-    const handleUpdate = (id: string) => {
-        navigate(`update/${id}`);
+    const handleSearch = (newFilters: Record<string, string>) => {
+        setCurrentPage(1);
+        setFilters(newFilters);
+
+        const queryParams = new URLSearchParams();
+        queryParams.append('page', '1');
+        queryParams.append('size', pageSize.toString());
+
+        Object.entries(newFilters).forEach(([key, value]) => {
+            if (value) queryParams.append(key, value);
+        });
+
+        navigate(`?${queryParams.toString()}`);
     };
 
     const handleCreateNewArticle = () => {
         navigate('create');
+    };
+
+    const handleUpdate = (id: string) => {
+        navigate(`update/${id}`);
     };
 
     const handleDeleteSelected = async (ids: React.Key[]) => {
@@ -72,30 +103,31 @@ const ArticlesPage: React.FC = () => {
             const response = await deleteArticles(ids as string[]);
             if (response.ok) {
                 setData(prevData => prevData.filter(item => !ids.includes(item.id)));
-                message.success(t('admin.message.deleteSuccess')); // Thông báo khi xóa nhiều thành công
+                message.success(t('admin.message.deleteSuccess'));
             } else {
                 const result = await response.json();
-                message.error(result.message || t('admin.message.deleteError')); // Thông báo khi xóa nhiều lỗi
+                message.error(result.message || t('admin.message.deleteError'));
             }
         } catch (error) {
-            message.error(t('admin.message.deleteError')); // Thông báo khi xóa nhiều thất bại
+            message.error(t('admin.message.deleteError'));
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Hàm xử lý khi thay đổi trang
     const onPageChange = (page: number, pageSize?: number) => {
         setCurrentPage(page);
         setPageSize(pageSize || 10);
-        navigate(`?page=${page}&size=${pageSize || 10}&keyword=${searchKeyword}`); // Cập nhật URL với từ khóa tìm kiếm
-    };
 
-    // Hàm xử lý tìm kiếm
-    const handleSearch = (keyword: string) => {
-        setSearchKeyword(keyword);
-        setCurrentPage(1); // Reset lại trang về 1 khi tìm kiếm
-        navigate(`?page=1&size=${pageSize}&keyword=${keyword}`); // Cập nhật URL khi tìm kiếm
+        const queryParams = new URLSearchParams();
+        queryParams.append('page', page.toString());
+        queryParams.append('size', (pageSize || 10).toString());
+
+        Object.entries(filters).forEach(([key, value]) => {
+            if (value) queryParams.append(key, value);
+        });
+
+        navigate(`?${queryParams.toString()}`);
     };
 
     const dataListConfig: DataListConfig<Article> = {
@@ -104,13 +136,11 @@ const ArticlesPage: React.FC = () => {
                 title: 'No.',
                 key: 'no',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
-                sorter: (a: Article, b: Article) => Number(a.id) - Number(b.id),
             },
             {
                 title: t('admin.article.titleColumn'),
                 dataIndex: 'title',
                 key: 'title',
-                sorter: (a: Article, b: Article) => a.title.localeCompare(b.title),
             },
             {
                 title: t('admin.article.thumbnail'),
@@ -124,33 +154,32 @@ const ArticlesPage: React.FC = () => {
                 title: t('admin.article.author'),
                 dataIndex: 'author',
                 key: 'author',
-                sorter: (a: Article, b: Article) => a.author.localeCompare(b.author),
             },
         ],
         data: data,
         rowKey: 'id',
         onCreateNew: handleCreateNewArticle,
         onUpdate: handleUpdate,
-        onDeleteSelected: handleDeleteSelected, // Sử dụng onDeleteSelected thay vì onDelete
-        search: {
-            keyword: searchKeyword, // Truyền từ khóa tìm kiếm vào cấu hình
-            onSearch: handleSearch, // Hàm tìm kiếm
-        },
+        onDeleteSelected: handleDeleteSelected,
         pagination: {
             currentPage: currentPage,
             totalItems: totalItems,
             pageSize: pageSize,
             onPaginationChange: onPageChange,
-        }
+        },
     };
 
     return (
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}`, name: t('admin.dashboard.title') },
-                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/articles`, name: t('admin.article.title') }
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/articles`, name: t('admin.article.title') },
             ]}
         >
+            <SearchFormTemplate
+                fields={searchFields}
+                onSearch={handleSearch}
+            />
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

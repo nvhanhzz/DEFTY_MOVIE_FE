@@ -21,7 +21,8 @@
         "form": {
             "reset": "Reset",
             "create": "Create",
-            "update": "Update"
+            "update": "Update",
+            "search": "Search"
         },
         "dataList": {
             "actionColumn": "Action",
