@@ -1,25 +1,36 @@
-import React, {useEffect, useState} from "react";
-import {Modal, Input, Select, DatePicker, Upload, Form, Row, Col, message} from "antd";
+import React, { useEffect, useState } from "react";
+import { Modal, Input, Select, DatePicker, Upload, Form, Row, Col, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import "./CreateDirector.scss";
 import { useTranslation } from "react-i18next";
+import { DirectorFromValues } from "../../Director/Create";
+import { postDirector } from "../../../services/directorService.tsx";
+import { RcFile } from "antd/es/upload";
+import { useNavigate } from "react-router-dom";
+import "./CreateDirector.scss";
 
-const { Option } = Select;
+const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-const AddDirectorPopup = ({ visible, onCancel, onAdd }) => {
+interface AddDirectorPopupProps {
+    visible: boolean;
+    onCancel: () => void;
+    onAdd: (directorData: DirectorFromValues) => void;
+}
+
+const AddDirectorPopup = ({ visible, onCancel, onAdd }: AddDirectorPopupProps) => {
     const [form] = Form.useForm();
-    const [avatar, setAvatar] = useState(null);
-    const { t } = useTranslation();
+    const [avatar, setAvatar] = useState<RcFile | null>(null);
     const [nation, setNation] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [file, setFile] = useState<RcFile | null>(null);
+    const navigate = useNavigate();
+    const { t } = useTranslation();
 
     useEffect(() => {
         const fetchCountries = async () => {
             try {
-                const response = await fetch('https://restcountries.com/v3.1/all');
+                const response = await fetch("https://restcountries.com/v3.1/all");
                 if (!response.ok) {
-                    throw new Error('Failed to fetch countries');
+                    throw new Error("Failed to fetch countries");
                 }
                 const data = await response.json();
                 const countries = data
@@ -27,94 +38,112 @@ const AddDirectorPopup = ({ visible, onCancel, onAdd }) => {
                         label: country.name.common,
                         value: country.name.common,
                     }))
-                    .sort((a: { label: string; }, b: { label: never; }) => a.label.localeCompare(b.label));
+                    // .sort((a, b) => a.label.localeCompare(b.label));
                 setNation(countries);
             } catch (error) {
-                message.error('Error fetching countries');
+                message.error("Error fetching countries");
                 console.error(error);
             }
         };
         fetchCountries();
     }, []);
-    const handleAdd = () => {
-        form.validateFields()
-            .then(values => {
-                const formData = {
-                    ...values,
-                    avatar,
-                };
 
-                onAdd(formData);
-                form.resetFields();
-                setAvatar(null);
-            })
-            .catch(info => {
-                console.error("Validation failed:", info);
-            });
+    const handleAdd = async (values: DirectorFromValues) => {
+        console.log(values);
+        setLoading(true);
+        try {
+            const formData = new FormData();
+            formData.append("fullName", values.fullName);
+            formData.append("gender", values.gender);
+            formData.append("dateOfBirth", values.dateOfBirth);
+            // formData.append("weight", String(values.weight));
+            // formData.append("height", String(values.height));
+            formData.append("nationality", values.nationality);
+            // formData.append("description", values.description);
+            if (file) {
+                formData.append("avatar", file);
+            }
+
+            const response = await postDirector(formData);
+            if (!response.ok) {
+                message.error(t("admin.message.createError"));
+                console.log(response);
+                return;
+            }
+
+            message.success(t("admin.message.createSuccess"));
+            navigate(`${PREFIX_URL_ADMIN}/movies/create`);
+            window.location.reload();
+            onAdd(values);
+        } catch (error) {
+            message.error(t("admin.message.fetchError"));
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const handleAvatarChange = ({ file }) => {
-        setAvatar(file);
+    const handleAvatarChange = ({ file }: { file: RcFile }) => {
+        setFile(file);
     };
 
     const handleResetForm = () => {
-        form.resetFields(); // Reset all form fields
-        setAvatar(null); // Reset avatar
+        form.resetFields();
+        setAvatar(null);
+        setFile(null); // Reset the file state
     };
 
     const handleModalCancel = () => {
-        handleResetForm(); // Reset form when cancel is clicked
-        onCancel(); // Close modal
+        handleResetForm();
+        onCancel();
     };
 
     return (
         <Modal
-            className={"add-director-popup"}
-            title={t('admin.director.create.title')}
+            className="add-director-popup"
+            title={t("admin.director.create.title")}
             open={visible}
             onCancel={handleModalCancel}
-            onOk={handleAdd}
-            okText= {t('admin.form.create')}
-            cancelText={t('admin.form.reset')}
+            onOk={() => form.submit()}
+            okText={t("admin.form.create")}
+            cancelText={t("admin.form.reset")}
             width={800}
         >
-            <Form form={form} layout="vertical">
+            <Form form={form} layout="vertical" onFinish={handleAdd}>
                 <Row gutter={32}>
                     <Col span={16}>
                         <Form.Item
-                            label={t('admin.director.fullName')}
+                            label={t("admin.director.fullName")}
                             name="fullName"
-                            rules={[{ required: true, message: t('admin.director.create.validation.fullName') }]}
+                            rules={[{ required: true, message: t("admin.director.create.validation.fullName") }]}
                         >
-                            <Input placeholder={t('admin.director.create.validation.fullName')} />
+                            <Input placeholder={t("admin.director.create.validation.fullName")} />
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.gender.title')}
+                            label={t("admin.director.gender.title")}
                             name="gender"
-                            rules={[{ required: true, message: t('admin.director.create.validation.gender') }]}
+                            rules={[{ required: true, message: t("admin.director.create.validation.gender") }]}
                         >
-                            <Select placeholder={t('admin.director.gender.placeholder')}>
-                                <Select.Option value="male">{t('admin.director.gender.male')}</Select.Option>
-                                <Select.Option value="female">{t('admin.director.gender.female')}</Select.Option>
-                                <Select.Option value="other">{t('admin.director.gender.other')}</Select.Option>
+                            <Select placeholder={t("admin.director.gender.placeholder")}>
+                                <Select.Option value="male">{t("admin.director.gender.male")}</Select.Option>
+                                <Select.Option value="female">{t("admin.director.gender.female")}</Select.Option>
+                                <Select.Option value="other">{t("admin.director.gender.other")}</Select.Option>
                             </Select>
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.dateOfBirth')}
-                            name="dob"
-                            rules={[{ required: true, message: t('admin.director.create.validation.dateOfBirth') }]}
+                            label={t("admin.director.dateOfBirth")}
+                            name="dateOfBirth" // Change 'dob' to 'dateOfBirth'
+                            rules={[{ required: true, message: t("admin.director.create.validation.dateOfBirth") }]}
                         >
                             <DatePicker style={{ width: "100%" }} format="YYYY-MM-DD" />
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.movie.nation')}
-                            name="nation"
-                            rules={[{ required: true, message: t('admin.movie.validation.nation') }]}
+                            label={t("admin.movie.nation")}
+                            name="nationality"
+                            rules={[{ required: true, message: t("admin.movie.validation.nation") }]}
                         >
                             <Select
                                 options={nation}
@@ -127,8 +156,7 @@ const AddDirectorPopup = ({ visible, onCancel, onAdd }) => {
                         </Form.Item>
                     </Col>
 
-                    {/* Phần Avatar bên phải */}
-                    <Col span={8} className={"avatar-col"}>
+                    <Col span={8} className="avatar-col">
                         <Form.Item label="Avatar" name="avatar">
                             <Upload
                                 listType="picture-card"
@@ -137,11 +165,7 @@ const AddDirectorPopup = ({ visible, onCancel, onAdd }) => {
                                 showUploadList={false}
                             >
                                 {avatar ? (
-                                    <img
-                                        src={URL.createObjectURL(avatar)}
-                                        alt="Avatar"
-                                        style={{ width: "100%" }}
-                                    />
+                                    <img src={URL.createObjectURL(avatar)} alt="Avatar" style={{ width: "100%" }} />
                                 ) : (
                                     <div>
                                         <PlusOutlined />
