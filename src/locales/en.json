@@ -223,6 +223,7 @@
             "ranking": "Ranking",
             "thumbnail": "Thumbnail",
             "trailer": "Trailer",
+            "status": "Status",
             "searchPlaceholder": "Search by name",
             "directorPlaceholder": "Select director",
             "membershipTypePlaceholder": "Select membership type",

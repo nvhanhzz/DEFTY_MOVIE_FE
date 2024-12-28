@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { message, Spin } from 'antd';
+import {message, Spin, Switch} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {deleteRole, getRoles} from '../../services/roleSevice';
+import {deleteRole, getRoles, switchStatus} from '../../services/roleSevice';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
@@ -15,6 +15,7 @@ export interface Role {
     id: string;
     name: string;
     description: string;
+    status: number;
     rolePermissions: Permission[];
 }
 
@@ -25,6 +26,7 @@ const RolePage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [searchKeyword, setSearchKeyword] = useState<string>('');
+    const [status, setStatus] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
@@ -40,9 +42,11 @@ const RolePage: React.FC = () => {
             }
             const result = await response.json();
             const content: Role[] = result.data.content;
+            console.log(content);
             const roles = content.map((item: any) => ({ ...item, key: item.id }));
             setTotalItems(result.data.totalElements);
             setData(roles);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
@@ -77,6 +81,7 @@ const RolePage: React.FC = () => {
                 const result = await response.json();
                 message.error(result.message || t('admin.message.deleteError')); // Thông báo khi xóa nhiều lỗi
             }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.deleteError')); // Thông báo khi xóa nhiều thất bại
         } finally {
@@ -84,10 +89,35 @@ const RolePage: React.FC = () => {
         }
     };
 
+    const handleSwitchStatus = async (id: string, checked: boolean) => {
+        setIsLoading(true);
+        try {
+            setData(prevData => prevData.map(item =>
+                item.id === id ? { ...item, status: checked ? 1 : 0 } : item
+            ));
+            const response = await switchStatus(id);
+            if (response.status === 200) {
+                message.success(t('admin.message.updateSuccess'));
+            } else {
+                message.error(t('admin.message.updateError'));
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            setData(prevData => prevData.map(item =>
+                item.id === id ? { ...item, status: item.status === 1 ? 0 : 1 } : item
+            ));
+            message.error(t('admin.message.updateError'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+
+
     // Hàm xử lý tìm kiếm
     const handleSearch = (keyword: string) => {
         setSearchKeyword(keyword);
-        setCurrentPage(1); // Reset lại trang hiện tại khi tìm kiếm
+        setCurrentPage(1);
         navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`); // Cập nhật URL với từ khóa tìm kiếm
     };
 
@@ -104,6 +134,7 @@ const RolePage: React.FC = () => {
             {
                 title: 'No.',
                 dataIndex: 'key',
+                align: 'center',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
                 sorter: (a: Role, b: Role) => Number(a.id) - Number(b.id),
             },
@@ -111,13 +142,28 @@ const RolePage: React.FC = () => {
                 title: t('admin.role.roleColumn'),
                 dataIndex: 'name',
                 key: 'name',
+                align: 'center',
                 sorter: (a: Role, b: Role) => a.name.localeCompare(b.name),
             },
             {
                 title: t('admin.role.descriptionColumn'),
                 dataIndex: 'description',
                 key: 'description',
+                align: 'center',
                 sorter: (a: Role, b: Role) => a.description.localeCompare(b.description),
+            },
+            {
+                title: t('admin.movie.status'),
+                dataIndex: 'status',
+                key: 'status',
+                align: 'center',
+                sorter: (a: Role, b: Role) => a.status - b.status,
+                render: (status, record) => (
+                    <Switch
+                        checked={status === 1}
+                        onChange={(checked) => handleSwitchStatus(record.id, checked)}
+                    />
+                ),
             },
         ],
         data: data,

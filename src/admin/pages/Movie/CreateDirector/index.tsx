@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Input, Select, DatePicker, Upload, Form, Row, Col, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
@@ -20,7 +20,6 @@ const AddDirectorPopup = ({ visible, onCancel, onAdd }: AddDirectorPopupProps) =
     const [form] = Form.useForm();
     const [avatar, setAvatar] = useState<RcFile | null>(null);
     const [nation, setNation] = useState([]);
-    const [loading, setLoading] = useState(false);
     const [file, setFile] = useState<RcFile | null>(null);
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -38,10 +37,9 @@ const AddDirectorPopup = ({ visible, onCancel, onAdd }: AddDirectorPopupProps) =
                         label: country.name.common,
                         value: country.name.common,
                     }))
-                    // .sort((a, b) => a.label.localeCompare(b.label));
+                    .sort((a: { label: string; }, b: { label: never; }) => a.label.localeCompare(b.label));
                 setNation(countries);
             } catch (error) {
-                message.error("Error fetching countries");
                 console.error(error);
             }
         };
@@ -50,7 +48,6 @@ const AddDirectorPopup = ({ visible, onCancel, onAdd }: AddDirectorPopupProps) =
 
     const handleAdd = async (values: DirectorFromValues) => {
         console.log(values);
-        setLoading(true);
         try {
             const formData = new FormData();
             formData.append("fullName", values.fullName);
@@ -73,13 +70,9 @@ const AddDirectorPopup = ({ visible, onCancel, onAdd }: AddDirectorPopupProps) =
 
             message.success(t("admin.message.createSuccess"));
             navigate(`${PREFIX_URL_ADMIN}/movies/create`);
-            window.location.reload();
             onAdd(values);
         } catch (error) {
-            message.error(t("admin.message.fetchError"));
             console.error(error);
-        } finally {
-            setLoading(false);
         }
     };
 

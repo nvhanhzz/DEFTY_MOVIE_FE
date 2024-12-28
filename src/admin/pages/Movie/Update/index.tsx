@@ -7,7 +7,7 @@ import OutletTemplate from '../../../templates/Outlet';
 import { getMovieById, updateMovieById } from "../../../services/movieService";
 import './UpdateMovie.scss';
 import { RcFile } from "antd/es/upload";
-import { MovieFormValues } from "../Create";
+import {Country, MovieFormValues} from "../Create";
 import { Movie } from "../index.tsx";
 import dayjs from 'dayjs';
 import {getDirectors} from "../../../services/directorService.tsx";
@@ -27,15 +27,12 @@ const UpdateMovie: React.FC = () => {
         const fetchDirectors = async () => {
             try {
                 const response = await getDirectors(1, 999999999);
-                const data = await response.json();
+                const data = await response.json()
+                // console.log(data.data.content)
                 if (response.ok) {
-                    const options = data.data.content.map((director: { fullName: never; }) => ({
-                        label: director.fullName,
-                        value: director.fullName,
-                    }));
-                    setDirectorOptions(options);
+                    setDirectorOptions(data.data.content);
                 } else {
-                    message.error('Failed to load directors');
+                    message.error('Failed to load roles');
                 }
             } catch (error) {
                 message.error('Error fetching directors');
@@ -52,7 +49,7 @@ const UpdateMovie: React.FC = () => {
                 const result = await response.json();
                 if (response.ok && result.status === 200) {
                     const data: Movie = result.data;
-                    console.log(data)
+                    // console.log(data)
                     form.setFieldsValue({
                         title: data.title,
                         description: data.description,
@@ -80,20 +77,15 @@ const UpdateMovie: React.FC = () => {
         const fetchCountries = async () => {
             try {
                 const response = await fetch('https://restcountries.com/v3.1/all');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch countries');
-                }
                 const data = await response.json();
-                const countries = data
-                    .map((country: { name: { common: string }; cca2: string }) => ({
-                        label: country.name.common,
-                        value: country.name.common,
-                    }))
-                    .sort((a: { label: string; }, b: { label: never; }) => a.label.localeCompare(b.label));
+
+                const countries = data.sort((a: { name: { common: string; }; }, b: { name: { common: never; }; }) =>
+                    a.name.common.localeCompare(b.name.common)
+                );
+
                 setNation(countries);
             } catch (error) {
-                message.error('Error fetching countries');
-                console.error(error);
+                console.error('Error fetching countries:', error);
             }
         };
         fetchCountries();
@@ -193,12 +185,16 @@ const UpdateMovie: React.FC = () => {
                             rules={[{ required: true, message: t('admin.movie.validation.nation') }]}
                         >
                             <Select
-                                options={nation}
-                                placeholder={t('admin.movie.placeholder.nation')}
+                                placeholder="Chọn quốc gia"
                                 showSearch
+                                style={{ width: 200 }}
                                 filterOption={(input, option) =>
-                                    option.label.toLowerCase().includes(input.toLowerCase())
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
+                                options={nation.map((country: Country) => ({
+                                    label: country.name.common,
+                                    value: country.name.common,
+                                }))}
                             />
                         </Form.Item>
 
@@ -243,10 +239,13 @@ const UpdateMovie: React.FC = () => {
                             name="director"
                             rules={[{ required: true, message: t('admin.movie.validation.director') }]}
                         >
-                            <Select
-                                placeholder={t('admin.movie.directorPlaceholder')}
-                                options={directorOptions}
-                            />
+                            <Select placeholder={t('admin.movie.directorPlaceholder')}>
+                                {directorOptions.map((director: { fullName: string; id: string }) => (
+                                    <Select.Option key={director.id} value={director.fullName}>
+                                        {director.fullName}
+                                    </Select.Option>
+                                ))}
+                            </Select>
                         </Form.Item>
 
                     </Col>

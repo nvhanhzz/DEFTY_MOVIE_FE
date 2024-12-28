@@ -16,6 +16,7 @@ export interface Movie {
     thumbnail: string;
     ranking: number;
     releaseDate: Date;
+    status: number;
     nation: string;
     director: string;
     membershipType: number;
@@ -38,10 +39,10 @@ const MoviePage: React.FC = () => {
     const location = useLocation();
     const { t } = useTranslation();
 
-    const fetchData = async (page: number, pageSize: number) => {
+    const fetchData = async (page: number, pageSize: number, keyword?: string) => {
         setIsLoading(true);
         try {
-            const response = await getMovies(page, pageSize);
+            const response = await getMovies(page, pageSize, 'username', keyword);
             const result = await response.json();
             const content: Movie[] = result.data.content;
             const movies = content.map((item) => ({
@@ -61,7 +62,7 @@ const MoviePage: React.FC = () => {
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
-        const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
+        const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
         const keywordFromUrl = searchParams.get('keyword') || '';
         const nationFromUrl = searchParams.get('nation') || '';
         const releaseDateFromUrl = searchParams.get('releaseDate') || '';
@@ -96,7 +97,13 @@ const MoviePage: React.FC = () => {
         try {
             const response = await deleteMovie(ids as string[]);
             if (response.ok) {
-                setData(prevData => prevData.filter(item => !ids.includes(item.id)));
+                setData((prevData) =>
+                    prevData.map((item) =>
+                        ids.includes(item.id)
+                            ? { ...item, status: 0 }
+                            : item
+                    )
+                );
                 message.success(t('admin.message.deleteSuccess'));
             } else {
                 const result = await response.json();
@@ -110,16 +117,17 @@ const MoviePage: React.FC = () => {
         }
     };
 
+
     const onPageChange = (page: number, pageSize?: number) => {
         setCurrentPage(page);
         setPageSize(pageSize || 10);
-        navigate(`?page=${page}&size=${pageSize || 10}&keyword=${searchKeyword}&nation=${nation}&releaseDate=${releaseDate}&ranking=${ranking}&directorId=${directorId}&status=${status}`);
+        navigate(`?page=${page}&pageSize=${pageSize || 10}&keyword=${searchKeyword}&nation=${nation}&releaseDate=${releaseDate}&ranking=${ranking}&directorId=${directorId}&status=${status}`);
     };
 
     const handleSearch = (keyword: string) => {
         setSearchKeyword(keyword);
         setCurrentPage(1);
-        navigate(`?page=1&size=${pageSize}&keyword=${keyword}&nation=${nation}&releaseDate=${releaseDate}&ranking=${ranking}&directorId=${directorId}&status=${status}`);
+        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}&nation=${nation}&releaseDate=${releaseDate}&ranking=${ranking}&directorId=${directorId}&status=${status}`);
     };
 
     const dataListConfig: DataListConfig<Movie> = {
@@ -188,7 +196,21 @@ const MoviePage: React.FC = () => {
                         </Tag>
                     );
                 },
-            }
+            },
+            {
+                title: t('admin.movie.status'),
+                dataIndex: 'status',
+                key: 'status',
+                align: 'center',
+                sorter: (a: Movie, b: Movie) => a.status - b.status,
+                render: (status) => {
+                    return (
+                        <Tag color={status === 1 ? 'blue' : 'red'}>
+                            {status === 1 ? 'Active' : 'Inactive'}
+                        </Tag>
+                    );
+                },
+            },
         ],
         data: data,
         rowKey: 'id',

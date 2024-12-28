@@ -9,6 +9,7 @@ import { RcFile } from "antd/es/upload";
 import AddOptionModal from "../CreateDirector";
 import { UploadOutlined } from "@ant-design/icons";
 import {getDirectors} from "../../../services/directorService.tsx";
+import {Director} from "../../Director";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -25,6 +26,14 @@ export interface MovieFormValues {
     coverImage?: RcFile;
 }
 
+export interface Country {
+    name: {
+        common: string;
+        official: string;
+    };
+    cca3: string;
+}
+
 const CreateMovie: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [thumbnail, setThumbnail] = useState<RcFile | null>(null);
@@ -33,7 +42,6 @@ const CreateMovie: React.FC = () => {
     const { t } = useTranslation();
     const [directorOptions, setDirectorOptions] = useState([]);
     const [nation, setNation] = useState([]);
-    const [currentField, setCurrentField] = useState("");
 
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal state for director
 
@@ -41,16 +49,12 @@ const CreateMovie: React.FC = () => {
         const fetchDirectors = async () => {
             try {
                 const response = await getDirectors(1, 999999999);
-                const data = await response.json();
+                const data = await response.json()
+                // console.log(data.data.content)
                 if (response.ok) {
-                    const options = data.data.content.map((director: { fullName: never; }) => ({
-                        label: director.fullName,
-                        value: director.fullName,
-                    }));
-                    console.log(options);
-                    setDirectorOptions(options);
+                    setDirectorOptions(data.data.content);
                 } else {
-                    message.error('Failed to load directors');
+                    message.error('Failed to load roles');
                 }
             } catch (error) {
                 message.error('Error fetching directors');
@@ -64,28 +68,22 @@ const CreateMovie: React.FC = () => {
         const fetchCountries = async () => {
             try {
                 const response = await fetch('https://restcountries.com/v3.1/all');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch countries');
-                }
                 const data = await response.json();
-                const countries = data
-                    .map((country: { name: { common: string }; cca2: string }) => ({
-                        label: country.name.common,
-                        value: country.name.common,
-                    }))
-                    .sort((a: { label: string; }, b: { label: never; }) => a.label.localeCompare(b.label));
+
+                const countries = data.sort((a: { name: { common: string; }; }, b: { name: { common: never; }; }) =>
+                    a.name.common.localeCompare(b.name.common)
+                );
+
                 setNation(countries);
             } catch (error) {
-                message.error('Error fetching countries');
-                console.error(error);
+                console.error('Error fetching countries:', error);
             }
         };
         fetchCountries();
     }, []);
 
-
     const handleCreateMovie = async (values: MovieFormValues) => {
-        console.log(values);
+        // console.log(values);
         setLoading(true);
         try {
             const formData = new FormData();
@@ -128,16 +126,10 @@ const CreateMovie: React.FC = () => {
     };
 
     const handleAddOption = () => {
-        // if (currentField === "membershipType") {
-        //     setMembershipOptions([...membershipOptions, { value: newOption, label: newOption }]);
-        // } else if (currentField === "director") {
-        //     setDirectorOptions([...directorOptions, { value: newOption, label: newOption }]);
-        // }
         setIsModalOpen(false);
     };
 
-    const showAddOptionModal = (field: string) => {
-        setCurrentField(field);
+    const showAddOptionModal = () => {
         setIsModalOpen(true);
     };
 
@@ -187,12 +179,16 @@ const CreateMovie: React.FC = () => {
                             rules={[{ required: true, message: t('admin.movie.validation.nation') }]}
                         >
                             <Select
-                                options={nation}
-                                placeholder={t('admin.movie.placeholder.nation')}
+                                placeholder="Chọn quốc gia"
                                 showSearch
+                                style={{ width: 200 }}
                                 filterOption={(input, option) =>
-                                    option.label.toLowerCase().includes(input.toLowerCase())
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
+                                options={nation.map((country: Country) => ({
+                                    label: country.name.common,
+                                    value: country.name.common,
+                                }))}
                             />
                         </Form.Item>
 
@@ -237,17 +233,36 @@ const CreateMovie: React.FC = () => {
                             rules={[{ required: true, message: t('admin.movie.validation.director') }]}
                         >
                             <Select
-                                options={directorOptions}
-                                placeholder={t('admin.movie.directorPlaceholder')}
+                                placeholder="Chọn đạo diễn"
                                 dropdownRender={(menu) => (
                                     <>
                                         {menu}
-                                        <Button type="link" onClick={() => showAddOptionModal("director")}>
-                                            + {t('admin.movie.addNewOption')}
-                                        </Button>
+                                        <div>
+                                            <Button type="link" onClick={() => showAddOptionModal()}>
+                                                + Thêm mới đạo diễn
+                                            </Button>
+                                        </div>
                                     </>
                                 )}
-                            />
+                            >
+                                {directorOptions.map((director: Director) => (
+                                    <Select.Option key={director.id} value={director.fullName}>
+                                        {director.fullName}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                            {/*<Select*/}
+                            {/*    options={directorOptions}*/}
+                            {/*    placeholder={t('admin.movie.directorPlaceholder')}*/}
+                            {/*    dropdownRender={(menu) => (*/}
+                            {/*        <>*/}
+                            {/*            {menu}*/}
+                            {/*            <Button type="link" onClick={() => showAddOptionModal("director")}>*/}
+                            {/*                + {t('admin.movie.addNewOption')}*/}
+                            {/*            </Button>*/}
+                            {/*        </>*/}
+                            {/*    )}*/}
+                            {/*/>*/}
                         </Form.Item>
                     </Col>
 

@@ -216,10 +216,10 @@ const CreateAccount: React.FC = () => {
                                     listType="picture-card"
                                     beforeUpload={(file) => {
                                         handleAvatarChange({ file });
-                                        return false;  // Không cho phép upload tự động
+                                        return false;
                                     }}
                                     className="avatar-uploader"
-                                    showUploadList={false}  // Ẩn danh sách file sau khi upload
+                                    showUploadList={false}
                                 >
                                     <img
                                         src={file ? URL.createObjectURL(file as Blob) : 'https://th.bing.com/th/id/OIP.lMA6AEzLnoPpw177nVhYZgHaHa?pid=ImgDet&w=184&h=184&c=7&dpr=1.3'}

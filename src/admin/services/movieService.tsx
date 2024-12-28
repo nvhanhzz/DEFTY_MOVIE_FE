@@ -6,32 +6,37 @@ import {getWithParams} from "../utils/getWithParams.tsx";
 
 const PREFIX_MOVIE: string = import.meta.env.VITE_PREFIX_MOVIE as string;
 
-export const getMovies = async (
-    page?: number,
-    size?: number,
-    title?: string,
-    nation?: string,
-    releaseDate?: string,
-    ranking?: number,
-    directorId?: number,
-    status?: number
-): Promise<Response> => {
+// export const getMovies = async (
+//     page?: number,
+//     size?: number,
+//     title?: string,
+//     nation?: string,
+//     releaseDate?: string,
+//     ranking?: number,
+//     directorId?: number,
+//     status?: number
+// ): Promise<Response> => {
+//     const url = `${PREFIX_MOVIE}`;
+//     const params: Record<string, any> = {
+//         page,
+//         size,
+//         title,
+//         nation,
+//         releaseDate,
+//         ranking,
+//         directorId,
+//         status
+//     };
+//     Object.keys(params).forEach(key => {
+//         if (params[key] === undefined) {
+//             delete params[key];
+//         }
+//     });
+//     return handleRequest(getWithParams(url, params));
+// };
+export const getMovies = (page?: number, pageSize?: number, searchKey?: string, searchValue?: string): Promise<Response> => {
     const url = `${PREFIX_MOVIE}`;
-    const params: Record<string, any> = {
-        page,
-        size,
-        title,
-        nation,
-        releaseDate,
-        ranking,
-        directorId,
-        status
-    };
-    Object.keys(params).forEach(key => {
-        if (params[key] === undefined) {
-            delete params[key];
-        }
-    });
+    const params = { page, pageSize, [searchKey || '']: searchValue };
     return handleRequest(getWithParams(url, params));
 };
 

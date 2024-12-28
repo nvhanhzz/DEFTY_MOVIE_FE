@@ -50,6 +50,7 @@ const DataListTemplate = <T extends { id: string }>( { config }: { config: DataL
     const actionColumn: ColumnType<T> = {
         title: t('admin.dataList.actionColumn'),
         key: 'action',
+        align: 'center',
         render: (record: T) => (
             <Space className="data-list__action-buttons">
                 <Button className="data-list__action-button data-list__action-button--edit" icon={<EditOutlined />} onClick={() => config.onUpdate(record.id)} />
@@ -59,7 +60,7 @@ const DataListTemplate = <T extends { id: string }>( { config }: { config: DataL
                     okText={t('admin.dataList.deleteSelectedConfirm')}
                     cancelText={t('admin.dataList.deleteSelectedCancel')}
                 >
-                    <Button className="data-list__action-button data-list__action-button--delete" icon={<DeleteOutlined />} danger />
+                    <Button className="data-list__action-button data-list__action-button--delete" icon={<DeleteOutlined />} />
                 </Popconfirm>
             </Space>
         ),

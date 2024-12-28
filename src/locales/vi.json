@@ -221,6 +221,7 @@
             "trailer": "Trailer",
             "nation": "Quốc gia",
             "director": "Đạo diễn",
+            "status": "Trạng thái",
             "releaseDate": "Ngày phát hành",
             "ranking": "Xếp hạng",
             "membershipType": "Loại thành viên",
