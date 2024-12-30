@@ -215,21 +215,57 @@
         "movie": {
             "title": "Phim",
             "createNewPermissionButton": "Tạo phim mới",
-            "nameColumn": "Tên phim",
+            "titleColumn": "Tên phim",
             "descriptionColumn": "Mô tả",
             "actionColumn": "Hành động",
+            "description": "Mô tả",
+            "trailer": "Trailer",
+            "nation": "Quốc gia",
+            "director": "Đạo diễn",
+            "status": "Trạng thái",
+            "releaseDate": "Ngày phát hành",
+            "ranking": "Xếp hạng",
+            "membershipType": "Loại thành viên",
+            "thumbnail": "Ảnh phim",
             "searchPlaceholder": "Tìm kiếm theo tên",
+            "directorPlaceholder": "Chọn đạo diễn",
+            "membershipTypePlaceholder": "Chọn loại thành viên",
+            "addNewOption": "Thêm mới",
+            "addNewMembershipType": "Thêm loại thành viên mới",
+            "newMembershipType": "Loại thành viên mới",
+            "newMembershipTypePlaceholder": "Nhập loại thành viên mới",
             "create": {
                 "title": "Tạo phim mới",
-                "permissionName": "Tên phim",
-                "description": "Mô tả",
-                "createPermissionButton": "Tạo phim"
+                "titleMovie": "Tiêu đề phim",
+                "coverImage": "Hình bìa"
+            },
+            "placeholder":{
+                "nation": "Chọn quốc gia",
+                "title" : "Nhập tên phim",
+                "trailer": "Nhập trailer",
+                "description": "Nhập mô tả",
+                "ranking": "Nhập xếp hạng"
             },
             "update": {
                 "title": "Cập nhật phim",
                 "permissionName": "Tên phim",
                 "description": "Mô tả",
                 "updatePermissionButton": "Cập nhật phim"
+            },
+            "validation": {
+                "titleMovie": "Tiêu đề phim là bắt buộc.",
+                "description": "Mô tả phim là bắt buộc.",
+                "trailer": "Trailer là bắt buộc.",
+                "nation": "Quốc gia là bắt buộc.",
+                "director": "Đạo diễn là bắt buộc.",
+                "releaseDate": {
+                    "required": "Ngày phát hành là bắt buộc.",
+                    "invalid": "Định dạng ngày phát hành không hợp lệ."
+                },
+                "raking": "Xếp hạng là bắt buộc.",
+                "membershipType": "Loại thành viên là bắt buộc.",
+                "thumbnail": "Hình thu nhỏ là bắt buộc.",
+                "coverImage": "Hình bìa là bắt buộc."
             }
         },"episode": {
             "title": "Tập phim",

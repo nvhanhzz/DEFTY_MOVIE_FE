@@ -105,6 +105,7 @@ const PermissionsPage: React.FC = () => {
             {
                 title: 'No.',
                 key: 'no',
+                align: 'center',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
                 sorter: (a: Permission, b: Permission) => Number(a.id) - Number(b.id),
             },
@@ -112,12 +113,14 @@ const PermissionsPage: React.FC = () => {
                 title: t('admin.permission.nameColumn'),
                 dataIndex: 'name',
                 key: 'name',
+                align: 'center',
                 sorter: (a: Permission, b: Permission) => a.name.localeCompare(b.name),
             },
             {
                 title: t('admin.permission.descriptionColumn'),
                 dataIndex: 'description',
                 key: 'description',
+                align: 'center',
                 sorter: (a: Permission, b: Permission) => a.description.localeCompare(b.description),
             },
         ],

@@ -48,6 +48,7 @@ const UpdateAccount: React.FC = () => {
                         form.setFieldsValue({ avatar: data.avatar });
                     }
                 }
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (e) {
                 message.error('Error fetching account data');
             }

@@ -1,58 +1,114 @@
-import React, { useState } from 'react';  // Import useRef
-import { Button, Form, Input, message, Upload } from 'antd';
+import React, {useEffect, useState} from 'react';
+import { Button, Form, Input, message, Upload, DatePicker, Select, Row, Col} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { postMovie } from '../../../services/movieService';
 import OutletTemplate from '../../../templates/Outlet';
-import { Editor } from '@tinymce/tinymce-react';
-import { tinyMceConfig } from '../../../utils/tinyMceConfig';
-import { RcFile } from 'antd/es/upload';  // Import RcFile
+import { postMovie } from "../../../services/movieService";
 import './CreateMovie.scss';
-import {UploadOutlined} from "@ant-design/icons";
+import { RcFile } from "antd/es/upload";
+import AddOptionModal from "../CreateDirector";
+import { UploadOutlined } from "@ant-design/icons";
+import {getDirectors} from "../../../services/directorService.tsx";
+import {Director} from "../../Director";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
 export interface MovieFormValues {
     title: string;
-    content: string;
-    author: string;
-    thumbnail?: RcFile;  // Use RcFile for thumbnail as well
+    description: string;
+    trailer: string;
+    nation: string;
+    ranking: string;
+    releaseDate: string;
+    membershipType: string;
+    director: string;
+    thumbnail?: RcFile;
+    coverImage?: RcFile;
+}
+
+export interface Country {
+    name: {
+        common: string;
+        official: string;
+    };
+    cca3: string;
 }
 
 const CreateMovie: React.FC = () => {
     const [loading, setLoading] = useState(false);
-    const [file, setFile] = useState<RcFile | null>(null);  // Use RcFile type for the file
+    const [thumbnail, setThumbnail] = useState<RcFile | null>(null);
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const [directorOptions, setDirectorOptions] = useState([]);
+    const [nation, setNation] = useState([]);
 
-    // Handle form submission
+    const [isModalOpen, setIsModalOpen] = useState(false); // Modal state for director
+
+    useEffect(() => {
+        const fetchDirectors = async () => {
+            try {
+                const response = await getDirectors(1, 999999999);
+                const data = await response.json()
+                // console.log(data.data.content)
+                if (response.ok) {
+                    setDirectorOptions(data.data.content);
+                } else {
+                    message.error('Failed to load roles');
+                }
+            } catch (error) {
+                message.error('Error fetching directors');
+                console.error(error);
+            }
+        };
+        fetchDirectors();
+    }, []);
+
+    useEffect(() => {
+        const fetchCountries = async () => {
+            try {
+                const response = await fetch('https://restcountries.com/v3.1/all');
+                const data = await response.json();
+
+                const countries = data.sort((a: { name: { common: string; }; }, b: { name: { common: never; }; }) =>
+                    a.name.common.localeCompare(b.name.common)
+                );
+
+                setNation(countries);
+            } catch (error) {
+                console.error('Error fetching countries:', error);
+            }
+        };
+        fetchCountries();
+    }, []);
+
     const handleCreateMovie = async (values: MovieFormValues) => {
+        // console.log(values);
         setLoading(true);
         try {
             const formData = new FormData();
             formData.append('title', values.title);
-            formData.append('content', values.content);
-            formData.append('author', values.author);
-
-            if (file) {
-                formData.append('thumbnail', file);  // Append file as thumbnail
+            formData.append('description', values.description);
+            formData.append('trailer', values.trailer);
+            formData.append('nation', values.nation);
+            formData.append('ranking', values.ranking);
+            formData.append('releaseDate', values.releaseDate);
+            formData.append('membershipType', values.membershipType);
+            formData.append('director', values.director);
+            if (thumbnail) {
+                formData.append('thumbnail', thumbnail);
             }
 
             const response = await postMovie(formData);
             const result = await response.json();
-            console.log(response, result);
             if (!response.ok) {
-                message.error(result.message || t('admin.message.createError'));
-                return;
-            }
-            if (result.status !== 200) {
                 message.error(result.message || t('admin.message.createError'));
                 return;
             }
 
             message.success(t('admin.message.createSuccess'));
             navigate(`${PREFIX_URL_ADMIN}/movies`);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
@@ -60,15 +116,21 @@ const CreateMovie: React.FC = () => {
         }
     };
 
-    // Handle file change (thumbnail)
-    const handleThumbnailChange = ({ file }: { file: RcFile }) => {
-        setFile(file);
+    const handleAvatarChange = ({ file }: { file: RcFile }) => {
+        setThumbnail(file);
     };
 
-    // Handle form reset
     const handleResetForm = () => {
         form.resetFields();
-        setFile(null);
+        setThumbnail(null);
+    };
+
+    const handleAddOption = () => {
+        setIsModalOpen(false);
+    };
+
+    const showAddOptionModal = () => {
+        setIsModalOpen(true);
     };
 
     return (
@@ -76,7 +138,7 @@ const CreateMovie: React.FC = () => {
             breadcrumbItems={[
                 { path: `${PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
                 { path: `${PREFIX_URL_ADMIN}/movies`, name: t('admin.movie.title') },
-                { path: '', name: t('admin.movie.create.title') },
+                { path: ``, name: t('admin.movie.create.title') },
             ]}
         >
             <Form
@@ -85,85 +147,173 @@ const CreateMovie: React.FC = () => {
                 layout="vertical"
                 className="create-movie-form"
             >
-                <Form.Item
-                    label={t('admin.movie.title')}
-                    name="title"
-                    rules={[{ required: true, message: t('admin.movie.validation.title') }]}
-                >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item
-                    label={t('admin.movie.content')}
-                    name="content"
-                    rules={[{ required: true, message: t('admin.movie.validation.title') }]}
-                >
-                    <Input />
-                </Form.Item>
-
-                {/*<Form.Item*/}
-                {/*    label={t('admin.movie.content')}*/}
-                {/*    name="content"*/}
-                {/*>*/}
-                {/*    <Editor*/}
-                {/*        initialValue=""*/}
-                {/*        init={tinyMceConfig}*/}
-                {/*        onEditorChange={(content, editor) => {*/}
-                {/*            form.setFieldsValue({ content: content });*/}
-                {/*        }}*/}
-                {/*    />*/}
-                {/*</Form.Item>*/}
-
-                <Form.Item
-                    label={t('admin.movie.author')}
-                    name="author"
-                    rules={[{ required: true, message: t('admin.movie.validation.author') }]}
-                >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item label={t('admin.movie.thumbnail')} className="thumbnail-wrapper">
-                    <div className="thumbnail-preview">
-                        <Upload
-                            listType="picture-card"
-                            beforeUpload={(file) => {
-                                handleThumbnailChange({ file });
-                                return false;  // Không cho phép upload tự động
-                            }}
-                            className="thumbnail-uploader"
-                            showUploadList={false}  // Ẩn danh sách file sau khi upload
+                <Row gutter={10}>
+                    <Col span={16}>
+                        <Form.Item
+                            label={t('admin.movie.create.titleMovie')}
+                            name="title"
+                            rules={[{ required: true, message: t('admin.movie.validation.title') }]}
                         >
-                            <img
-                                src={file ? URL.createObjectURL(file as Blob) : 'https://via.placeholder.com/150'}
-                                alt="thubnail"
-                                className="thumbnail-image"
+                            <Input placeholder={t('admin.movie.placeholder.title')}/>
+                        </Form.Item>
+
+                        <Form.Item
+                            label={t('admin.movie.description')}
+                            name="description"
+                            rules={[{ required: true, message: t('admin.movie.validation.description') }]}
+                        >
+                            <Input.TextArea placeholder={t('admin.movie.placeholder.description')}/>
+                        </Form.Item>
+
+                        <Form.Item
+                            label={t('admin.movie.trailer')}
+                            name="trailer"
+                            rules={[{ required: true, message: t('admin.movie.validation.trailer') }]}
+                        >
+                            <Input placeholder={t('admin.movie.placeholder.trailer')}/>
+                        </Form.Item>
+
+                        <Form.Item
+                            label={t('admin.movie.nation')}
+                            name="nation"
+                            rules={[{ required: true, message: t('admin.movie.validation.nation') }]}
+                        >
+                            <Select
+                                placeholder="Chọn quốc gia"
+                                showSearch
+                                style={{ width: 200 }}
+                                filterOption={(input, option) =>
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                }
+                                options={nation.map((country: Country) => ({
+                                    label: country.name.common,
+                                    value: country.name.common,
+                                }))}
                             />
-                        </Upload>
-                        <Button className="upload-button">
-                            <UploadOutlined /> {t('admin.account.upload')}
-                        </Button>
-                    </div>
-                </Form.Item>
+                        </Form.Item>
+
+                        <Form.Item
+                            label={t('admin.movie.ranking')}
+                            name="ranking"
+                            rules={[{ required: true, message: t('admin.movie.validation.ranking') }]}
+                        >
+                            <Input placeholder={t('admin.movie.placeholder.ranking')}/>
+                        </Form.Item>
+
+                        <Form.Item
+                            label={t('admin.movie.releaseDate')}
+                            name="releaseDate"
+                            rules={[{ required: true, message: t('admin.movie.validation.releaseDate') }]}
+                        >
+                            <DatePicker
+                                format="YYYY-MM-DD"
+                                onChange={(_date, dateString) => {
+                                    form.setFieldsValue({ dateOfBirth: dateString });
+                                }}
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label={t('admin.movie.membershipType')}
+                            name="membershipType"
+                            rules={[{ required: true, message: t('admin.movie.validation.membershipType') }]}
+                        >
+                            <Select
+                                placeholder={t('admin.movie.membershipTypePlaceholder')}
+                                options={[
+                                    { label: 'VIP', value: 1 },
+                                    { label: 'Normal', value: 0 }
+                                ]}
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label={t('admin.movie.director')}
+                            name="director"
+                            rules={[{ required: true, message: t('admin.movie.validation.director') }]}
+                        >
+                            <Select
+                                placeholder="Chọn đạo diễn"
+                                dropdownRender={(menu) => (
+                                    <>
+                                        {menu}
+                                        <div>
+                                            <Button type="link" onClick={() => showAddOptionModal()}>
+                                                + Thêm mới đạo diễn
+                                            </Button>
+                                        </div>
+                                    </>
+                                )}
+                            >
+                                {directorOptions.map((director: Director) => (
+                                    <Select.Option key={director.id} value={director.fullName}>
+                                        {director.fullName}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                            {/*<Select*/}
+                            {/*    options={directorOptions}*/}
+                            {/*    placeholder={t('admin.movie.directorPlaceholder')}*/}
+                            {/*    dropdownRender={(menu) => (*/}
+                            {/*        <>*/}
+                            {/*            {menu}*/}
+                            {/*            <Button type="link" onClick={() => showAddOptionModal("director")}>*/}
+                            {/*                + {t('admin.movie.addNewOption')}*/}
+                            {/*            </Button>*/}
+                            {/*        </>*/}
+                            {/*    )}*/}
+                            {/*/>*/}
+                        </Form.Item>
+                    </Col>
+
+                    <Col span={8} className="thumbnail-col">
+                        <Form.Item label={t('admin.movie.thumbnail')} className="thumbnail-wrapper">
+                            <div className="thumbnail-preview">
+                                <Upload
+                                    listType="picture-card"
+                                    beforeUpload={(file) => {
+                                        handleAvatarChange({ file });
+                                        return false;
+                                    }}
+                                    showUploadList={false}
+                                    className="thumbnail-uploader"
+                                >
+                                    <div className={"thumbnail-upload"}>
+                                        {thumbnail ? (
+                                            <img
+                                                src={URL.createObjectURL(thumbnail)}
+                                                alt="thumbnail"
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            />
+                                        ) : (
+                                            <UploadOutlined style={{ fontSize: '24px' }} />
+                                        )}
+                                    </div>
+                                </Upload>
+                                <Button className="upload-button">
+                                    <UploadOutlined /> {t('admin.movie.upload')}
+                                </Button>
+                            </div>
+                        </Form.Item>
+                    </Col>
+                </Row>
 
                 <div className="form-actions">
-                    <Button
-                        htmlType="button"
-                        onClick={handleResetForm}  // Reset form and thumbnail
-                        className="reset-button"
-                    >
+                    <Button onClick={handleResetForm} className="reset-button">
                         {t('admin.form.reset')}
                     </Button>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        loading={loading}
-                        className="submit-button"
-                    >
+                    <Button type="primary" htmlType="submit" loading={loading} className="submit-button">
                         {t('admin.form.create')}
                     </Button>
                 </div>
             </Form>
+            <AddOptionModal
+                visible={isModalOpen}
+                onCancel={() => setIsModalOpen(false)}
+                onAdd={handleAddOption}
+            />
         </OutletTemplate>
+
     );
 };
 

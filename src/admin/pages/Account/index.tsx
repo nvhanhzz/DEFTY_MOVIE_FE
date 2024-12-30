@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { message, Spin } from 'antd';
+import {message, Spin, Switch} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
-import { deleteAccounts, getAccounts } from '../../services/accountService.tsx';
+import {deleteAccounts, getAccounts, switchStatusAccount} from '../../services/accountService.tsx';
+import {Role} from "../Role";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -19,6 +20,7 @@ export interface Account {
     gender: string;
     address: string;
     avatar: string;
+    status: number;
     dateOfBirth: Date;
     role: string;
 }
@@ -51,6 +53,7 @@ const AccountPage: React.FC = () => {
             }));
             setTotalItems(result.data.totalElements);
             setData(accounts);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
@@ -92,6 +95,7 @@ const AccountPage: React.FC = () => {
                 const result = await response.json();
                 message.error(result.message || t('admin.message.deleteError')); // Thông báo khi có lỗi xóa
             }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.deleteError')); // Thông báo khi xóa thất bại
         } finally {
@@ -99,6 +103,28 @@ const AccountPage: React.FC = () => {
         }
     };
 
+    const handleSwitchStatus = async (id: string, checked: boolean) => {
+        setIsLoading(true);
+        try {
+            setData(prevData => prevData.map(item =>
+                item.id === id ? { ...item, status: checked ? 1 : 0 } : item
+            ));
+            const response = await switchStatusAccount(id);
+            if (response.status === 200) {
+                message.success(t('admin.message.updateSuccess'));
+            } else {
+                message.error(t('admin.message.updateError'));
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            setData(prevData => prevData.map(item =>
+                item.id === id ? { ...item, status: item.status === 1 ? 0 : 1 } : item
+            ));
+            message.error(t('admin.message.updateError'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
     const onPageChange = (page: number, pageSize?: number) => {
         const keyword = searchKeyword || '';
         setCurrentPage(page);
@@ -117,6 +143,7 @@ const AccountPage: React.FC = () => {
             {
                 title: 'No.',
                 dataIndex: 'key',
+                align: 'center',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
                 sorter: (a: Account, b: Account) => Number(a.id) - Number(b.id),
             },
@@ -124,34 +151,53 @@ const AccountPage: React.FC = () => {
                 title: t('admin.account.username'),
                 dataIndex: 'username',
                 key: 'username',
+                align: 'center',
                 sorter: (a: Account, b: Account) => a.username.localeCompare(b.username),
             },
             {
                 title: t('admin.account.email'),
                 dataIndex: 'email',
                 key: 'email',
+                align: 'center',
                 sorter: (a: Account, b: Account) => (a.email || '').localeCompare(b.email || ''),
             },
             {
                 title: t('admin.account.fullName'),
                 dataIndex: 'fullName',
                 key: 'fullName',
+                align: 'center',
                 sorter: (a: Account, b: Account) => (a.fullName || '').localeCompare(b.fullName || ''),
             },
             {
                 title: t('admin.account.phone'),
                 dataIndex: 'phone',
                 key: 'phone',
+                align: 'center',
             },
             {
                 title: t('admin.account.gender.title'),
                 dataIndex: 'gender',
                 key: 'gender',
+                align: 'center',
             },
             {
                 title: t('admin.account.role.title'),
                 dataIndex: 'role',
                 key: 'role',
+                align: 'center',
+            },
+            {
+                title: t('admin.movie.status'),
+                dataIndex: 'status',
+                key: 'status',
+                align: 'center',
+                sorter: (a: Role, b: Role) => a.status - b.status,
+                render: (status, record) => (
+                    <Switch
+                        checked={status === 1}
+                        onChange={(checked) => handleSwitchStatus(record.id, checked)}
+                    />
+                ),
             },
         ],
         data: data,

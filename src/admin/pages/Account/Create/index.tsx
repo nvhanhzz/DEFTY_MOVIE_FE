@@ -84,6 +84,7 @@ const CreateAccount: React.FC = () => {
 
             message.success(t('admin.message.createSuccess'));
             navigate(`${PREFIX_URL_ADMIN}/accounts`);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
@@ -215,10 +216,10 @@ const CreateAccount: React.FC = () => {
                                     listType="picture-card"
                                     beforeUpload={(file) => {
                                         handleAvatarChange({ file });
-                                        return false;  // Không cho phép upload tự động
+                                        return false;
                                     }}
                                     className="avatar-uploader"
-                                    showUploadList={false}  // Ẩn danh sách file sau khi upload
+                                    showUploadList={false}
                                 >
                                     <img
                                         src={file ? URL.createObjectURL(file as Blob) : 'https://th.bing.com/th/id/OIP.lMA6AEzLnoPpw177nVhYZgHaHa?pid=ImgDet&w=184&h=184&c=7&dpr=1.3'}
