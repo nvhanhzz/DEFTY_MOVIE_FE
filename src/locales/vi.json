@@ -21,7 +21,8 @@
         "form": {
             "reset": "Làm mới",
             "create": "Tạo",
-            "update": "Cập nhật"
+            "update": "Cập nhật",
+            "search": "Tìm kiếm"
         },
         "dataList": {
             "actionColumn": "Hành động",

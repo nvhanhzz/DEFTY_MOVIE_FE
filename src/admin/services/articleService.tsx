@@ -5,9 +5,17 @@ import React from "react";
 
 const PREFIX_ARTICLE: string = import.meta.env.VITE_PREFIX_ARTICLE as string;
 
-export const getArticles = async (page?: number, size?: number, searchKey?: string, searchValue?: string): Promise<Response> => {
+export const getArticles = async (
+    page?: number,
+    size?: number,
+    filters?: Record<string, string | number>
+): Promise<Response> => {
     const url = `${PREFIX_ARTICLE}`;
-    const params = { page, size, [searchKey || '']: searchValue }; // Optional search parameters
+    const params = {
+        page,
+        size,
+        ...filters,
+    };
     return handleRequest(getWithParams(url, params));
 };
 
