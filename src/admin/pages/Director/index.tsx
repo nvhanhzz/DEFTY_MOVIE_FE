@@ -1,41 +1,81 @@
 import React, { useEffect, useState } from 'react';
 import { message, Spin } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';  // Import useTranslation
+import { useTranslation } from 'react-i18next'; // Import useTranslation
+import dayjs from 'dayjs'; // Use dayjs instead of moment
+import customParseFormat from 'dayjs/plugin/customParseFormat'; // Plugin for custom date formats
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
 import { deleteDirectors, getDirectors } from "../../services/directorService.tsx";
-import moment from 'moment';
+import SearchFormTemplate from "../../templates/Search";
+
+// Extend dayjs with the customParseFormat plugin
+dayjs.extend(customParseFormat);
 
 export interface Director {
     id: string;
-    fullName: string,
-    gender: string,
-    dateOfBirth: Date,
-    weight: string,
-    height: string,
-    nationality: string,
-    description: string,
-    avatar: string
+    fullName: string;
+    gender: string;
+    dateOfBirth: Date;
+    weight: string;
+    height: string;
+    nationality: string;
+    description: string;
+    avatar: string;
 }
 
 const DirectorPage: React.FC = () => {
-    const { t } = useTranslation();  // Khởi tạo t từ useTranslation
+    const { t } = useTranslation(); // Khởi tạo t từ useTranslation
     const [data, setData] = useState<Director[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
-    const [searchKeyword, setSearchKeyword] = useState<string>(''); // State cho từ khóa tìm kiếm
+    const [filters, setFilters] = useState<Record<string, string>>({});
     const navigate = useNavigate();
     const location = useLocation();
 
-    const fetchData = async (page: number, pageSize: number) => {
+    const searchFields = [
+        {
+            type: 'input',
+            label: t('admin.director.fullName'),
+            name: 'name',
+            placeholder: t('admin.director.fullName'),
+        },
+        {
+            type: 'select',
+            label: t('admin.director.gender.title'),
+            name: 'gender',
+            placeholder: t('admin.director.gender.title'),
+            options: [
+                {
+                    label: t('admin.director.gender.male'),
+                    value: 'male',
+                },
+                {
+                    label: t('admin.director.gender.female'),
+                    value: 'female',
+                },
+                {
+                    label: t('admin.director.gender.other'),
+                    value: 'other',
+                },
+            ],
+        },
+        {
+            type: 'date',
+            label: t('admin.director.dateOfBirth'),
+            name: 'dateOfBirth',
+            placeholder: t('admin.director.dateOfBirth'),
+        },
+    ];
+
+    const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
         setIsLoading(true);
         try {
-            const response = await getDirectors(page, pageSize); // Gọi API với từ khóa
+            const response = await getDirectors(page, pageSize, filters); // Gọi API với từ khóa
             const result = await response.json();
             const content: Director[] = result.data.content;
             const directors = content.map((item: Director) => ({
@@ -44,9 +84,8 @@ const DirectorPage: React.FC = () => {
             }));
             setTotalItems(result.data.totalElements);
             setData(directors);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
-            message.error(t('admin.message.fetchError'));  // Sử dụng t() để thay thế chuỗi
+            message.error(t('admin.message.fetchError')); // Sử dụng t() để thay thế chuỗi
         } finally {
             setIsLoading(false);
         }
@@ -55,17 +94,46 @@ const DirectorPage: React.FC = () => {
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
-        const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
-        const keywordFromUrl = searchParams.get('keyword') || ''; // Lấy từ khóa tìm kiếm từ URL
+        const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
+        const filtersFromUrl: Record<string, string> = {};
+
+        searchParams.forEach((value, key) => {
+            if (key !== 'page' && key !== 'size') {
+                filtersFromUrl[key] = value;
+            }
+        });
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
-        setSearchKeyword(keywordFromUrl); // Cập nhật từ khóa tìm kiếm
+        setFilters(filtersFromUrl);
     }, [location.search]);
 
     useEffect(() => {
-        fetchData(currentPage, pageSize); // Gọi fetchData với từ khóa tìm kiếm
-    }, [currentPage, pageSize, searchKeyword]);
+        fetchData(currentPage, pageSize, filters);
+    }, [currentPage, pageSize, filters]);
+
+    const handleSearch = (newFilters: Record<string, any>) => {
+        const formattedFilters: Record<string, any> = { ...newFilters };
+
+        Object.keys(formattedFilters).forEach((key) => {
+            if (key === 'dateOfBirth' && formattedFilters[key]) {
+                formattedFilters[key] = dayjs(formattedFilters[key], 'YYYY-MM-DD').format('YYYY-MM-DD');
+            }
+        });
+
+        setCurrentPage(1);
+        setFilters(formattedFilters);
+
+        const queryParams = new URLSearchParams();
+        queryParams.append('page', '1');
+        queryParams.append('size', pageSize.toString());
+
+        Object.entries(formattedFilters).forEach(([key, value]) => {
+            if (value) queryParams.append(key, value.toString());
+        });
+
+        navigate(`?${queryParams.toString()}`);
+    };
 
     const handleUpdate = (id: string) => {
         navigate(`update/${id}`);
@@ -81,13 +149,12 @@ const DirectorPage: React.FC = () => {
             const response = await deleteDirectors(ids as string[]);
             console.log(response, await response.json());
             if (response.ok) {
-                setData(prevData => prevData.filter(item => !ids.includes(item.id)));
-                message.success(t('admin.message.deleteSuccess'));  // Dùng t() cho thông báo
+                setData((prevData) => prevData.filter((item) => !ids.includes(item.id)));
+                message.success(t('admin.message.deleteSuccess')); // Dùng t() cho thông báo
             } else {
                 const result = await response.json();
-                message.error(result.message || t('admin.message.deleteError'));  // Dùng t() cho thông báo
+                message.error(result.message || t('admin.message.deleteError')); // Dùng t() cho thông báo
             }
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.deleteError'));
         } finally {
@@ -101,87 +168,41 @@ const DirectorPage: React.FC = () => {
         navigate(`?page=${page}&pageSize=${pageSize || 10}`);
     };
 
-    const handleSearch = (keyword: string) => {
-        setSearchKeyword(keyword);
-        setCurrentPage(1);
-        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`);
-    };
-
     const dataListConfig: DataListConfig<Director> = {
         columns: [
             {
-                title: 'No.',  // Dùng t() cho tiêu đề cột
+                title: 'No.', // Dùng t() cho tiêu đề cột
                 key: 'no',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
-                sorter: (a: Director, b: Director) => Number(a.id) - Number(b.id),
             },
             {
-                title: t('admin.director.fullName'),  // Dùng t() cho tiêu đề cột
+                title: t('admin.director.fullName'),
                 dataIndex: 'fullName',
                 key: 'fullName',
-                sorter: (a: Director, b: Director) => (a.fullName || '').localeCompare(b.fullName || ''),
             },
             {
-                title: t('admin.director.gender.title'),  // Dùng t() cho tiêu đề cột
+                title: t('admin.director.gender.title'),
                 dataIndex: 'gender',
                 key: 'gender',
-                sorter: (a: Director, b: Director) => (a.gender || '').localeCompare(b.gender || ''),
             },
             {
-                title: t('admin.director.weight'),  // Dùng t() cho tiêu đề cột
-                dataIndex: 'weight',
-                key: 'weight',
-                sorter: (a: Director, b: Director) => (a.weight || '').localeCompare(b.weight || ''),
-            },
-            {
-                title: t('admin.director.height'),  // Dùng t() cho tiêu đề cột
-                dataIndex: 'height',
-                key: 'height',
-                sorter: (a: Director, b: Director) => (a.height || '').localeCompare(b.height || ''),
-            },
-            {
-                title: t('admin.director.nationality'),  // Dùng t() cho tiêu đề cột
-                dataIndex: 'nationality',
-                key: 'nationality',
-                sorter: (a: Director, b: Director) => (a.nationality || '').localeCompare(b.nationality || ''),
-            },
-            {
-                title: t('admin.director.description'),  // Dùng t() cho tiêu đề cột
-                dataIndex: 'description',
-                key: 'description',
-                sorter: (a: Director, b: Director) => (a.description || '').localeCompare(b.description || ''),
-            },
-            {
-                title: t('admin.director.avatar'),  // Dùng t() cho tiêu đề cột
-                dataIndex: 'avatar',
-                key: 'avatar',
-                render: (thumbnail: string) => (
-                    <img src={thumbnail} alt="thumbnail" style={{ width: '100px', height: 'auto', borderRadius: '4px' }} />
-                ),
-            },
-            {
-                title: t('admin.director.dateOfBirth'),  // Dùng t() cho tiêu đề cột
+                title: t('admin.director.dateOfBirth'),
                 dataIndex: 'dateOfBirth',
                 key: 'dateOfBirth',
-                render: (dateOfBirth: Date) => dateOfBirth ? moment(dateOfBirth).format('DD/MM/YYYY') : '',
-                sorter: (a: Director, b: Director) => (a.dateOfBirth ? moment(a.dateOfBirth).unix() : 0) - (b.dateOfBirth ? moment(b.dateOfBirth).unix() : 0),
+                render: (dateOfBirth: Date) => (dateOfBirth ? dayjs(dateOfBirth).format('DD/MM/YYYY') : ''),
             },
         ],
-        data: data,
+        data,
         rowKey: 'id',
         onCreateNew: handleCreateNewPermission,
         onUpdate: handleUpdate,
         onDeleteSelected: handleDeleteSelected,
-        search: {
-            keyword: searchKeyword,
-            onSearch: handleSearch,
-        },
         pagination: {
-            currentPage: currentPage,
-            totalItems: totalItems,
-            pageSize: pageSize,
+            currentPage,
+            totalItems,
+            pageSize,
             onPaginationChange: onPageChange,
-        }
+        },
     };
 
     return (
@@ -191,6 +212,7 @@ const DirectorPage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.director.title') },
             ]}
         >
+            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} />
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

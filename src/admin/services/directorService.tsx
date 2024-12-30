@@ -5,9 +5,17 @@ import React from "react";
 
 const PREFIX_DIRECTOR: string = import.meta.env.VITE_PREFIX_DIRECTOR as string;
 
-export const getDirectors = async (page?: number, size?: number): Promise<Response> => {
+export const getDirectors = async (
+    page?: number,
+    size?: number,
+    filters?: Record<string, string | number>
+): Promise<Response> => {
     const url = `${PREFIX_DIRECTOR}/all`;
-    const params = { page, size }; // Optional search parameters
+    const params = {
+        page,
+        size,
+        ...filters,
+    };
     return handleRequest(getWithParams(url, params));
 };
 
