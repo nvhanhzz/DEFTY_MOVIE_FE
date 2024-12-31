@@ -31,7 +31,13 @@
             "deleteSelectedButton": "Xóa các mục đã chọn",
             "deleteConfirm": "Bạn có chắc chắn muốn xóa mục này không?",
             "deleteSelectedConfirm": "Xóa",
-            "deleteSelectedCancel": "Hủy"
+            "deleteSelectedCancel": "Hủy",
+            "status": {
+                "title": "Trạng thái",
+                "active": "Hoạt động",
+                "inactive": "Dừng hoạt động",
+                "all": "Tất cả"
+            }
         },
         "login": {
             "title": "Trang quản trị Defty",
@@ -320,6 +326,17 @@
                 "confirm": "Bạn có chắc chắn muốn xóa tập phim này không?",
                 "success": "Tập phim đã được xóa thành công.",
                 "error": "Không thể xóa tập phim."
+            }
+        },
+        "category": {
+            "title": "Danh mục",
+            "name": "Tên",
+            "description": "Mô tả",
+            "create": {
+                "title": "Tạo mới"
+            },
+            "update": {
+                "title": "Cập nhật"
             }
         }
     },
