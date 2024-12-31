@@ -1,0 +1,82 @@
+.create-director-form {
+  .avatar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .avatar-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+    width: 200px; /* Cố định kích thước */
+    height: 200px;
+    border-radius: 50%; /* Tạo hình tròn */
+    border: 2px solid #e8e8e8; /* Thêm viền cho avatar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .avatar-preview {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .ant-upload, .ant-upload-select {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+  }
+
+  .avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Giữ nguyên tỷ lệ ảnh và không cắt */
+    border-radius: 50%; /* Làm tròn ảnh */
+  }
+
+  .upload-button {
+    position: absolute;
+    display: none;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Hiển thị nút upload khi hover vào avatar */
+  .avatar-wrapper:hover .upload-button {
+    display: block;
+    opacity: 1;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .submit-button, .reset-button {
+    width: 100px;
+    margin-left: 10px;
+  }
+
+  /* Optional: Style for upload button and preview in the avatar-wrapper */
+  .ant-upload {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

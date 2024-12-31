@@ -9,7 +9,8 @@ import {
     UserOutlined,
     LinuxOutlined,
     CameraOutlined,
-    TagsOutlined
+    TagsOutlined,
+    IdcardOutlined
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Sider.scss';
@@ -41,14 +42,19 @@ const menuItems: MenuItem[] = [
         linkTo: 'movies',
     },
     {
+        icon: <TagsOutlined  />,
+        label: 'admin.category.title',
+        linkTo: 'categories',
+    },
+    {
         icon: <CameraOutlined />,
         label: 'admin.director.title',
         linkTo: 'directors',
     },
     {
-        icon: <TagsOutlined  />,
-        label: 'admin.category.title',
-        linkTo: 'categories',
+        icon: <IdcardOutlined />,
+        label: 'admin.actor.title',
+        linkTo: 'actors',
     },
     {
         icon: <UserOutlined />,

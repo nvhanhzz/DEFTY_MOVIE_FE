@@ -338,6 +338,48 @@
             "update": {
                 "title": "Cập nhật"
             }
+        },
+        "actor": {
+            "title": "Diễn viên",
+            "fullName": "Họ và tên",
+            "gender": {
+                "title": "Giới tính",
+                "placeholder": "Chọn giới tính",
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            },
+            "avatar": "Ảnh",
+            "dateOfBirth": "Ngày sinh",
+            "weight": "Cân nặng",
+            "height": "Chiều cao",
+            "nationality": "Quốc tịch",
+            "description": "Mô tả",
+            "create": {
+                "title": "Tạo mới",
+                "form": {
+                    "reset": "Đặt lại",
+                    "create": "Tạo"
+                },
+                "validation": {
+                    "fullName": "Vui lòng nhập họ và tên!",
+                    "dateOfBirth": "Vui lòng chọn ngày sinh!",
+                    "gender": "Vui lòng chọn giới tính!",
+                    "weight": "Vui lòng nhập cân nặng!",
+                    "height": "Vui lòng nhập chiều cao!",
+                    "nationality": "Vui lòng nhập quốc tịch!",
+                    "description": "Vui lòng nhập mô tả!"
+                },
+                "message": {
+                    "createError": "Đã xảy ra lỗi khi tạo diễn viên. Vui lòng thử lại.",
+                    "createSuccess": "Tạo diễn viên thành công.",
+                    "fetchError": "Lỗi khi lấy dữ liệu. Vui lòng thử lại sau."
+                },
+                "upload": "Tải lên ảnh đại diện"
+            },
+            "update": {
+                "title": "Cập nhật"
+            }
         }
     },
     "client": {}

@@ -29,6 +29,9 @@ import UpdateEpisode from "../pages/Episode/Update";
 import CategoryPage from "../pages/Category";
 import CreateCategory from "../pages/Category/Create";
 import UpdateCategory from "../pages/Category/Update";
+import ActorPage from "../pages/Actor";
+import CreateActor from "../pages/Actor/Create";
+import UpdateActor from "../pages/Actor/Update";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -148,6 +151,18 @@ const DefaultRoutes: RouteType[] = [
     {
         path: 'category/update/:id',
         element: <UpdateCategory />,
+    },
+    {
+        path: 'actors',
+        element: <ActorPage />,
+    },
+    {
+        path: 'actors/create',
+        element: <CreateActor />,
+    },
+    {
+        path: 'actors/update/:id',
+        element: <UpdateActor />,
     },
     {
         path: 'settings',

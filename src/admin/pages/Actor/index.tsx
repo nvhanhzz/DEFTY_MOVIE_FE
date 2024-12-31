@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import {message, Spin, Switch} from 'antd';
+import { message, Spin } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
+import dayjs from 'dayjs'; // Use dayjs instead of moment
+import customParseFormat from 'dayjs/plugin/customParseFormat'; // Plugin for custom date formats
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
-import {getCategories, deleteCategories, switchStatusCategory} from "../../services/categoryService.tsx";
+import { deleteActors, getActors } from "../../services/actorService.tsx";
 import SearchFormTemplate from "../../templates/Search";
 
-export interface Category {
+// Extend dayjs with the customParseFormat plugin
+dayjs.extend(customParseFormat);
+
+export interface Actor {
     id: string;
-    name: string;
-    description: string;
-    status: number;
+    fullName: string,
+    gender: string,
+    dateOfBirth: Date,
+    weight: number,
+    height: number,
+    nationality: string,
+    description: string,
+    avatar: string
 }
 
-const CategoryPage: React.FC = () => {
-    const { t } = useTranslation(); // Khởi tạo t từ useTranslation
-    const [data, setData] = useState<Category[]>([]);
+const ActorPage: React.FC = () => {
+    const { t } = useTranslation();
+    const [data, setData] = useState<Actor[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -30,9 +40,29 @@ const CategoryPage: React.FC = () => {
     const searchFields = [
         {
             type: 'input',
-            label: t('admin.category.name'),
+            label: t('admin.actor.fullName'),
             name: 'name',
-            placeholder: t('admin.category.name'),
+            placeholder: t('admin.actor.fullName'),
+        },
+        {
+            type: 'select',
+            label: t('admin.actor.gender.title'),
+            name: 'gender',
+            placeholder: t('admin.actor.gender.title'),
+            options: [
+                {
+                    label: t('admin.actor.gender.male'),
+                    value: 'male',
+                },
+                {
+                    label: t('admin.actor.gender.female'),
+                    value: 'female',
+                },
+                {
+                    label: t('admin.actor.gender.other'),
+                    value: 'other',
+                },
+            ],
         },
         {
             type: 'select',
@@ -59,21 +89,22 @@ const CategoryPage: React.FC = () => {
     const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
         setIsLoading(true);
         try {
-            const response = await getCategories(page, pageSize, filters);
+            const response = await getActors(page, pageSize, filters); // Gọi API với từ khóa
             const result = await response.json();
-
             if (!response.ok || result.status === 404) {
                 setTotalItems(0);
                 setData([]);
                 return;
             }
-            const content: Category[] = result.data.content;
-            const directors = content.map((item: Category) => ({
+
+            const content: Actor[] = result.data.content;
+            const actors = content.map((item: Actor) => ({
                 ...item,
                 key: item.id,
             }));
             setTotalItems(result.data.totalElements);
-            setData(directors);
+            setData(actors);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
@@ -120,17 +151,17 @@ const CategoryPage: React.FC = () => {
     };
 
     const handleUpdate = (id: string) => {
-        navigate(`/admin/category/update/${id}`);
+        navigate(`update/${id}`);
     };
 
     const handleCreateNewPermission = () => {
-        navigate('/admin/category/create');
+        navigate('create');
     };
 
     const handleDeleteSelected = async (ids: React.Key[]) => {
         setIsLoading(true);
         try {
-            const response = await deleteCategories(ids as string[]);
+            const response = await deleteActors(ids as string[]);
             if (response.ok) {
                 setData((prevData) => prevData.filter((item) => !ids.includes(item.id)));
                 message.success(t('admin.message.deleteSuccess')); // Dùng t() cho thông báo
@@ -145,61 +176,62 @@ const CategoryPage: React.FC = () => {
         }
     };
 
-    const handleSwitchStatus = async (id: string, checked: boolean) => {
-        setIsLoading(true);
-        try {
-            const response = await switchStatusCategory(id);
-            const result = await response.json();
-            if (!response.ok || result.status !== 200) {
-                message.error(t('admin.message.updateError'));
-                return;
-            }
-            setData(prevData => prevData.map(item =>
-                item.id === id ? { ...item, status: checked ? 1 : 0 } : item
-            ));
-
-            message.success(t('admin.message.updateSuccess'));
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (error) {
-            message.error(t('admin.message.updateError'));
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     const onPageChange = (page: number, pageSize?: number) => {
         setCurrentPage(page);
         setPageSize(pageSize || 10);
         navigate(`?page=${page}&pageSize=${pageSize || 10}`);
     };
 
-    const dataListConfig: DataListConfig<Category> = {
+    const dataListConfig: DataListConfig<Actor> = {
         columns: [
             {
-                title: 'No.', // Dùng t() cho tiêu đề cột
+                title: 'No.',
                 key: 'no',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
             },
             {
-                title: t('admin.category.name'),
-                dataIndex: 'name',
-                key: 'name',
+                title: t('admin.actor.fullName'),
+                dataIndex: 'fullName',
+                key: 'fullName',
             },
             {
-                title: t('admin.category.description'),
+                title: t('admin.actor.avatar'),
+                dataIndex: 'avatar',
+                key: 'avatar',
+                render: (avatar: string) => (
+                    <img src={avatar} alt="thumbnail" style={{ width: '100px', height: 'auto', borderRadius: '4px' }} />
+                ),
+            },
+            {
+                title: t('admin.actor.gender.title'),
+                dataIndex: 'gender',
+                key: 'gender',
+            },
+            {
+                title: t('admin.actor.dateOfBirth'),
+                dataIndex: 'dateOfBirth',
+                key: 'dateOfBirth',
+                render: (dateOfBirth: Date) => (dateOfBirth ? dayjs(dateOfBirth).format('DD/MM/YYYY') : ''),
+            },
+            {
+                title: t('admin.actor.weight'),
+                dataIndex: 'weight',
+                key: 'weight',
+            },
+            {
+                title: t('admin.actor.height'),
+                dataIndex: 'height',
+                key: 'height',
+            },
+            {
+                title: t('admin.actor.nationality'),
+                dataIndex: 'nationality',
+                key: 'nationality',
+            },
+            {
+                title: t('admin.actor.description'),
                 dataIndex: 'description',
                 key: 'description',
-            },
-            {
-                title: t('admin.dataList.status.title'),
-                dataIndex: 'status',
-                key: 'status',
-                render: (status, record) => (
-                    <Switch
-                        checked={status === 1}
-                        onChange={(checked) => handleSwitchStatus(record.id, checked)}
-                    />
-                ),
             },
         ],
         data,
@@ -219,7 +251,7 @@ const CategoryPage: React.FC = () => {
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}`, name: t('admin.dashboard.title') },
-                { path: ``, name: t('admin.category.title') },
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.director.title') },
             ]}
         >
             <SearchFormTemplate fields={searchFields} onSearch={handleSearch} />
@@ -234,4 +266,4 @@ const CategoryPage: React.FC = () => {
     );
 };
 
-export default CategoryPage;
+export default ActorPage;

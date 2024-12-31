@@ -171,7 +171,7 @@ const DirectorPage: React.FC = () => {
     const dataListConfig: DataListConfig<Director> = {
         columns: [
             {
-                title: 'No.', // Dùng t() cho tiêu đề cột
+                title: 'No.',
                 key: 'no',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
             },
@@ -179,6 +179,14 @@ const DirectorPage: React.FC = () => {
                 title: t('admin.director.fullName'),
                 dataIndex: 'fullName',
                 key: 'fullName',
+            },
+            {
+                title: t('admin.director.avatar'),
+                dataIndex: 'avatar',
+                key: 'avatar',
+                render: (avatar: string) => (
+                    <img src={avatar} alt="thumbnail" style={{ width: '100px', height: 'auto', borderRadius: '4px' }} />
+                ),
             },
             {
                 title: t('admin.director.gender.title'),
@@ -190,6 +198,26 @@ const DirectorPage: React.FC = () => {
                 dataIndex: 'dateOfBirth',
                 key: 'dateOfBirth',
                 render: (dateOfBirth: Date) => (dateOfBirth ? dayjs(dateOfBirth).format('DD/MM/YYYY') : ''),
+            },
+            {
+                title: t('admin.director.weight'),
+                dataIndex: 'weight',
+                key: 'weight',
+            },
+            {
+                title: t('admin.director.height'),
+                dataIndex: 'height',
+                key: 'height',
+            },
+            {
+                title: t('admin.director.nationality'),
+                dataIndex: 'nationality',
+                key: 'nationality',
+            },
+            {
+                title: t('admin.director.description'),
+                dataIndex: 'description',
+                key: 'description',
             },
         ],
         data,
