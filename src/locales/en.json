@@ -31,7 +31,13 @@
             "deleteSelectedButton": "Delete selected",
             "deleteConfirm": "Are you sure you want to delete this item?",
             "deleteSelectedConfirm": "OK",
-            "deleteSelectedCancel": "Cancel"
+            "deleteSelectedCancel": "Cancel",
+            "status": {
+                "title": "Status",
+                "active": "Active",
+                "inactive": "Inactive",
+                "all": "All"
+            }
         },
         "login": {
             "title": "Defty Admin Portal",
@@ -320,9 +326,18 @@
                 "success": "Episode deleted successfully.",
                 "error": "Failed to delete episode."
             }
+        },
+        "category": {
+            "title": "Category",
+            "name": "Name",
+            "description": "Description",
+            "create": {
+                "title": "Create"
+            },
+            "update": {
+                "title": "Update"
+            }
         }
-
-
     },
     "client": {}
 }
