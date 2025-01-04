@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { message, Spin } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
-import dayjs from 'dayjs'; // Use dayjs instead of moment
-import customParseFormat from 'dayjs/plugin/customParseFormat'; // Plugin for custom date formats
+import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
 import { deleteDirectors, getDirectors } from "../../services/directorService.tsx";
 import SearchFormTemplate from "../../templates/Search";
-
-// Extend dayjs with the customParseFormat plugin
-dayjs.extend(customParseFormat);
 
 export interface Director {
     id: string;
@@ -27,13 +23,14 @@ export interface Director {
 }
 
 const DirectorPage: React.FC = () => {
-    const { t } = useTranslation(); // Khởi tạo t từ useTranslation
+    const { t } = useTranslation();
     const [data, setData] = useState<Director[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [filters, setFilters] = useState<Record<string, string>>({});
+    const [initialValues, setInitialValues] = useState<Record<string, any>>({});
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -65,7 +62,7 @@ const DirectorPage: React.FC = () => {
             ],
         },
         {
-            type: 'date',
+            type: 'dateRange',
             label: t('admin.director.dateOfBirth'),
             name: 'dateOfBirth',
             placeholder: t('admin.director.dateOfBirth'),
@@ -75,8 +72,13 @@ const DirectorPage: React.FC = () => {
     const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
         setIsLoading(true);
         try {
-            const response = await getDirectors(page, pageSize, filters); // Gọi API với từ khóa
+            const response = await getDirectors(page, pageSize, filters);
             const result = await response.json();
+            if (!response.ok || result.status === 404) {
+                setTotalItems(0);
+                setData([]);
+                return;
+            }
             const content: Director[] = result.data.content;
             const directors = content.map((item: Director) => ({
                 ...item,
@@ -85,7 +87,7 @@ const DirectorPage: React.FC = () => {
             setTotalItems(result.data.totalElements);
             setData(directors);
         } catch (error) {
-            message.error(t('admin.message.fetchError')); // Sử dụng t() để thay thế chuỗi
+            message.error(t('admin.message.fetchError'));
         } finally {
             setIsLoading(false);
         }
@@ -96,16 +98,23 @@ const DirectorPage: React.FC = () => {
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
         const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
         const filtersFromUrl: Record<string, string> = {};
+        const initialSearchValues: Record<string, any> = {};
 
         searchParams.forEach((value, key) => {
             if (key !== 'page' && key !== 'size') {
                 filtersFromUrl[key] = value;
+                const field = searchFields.find((f) => f.name === key);
+                if (field) {
+                    initialSearchValues[key] = value;
+                }
             }
         });
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
         setFilters(filtersFromUrl);
+        setInitialValues(initialSearchValues);
+        console.log(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {
@@ -113,22 +122,14 @@ const DirectorPage: React.FC = () => {
     }, [currentPage, pageSize, filters]);
 
     const handleSearch = (newFilters: Record<string, any>) => {
-        const formattedFilters: Record<string, any> = { ...newFilters };
-
-        Object.keys(formattedFilters).forEach((key) => {
-            if (key === 'dateOfBirth' && formattedFilters[key]) {
-                formattedFilters[key] = dayjs(formattedFilters[key], 'YYYY-MM-DD').format('YYYY-MM-DD');
-            }
-        });
-
         setCurrentPage(1);
-        setFilters(formattedFilters);
+        setFilters(newFilters);
 
         const queryParams = new URLSearchParams();
         queryParams.append('page', '1');
         queryParams.append('size', pageSize.toString());
 
-        Object.entries(formattedFilters).forEach(([key, value]) => {
+        Object.entries(newFilters).forEach(([key, value]) => {
             if (value) queryParams.append(key, value.toString());
         });
 
@@ -147,13 +148,12 @@ const DirectorPage: React.FC = () => {
         setIsLoading(true);
         try {
             const response = await deleteDirectors(ids as string[]);
-            console.log(response, await response.json());
             if (response.ok) {
                 setData((prevData) => prevData.filter((item) => !ids.includes(item.id)));
-                message.success(t('admin.message.deleteSuccess')); // Dùng t() cho thông báo
+                message.success(t('admin.message.deleteSuccess'));
             } else {
                 const result = await response.json();
-                message.error(result.message || t('admin.message.deleteError')); // Dùng t() cho thông báo
+                message.error(result.message || t('admin.message.deleteError'));
             }
         } catch (error) {
             message.error(t('admin.message.deleteError'));
@@ -240,7 +240,7 @@ const DirectorPage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.director.title') },
             ]}
         >
-            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} />
+            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

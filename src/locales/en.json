@@ -22,7 +22,32 @@
             "reset": "Reset",
             "create": "Create",
             "update": "Update",
-            "search": "Search"
+            "delete": "Delete",
+            "search": "Search",
+            "submit": "Submit",
+            "save": "Save",
+            "cancel": "Cancel",
+            "confirm": "Confirm",
+            "selectDate": "Select a date",
+            "startDate": "Start Date",
+            "endDate": "End Date",
+            "selectOption": "Select an option",
+            "enterValue": "Enter a value",
+            "selectRange": "Select range",
+            "placeholder": {
+                "search": "Enter search keyword",
+                "select": "Please select",
+                "text": "Enter text here"
+            },
+            "validation": {
+                "requiredField": "This field is required.",
+                "invalidEmail": "Please enter a valid email address.",
+                "minLength": "This field must be at least {min} characters.",
+                "maxLength": "This field must be no more than {max} characters.",
+                "invalidNumber": "Please enter a valid number.",
+                "invalidDate": "Please enter a valid date.",
+                "rangeExceeded": "Value is out of range."
+            }
         },
         "dataList": {
             "actionColumn": "Action",

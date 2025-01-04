@@ -32,6 +32,7 @@ import UpdateCategory from "../pages/Category/Update";
 import ActorPage from "../pages/Actor";
 import CreateActor from "../pages/Actor/Create";
 import UpdateActor from "../pages/Actor/Update";
+import Test from "../pages/Test";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -163,6 +164,10 @@ const DefaultRoutes: RouteType[] = [
     {
         path: 'actors/update/:id',
         element: <UpdateActor />,
+    },
+    {
+        path: 'test',
+        element: <Test />,
     },
     {
         path: 'settings',

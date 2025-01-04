@@ -19,10 +19,35 @@
             "fetchError": "Lấy dữ liệu không thành công."
         },
         "form": {
-            "reset": "Làm mới",
-            "create": "Tạo",
+            "reset": "Đặt lại",
+            "create": "Tạo mới",
             "update": "Cập nhật",
-            "search": "Tìm kiếm"
+            "delete": "Xóa",
+            "search": "Tìm kiếm",
+            "submit": "Gửi",
+            "save": "Lưu",
+            "cancel": "Hủy",
+            "confirm": "Xác nhận",
+            "selectDate": "Chọn ngày",
+            "startDate": "Ngày bắt đầu",
+            "endDate": "Ngày kết thúc",
+            "selectOption": "Chọn một tùy chọn",
+            "enterValue": "Nhập giá trị",
+            "selectRange": "Chọn khoảng",
+            "placeholder": {
+                "search": "Nhập từ khóa tìm kiếm",
+                "select": "Vui lòng chọn",
+                "text": "Nhập văn bản tại đây"
+            },
+            "validation": {
+                "requiredField": "Trường này là bắt buộc.",
+                "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ.",
+                "minLength": "Trường này phải có ít nhất {min} ký tự.",
+                "maxLength": "Trường này không được vượt quá {max} ký tự.",
+                "invalidNumber": "Vui lòng nhập một số hợp lệ.",
+                "invalidDate": "Vui lòng nhập một ngày hợp lệ.",
+                "rangeExceeded": "Giá trị vượt ngoài khoảng cho phép."
+            }
         },
         "dataList": {
             "actionColumn": "Hành động",

@@ -1,20 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Form, DatePicker, Select, Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
 import "./Search.scss";
-
-// Extend dayjs with customParseFormat for strict parsing
-dayjs.extend(customParseFormat);
+import dayjs from "dayjs";
 
 export interface SearchFormField {
-    type: 'date' | 'select' | 'input' | string;
+    type: 'dateRange' | 'select' | 'input' | string;
     label: string;
     name: string;
     options?: { label: string; value: any }[];
-    placeholder?: string;
+    placeholder?: string | [string, string];
     style?: React.CSSProperties;
     rules?: Array<Record<string, any>>;
 }
@@ -22,47 +18,25 @@ export interface SearchFormField {
 export interface SearchFormConfig {
     onSearch: (filters: Record<string, any>) => void;
     fields: SearchFormField[];
-    initialValues?: Record<string, any>; // Optional initial values
+    initialValues?: Record<string, any>;
 }
 
 const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields, initialValues = {} }) => {
     const { t } = useTranslation();
     const [form] = Form.useForm();
 
-    const handleSearch = () => {
-        const values = form.getFieldsValue();
-        const formattedValues = Object.keys(values).reduce((acc, key) => {
-            const field = fields.find((f) => f.name === key);
-            if (field?.type === 'date' && values[key]) {
-                const date = dayjs(values[key], 'YYYY-MM-DD', true);
-                acc[key] = date.isValid() ? date.format('YYYY-MM-DD') : undefined;
-            } else {
-                acc[key] = values[key];
-            }
-            return acc;
-        }, {} as Record<string, any>);
-        onSearch(formattedValues);
-    };
-
-    // Ensure initial values are correctly formatted for date fields
-    const formattedInitialValues = Object.keys(initialValues).reduce((acc, key) => {
-        const field = fields.find((f) => f.name === key);
-        if (field?.type === 'date' && initialValues[key]) {
-            const date = dayjs(initialValues[key], 'YYYY-MM-DD', true);
-            acc[key] = date.isValid() ? date : undefined;
-        } else {
-            acc[key] = initialValues[key];
-        }
-        return acc;
-    }, {} as Record<string, any>);
+    useEffect(() => {
+        form.setFieldsValue(initialValues);
+    }, [initialValues]);
 
     return (
         <Form
             form={form}
             layout="inline"
-            initialValues={formattedInitialValues}
+            initialValues={initialValues} // Sử dụng trực tiếp initialValues
             style={{ marginBottom: 20 }}
             className="search-form-container"
+            onFinish={onSearch} // Gọi trực tiếp onSearch khi form được submit
         >
             {fields.map((field) => (
                 <Form.Item
@@ -72,30 +46,57 @@ const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields, init
                     rules={field.rules || []}
                     className="search-form-item"
                 >
-                    {field.type === 'date' && (
-                        <DatePicker
-                            format="YYYY-MM-DD"
-                            placeholder={field.placeholder || t('admin.form.selectDate')}
-                            style={field.style || { width: '150px' }}
-                            onChange={(date) =>
-                                form.setFieldValue(
-                                    field.name,
-                                    date ? dayjs(date).format('YYYY-MM-DD') : undefined
-                                )
-                            }
-                        />
+                    {field.type === 'dateRange' && (
+                        <div>
+                            <DatePicker.RangePicker
+                                format="DD/MM/YYYY"
+                                placeholder={
+                                    Array.isArray(field.placeholder)
+                                        ? field.placeholder
+                                        : [
+                                            t('admin.form.startDate'),
+                                            t('admin.form.endDate'),
+                                        ]
+                                }
+                                value={
+                                    initialValues[field.name]
+                                        ? initialValues[field.name]
+                                            .split(' - ')
+                                            .map((date: string) => (date ? dayjs(date, 'DD/MM/YYYY') : null))
+                                        : undefined
+                                }
+                                allowEmpty={[true, true]}
+                                onChange={(_dates, dateStrings) => {
+                                    const [start, end] = dateStrings;
+
+                                    const formattedStart = start ? dayjs(start, 'DD/MM/YYYY', true).isValid() ? dayjs(start, 'DD/MM/YYYY').format('DD/MM/YYYY') : '' : '';
+                                    const formattedEnd = end ? dayjs(end, 'DD/MM/YYYY', true).isValid() ? dayjs(end, 'DD/MM/YYYY').format('DD/MM/YYYY') : '' : '';
+
+                                    const result = formattedStart || formattedEnd ? `${formattedStart} - ${formattedEnd}` : '';;
+
+                                    form.setFieldsValue({
+                                        [field.name]: result,
+                                    });
+                                }}
+                            />
+                            <Form.Item name={field.name} style={{ display: 'none' }}>
+                                <Input type="hidden" />
+                            </Form.Item>
+                        </div>
                     )}
                     {field.type === 'select' && (
                         <Select
                             placeholder={field.placeholder || t('admin.form.selectOption')}
                             options={field.options}
                             style={field.style || { width: '150px' }}
+                            value={initialValues[field.name]}
                         />
                     )}
                     {field.type === 'input' && (
                         <Input
-                            placeholder={field.placeholder || t('admin.form.enterValue')}
+                            placeholder={field.placeholder as string || t('admin.form.enterValue')}
                             style={field.style || { width: '150px' }}
+                            value={initialValues[field.name]}
                         />
                     )}
                 </Form.Item>
@@ -104,7 +105,7 @@ const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields, init
                 <Button
                     type="primary"
                     icon={<SearchOutlined />}
-                    onClick={handleSearch}
+                    htmlType="submit" // Trực tiếp submit form
                 >
                     {t('admin.form.search')}
                 </Button>
