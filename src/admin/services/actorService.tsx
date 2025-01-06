@@ -3,14 +3,14 @@ import handleRequest from "../utils/handleRequest.tsx";
 import {del, get, patchFormData, postFormData} from "../utils/request.tsx";
 import React from "react";
 
-const PREFIX_DIRECTOR: string = import.meta.env.VITE_PREFIX_DIRECTOR as string;
+const PREFIX_ACTOR: string = import.meta.env.VITE_PREFIX_ACTOR as string;
 
-export const getDirectors = async (
+export const getActors = async (
     page?: number,
     size?: number,
     filters?: Record<string, string | number>
 ): Promise<Response> => {
-    const url = `${PREFIX_DIRECTOR}/all`;
+    const url = `${PREFIX_ACTOR}/all`;
     const params = {
         page,
         size,
@@ -19,22 +19,22 @@ export const getDirectors = async (
     return handleRequest(getWithParams(url, params));
 };
 
-export const postDirector = (option: FormData): Promise<Response> => {
-    const url = `${PREFIX_DIRECTOR}`;
+export const postActor = (option: FormData): Promise<Response> => {
+    const url = `${PREFIX_ACTOR}`;
     return handleRequest(postFormData(url, option));
 };
 
-export const deleteDirectors = (ids: React.Key[]): Promise<Response> => {
-    const url = `${PREFIX_DIRECTOR}/${ids.join(',')}`;
+export const deleteActors = (ids: React.Key[]): Promise<Response> => {
+    const url = `${PREFIX_ACTOR}/${ids.join(',')}`;
     return handleRequest(del(url));
 };
 
-export const getDirectorById = (id: string): Promise<Response> => {
-    const url = `${PREFIX_DIRECTOR}/${id}`;
+export const getActorById = (id: string): Promise<Response> => {
+    const url = `${PREFIX_ACTOR}/${id}`;
     return handleRequest(get(url));
 };
 
-export const updateDirectorById = (id: string, option: FormData): Promise<Response> => {
-    const url = `${PREFIX_DIRECTOR}/${id}`;
+export const updateActorById = (id: string, option: FormData): Promise<Response> => {
+    const url = `${PREFIX_ACTOR}/${id}`;
     return handleRequest(patchFormData(url, option));
 };

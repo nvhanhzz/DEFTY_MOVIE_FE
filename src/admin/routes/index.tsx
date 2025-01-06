@@ -26,6 +26,13 @@ import UpdateDirector from "../pages/Director/Update";
 import EpisodePage from "../pages/Episode";
 import CreateEpisode from "../pages/Episode/Create";
 import UpdateEpisode from "../pages/Episode/Update";
+import CategoryPage from "../pages/Category";
+import CreateCategory from "../pages/Category/Create";
+import UpdateCategory from "../pages/Category/Update";
+import ActorPage from "../pages/Actor";
+import CreateActor from "../pages/Actor/Create";
+import UpdateActor from "../pages/Actor/Update";
+import Test from "../pages/Test";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -133,6 +140,34 @@ const DefaultRoutes: RouteType[] = [
     {
         path: 'directors/update/:id',
         element: <UpdateDirector />,
+    },
+    {
+        path: 'categories',
+        element: <CategoryPage />,
+    },
+    {
+        path: 'category/create',
+        element: <CreateCategory />,
+    },
+    {
+        path: 'category/update/:id',
+        element: <UpdateCategory />,
+    },
+    {
+        path: 'actors',
+        element: <ActorPage />,
+    },
+    {
+        path: 'actors/create',
+        element: <CreateActor />,
+    },
+    {
+        path: 'actors/update/:id',
+        element: <UpdateActor />,
+    },
+    {
+        path: 'test',
+        element: <Test />,
     },
     {
         path: 'settings',

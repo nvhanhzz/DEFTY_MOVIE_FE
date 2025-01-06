@@ -19,10 +19,35 @@
             "fetchError": "Lấy dữ liệu không thành công."
         },
         "form": {
-            "reset": "Làm mới",
-            "create": "Tạo",
+            "reset": "Đặt lại",
+            "create": "Tạo mới",
             "update": "Cập nhật",
-            "search": "Tìm kiếm"
+            "delete": "Xóa",
+            "search": "Tìm kiếm",
+            "submit": "Gửi",
+            "save": "Lưu",
+            "cancel": "Hủy",
+            "confirm": "Xác nhận",
+            "selectDate": "Chọn ngày",
+            "startDate": "Ngày bắt đầu",
+            "endDate": "Ngày kết thúc",
+            "selectOption": "Chọn một tùy chọn",
+            "enterValue": "Nhập giá trị",
+            "selectRange": "Chọn khoảng",
+            "placeholder": {
+                "search": "Nhập từ khóa tìm kiếm",
+                "select": "Vui lòng chọn",
+                "text": "Nhập văn bản tại đây"
+            },
+            "validation": {
+                "requiredField": "Trường này là bắt buộc.",
+                "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ.",
+                "minLength": "Trường này phải có ít nhất {min} ký tự.",
+                "maxLength": "Trường này không được vượt quá {max} ký tự.",
+                "invalidNumber": "Vui lòng nhập một số hợp lệ.",
+                "invalidDate": "Vui lòng nhập một ngày hợp lệ.",
+                "rangeExceeded": "Giá trị vượt ngoài khoảng cho phép."
+            }
         },
         "dataList": {
             "actionColumn": "Hành động",
@@ -31,7 +56,13 @@
             "deleteSelectedButton": "Xóa các mục đã chọn",
             "deleteConfirm": "Bạn có chắc chắn muốn xóa mục này không?",
             "deleteSelectedConfirm": "Xóa",
-            "deleteSelectedCancel": "Hủy"
+            "deleteSelectedCancel": "Hủy",
+            "status": {
+                "title": "Trạng thái",
+                "active": "Hoạt động",
+                "inactive": "Dừng hoạt động",
+                "all": "Tất cả"
+            }
         },
         "login": {
             "title": "Trang quản trị Defty",
@@ -320,6 +351,59 @@
                 "confirm": "Bạn có chắc chắn muốn xóa tập phim này không?",
                 "success": "Tập phim đã được xóa thành công.",
                 "error": "Không thể xóa tập phim."
+            }
+        },
+        "category": {
+            "title": "Danh mục",
+            "name": "Tên",
+            "description": "Mô tả",
+            "create": {
+                "title": "Tạo mới"
+            },
+            "update": {
+                "title": "Cập nhật"
+            }
+        },
+        "actor": {
+            "title": "Diễn viên",
+            "fullName": "Họ và tên",
+            "gender": {
+                "title": "Giới tính",
+                "placeholder": "Chọn giới tính",
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            },
+            "avatar": "Ảnh",
+            "dateOfBirth": "Ngày sinh",
+            "weight": "Cân nặng",
+            "height": "Chiều cao",
+            "nationality": "Quốc tịch",
+            "description": "Mô tả",
+            "create": {
+                "title": "Tạo mới",
+                "form": {
+                    "reset": "Đặt lại",
+                    "create": "Tạo"
+                },
+                "validation": {
+                    "fullName": "Vui lòng nhập họ và tên!",
+                    "dateOfBirth": "Vui lòng chọn ngày sinh!",
+                    "gender": "Vui lòng chọn giới tính!",
+                    "weight": "Vui lòng nhập cân nặng!",
+                    "height": "Vui lòng nhập chiều cao!",
+                    "nationality": "Vui lòng nhập quốc tịch!",
+                    "description": "Vui lòng nhập mô tả!"
+                },
+                "message": {
+                    "createError": "Đã xảy ra lỗi khi tạo diễn viên. Vui lòng thử lại.",
+                    "createSuccess": "Tạo diễn viên thành công.",
+                    "fetchError": "Lỗi khi lấy dữ liệu. Vui lòng thử lại sau."
+                },
+                "upload": "Tải lên ảnh đại diện"
+            },
+            "update": {
+                "title": "Cập nhật"
             }
         }
     },

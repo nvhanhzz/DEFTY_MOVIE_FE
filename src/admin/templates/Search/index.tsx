@@ -1,57 +1,102 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Form, DatePicker, Select, Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import "./Search.scss";
+import dayjs from "dayjs";
 
-export interface SearchFormConfig {
-    onSearch: (filters: Record<string, string>) => void; // Nhận filters làm tham số
-    fields: Array<{
-        type: 'date' | 'select' | 'input' | string;
-        label: string;
-        name: string;
-        options?: { label: string; value: any }[];
-        placeholder?: string;
-        style?: React.CSSProperties;
-    }>;
+export interface SearchFormField {
+    type: 'dateRange' | 'select' | 'input' | string;
+    label: string;
+    name: string;
+    options?: { label: string; value: any }[];
+    placeholder?: string | [string, string];
+    style?: React.CSSProperties;
+    rules?: Array<Record<string, any>>;
 }
 
-const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields }) => {
+export interface SearchFormConfig {
+    onSearch: (filters: Record<string, any>) => void;
+    fields: SearchFormField[];
+    initialValues?: Record<string, any>;
+}
+
+const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields, initialValues = {} }) => {
     const { t } = useTranslation();
     const [form] = Form.useForm();
 
-    const handleSearch = () => {
-        const values = form.getFieldsValue(); // Lấy tất cả giá trị từ form
-        onSearch(values); // Gọi hàm onSearch với giá trị form
-    };
+    useEffect(() => {
+        form.setFieldsValue(initialValues);
+    }, [initialValues]);
 
     return (
         <Form
             form={form}
             layout="inline"
+            initialValues={initialValues} // Sử dụng trực tiếp initialValues
             style={{ marginBottom: 20 }}
-            className={'search-form-container'}
+            className="search-form-container"
+            onFinish={onSearch} // Gọi trực tiếp onSearch khi form được submit
         >
             {fields.map((field) => (
-                <Form.Item key={field.name} label={field.label} name={field.name} className={'search-form-item'}>
-                    {field.type === 'date' && (
-                        <DatePicker
-                            format="YYYY-MM-DD"
-                            placeholder={field.placeholder || t('admin.form.selectDate')}
-                            style={field.style || { width: '150px' }}
-                        />
+                <Form.Item
+                    key={field.name}
+                    label={field.label}
+                    name={field.name}
+                    rules={field.rules || []}
+                    className="search-form-item"
+                >
+                    {field.type === 'dateRange' && (
+                        <div>
+                            <DatePicker.RangePicker
+                                format="DD/MM/YYYY"
+                                placeholder={
+                                    Array.isArray(field.placeholder)
+                                        ? field.placeholder
+                                        : [
+                                            t('admin.form.startDate'),
+                                            t('admin.form.endDate'),
+                                        ]
+                                }
+                                value={
+                                    initialValues[field.name]
+                                        ? initialValues[field.name]
+                                            .split(' - ')
+                                            .map((date: string) => (date ? dayjs(date, 'DD/MM/YYYY') : null))
+                                        : undefined
+                                }
+                                allowEmpty={[true, true]}
+                                onChange={(_dates, dateStrings) => {
+                                    const [start, end] = dateStrings;
+
+                                    const formattedStart = start ? dayjs(start, 'DD/MM/YYYY', true).isValid() ? dayjs(start, 'DD/MM/YYYY').format('DD/MM/YYYY') : '' : '';
+                                    const formattedEnd = end ? dayjs(end, 'DD/MM/YYYY', true).isValid() ? dayjs(end, 'DD/MM/YYYY').format('DD/MM/YYYY') : '' : '';
+
+                                    const result = formattedStart || formattedEnd ? `${formattedStart} - ${formattedEnd}` : '';;
+
+                                    form.setFieldsValue({
+                                        [field.name]: result,
+                                    });
+                                }}
+                            />
+                            <Form.Item name={field.name} style={{ display: 'none' }}>
+                                <Input type="hidden" />
+                            </Form.Item>
+                        </div>
                     )}
                     {field.type === 'select' && (
                         <Select
                             placeholder={field.placeholder || t('admin.form.selectOption')}
                             options={field.options}
                             style={field.style || { width: '150px' }}
+                            value={initialValues[field.name]}
                         />
                     )}
                     {field.type === 'input' && (
                         <Input
-                            placeholder={field.placeholder || t('admin.form.enterValue')}
+                            placeholder={field.placeholder as string || t('admin.form.enterValue')}
                             style={field.style || { width: '150px' }}
+                            value={initialValues[field.name]}
                         />
                     )}
                 </Form.Item>
@@ -60,7 +105,7 @@ const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields }) =>
                 <Button
                     type="primary"
                     icon={<SearchOutlined />}
-                    onClick={handleSearch}
+                    htmlType="submit" // Trực tiếp submit form
                 >
                     {t('admin.form.search')}
                 </Button>

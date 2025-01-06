@@ -22,7 +22,32 @@
             "reset": "Reset",
             "create": "Create",
             "update": "Update",
-            "search": "Search"
+            "delete": "Delete",
+            "search": "Search",
+            "submit": "Submit",
+            "save": "Save",
+            "cancel": "Cancel",
+            "confirm": "Confirm",
+            "selectDate": "Select a date",
+            "startDate": "Start Date",
+            "endDate": "End Date",
+            "selectOption": "Select an option",
+            "enterValue": "Enter a value",
+            "selectRange": "Select range",
+            "placeholder": {
+                "search": "Enter search keyword",
+                "select": "Please select",
+                "text": "Enter text here"
+            },
+            "validation": {
+                "requiredField": "This field is required.",
+                "invalidEmail": "Please enter a valid email address.",
+                "minLength": "This field must be at least {min} characters.",
+                "maxLength": "This field must be no more than {max} characters.",
+                "invalidNumber": "Please enter a valid number.",
+                "invalidDate": "Please enter a valid date.",
+                "rangeExceeded": "Value is out of range."
+            }
         },
         "dataList": {
             "actionColumn": "Action",
@@ -31,7 +56,13 @@
             "deleteSelectedButton": "Delete selected",
             "deleteConfirm": "Are you sure you want to delete this item?",
             "deleteSelectedConfirm": "OK",
-            "deleteSelectedCancel": "Cancel"
+            "deleteSelectedCancel": "Cancel",
+            "status": {
+                "title": "Status",
+                "active": "Active",
+                "inactive": "Inactive",
+                "all": "All"
+            }
         },
         "login": {
             "title": "Defty Admin Portal",
@@ -320,9 +351,60 @@
                 "success": "Episode deleted successfully.",
                 "error": "Failed to delete episode."
             }
+        },
+        "category": {
+            "title": "Category",
+            "name": "Name",
+            "description": "Description",
+            "create": {
+                "title": "Create"
+            },
+            "update": {
+                "title": "Update"
+            }
+        },
+        "actor": {
+            "title": "Actor",
+            "fullName": "Full name",
+            "gender": {
+                "title": "Gender",
+                "placeholder": "Select gender",
+                "male": "Male",
+                "female": "Female",
+                "other": "Other"
+            },
+            "avatar": "Avatar",
+            "dateOfBirth": "Date of birth",
+            "weight": "Weight",
+            "height": "Height",
+            "nationality": "Nationality",
+            "description": "Description",
+            "create": {
+                "title": "Create",
+                "form": {
+                    "reset": "Reset",
+                    "create": "Create"
+                },
+                "validation": {
+                    "fullName": "Please input the full name!",
+                    "dateOfBirth": "Please select the date of birth!",
+                    "gender": "Please select gender!",
+                    "weight": "Please input the weight!",
+                    "height": "Please input the height!",
+                    "nationality": "Please input the nationality!",
+                    "description": "Please input the description!"
+                },
+                "message": {
+                    "createError": "An error occurred while creating the actor. Please try again.",
+                    "createSuccess": "Actor created successfully.",
+                    "fetchError": "Error fetching data. Please try again later."
+                },
+                "upload": "Upload Avatar"
+            },
+            "update": {
+                "title": "Update"
+            }
         }
-
-
     },
     "client": {}
 }

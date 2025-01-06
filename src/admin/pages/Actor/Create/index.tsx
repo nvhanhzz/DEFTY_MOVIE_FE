@@ -4,13 +4,13 @@ import { UploadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
-import './CreateDirector.scss';
+import './CreateActor.scss';
 import { RcFile } from "antd/es/upload";
-import {postDirector} from "../../../services/directorService.tsx";
+import {postActor} from "../../../services/actorService.tsx";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
-export interface DirectorFromValues {
+export interface ActorFromValues {
     fullName: string;
     gender: string;
     dateOfBirth: string;
@@ -21,15 +21,14 @@ export interface DirectorFromValues {
     avatar?: RcFile;
 }
 
-const CreateDirector: React.FC = () => {
+const CreateActor: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [file, setFile] = useState<RcFile | null>(null);
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    const handleCreateDirector = async (values: DirectorFromValues) => {
-        console.log(values);
+    const handleCreateAccount = async (values: ActorFromValues) => {
         setLoading(true);
         try {
             const formData = new FormData();
@@ -44,19 +43,15 @@ const CreateDirector: React.FC = () => {
                 formData.append('avatar', file);
             }
 
-            const response = await postDirector(formData);
+            const response = await postActor(formData);
             const result = await response.json();
-            if (!response.ok) {
-                message.error(result.message || t('admin.message.createError'));
-                return;
-            }
-            if (result.status !== 201) {
+            if (!response.ok || result.status !== 201) {
                 message.error(result.message || t('admin.message.createError'));
                 return;
             }
 
             message.success(t('admin.message.createSuccess'));
-            navigate(`${PREFIX_URL_ADMIN}/directors`);
+            navigate(`${PREFIX_URL_ADMIN}/actors`);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
@@ -78,30 +73,30 @@ const CreateDirector: React.FC = () => {
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
-                { path: `${PREFIX_URL_ADMIN}/directors`, name: t('admin.director.title') },
-                { path: ``, name: t('admin.director.create.title') },
+                { path: `${PREFIX_URL_ADMIN}/actors`, name: t('admin.actor.title') },
+                { path: ``, name: t('admin.actor.create.title') },
             ]}
         >
             <Form
                 form={form}
-                onFinish={handleCreateDirector}
+                onFinish={handleCreateAccount}
                 layout="vertical"
                 className="create-account-form"
             >
                 <Row gutter={10}>
                     <Col span={16}>
                         <Form.Item
-                            label={t('admin.director.fullName')}
+                            label={t('admin.actor.fullName')}
                             name="fullName"
-                            rules={[{ required: true, message: t('admin.director.create.validation.fullName') }]}
+                            rules={[{ required: true, message: t('admin.actor.create.validation.fullName') }]}
                         >
                             <Input />
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.dateOfBirth')}
+                            label={t('admin.actor.dateOfBirth')}
                             name="datePicker"
-                            rules={[{ required: true, message: t('admin.director.create.validation.dateOfBirth') }]}
+                            rules={[{ required: true, message: t('admin.actor.create.validation.dateOfBirth') }]}
                         >
                             <DatePicker
                                 format="YYYY-MM-DD"
@@ -110,52 +105,52 @@ const CreateDirector: React.FC = () => {
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.gender.title')}
+                            label={t('admin.actor.gender.title')}
                             name="gender"
-                            rules={[{ required: true, message: t('admin.director.create.validation.gender') }]}
+                            rules={[{ required: true, message: t('admin.actor.create.validation.gender') }]}
                         >
-                            <Select placeholder={t('admin.director.gender.placeholder')}>
-                                <Select.Option value="male">{t('admin.director.gender.male')}</Select.Option>
-                                <Select.Option value="female">{t('admin.director.gender.female')}</Select.Option>
-                                <Select.Option value="other">{t('admin.director.gender.other')}</Select.Option>
+                            <Select placeholder={t('admin.actor.gender.placeholder')}>
+                                <Select.Option value="male">{t('admin.actor.gender.male')}</Select.Option>
+                                <Select.Option value="female">{t('admin.actor.gender.female')}</Select.Option>
+                                <Select.Option value="other">{t('admin.actor.gender.other')}</Select.Option>
                             </Select>
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.weight')}
+                            label={t('admin.actor.weight')}
                             name="weight"
-                            rules={[{ required: true, message: t('admin.director.create.validation.weight') }]}
+                            rules={[{ required: true, message: t('admin.actor.create.validation.weight') }]}
                         >
-                            <Input type="number" />
+                            <Input type="number" min={0} />
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.height')}
+                            label={t('admin.actor.height')}
                             name="height"
-                            rules={[{ required: true, message: t('admin.director.create.validation.height') }]}
+                            rules={[{ required: true, message: t('admin.actor.create.validation.height') }]}
                         >
-                            <Input type="number" />
+                            <Input type="number" min={0}/>
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.nationality')}
+                            label={t('admin.actor.nationality')}
                             name="nationality"
-                            rules={[{ required: true, message: t('admin.director.create.validation.nationality') }]}
+                            rules={[{ required: true, message: t('admin.actor.create.validation.nationality') }]}
                         >
                             <Input />
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.description')}
+                            label={t('admin.actor.description')}
                             name="description"
-                            rules={[{ required: true, message: t('admin.director.create.validation.description') }]}
+                            rules={[{ required: true, message: t('admin.actor.create.validation.description') }]}
                         >
                             <Input.TextArea />
                         </Form.Item>
                     </Col>
 
                     <Col span={8} className="avatar-col">
-                        <Form.Item label={t('admin.director.avatar')} className="avatar-wrapper">
+                        <Form.Item label={t('admin.actor.avatar')} className="avatar-wrapper">
                             <div className="avatar-preview">
                                 <Upload
                                     listType="picture-card"
@@ -173,7 +168,7 @@ const CreateDirector: React.FC = () => {
                                     />
                                 </Upload>
                                 <Button className="upload-button">
-                                    <UploadOutlined /> {t('admin.director.upload')}
+                                    <UploadOutlined /> {t('admin.actor.upload')}
                                 </Button>
                             </div>
                         </Form.Item>
@@ -201,4 +196,4 @@ const CreateDirector: React.FC = () => {
     );
 };
 
-export default CreateDirector;
+export default CreateActor;
