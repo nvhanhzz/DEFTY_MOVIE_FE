@@ -2,39 +2,71 @@ import React, { useEffect, useState } from 'react';
 import {message, Spin, Switch} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {getArticles, deleteArticles, switchStatusArticle} from '../../services/articleService';
+import dayjs from 'dayjs';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
+import { getUsers, switchStatusUser} from "../../services/userService.tsx";
 import SearchFormTemplate from "../../templates/Search";
 
-export interface Article {
-    id: string;
-    title: string;
-    content: string;
-    author: string;
-    thumbnail: string;
-    slug: string;
+export interface User {
+    id: string,
+    username: string,
+    email: string,
+    fullName: string,
+    phone: string,
+    gender: string,
+    address: string,
+    avatar: string,
+    status: number,
+    dateOfBirth: Date
 }
 
-const ArticlesPage: React.FC = () => {
-    const [data, setData] = useState<Article[]>([]);
+const UserPage: React.FC = () => {
+    const { t } = useTranslation();
+    const [data, setData] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [filters, setFilters] = useState<Record<string, string>>({});
+    const [initialValues, setInitialValues] = useState<Record<string, any>>({});
     const navigate = useNavigate();
     const location = useLocation();
-    const { t } = useTranslation();
 
     const searchFields = [
         {
             type: 'input',
-            label: t('admin.article.titleColumn'),
-            name: 'title',
-            placeholder: t('admin.article.titleColumn'),
+            label: t('admin.user.fullName'),
+            name: 'name',
+            placeholder: t('admin.user.fullName'),
+        },
+        {
+            type: 'select',
+            label: t('admin.user.gender.title'),
+            name: 'gender',
+            placeholder: t('admin.user.gender.title'),
+            options: [
+                {
+                    label: t('admin.user.gender.male'),
+                    value: 'male',
+                },
+                {
+                    label: t('admin.user.gender.female'),
+                    value: 'female',
+                },
+                {
+                    label: t('admin.user.gender.other'),
+                    value: 'other',
+                },
+            ],
+        },
+        {
+            type: 'dateRange',
+            label: t('admin.user.dateOfBirth'),
+            name: 'dateOfBirth',
+            placeholder: t('admin.user.dateOfBirth'),
         },
         {
             type: 'select',
@@ -61,16 +93,20 @@ const ArticlesPage: React.FC = () => {
     const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
         setIsLoading(true);
         try {
-            const response = await getArticles(page, pageSize, filters);
+            const response = await getUsers(page, pageSize, filters);
             const result = await response.json();
             if (!response.ok || result.status === 404) {
                 setTotalItems(0);
                 setData([]);
                 return;
             }
-            const articles: Article[] = result.data.content;
+            const content: User[] = result.data.content;
+            const users = content.map((item: User) => ({
+                ...item,
+                key: item.id,
+            }));
             setTotalItems(result.data.totalElements);
-            setData(articles.map(item => ({ ...item, key: item.id })));
+            setData(users);
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
@@ -83,23 +119,30 @@ const ArticlesPage: React.FC = () => {
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
         const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
         const filtersFromUrl: Record<string, string> = {};
+        const initialSearchValues: Record<string, any> = {};
 
         searchParams.forEach((value, key) => {
             if (key !== 'page' && key !== 'size') {
                 filtersFromUrl[key] = value;
+                const field = searchFields.find((f) => f.name === key);
+                if (field) {
+                    initialSearchValues[key] = value;
+                }
             }
         });
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
         setFilters(filtersFromUrl);
+        setInitialValues(initialSearchValues);
+        console.log(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {
         fetchData(currentPage, pageSize, filters);
     }, [currentPage, pageSize, filters]);
 
-    const handleSearch = (newFilters: Record<string, string>) => {
+    const handleSearch = (newFilters: Record<string, any>) => {
         setCurrentPage(1);
         setFilters(newFilters);
 
@@ -108,57 +151,22 @@ const ArticlesPage: React.FC = () => {
         queryParams.append('size', pageSize.toString());
 
         Object.entries(newFilters).forEach(([key, value]) => {
-            if (value) queryParams.append(key, value);
+            if (value) queryParams.append(key, value.toString());
         });
 
         navigate(`?${queryParams.toString()}`);
-    };
-
-    const handleCreateNewArticle = () => {
-        navigate('create');
-    };
-
-    const handleUpdate = (id: string) => {
-        navigate(`update/${id}`);
-    };
-
-    const handleDeleteSelected = async (ids: React.Key[]) => {
-        setIsLoading(true);
-        try {
-            const response = await deleteArticles(ids as string[]);
-            if (response.ok) {
-                setData(prevData => prevData.filter(item => !ids.includes(item.id)));
-                message.success(t('admin.message.deleteSuccess'));
-            } else {
-                const result = await response.json();
-                message.error(result.message || t('admin.message.deleteError'));
-            }
-        } catch (error) {
-            message.error(t('admin.message.deleteError'));
-        } finally {
-            setIsLoading(false);
-        }
     };
 
     const onPageChange = (page: number, pageSize?: number) => {
         setCurrentPage(page);
         setPageSize(pageSize || 10);
-
-        const queryParams = new URLSearchParams();
-        queryParams.append('page', page.toString());
-        queryParams.append('size', (pageSize || 10).toString());
-
-        Object.entries(filters).forEach(([key, value]) => {
-            if (value) queryParams.append(key, value);
-        });
-
-        navigate(`?${queryParams.toString()}`);
+        navigate(`?page=${page}&pageSize=${pageSize || 10}`);
     };
 
     const handleSwitchStatus = async (id: string, checked: boolean) => {
         setIsLoading(true);
         try {
-            const response = await switchStatusArticle(id);
+            const response = await switchStatusUser(id);
             const result = await response.json();
             if (!response.ok || result.status !== 200) {
                 message.error(t('admin.message.updateError'));
@@ -177,7 +185,7 @@ const ArticlesPage: React.FC = () => {
         }
     };
 
-    const dataListConfig: DataListConfig<Article> = {
+    const dataListConfig: DataListConfig<User> = {
         columns: [
             {
                 title: 'No.',
@@ -185,22 +193,53 @@ const ArticlesPage: React.FC = () => {
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
             },
             {
-                title: t('admin.article.titleColumn'),
-                dataIndex: 'title',
-                key: 'title',
+                title: t('admin.user.username'),
+                dataIndex: 'username',
+                key: 'username',
             },
             {
-                title: t('admin.article.thumbnail'),
-                dataIndex: 'thumbnail',
-                key: 'thumbnail',
-                render: (thumbnail: string) => (
-                    <img src={thumbnail} alt="thumbnail" style={{ width: '100px', height: 'auto', borderRadius: '4px' }} />
+                title: t('admin.user.fullName'),
+                dataIndex: 'fullName',
+                key: 'fullName',
+            },
+            {
+                title: t('admin.user.avatar'),
+                dataIndex: 'avatar',
+                key: 'avatar',
+                render: (avatar: string) => (
+                    <img src={avatar} alt="thumbnail" style={{ width: '100px', height: 'auto', borderRadius: '4px' }} />
                 ),
             },
             {
-                title: t('admin.article.author'),
-                dataIndex: 'author',
-                key: 'author',
+                title: t('admin.user.email'),
+                dataIndex: 'email',
+                key: 'email',
+            },
+            {
+                title: t('admin.user.phone'),
+                dataIndex: 'phone',
+                key: 'phone',
+            },
+            {
+                title: t('admin.user.address'),
+                dataIndex: 'address',
+                key: 'address',
+            },
+            {
+                title: t('admin.user.gender.title'),
+                dataIndex: 'gender',
+                key: 'gender',
+            },
+            {
+                title: t('admin.user.dateOfBirth'),
+                dataIndex: 'dateOfBirth',
+                key: 'dateOfBirth',
+                render: (dateOfBirth: Date) => (dateOfBirth ? dayjs(dateOfBirth).format('DD/MM/YYYY') : ''),
+            },
+            {
+                title: t('admin.director.nationality'),
+                dataIndex: 'nationality',
+                key: 'nationality',
             },
             {
                 title: t('admin.dataList.status.title'),
@@ -214,15 +253,15 @@ const ArticlesPage: React.FC = () => {
                 ),
             },
         ],
-        data: data,
+        data,
         rowKey: 'id',
-        onCreateNew: handleCreateNewArticle,
-        onUpdate: handleUpdate,
-        onDeleteSelected: handleDeleteSelected,
+        onUpdate: () => {},
+        onDeleteSelected: () => {},
+        noActions: true,
         pagination: {
-            currentPage: currentPage,
-            totalItems: totalItems,
-            pageSize: pageSize,
+            currentPage,
+            totalItems,
+            pageSize,
             onPaginationChange: onPageChange,
         },
     };
@@ -231,13 +270,10 @@ const ArticlesPage: React.FC = () => {
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}`, name: t('admin.dashboard.title') },
-                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/articles`, name: t('admin.article.title') },
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.user.title') },
             ]}
         >
-            <SearchFormTemplate
-                fields={searchFields}
-                onSearch={handleSearch}
-            />
+            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />
@@ -249,4 +285,4 @@ const ArticlesPage: React.FC = () => {
     );
 };
 
-export default ArticlesPage;
+export default UserPage;

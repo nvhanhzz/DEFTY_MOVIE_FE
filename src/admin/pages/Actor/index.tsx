@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { message, Spin } from 'antd';
+import {message, Spin, Switch} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import dayjs from 'dayjs'; // Use dayjs instead of moment
@@ -8,7 +8,7 @@ import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
-import { deleteActors, getActors } from "../../services/actorService.tsx";
+import {deleteActors, getActors, switchStatusActor} from "../../services/actorService.tsx";
 import SearchFormTemplate from "../../templates/Search";
 
 // Extend dayjs with the customParseFormat plugin
@@ -36,6 +36,7 @@ const ActorPage: React.FC = () => {
     const [filters, setFilters] = useState<Record<string, string>>({});
     const navigate = useNavigate();
     const location = useLocation();
+    const [initialValues, setInitialValues] = useState<Record<string, any>>({});
 
     const searchFields = [
         {
@@ -63,6 +64,12 @@ const ActorPage: React.FC = () => {
                     value: 'other',
                 },
             ],
+        },
+        {
+            type: 'dateRange',
+            label: t('admin.director.dateOfBirth'),
+            name: 'dateOfBirth',
+            placeholder: t('admin.director.dateOfBirth'),
         },
         {
             type: 'select',
@@ -117,16 +124,23 @@ const ActorPage: React.FC = () => {
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
         const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
         const filtersFromUrl: Record<string, string> = {};
+        const initialSearchValues: Record<string, any> = {};
 
         searchParams.forEach((value, key) => {
             if (key !== 'page' && key !== 'size') {
                 filtersFromUrl[key] = value;
+                const field = searchFields.find((f) => f.name === key);
+                if (field) {
+                    initialSearchValues[key] = value;
+                }
             }
         });
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
         setFilters(filtersFromUrl);
+        setInitialValues(initialSearchValues);
+        console.log(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {
@@ -182,6 +196,28 @@ const ActorPage: React.FC = () => {
         navigate(`?page=${page}&pageSize=${pageSize || 10}`);
     };
 
+    const handleSwitchStatus = async (id: string, checked: boolean) => {
+        setIsLoading(true);
+        try {
+            const response = await switchStatusActor(id);
+            const result = await response.json();
+            if (!response.ok || result.status !== 200) {
+                message.error(t('admin.message.updateError'));
+                return;
+            }
+            setData(prevData => prevData.map(item =>
+                item.id === id ? { ...item, status: checked ? 1 : 0 } : item
+            ));
+
+            message.success(t('admin.message.updateSuccess'));
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            message.error(t('admin.message.updateError'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const dataListConfig: DataListConfig<Actor> = {
         columns: [
             {
@@ -233,6 +269,17 @@ const ActorPage: React.FC = () => {
                 dataIndex: 'description',
                 key: 'description',
             },
+            {
+                title: t('admin.dataList.status.title'),
+                dataIndex: 'status',
+                key: 'status',
+                render: (status, record) => (
+                    <Switch
+                        checked={status === 1}
+                        onChange={(checked) => handleSwitchStatus(record.id, checked)}
+                    />
+                ),
+            },
         ],
         data,
         rowKey: 'id',
@@ -251,10 +298,10 @@ const ActorPage: React.FC = () => {
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}`, name: t('admin.dashboard.title') },
-                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.director.title') },
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.actor.title') },
             ]}
         >
-            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} />
+            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

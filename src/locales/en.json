@@ -404,6 +404,24 @@
             "update": {
                 "title": "Update"
             }
+        },
+        "user": {
+            "title": "User",
+            "fullName": "Full name",
+            "gender": {
+                "title": "Gender",
+                "placeholder": "Select gender",
+                "male": "Male",
+                "female": "Female",
+                "other": "Other"
+            },
+            "avatar": "Avatar",
+            "dateOfBirth": "Date of birth",
+            "nationality": "Nationality",
+            "username": "Username",
+            "phone": "Phone",
+            "email": "Email",
+            "address": "Address"
         }
     },
     "client": {}

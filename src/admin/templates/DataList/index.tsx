@@ -10,9 +10,10 @@ export interface DataListConfig<T> {
     columns: TableColumnsType<T>;
     data: T[];
     rowKey: string;
-    onCreateNew: () => void;
+    onCreateNew?: () => void;
     onUpdate: (id: string) => void;
-    onDeleteSelected: (ids: React.Key[]) => void; // Xóa nhiều mục
+    onDeleteSelected: (ids: React.Key[]) => void;
+    noActions?: boolean;
     search?: {
         keyword?: string;
         onSearch: (value: string) => void;
@@ -70,9 +71,11 @@ const DataListTemplate = <T extends { id: string }>( { config }: { config: DataL
         <>
             <Row justify="space-between" className="data-list__header">
                 <Col>
-                    <Button className="data-list__create-button" type="primary" icon={<PlusOutlined />} onClick={config.onCreateNew}>
-                        {t('admin.dataList.createNewButton')}
-                    </Button>
+                    {config.onCreateNew && (
+                        <Button className="data-list__create-button" type="primary" icon={<PlusOutlined />} onClick={config.onCreateNew}>
+                            {t('admin.dataList.createNewButton')}
+                        </Button>
+                    )}
                 </Col>
                 <Col>
                     {config.search && (
@@ -90,7 +93,7 @@ const DataListTemplate = <T extends { id: string }>( { config }: { config: DataL
 
             <Table<T>
                 className="data-list__table"
-                columns={[...config.columns, actionColumn]}
+                columns={(config.noActions && config.noActions) ? config.columns : [...config.columns, actionColumn]}
                 dataSource={config.data}
                 rowKey={config.rowKey}
                 pagination={false}

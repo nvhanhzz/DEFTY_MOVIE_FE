@@ -405,6 +405,24 @@
             "update": {
                 "title": "Cập nhật"
             }
+        },
+        "user": {
+            "title": "Người dùng",
+            "fullName": "Họ và tên",
+            "gender": {
+                "title": "Giới tính",
+                "placeholder": "Chọn giới tính",
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            },
+            "avatar": "Ảnh đại diện",
+            "dateOfBirth": "Ngày sinh",
+            "nationality": "Quốc tịch",
+            "username": "Tên đăng nhập",
+            "phone": "Số điện thoại",
+            "email": "Email",
+            "address": "Địa chỉ"
         }
     },
     "client": {}

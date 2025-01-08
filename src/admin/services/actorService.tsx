@@ -1,6 +1,6 @@
 import {getWithParams} from "../utils/getWithParams.tsx";
 import handleRequest from "../utils/handleRequest.tsx";
-import {del, get, patchFormData, postFormData} from "../utils/request.tsx";
+import {del, get, patchFormData, patchJson, postFormData} from "../utils/request.tsx";
 import React from "react";
 
 const PREFIX_ACTOR: string = import.meta.env.VITE_PREFIX_ACTOR as string;
@@ -37,4 +37,8 @@ export const getActorById = (id: string): Promise<Response> => {
 export const updateActorById = (id: string, option: FormData): Promise<Response> => {
     const url = `${PREFIX_ACTOR}/${id}`;
     return handleRequest(patchFormData(url, option));
+};
+
+export const switchStatusActor = (id: string): Promise<Response> => {
+    return handleRequest(patchJson(`${PREFIX_ACTOR}/status/${id}`, {}));
 };

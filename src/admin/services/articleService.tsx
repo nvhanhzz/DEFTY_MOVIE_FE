@@ -1,6 +1,6 @@
 import {getWithParams} from "../utils/getWithParams.tsx";
 import handleRequest from "../utils/handleRequest.tsx";
-import {del, get, patchFormData, postFormData} from "../utils/request.tsx";
+import {del, get, patchFormData, patchJson, postFormData} from "../utils/request.tsx";
 import React from "react";
 
 const PREFIX_ARTICLE: string = import.meta.env.VITE_PREFIX_ARTICLE as string;
@@ -37,4 +37,8 @@ export const getArticleById = (id: string): Promise<Response> => {
 export const updateArticleById = (id: string, option: FormData): Promise<Response> => {
     const url = `${PREFIX_ARTICLE}/${id}`;
     return handleRequest(patchFormData(url, option));
+};
+
+export const switchStatusArticle = (id: string): Promise<Response> => {
+    return handleRequest(patchJson(`${PREFIX_ARTICLE}/status/${id}`, {}));
 };

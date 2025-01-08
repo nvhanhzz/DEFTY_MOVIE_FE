@@ -1,17 +1,23 @@
 import {getWithParams} from "../utils/getWithParams.tsx";
 import handleRequest from "../utils/handleRequest.tsx";
-import {del, get, patchFormData, postFormData} from "../utils/request.tsx";
+import {del, get, patchFormData, patchJson, postFormData} from "../utils/request.tsx";
 import React from "react";
 
 const PREFIX_EPISODE: string = import.meta.env.VITE_PREFIX_EPISODE as string;
 
 export const getEpisodesByMovie = async (
     movieId: string,
-    page: number,
-    size: number
+    page?: number,
+    size?: number,
+    filters?: Record<string, string | number>
 ): Promise<Response> => {
     const url = `${PREFIX_EPISODE}`;
-    const params = { page, size, movieId };
+    const params = {
+        page,
+        size,
+        movieId,
+        ...filters,
+    };
     return handleRequest(getWithParams(url, params));
 };
 
@@ -33,4 +39,8 @@ export const getEpisodeById = (id: string): Promise<Response> => {
 export const updateEpisodeById = (id: string, option: FormData): Promise<Response> => {
     const url = `${PREFIX_EPISODE}/${id}`;
     return handleRequest(patchFormData(url, option));
+};
+
+export const switchStatusEpisode = (id: string): Promise<Response> => {
+    return handleRequest(patchJson(`${PREFIX_EPISODE}/status/${id}`, {}));
 };

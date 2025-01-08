@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { message, Spin } from 'antd';
+import {message, Spin, Switch} from 'antd';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate, { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
-import { deleteEpisodes, getEpisodesByMovie } from '../../services/episodeService';
+import {deleteEpisodes, getEpisodesByMovie, switchStatusEpisode} from '../../services/episodeService';
 import { getMovieById } from '../../services/movieService';
+import SearchFormTemplate from "../../templates/Search";
 
 export interface Episode {
     id: string;
@@ -25,10 +26,72 @@ const EpisodePage: React.FC = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
-    const [searchKeyword, setSearchKeyword] = useState<string>('');
     const { id: movieId } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
+    const [filters, setFilters] = useState<Record<string, string>>({});
+    const [initialValues, setInitialValues] = useState<Record<string, any>>({});
+
+    const searchFields = [
+        {
+            type: 'select',
+            label: t('admin.dataList.status.title'),
+            name: 'status',
+            placeholder: t('admin.dataList.status.title'),
+            options: [
+                {
+                    label: t('admin.dataList.status.active'),
+                    value: '1',
+                },
+                {
+                    label: t('admin.dataList.status.inactive'),
+                    value: '0',
+                },
+                {
+                    label: t('admin.dataList.status.all'),
+                    value: '',
+                },
+            ],
+        },
+    ];
+
+    const handleSearch = (newFilters: Record<string, any>) => {
+        setCurrentPage(1);
+        setFilters(newFilters);
+
+        const queryParams = new URLSearchParams();
+        queryParams.append('page', '1');
+        queryParams.append('size', pageSize.toString());
+
+        Object.entries(newFilters).forEach(([key, value]) => {
+            if (value) queryParams.append(key, value.toString());
+        });
+
+        navigate(`?${queryParams.toString()}`);
+    };
+
+    const handleSwitchStatus = async (id: string, checked: boolean) => {
+        setIsLoading(true);
+        try {
+            const response = await switchStatusEpisode(id);
+            const result = await response.json();
+            console.log(response, result);
+            if (!response.ok || result.status !== 200) {
+                message.error(t('admin.message.updateError'));
+                return;
+            }
+            setData(prevData => prevData.map(item =>
+                item.id === id ? { ...item, status: checked ? 1 : 0 } : item
+            ));
+
+            message.success(t('admin.message.updateSuccess'));
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            message.error(t('admin.message.updateError'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const fetchMovieName = async (movieId: string) => {
         try {
@@ -44,11 +107,16 @@ const EpisodePage: React.FC = () => {
         }
     };
 
-    const fetchData = async (movieId: string, page: number, pageSize: number) => {
+    const fetchData = async (movieId: string, page: number, pageSize: number, filters: Record<string, string>) => {
         setIsLoading(true);
         try {
-            const response = await getEpisodesByMovie(movieId, page, pageSize);
+            const response = await getEpisodesByMovie(movieId, page, pageSize, filters);
             const result = await response.json();
+            if (!response.ok || result.status === 404) {
+                setTotalItems(0);
+                setData([]);
+                return;
+            }
             const content: Episode[] = result.data.content.map((item: Episode) => ({
                 ...item,
                 key: item.id,
@@ -65,18 +133,31 @@ const EpisodePage: React.FC = () => {
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
-        const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
-        const keywordFromUrl = searchParams.get('keyword') || '';
+        const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
+        const filtersFromUrl: Record<string, string> = {};
+        const initialSearchValues: Record<string, any> = {};
+
+        searchParams.forEach((value, key) => {
+            if (key !== 'page' && key !== 'size') {
+                filtersFromUrl[key] = value;
+                const field = searchFields.find((f) => f.name === key);
+                if (field) {
+                    initialSearchValues[key] = value;
+                }
+            }
+        });
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
-        setSearchKeyword(keywordFromUrl);
+        setFilters(filtersFromUrl);
+        setInitialValues(initialSearchValues);
+        console.log(initialSearchValues);
+    }, [location.search]);
 
-        if (movieId) {
-            fetchMovieName(movieId);
-            fetchData(movieId, pageFromUrl, pageSizeFromUrl);
-        }
-    }, [location.search, movieId]);
+    useEffect(() => {
+        fetchMovieName(movieId as string);
+        fetchData(movieId as string, currentPage, pageSize, filters);
+    }, [movieId, currentPage, pageSize, filters]);
 
     const handleUpdate = (id: string) => {
         navigate(`update/${id}`);
@@ -104,13 +185,8 @@ const EpisodePage: React.FC = () => {
         }
     };
 
-    const handleSearch = (keyword: string) => {
-        setSearchKeyword(keyword);
-        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`);
-    };
-
     const onPageChange = (page: number, pageSize?: number) => {
-        navigate(`?page=${page}&pageSize=${pageSize || 10}&keyword=${searchKeyword}`);
+        navigate(`?page=${page}&pageSize=${pageSize || 10}`);
     };
 
     const dataListConfig: DataListConfig<Episode> = {
@@ -158,16 +234,23 @@ const EpisodePage: React.FC = () => {
                     </a>
                 ),
             },
+            {
+                title: t('admin.dataList.status.title'),
+                dataIndex: 'status',
+                key: 'status',
+                render: (status, record) => (
+                    <Switch
+                        checked={status === 1}
+                        onChange={(checked) => handleSwitchStatus(record.id, checked)}
+                    />
+                ),
+            },
         ],
         data,
         rowKey: 'id',
         onCreateNew: handleCreateNewPermission,
         onUpdate: handleUpdate,
         onDeleteSelected: handleDeleteSelected,
-        search: {
-            keyword: searchKeyword,
-            onSearch: handleSearch,
-        },
         pagination: {
             currentPage,
             totalItems,
@@ -184,6 +267,7 @@ const EpisodePage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/movies/${movieId}/episode`, name: t('admin.episode.title') },
             ]}
         >
+            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

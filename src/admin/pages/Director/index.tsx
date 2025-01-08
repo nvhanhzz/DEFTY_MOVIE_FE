@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { message, Spin } from 'antd';
+import {message, Spin, Switch} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
@@ -7,7 +7,7 @@ import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
-import { deleteDirectors, getDirectors } from "../../services/directorService.tsx";
+import {deleteDirectors, getDirectors, switchStatusDirector} from "../../services/directorService.tsx";
 import SearchFormTemplate from "../../templates/Search";
 
 export interface Director {
@@ -66,6 +66,26 @@ const DirectorPage: React.FC = () => {
             label: t('admin.director.dateOfBirth'),
             name: 'dateOfBirth',
             placeholder: t('admin.director.dateOfBirth'),
+        },
+        {
+            type: 'select',
+            label: t('admin.dataList.status.title'),
+            name: 'status',
+            placeholder: t('admin.dataList.status.title'),
+            options: [
+                {
+                    label: t('admin.dataList.status.active'),
+                    value: '1',
+                },
+                {
+                    label: t('admin.dataList.status.inactive'),
+                    value: '0',
+                },
+                {
+                    label: t('admin.dataList.status.all'),
+                    value: '',
+                },
+            ],
         },
     ];
 
@@ -168,6 +188,28 @@ const DirectorPage: React.FC = () => {
         navigate(`?page=${page}&pageSize=${pageSize || 10}`);
     };
 
+    const handleSwitchStatus = async (id: string, checked: boolean) => {
+        setIsLoading(true);
+        try {
+            const response = await switchStatusDirector(id);
+            const result = await response.json();
+            if (!response.ok || result.status !== 200) {
+                message.error(t('admin.message.updateError'));
+                return;
+            }
+            setData(prevData => prevData.map(item =>
+                item.id === id ? { ...item, status: checked ? 1 : 0 } : item
+            ));
+
+            message.success(t('admin.message.updateSuccess'));
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            message.error(t('admin.message.updateError'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const dataListConfig: DataListConfig<Director> = {
         columns: [
             {
@@ -218,6 +260,17 @@ const DirectorPage: React.FC = () => {
                 title: t('admin.director.description'),
                 dataIndex: 'description',
                 key: 'description',
+            },
+            {
+                title: t('admin.dataList.status.title'),
+                dataIndex: 'status',
+                key: 'status',
+                render: (status, record) => (
+                    <Switch
+                        checked={status === 1}
+                        onChange={(checked) => handleSwitchStatus(record.id, checked)}
+                    />
+                ),
             },
         ],
         data,
