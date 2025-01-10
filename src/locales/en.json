@@ -421,7 +421,11 @@
             "username": "Username",
             "phone": "Phone",
             "email": "Email",
-            "address": "Address"
+            "address": "Address",
+            "detail": {
+                "title": "User detail",
+                "notFound": "User details not found."
+            }
         }
     },
     "client": {}

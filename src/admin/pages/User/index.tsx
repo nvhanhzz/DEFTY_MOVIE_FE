@@ -9,6 +9,7 @@ import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
 import { getUsers, switchStatusUser} from "../../services/userService.tsx";
 import SearchFormTemplate from "../../templates/Search";
+import UserDetail from "./Detail/UserDetail.tsx";
 
 export interface User {
     id: string,
@@ -34,6 +35,8 @@ const UserPage: React.FC = () => {
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
     const navigate = useNavigate();
     const location = useLocation();
+    const [isUserDetailVisible, setIsUserDetailVisible] = useState(false);
+    const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
     const searchFields = [
         {
@@ -101,6 +104,7 @@ const UserPage: React.FC = () => {
                 return;
             }
             const content: User[] = result.data.content;
+            console.log(content);
             const users = content.map((item: User) => ({
                 ...item,
                 key: item.id,
@@ -185,6 +189,11 @@ const UserPage: React.FC = () => {
         }
     };
 
+    const handleViewDetail = (id: string) => {
+        setSelectedUserId(id);
+        setIsUserDetailVisible(true);
+    };
+
     const dataListConfig: DataListConfig<User> = {
         columns: [
             {
@@ -255,9 +264,7 @@ const UserPage: React.FC = () => {
         ],
         data,
         rowKey: 'id',
-        onUpdate: () => {},
-        onDeleteSelected: () => {},
-        noActions: true,
+        onViewDetail: handleViewDetail,
         pagination: {
             currentPage,
             totalItems,
@@ -279,7 +286,14 @@ const UserPage: React.FC = () => {
                     <Spin indicator={<LoadingOutlined spin />} />
                 </div>
             ) : (
+                <div>
                 <DataListTemplate config={dataListConfig} />
+                <UserDetail
+                    visible={isUserDetailVisible}
+                    onClose={() => setIsUserDetailVisible(false)}
+                    userId={selectedUserId}
+                />
+                </div>
             )}
         </OutletTemplate>
     );

@@ -422,7 +422,11 @@
             "username": "Tên đăng nhập",
             "phone": "Số điện thoại",
             "email": "Email",
-            "address": "Địa chỉ"
+            "address": "Địa chỉ",
+            "detail": {
+                "title": "Chi tiết người dùng",
+                "notFound": "không tìm thấy người dùng."
+            }
         }
     },
     "client": {}
