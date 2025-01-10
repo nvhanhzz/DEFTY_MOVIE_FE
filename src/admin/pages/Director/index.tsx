@@ -87,6 +87,11 @@ const DirectorPage: React.FC = () => {
                 },
             ],
         },
+        {
+            type: 'nationality',
+            label: t('admin.user.nationality'),
+            name: 'nationality',
+        }
     ];
 
     const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
@@ -242,12 +247,12 @@ const DirectorPage: React.FC = () => {
                 render: (dateOfBirth: Date) => (dateOfBirth ? dayjs(dateOfBirth).format('DD/MM/YYYY') : ''),
             },
             {
-                title: t('admin.director.weight'),
+                title: t('admin.director.weight') + ' (kg)',
                 dataIndex: 'weight',
                 key: 'weight',
             },
             {
-                title: t('admin.director.height'),
+                title: t('admin.director.height') + ' (cm)',
                 dataIndex: 'height',
                 key: 'height',
             },

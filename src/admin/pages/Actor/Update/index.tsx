@@ -8,6 +8,7 @@ import { getActorById, updateActorById } from "../../../services/actorService.ts
 import { RcFile } from "antd/es/upload";
 import dayjs from 'dayjs';
 import { ActorFromValues } from "../Create";
+import CountrySelect from "../../../components/CountrySelect";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -167,7 +168,11 @@ const UpdateActor: React.FC = () => {
                             name="nationality"
                             rules={[{ required: true, message: t('admin.actor.validation.nationality') }]}
                         >
-                            <Input />
+                            <CountrySelect
+                                placeholder={t('admin.form.selectNationality')}
+                                onChange={(value) => form.setFieldsValue({ nationality: value })}
+                                type='nationality'
+                            />
                         </Form.Item>
 
                         <Form.Item

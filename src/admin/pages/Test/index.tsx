@@ -1,81 +1,72 @@
 import React, { useState, useEffect } from "react";
-import { Select, Spin } from "antd";
 
-const { Option } = Select;
+const CountryFlagsToJson: React.FC = () => {
+    const [countries, setCountries] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-interface Country {
-    name: string;
-    flag: string;
-}
-
-interface NationalSelectProps {
-    onChange: (value: string) => void;
-}
-
-const NationalSelect: React.FC<NationalSelectProps> = ({ onChange }) => {
-    const [countries, setCountries] = useState<Country[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        const fetchCountries = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch("https://restcountries.com/v3.1/all");
-                if (!response.ok) {
-                    throw new Error("Failed to fetch country.js data");
-                }
-                const data = await response.json();
-                const countryData: Country[] = data.map((country: any) => ({
+    const fetchCountries = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch("https://restcountries.com/v3.1/all");
+            const data = await response.json();
+            // Map data to extract name, flag, and nationality (male)
+            const countryData = data
+                .map((country: any) => ({
                     name: country.name.common,
                     flag: country.flags.png,
-                }));
-                setCountries(countryData.sort((a, b) => a.name.localeCompare(b.name))); // Sort alphabetically
-            } catch (error) {
-                console.error("Error fetching countries:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+                    nationality: country.demonyms?.eng?.m || "Unknown", // Use male demonym
+                }))
+                .sort((a: any, b: any) => a.name.localeCompare(b.name)); // Sort alphabetically by name
+            setCountries(countryData);
+        } catch (error) {
+            console.error("Error fetching countries:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchCountries();
     }, []);
 
+    const downloadJson = () => {
+        const blob = new Blob([JSON.stringify(countries, null, 2)], {
+            type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "countries_with_nationalities.json";
+        link.click();
+        URL.revokeObjectURL(url);
+    };
+
     return (
-        <Select
-            showSearch
-            placeholder="Select a country"
-            onChange={onChange}
-            style={{ width: "100%" }}
-            loading={loading}
-            filterOption={(input, option) => {
-                // Use `String(option?.children)` to convert ReactNode to a string
-                const childrenString = String(option?.children);
-                return childrenString.toLowerCase().includes(input.toLowerCase());
-            }}
-        >
+        <div style={{ padding: "20px" }}>
+            <h1>Country Names, Flags, and Male Nationalities</h1>
             {loading ? (
-                <Option value="" disabled>
-                    <Spin /> Loading...
-                </Option>
+                <p>Loading...</p>
             ) : (
-                countries.map((country) => (
-                    <Option key={country.name} value={country.name}>
-                        <img
-                            src={country.flag}
-                            alt={country.name}
-                            style={{
-                                width: "20px",
-                                height: "15px",
-                                marginRight: "8px",
-                                border: "1px solid #ddd",
-                            }}
-                        />
-                        {country.name}
-                    </Option>
-                ))
+                <div>
+                    <button onClick={downloadJson} style={{ marginBottom: "10px" }}>
+                        Download JSON
+                    </button>
+                    <ul>
+                        {countries.map((country: any, index) => (
+                            <li key={index}>
+                                <img
+                                    src={country.flag}
+                                    alt={`${country.name} flag`}
+                                    style={{ width: "30px", marginRight: "10px" }}
+                                />
+                                <strong>{country.name}</strong> - <em>{country.nationality}</em>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             )}
-        </Select>
+        </div>
     );
 };
 
-export default NationalSelect;
+export default CountryFlagsToJson;

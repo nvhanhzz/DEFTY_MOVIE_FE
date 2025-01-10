@@ -91,6 +91,11 @@ const ActorPage: React.FC = () => {
                 },
             ],
         },
+        {
+            type: 'nationality',
+            label: t('admin.user.nationality'),
+            name: 'nationality',
+        }
     ];
 
     const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {

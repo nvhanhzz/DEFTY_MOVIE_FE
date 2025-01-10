@@ -9,6 +9,7 @@ import { RcFile } from "antd/es/upload";
 import dayjs from 'dayjs';
 // import './UpdateDirector.scss';
 import { DirectorFromValues } from "../Create";
+import CountrySelect from "../../../components/CountrySelect";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -141,7 +142,7 @@ const UpdateDirector: React.FC = () => {
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.gender')}
+                            label={t('admin.director.gender.title')}
                             name="gender"
                             rules={[{ required: true, message: t('admin.director.validation.gender') }]}
                         >
@@ -173,7 +174,11 @@ const UpdateDirector: React.FC = () => {
                             name="nationality"
                             rules={[{ required: true, message: t('admin.director.validation.nationality') }]}
                         >
-                            <Input />
+                            <CountrySelect
+                                placeholder={t('admin.form.selectNationality')}
+                                onChange={(value) => form.setFieldsValue({ nationality: value })}
+                                type='nationality'
+                            />
                         </Form.Item>
 
                         <Form.Item

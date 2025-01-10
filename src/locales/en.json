@@ -34,6 +34,8 @@
             "selectOption": "Select an option",
             "enterValue": "Enter a value",
             "selectRange": "Select range",
+            "selectNationality": "Select Nationality",
+            "selectCountry": "Select Country",
             "placeholder": {
                 "search": "Enter search keyword",
                 "select": "Please select",

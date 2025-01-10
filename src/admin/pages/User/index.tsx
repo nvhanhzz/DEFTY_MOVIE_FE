@@ -91,6 +91,11 @@ const UserPage: React.FC = () => {
                 },
             ],
         },
+        {
+            type: 'nationality',
+            label: t('admin.user.nationality'),
+            name: 'nationality',
+        }
     ];
 
     const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
@@ -104,7 +109,6 @@ const UserPage: React.FC = () => {
                 return;
             }
             const content: User[] = result.data.content;
-            console.log(content);
             const users = content.map((item: User) => ({
                 ...item,
                 key: item.id,
@@ -139,7 +143,6 @@ const UserPage: React.FC = () => {
         setPageSize(pageSizeFromUrl);
         setFilters(filtersFromUrl);
         setInitialValues(initialSearchValues);
-        console.log(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {

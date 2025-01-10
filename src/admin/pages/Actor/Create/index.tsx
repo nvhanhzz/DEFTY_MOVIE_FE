@@ -7,6 +7,7 @@ import OutletTemplate from '../../../templates/Outlet';
 import './CreateActor.scss';
 import { RcFile } from "antd/es/upload";
 import {postActor} from "../../../services/actorService.tsx";
+import CountrySelect from "../../../components/CountrySelect";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -137,7 +138,11 @@ const CreateActor: React.FC = () => {
                             name="nationality"
                             rules={[{ required: true, message: t('admin.actor.create.validation.nationality') }]}
                         >
-                            <Input />
+                            <CountrySelect
+                                placeholder={t('admin.form.selectNationality')}
+                                onChange={(value) => form.setFieldsValue({ nationality: value })}
+                                type='nationality'
+                            />
                         </Form.Item>
 
                         <Form.Item

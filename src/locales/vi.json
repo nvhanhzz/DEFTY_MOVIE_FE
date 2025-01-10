@@ -34,6 +34,8 @@
             "selectOption": "Chọn một tùy chọn",
             "enterValue": "Nhập giá trị",
             "selectRange": "Chọn khoảng",
+            "selectNationality": "Chọn quốc tịch",
+            "selectCountry": "Chọn quốc gia",
             "placeholder": {
                 "search": "Nhập từ khóa tìm kiếm",
                 "select": "Vui lòng chọn",

@@ -4,9 +4,10 @@ import { SearchOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import "./Search.scss";
 import dayjs from "dayjs";
+import CountrySelect from "../../components/CountrySelect";
 
 export interface SearchFormField {
-    type: 'dateRange' | 'select' | 'input' | string;
+    type: 'dateRange' | 'select' | 'input' | 'nationality' | 'country' | string;
     label: string;
     name: string;
     options?: { label: string; value: any }[];
@@ -90,6 +91,7 @@ const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields, init
                             options={field.options}
                             style={field.style || { width: '150px' }}
                             value={initialValues[field.name]}
+                            allowClear
                         />
                     )}
                     {field.type === 'input' && (
@@ -99,9 +101,30 @@ const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields, init
                             value={initialValues[field.name]}
                         />
                     )}
+                    {(field.type === 'nationality' || field.type === 'country') && (
+                        <CountrySelect
+                            type={field.type}
+                            placeholder={
+                                field.placeholder as string ||
+                                (field.type === 'nationality'
+                                    ? t('admin.form.selectNationality')
+                                    : t('admin.form.selectCountry'))
+                            }
+                            style={field.style}
+                            value={initialValues[field.name]}
+                            onChange={(value) => form.setFieldsValue({ [field.name]: value })}
+                        />
+                    )}
                 </Form.Item>
             ))}
             <Form.Item>
+                <Button
+                    type="default"
+                    style={{ marginRight: '8px' }}
+                    onClick={() => form.resetFields()} // Reset toàn bộ form
+                >
+                    {t('admin.form.reset')}
+                </Button>
                 <Button
                     type="primary"
                     icon={<SearchOutlined />}

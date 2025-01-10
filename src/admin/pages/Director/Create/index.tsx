@@ -7,6 +7,7 @@ import OutletTemplate from '../../../templates/Outlet';
 import './CreateDirector.scss';
 import { RcFile } from "antd/es/upload";
 import {postDirector} from "../../../services/directorService.tsx";
+import CountrySelect from "../../../components/CountrySelect";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -122,19 +123,19 @@ const CreateDirector: React.FC = () => {
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.weight')}
+                            label={t('admin.director.weight') + ' (kg)'}
                             name="weight"
                             rules={[{ required: true, message: t('admin.director.create.validation.weight') }]}
                         >
-                            <Input type="number" />
+                            <Input type="number" min={0}/>
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.height')}
+                            label={t('admin.director.height') + ' (cm)'}
                             name="height"
                             rules={[{ required: true, message: t('admin.director.create.validation.height') }]}
                         >
-                            <Input type="number" />
+                            <Input type="number" min={0}/>
                         </Form.Item>
 
                         <Form.Item
@@ -142,7 +143,11 @@ const CreateDirector: React.FC = () => {
                             name="nationality"
                             rules={[{ required: true, message: t('admin.director.create.validation.nationality') }]}
                         >
-                            <Input />
+                            <CountrySelect
+                                placeholder={t('admin.form.selectNationality')}
+                                onChange={(value) => form.setFieldsValue({ nationality: value })}
+                                type='nationality'
+                            />
                         </Form.Item>
 
                         <Form.Item
