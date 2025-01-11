@@ -1,5 +1,4 @@
 .avt-editor {
-
   &__upload-btn {
     cursor: pointer;
     display: inline-block;
@@ -9,6 +8,17 @@
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    margin-top: 10px;
   }
 
   &__preview {

@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, message, Upload, DatePicker, Select, Row, Col } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Button, Form, Input, message, DatePicker, Select, Row, Col } from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
 import { getActorById, updateActorById } from "../../../services/actorService.tsx";
-import { RcFile } from "antd/es/upload";
 import dayjs from 'dayjs';
 import { ActorFromValues } from "../Create";
 import CountrySelect from "../../../components/CountrySelect";
+import AvtEditor from "../../../components/AvtEditor";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
 const UpdateActor: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [loading, setLoading] = useState(false);
-    const [file, setFile] = useState<RcFile | null>(null);
+    const [file, setFile] = useState<File | null>(null);
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const [form] = Form.useForm();
     const navigate = useNavigate();
@@ -91,9 +90,8 @@ const UpdateActor: React.FC = () => {
     };
 
     // Handle avatar change
-    const handleAvatarChange = ({ file }: { file: RcFile }) => {
+    const handleAvatarSave = (file: File | null) => {
         setFile(file);
-        setAvatarUrl(URL.createObjectURL(file));
     };
 
     // Reset form
@@ -186,23 +184,10 @@ const UpdateActor: React.FC = () => {
 
                     <Col span={8}>
                         <Form.Item label={t('admin.actor.avatar')} className="avatar-wrapper">
-                            <Upload
-                                listType="picture-card"
-                                beforeUpload={(file) => {
-                                    handleAvatarChange({ file });
-                                    return false; // Không upload tự động
-                                }}
-                                showUploadList={false}
-                            >
-                                {avatarUrl ? (
-                                    <img src={avatarUrl} alt="avatar" style={{ width: '100%' }} />
-                                ) : (
-                                    <div>
-                                        <UploadOutlined />
-                                        <div style={{ marginTop: 8 }}>{t('admin.actor.upload')}</div>
-                                    </div>
-                                )}
-                            </Upload>
+                            <AvtEditor
+                                onSave={handleAvatarSave}
+                                initialImage={avatarUrl as string}
+                            />
                         </Form.Item>
                     </Col>
                 </Row>

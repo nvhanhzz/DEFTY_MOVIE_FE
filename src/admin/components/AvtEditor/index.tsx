@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 // @ts-ignore
 import AvatarEditor from "react-avatar-editor";
-import { Modal, Slider, Button, message } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Modal, Slider, Button, message, Spin } from "antd";
+import { UploadOutlined, LoadingOutlined } from "@ant-design/icons";
 import imageCompression from "browser-image-compression";
 import "./AvtEditor.scss";
 
@@ -16,7 +16,29 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage }) => {
     const [preview, setPreview] = useState<string | null>(initialImage || null); // Preview ảnh
     const [modalOpen, setModalOpen] = useState(false);
     const [slideValue, setSlideValue] = useState<number>(10);
+    const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
     const cropRef = useRef<AvatarEditor | null>(null);
+
+    // Xử lý initialImage khi prop thay đổi
+    useEffect(() => {
+        if (initialImage) {
+            const fetchAndSetImage = async () => {
+                setIsLoading(true); // Bật loading
+                try {
+                    const response = await fetch(initialImage);
+                    const blob = await response.blob();
+                    const objectURL = URL.createObjectURL(blob);
+                    setSrc(objectURL);
+                    setPreview(objectURL);
+                } catch (error) {
+                    console.error("Failed to load initial image:", error);
+                } finally {
+                    setIsLoading(false); // Tắt loading
+                }
+            };
+            fetchAndSetImage();
+        }
+    }, [initialImage]);
 
     const handleSave = async () => {
         if (cropRef.current) {
@@ -29,30 +51,36 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage }) => {
 
             // Nén File
             try {
+                setIsLoading(true); // Bật loading
                 const compressedFile = await compressImage(file);
                 setPreview(URL.createObjectURL(compressedFile)); // Cập nhật preview
                 onSave(compressedFile); // Trả về File qua callback
             } catch (error) {
                 message.error("Image compression failed.");
                 console.error(error);
+            } finally {
+                setIsLoading(false); // Tắt loading
+                setModalOpen(false); // Đóng modal
             }
-
-            setModalOpen(false); // Đóng modal
         }
     };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
+            setIsLoading(true); // Bật loading
             try {
                 // Nén ảnh ngay khi tải lên
                 const compressedFile = await compressImage(e.target.files[0]);
                 const fileUrl = URL.createObjectURL(compressedFile);
 
                 setSrc(fileUrl);
+                setPreview(fileUrl);
                 setModalOpen(true); // Mở modal chỉnh sửa
             } catch (error) {
                 message.error("Failed to compress the image.");
                 console.error(error);
+            } finally {
+                setIsLoading(false); // Tắt loading
             }
         }
     };
@@ -75,25 +103,32 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage }) => {
                 accept="image/*"
                 id="upload-avatar"
                 onChange={handleFileChange}
-                style={{ display: "none" }} // Ẩn input mặc định
+                style={{ display: "none" }}
             />
             <label htmlFor="upload-avatar" className="avt-editor__upload-btn">
                 <Button
                     icon={<UploadOutlined />}
+                    loading={isLoading} // Loading trạng thái trên nút upload
                     onClick={() => document.getElementById("upload-avatar")?.click()} // Kích hoạt input ẩn
                 >
                     Upload
                 </Button>
             </label>
 
-            {/* Preview ảnh */}
-            {preview && (
-                <div
-                    className="avt-editor__preview"
-                    onClick={() => setModalOpen(true)} // Click vào ảnh mở modal
-                >
-                    <img src={preview} alt="Avatar Preview" />
+            {/* Hiển thị loading hoặc preview ảnh */}
+            {isLoading ? (
+                <div className="avt-editor__loading">
+                    <Spin indicator={<LoadingOutlined spin />} /> {/* Loading icon */}
                 </div>
+            ) : (
+                preview && (
+                    <div
+                        className="avt-editor__preview"
+                        onClick={() => setModalOpen(true)} // Click vào ảnh mở modal
+                    >
+                        <img src={preview} alt="Avatar Preview" />
+                    </div>
+                )
             )}
 
             {/* Modal chỉnh sửa */}

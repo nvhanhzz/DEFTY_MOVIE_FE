@@ -163,7 +163,7 @@ const UpdateEpisode: React.FC = () => {
                     </Upload>
                 </Form.Item>
 
-                <Form.Item label={t('admin.episode.link')}>
+                <Form.Item label={t('admin.episode.video')}>
                     <Upload
                         beforeUpload={(file) => {
                             handleVideoChange({ file });

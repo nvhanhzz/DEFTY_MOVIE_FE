@@ -157,27 +157,6 @@ const CreateActor: React.FC = () => {
 
                     <Col span={8} className="avatar-col">
                         <Form.Item label={t('admin.actor.avatar')} className="avatar-wrapper">
-                            {/*<div className="avatar-preview">*/}
-                            {/*    <Upload*/}
-                            {/*        listType="picture-card"*/}
-                            {/*        beforeUpload={(file) => {*/}
-                            {/*            handleAvatarChange({ file });*/}
-                            {/*            return false;  // Không cho phép upload tự động*/}
-                            {/*        }}*/}
-                            {/*        className="avatar-uploader"*/}
-                            {/*        showUploadList={false}  // Ẩn danh sách file sau khi upload*/}
-                            {/*    >*/}
-                            {/*        <img*/}
-                            {/*            src={file ? URL.createObjectURL(file as Blob) : 'https://th.bing.com/th/id/OIP.lMA6AEzLnoPpw177nVhYZgHaHa?pid=ImgDet&w=184&h=184&c=7&dpr=1.3'}*/}
-                            {/*            alt="avatar"*/}
-                            {/*            className="avatar-image"*/}
-                            {/*        />*/}
-                            {/*    </Upload>*/}
-                            {/*    <Button className="upload-button">*/}
-                            {/*        <UploadOutlined /> {t('admin.actor.upload')}*/}
-                            {/*    </Button>*/}
-                            {/*</div>*/}
-
                             <AvtEditor
                                 onSave={handleAvatarSave}
                                 initialImage={file ? URL.createObjectURL(file) : undefined}
