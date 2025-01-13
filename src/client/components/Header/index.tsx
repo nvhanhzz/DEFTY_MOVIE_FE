@@ -1,26 +1,51 @@
 import React from 'react';
 import './Header.scss';
-import {Link} from "react-router-dom";
+import { CiSearch } from "react-icons/ci";
+import { RiHistoryFill } from "react-icons/ri";
+import { MdLanguage } from "react-icons/md";
+import { FiUser } from "react-icons/fi";
+import { FcVip } from "react-icons/fc";
+import { Link } from "react-router-dom";
+import Dropdown from "../Dropdown";
 
 const AppHeader: React.FC = () => {
     return (
-        <div className="header">
+        <header className="header">
             <div className="header__left">
-                <h2 className="header__logo">Defty</h2>
-                <Link to="/" className="header__link">For you</Link>
-                <div className="header__dropdown">
-                    <div className="header__dropdown-trigger">More</div>
-                    <div className="header__dropdown-menu">
-                        <a href="/option1" className="header__dropdown-item">Option 1</a>
-                        <a href="/option2" className="header__dropdown-item">Option 2</a>
-                        <a href="/option3" className="header__dropdown-item">Option 3</a>
-                    </div>
-                </div>
+                <Link to="/" className="header__left--logo">
+                    <img src="../../../../public/assets/images/defty.png" alt="logo" />
+                </Link>+
+                <Link to="/" className="header__left--link">For you</Link>
+                <Dropdown trigger={<div className="header__left--dropdown-trigger">More</div>}>
+                    <div className="header__left--dropdown-item">Option 1</div>
+                    <div className="header__left--dropdown-item">Option 2</div>
+                    <div className="header__left--dropdown-item">Option 3</div>
+                </Dropdown>
             </div>
             <div className="header__right">
-                <h1 className="header__title">Right</h1>
+                <div className="header__right--search">
+                    <input type="text" placeholder="Search" />
+                    <CiSearch />
+                </div>
+                <div className="header__right--information">
+                    <div className="header__right--information--item">
+                        <RiHistoryFill/>
+                        <span>History</span>
+                    </div>
+                    <div className="header__right--information--item">
+                        <MdLanguage />
+                        <span>Language</span>
+                    </div>
+                    <div className="header__right--information--item">
+                        <FiUser/>
+                        <span>Me</span>
+                    </div>
+                </div>
+                <div className="header__right--vip">
+                    <FcVip/>
+                </div>
             </div>
-        </div>
+        </header>
     );
 };
 

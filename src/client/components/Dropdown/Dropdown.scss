@@ -1,3 +1,5 @@
+@import '../../../styles/Variable.scss';
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -43,14 +45,14 @@
     & > * {
       padding: 15px 40px;
       text-decoration: none;
-      color: #9C9DA0;
+      color: $text_color1;
       font-weight: 600;
       display: flex;
       justify-content: center;
       cursor: pointer;
 
       &:hover {
-        color: #20A544;
+        color: $text_color1_hover;
         background-color: #2C2E33;
       }
     }

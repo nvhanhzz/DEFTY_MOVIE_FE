@@ -1,0 +1,48 @@
+@import "../../../styles/Variable";
+
+.app-footer {
+  background-color: #111; // Màu nền đen
+  color: #fff; // Màu chữ trắng
+  padding: 7px 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .footer-section {
+      text-align: left;
+
+      h4 {
+        //margin-bottom: 10px;
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: none; // Ẩn danh sách mặc định
+
+        li {
+          margin-bottom: 8px;
+          font-size: 14px;
+          cursor: pointer;
+          color: $text_color1;
+
+          &:hover {
+            color: $text-color1_hover;
+          }
+        }
+      }
+    }
+  }
+
+  &:hover .footer-section ul {
+    display: block; // Hiển thị tất cả danh sách khi hover vào footer
+  }
+}
