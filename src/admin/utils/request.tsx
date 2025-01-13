@@ -96,8 +96,8 @@ export const del = async (path: string): Promise<Response> => {
     });
 };
 
-export const post = async (path: string): Promise<Response> => {
+export const patchStatus = async (path: string): Promise<Response> => {
     return requestWithRefresh(path, {
-        method: 'POST',
+        method: 'PATCH',
     });
 };

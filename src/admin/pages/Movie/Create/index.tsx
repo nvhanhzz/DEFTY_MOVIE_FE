@@ -32,6 +32,9 @@ export interface Country {
         official: string;
     };
     cca3: string;
+    flags: {
+        png: string;
+    }
 }
 
 const CreateMovie: React.FC = () => {
@@ -183,10 +186,19 @@ const CreateMovie: React.FC = () => {
                                 showSearch
                                 style={{ width: 200 }}
                                 filterOption={(input, option) =>
-                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                    (option?.value ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
                                 options={nation.map((country: Country) => ({
-                                    label: country.name.common,
+                                    label: (
+                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                            <img
+                                                src={country.flags.png}
+                                                alt={`Flag of ${country.name.common}`}
+                                                style={{ width: 20, height: 15, marginRight: 8 }}
+                                            />
+                                            {country.name.common}
+                                        </div>
+                                    ),
                                     value: country.name.common,
                                 }))}
                             />

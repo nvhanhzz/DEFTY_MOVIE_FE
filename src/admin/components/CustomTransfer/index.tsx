@@ -16,9 +16,10 @@ interface CustomTransferProps {
     target: Permission[]; // Cập nhật kiểu target là Permission[]
     onChange: (nextTarget: Permission[]) => void; // Callback để cập nhật quyền đã chọn
     roleId: string; // ID của vai trò
+    statusRole: number; // Trạng thái của vai trò
 }
 
-const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onChange, roleId }) => {
+const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onChange, roleId, statusRole }) => {
     const { t } = useTranslation(); // Sử dụng hook để lấy hàm dịch
     const [selectedSourceKeys, setSelectedSourceKeys] = useState<string[]>([]);
     const [selectedTargetKeys, setSelectedTargetKeys] = useState<string[]>([]);
@@ -110,7 +111,7 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
                                 />
                                 <span className="permission-title">{item.name}</span>
                                 {/* Xóa tooltip cho icon */}
-                                <InfoCircleOutlined className="info-icon" />
+                                <InfoCircleOutlined className="info-icon"/>
                             </li>
                         ))}
 
@@ -120,13 +121,13 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
             <div className="transfer-buttons">
                 <button
                     onClick={() => showConfirm('add')}
-                    disabled={selectedSourceKeys.length === 0 || isLoading} // Disable if no checkbox is selected or loading
+                    disabled={selectedSourceKeys.length === 0 || isLoading || statusRole === 0} // Thêm điều kiện kiểm tra statusRole
                 >
                     &gt;
                 </button>
                 <button
                     onClick={() => showConfirm('remove')}
-                    disabled={selectedTargetKeys.length === 0 || isLoading} // Disable if no checkbox is selected or loading
+                    disabled={selectedTargetKeys.length === 0 || isLoading || statusRole === 0} // Thêm điều kiện kiểm tra statusRole
                 >
                     &lt;
                 </button>
@@ -151,7 +152,7 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
                             />
                             <span className="permission-title">{item.name}</span>
                             {/* Xóa tooltip cho icon */}
-                            <InfoCircleOutlined className="info-icon" />
+                            <InfoCircleOutlined className="info-icon"/>
                         </li>
                     ))}
                 </ul>

@@ -30,6 +30,7 @@ const EditRole: React.FC = () => {
                         const result = await response.json();
                         if (result.status === 200) {
                             setRole(result.data);
+                            // console.log(result.data);
                             form.setFieldsValue({
                                 name: result.data.name,
                                 description: result.data.description
@@ -138,6 +139,7 @@ const EditRole: React.FC = () => {
                         target={selectedPermissions}
                         onChange={setSelectedPermissions}
                         roleId={id as string}
+                        statusRole={role.status}
                     />
                 </>
             )}

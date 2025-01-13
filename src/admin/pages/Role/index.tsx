@@ -26,7 +26,6 @@ const RolePage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [searchKeyword, setSearchKeyword] = useState<string>('');
-    const [status, setStatus] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();

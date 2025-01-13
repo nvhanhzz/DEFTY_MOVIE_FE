@@ -1,6 +1,6 @@
 // import {getWithParams} from "../utils/getWithParams.tsx";
 import handleRequest from "../utils/handleRequest.tsx";
-import {del, get, patchFormData, postFormData} from "../utils/request.tsx";
+import {del, get, patchFormData, patchStatus, post, postFormData} from "../utils/request.tsx";
 import React from "react";
 import {getWithParams} from "../utils/getWithParams.tsx";
 
@@ -38,6 +38,10 @@ export const getMovies = (page?: number, pageSize?: number, searchKey?: string, 
     const url = `${PREFIX_MOVIE}`;
     const params = { page, pageSize, [searchKey || '']: searchValue };
     return handleRequest(getWithParams(url, params));
+};
+
+export const switchStatusMovie  = (id: string): Promise<Response> => {
+    return handleRequest(patchStatus(`${PREFIX_MOVIE}/status/${id}`));
 };
 
 export const postMovie = (option: FormData): Promise<Response> => {

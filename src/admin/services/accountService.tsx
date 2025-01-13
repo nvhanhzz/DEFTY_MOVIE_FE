@@ -1,4 +1,4 @@
-import {del, get, patchFormData, post, postFormData} from "../utils/request";
+import {del, get, patchFormData, patchStatus, post, postFormData} from "../utils/request";
 import { getWithParams } from "../utils/getWithParams.tsx";
 import handleRequest from "../utils/handleRequest.tsx";
 // import {AccountFormValues} from "../pages/Account/Create";
@@ -17,7 +17,7 @@ export const postAccount = (option: FormData): Promise<Response> => {
 };
 
 export const switchStatusAccount = (id: string): Promise<Response> => {
-    return handleRequest(post(`${PREFIX_ACCOUNT}/status/${id}`));
+    return handleRequest(patchStatus(`${PREFIX_ACCOUNT}/status/${id}`));
 };
 
 export const deleteAccounts = (ids: string[]): Promise<Response> => {

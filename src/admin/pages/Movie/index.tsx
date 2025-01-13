@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import {message, Spin, Tag} from 'antd';
+import {message, Spin, Switch, Tag} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getMovies, deleteMovie } from '../../services/movieService';
+import {getMovies, deleteMovie, switchStatusMovie} from '../../services/movieService';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
+import {Role} from "../Role";
+import {switchStatusAccount} from "../../services/accountService.tsx";
 
 export interface Movie {
     id: string;
@@ -90,6 +92,29 @@ const MoviePage: React.FC = () => {
 
     const handleCreateNewMovie = () => {
         navigate('create');
+    };
+
+    const handleSwitchStatus = async (id: string, checked: boolean) => {
+        setIsLoading(true);
+        try {
+            setData(prevData => prevData.map(item =>
+                item.id === id ? { ...item, status: checked ? 1 : 0 } : item
+            ));
+            const response = await switchStatusMovie(id);
+            if (response.status === 200) {
+                message.success(t('admin.message.updateSuccess'));
+            } else {
+                message.error(t('admin.message.updateError'));
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            setData(prevData => prevData.map(item =>
+                item.id === id ? { ...item, status: item.status === 1 ? 0 : 1 } : item
+            ));
+            message.error(t('admin.message.updateError'));
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleDeleteSelected = async (ids: React.Key[]) => {
@@ -202,14 +227,13 @@ const MoviePage: React.FC = () => {
                 dataIndex: 'status',
                 key: 'status',
                 align: 'center',
-                sorter: (a: Movie, b: Movie) => a.status - b.status,
-                render: (status) => {
-                    return (
-                        <Tag color={status === 1 ? 'blue' : 'red'}>
-                            {status === 1 ? 'Active' : 'Inactive'}
-                        </Tag>
-                    );
-                },
+                sorter: (a: Role, b: Role) => a.status - b.status,
+                render: (status, record) => (
+                    <Switch
+                        checked={status === 1}
+                        onChange={(checked) => handleSwitchStatus(record.id, checked)}
+                    />
+                ),
             },
         ],
         data: data,

@@ -19,6 +19,7 @@ const UpdateAccount: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [loading, setLoading] = useState(false);
     const [file, setFile] = useState<RcFile | null>(null);
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const [roles, setRoles] = useState<Role[]>([]);
     const [form] = Form.useForm();
     const { t } = useTranslation();
@@ -44,8 +45,7 @@ const UpdateAccount: React.FC = () => {
                         datePicker: data.dateOfBirth ? dayjs(data.dateOfBirth) : null,
                     });
                     if (data.avatar) {
-                        // setFile(null);
-                        form.setFieldsValue({ avatar: data.avatar });
+                        setAvatarUrl(data.avatar);
                     }
                 }
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -236,23 +236,18 @@ const UpdateAccount: React.FC = () => {
                                     listType="picture-card"
                                     beforeUpload={(file) => {
                                         handleAvatarChange({ file });
-                                        return false;  // Không cho phép upload tự động
+                                        return false; // Không upload tự động
                                     }}
-                                    className="avatar-uploader"
-                                    showUploadList={false}  // Ẩn danh sách file sau khi upload
+                                    showUploadList={false}
                                 >
-                                    <img
-                                        src={file ? URL.createObjectURL(file as Blob) : 'https://th.bing.com/th/id/OIP.lMA6AEzLnoPpw177nVhYZgHaHa?pid=ImgDet&w=184&h=184&c=7&dpr=1.3'}
-                                        // src={
-                                        //     file
-                                        //         ? URL.createObjectURL(file as Blob) // Hiển thị file người dùng upload
-                                        //         : form.getFieldValue('avatar') // Hiển thị avatar sẵn có từ tài khoản
-                                        //             ? form.getFieldValue('avatar')
-                                        //             : 'https://via.placeholder.com/150' // URL mặc định nếu không có avatar
-                                        // }
-                                        alt="avatar"
-                                        className="avatar-image"
-                                    />
+                                    {avatarUrl ? (
+                                        <img src={avatarUrl} alt="avatar" style={{ width: '100%' }} />
+                                    ) : (
+                                        <div>
+                                            <UploadOutlined />
+                                            <div style={{ marginTop: 8 }}>{t('admin.director.upload')}</div>
+                                        </div>
+                                    )}
                                 </Upload>
                                 <Button className="upload-button">
                                     <UploadOutlined /> {t('admin.account.upload')}

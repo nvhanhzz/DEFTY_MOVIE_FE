@@ -1,5 +1,5 @@
 import { Role } from "../pages/Role";
-import {del, get, patchJson, post, postJson} from "../utils/request";
+import {del, get, patchJson, patchStatus, postJson} from "../utils/request";
 import { getWithParams } from "../utils/getWithParams.tsx";
 import handleRequest from "../utils/handleRequest.tsx";
 
@@ -24,7 +24,7 @@ export const updateRoleById = (id: string, option: Role): Promise<Response> => {
 };
 
 export const switchStatus = (id: string): Promise<Response> => {
-    return handleRequest(post(`${PREFIX_ROLE}/status/${id}`));
+    return handleRequest(patchStatus(`${PREFIX_ROLE}/status/${id}`));
 };
 
 export const deleteRole = (ids: string[]): Promise<Response> => {

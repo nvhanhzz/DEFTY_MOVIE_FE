@@ -179,6 +179,11 @@
                 "updatePermissionButton": "Update Permission"
             }
         },
+        "membership-packet": {
+            "title": "Membership Packets",
+            "nameColumn": "Membership Packet",
+            "descriptionColumn": "Description"
+        },
         "setting": {
             "title": "Settings",
             "language": "Language"

@@ -26,6 +26,9 @@ import UpdateDirector from "../pages/Director/Update";
 import EpisodePage from "../pages/Episode";
 import CreateEpisode from "../pages/Episode/Create";
 import UpdateEpisode from "../pages/Episode/Update";
+import MembershipPacketPage from "../pages/MembershipPackage";
+import CreateMembershipPacket from "../pages/MembershipPackage/Create";
+import EditMembershipPacket from "../pages/MembershipPackage/Update";
 import CategoryPage from "../pages/Category";
 import CreateCategory from "../pages/Category/Create";
 import UpdateCategory from "../pages/Category/Update";
@@ -142,32 +145,16 @@ const DefaultRoutes: RouteType[] = [
         element: <UpdateDirector />,
     },
     {
-        path: 'categories',
-        element: <CategoryPage />,
+        path: 'membership-packets',
+        element: <MembershipPacketPage />,
     },
     {
-        path: 'category/create',
-        element: <CreateCategory />,
+        path: 'membership-packets/update/:id',
+        element: <EditMembershipPacket />,
     },
     {
-        path: 'category/update/:id',
-        element: <UpdateCategory />,
-    },
-    {
-        path: 'actors',
-        element: <ActorPage />,
-    },
-    {
-        path: 'actors/create',
-        element: <CreateActor />,
-    },
-    {
-        path: 'actors/update/:id',
-        element: <UpdateActor />,
-    },
-    {
-        path: 'test',
-        element: <Test />,
+        path: 'membership-packets/create',
+        element: <CreateMembershipPacket />,
     },
     {
         path: 'settings',
