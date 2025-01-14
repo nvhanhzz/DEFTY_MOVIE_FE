@@ -68,7 +68,7 @@ const ActorPage: React.FC = () => {
         {
             type: 'dateRange',
             label: t('admin.director.dateOfBirth'),
-            name: 'dateOfBirth',
+            name: 'date_of_birth',
             placeholder: t('admin.director.dateOfBirth'),
         },
         {
@@ -103,6 +103,7 @@ const ActorPage: React.FC = () => {
         try {
             const response = await getActors(page, pageSize, filters); // Gọi API với từ khóa
             const result = await response.json();
+            console.log(result);
             if (!response.ok || result.status === 404) {
                 setTotalItems(0);
                 setData([]);
@@ -110,6 +111,7 @@ const ActorPage: React.FC = () => {
             }
 
             const content: Actor[] = result.data.content;
+            console.log(content);
             const actors = content.map((item: Actor) => ({
                 ...item,
                 key: item.id,
@@ -118,6 +120,7 @@ const ActorPage: React.FC = () => {
             setData(actors);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
+            console.log(error);
             message.error(t('admin.message.fetchError'));
         } finally {
             setIsLoading(false);

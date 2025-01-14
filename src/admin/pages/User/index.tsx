@@ -68,7 +68,7 @@ const UserPage: React.FC = () => {
         {
             type: 'dateRange',
             label: t('admin.user.dateOfBirth'),
-            name: 'dateOfBirth',
+            name: 'date_of_birth',
             placeholder: t('admin.user.dateOfBirth'),
         },
         {

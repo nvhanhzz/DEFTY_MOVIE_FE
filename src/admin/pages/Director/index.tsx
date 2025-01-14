@@ -64,7 +64,7 @@ const DirectorPage: React.FC = () => {
         {
             type: 'dateRange',
             label: t('admin.director.dateOfBirth'),
-            name: 'dateOfBirth',
+            name: 'date_of_birth',
             placeholder: t('admin.director.dateOfBirth'),
         },
         {
