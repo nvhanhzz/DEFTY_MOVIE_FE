@@ -1,0 +1,64 @@
+.carousel {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+
+  .carousel-container {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Hiệu ứng mượt */
+    transform: translateX(0); /* Dịch chuyển theo chiều ngang */
+  }
+
+  .carousel-slide {
+    flex: 0 0 100%; /* Mỗi slide chiếm 100% chiều rộng container */
+    width: 100%;
+  }
+
+  .carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 10;
+
+    &.prev {
+      left: 20px;
+    }
+
+    &.next {
+      right: 20px;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.8);
+      color: black;
+    }
+  }
+
+  .carousel-dots {
+    display: flex;
+    justify-content: right;
+    margin-top: -30px;
+    margin-right: 20px;
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      margin: 0 5px;
+      background: rgba(129, 107, 107, 0.5) !important;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 1001;
+
+      &.active {
+        background: rgba(255, 255, 255, 1) !important;
+      }
+    }
+  }
+}

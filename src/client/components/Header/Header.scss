@@ -1,12 +1,18 @@
 @import "../../../styles/Variable";
 
 .header {
+  position: fixed; /* Cố định header ở trên cùng */
+  top: 0;
+  left: 0;
+  width: calc(100% - 2 * 64px);
+  height: 72px;
+  //background-color: rgba(10, 12, 15, 0); /* Màu nền mờ */
+  backdrop-filter: blur(3px); /* Làm mờ phần nền phía sau */
+  z-index: 1000; /* Đảm bảo nằm trên các phần tử khác */
   display: flex;
   justify-content: space-between;
   padding: 0 64px;
   align-items: center;
-  height: 72px;
-  background-color: #0A0C0F;
 
   /* Left Section */
   &__left {
@@ -41,7 +47,7 @@
       transition: color 0.3s;
 
       &:hover {
-        color: #007bff;
+        color: $text_color1_hover;
       }
     }
 
@@ -52,7 +58,7 @@
       transition: color 0.3s;
 
       &:hover {
-        color: #007bff;
+        color: $text_color1_hover;
       }
     }
 
@@ -142,7 +148,7 @@
         }
 
         span {
-          font-size: 12px; /* Kích thước chữ nhỏ hơn */
+          font-size: 12px !important; /* Kích thước chữ nhỏ hơn */
         }
 
         &:hover {

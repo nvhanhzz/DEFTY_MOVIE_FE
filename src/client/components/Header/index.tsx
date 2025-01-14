@@ -14,7 +14,7 @@ const AppHeader: React.FC = () => {
             <div className="header__left">
                 <Link to="/" className="header__left--logo">
                     <img src="../../../../public/assets/images/defty.png" alt="logo" />
-                </Link>+
+                </Link>
                 <Link to="/" className="header__left--link">For you</Link>
                 <Dropdown trigger={<div className="header__left--dropdown-trigger">More</div>}>
                     <div className="header__left--dropdown-item">Option 1</div>
