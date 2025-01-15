@@ -2,18 +2,10 @@ import React from "react";
 import { MdOutlineStar } from "react-icons/md";
 import { FaCirclePlay } from "react-icons/fa6";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
+import { Movie } from "../MovieCard";
 import "./RecommendedMovie.scss";
 
-interface RecommendedMovieProps {
-    name: string; // Tên phim
-    category: string[]; // Danh mục thể loại
-    rating: number; // Đánh giá phim
-    releaseDate: string; // Ngày phát hành
-    description: string; // Mô tả phim
-    thumbnail: string; // URL ảnh nền
-}
-
-const RecommendedMovie: React.FC<RecommendedMovieProps> = ({
+const RecommendedMovie: React.FC<Movie> = ({
                                                                name,
                                                                category,
                                                                rating,

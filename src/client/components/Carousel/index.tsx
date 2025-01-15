@@ -1,15 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
 import "./Carousel.scss";
 import RecommendedMovie from "../RecommendedMovie";
-
-interface Movie {
-    name: string;
-    category: string[];
-    rating: number;
-    releaseDate: string;
-    description: string;
-    thumbnail: string;
-}
+import { Movie } from "../MovieCard";
 
 const Carousel: React.FC = () => {
     const movies: Movie[] = [
