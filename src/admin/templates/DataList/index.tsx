@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Input, Row, Col, Space, Popconfirm, Pagination } from 'antd';
-import { SearchOutlined, PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { SearchOutlined, PlusOutlined, DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import type { TableColumnsType } from 'antd';
 import type { ColumnType, FilterValue, SorterResult, TableCurrentDataSource, TablePaginationConfig } from 'antd/es/table/interface';
 import { useTranslation } from 'react-i18next';
@@ -10,9 +10,10 @@ export interface DataListConfig<T> {
     columns: TableColumnsType<T>;
     data: T[];
     rowKey: string;
-    onCreateNew: () => void;
-    onUpdate: (id: string) => void;
-    onDeleteSelected: (ids: React.Key[]) => void; // Xóa nhiều mục
+    onCreateNew?: () => void;
+    onUpdate?: (id: string) => void;
+    onDeleteSelected?: (ids: React.Key[]) => void;
+    onViewDetail?: (id: string) => void;
     search?: {
         keyword?: string;
         onSearch: (value: string) => void;
@@ -53,15 +54,22 @@ const DataListTemplate = <T extends { id: string }>( { config }: { config: DataL
         align: 'center',
         render: (record: T) => (
             <Space className="data-list__action-buttons">
-                <Button className="data-list__action-button data-list__action-button--edit" icon={<EditOutlined />} onClick={() => config.onUpdate(record.id)} />
-                <Popconfirm
-                    title={t('admin.dataList.deleteConfirm')}
-                    onConfirm={() => config.onDeleteSelected([record.id])} // Sử dụng onDeleteSelected thay vì onDelete
-                    okText={t('admin.dataList.deleteSelectedConfirm')}
-                    cancelText={t('admin.dataList.deleteSelectedCancel')}
-                >
-                    <Button className="data-list__action-button data-list__action-button--delete" icon={<DeleteOutlined />} />
-                </Popconfirm>
+                { config.onViewDetail && (
+                    <Button className="data-list__action-button data-list__action-button--view" icon={<EyeOutlined />} onClick={() => config.onViewDetail && config.onViewDetail(record.id)} />
+                )}
+                { config.onUpdate && (
+                    <Button className="data-list__action-button data-list__action-button--edit" icon={<EditOutlined />} onClick={() => config.onUpdate && config.onUpdate(record.id)} />
+                )}
+                { config.onDeleteSelected && (
+                    <Popconfirm
+                        title={t('admin.dataList.deleteConfirm')}
+                        onConfirm={() => config.onDeleteSelected && config.onDeleteSelected([record.id])} // Sử dụng onDeleteSelected thay vì onDelete
+                        okText={t('admin.dataList.deleteSelectedConfirm')}
+                        cancelText={t('admin.dataList.deleteSelectedCancel')}
+                    >
+                        <Button className="data-list__action-button data-list__action-button--delete" icon={<DeleteOutlined />} />
+                    </Popconfirm>
+                )}
             </Space>
         ),
     };
@@ -70,9 +78,11 @@ const DataListTemplate = <T extends { id: string }>( { config }: { config: DataL
         <>
             <Row justify="space-between" className="data-list__header">
                 <Col>
-                    <Button className="data-list__create-button" type="primary" icon={<PlusOutlined />} onClick={config.onCreateNew}>
-                        {t('admin.dataList.createNewButton')}
-                    </Button>
+                    {config.onCreateNew && (
+                        <Button className="data-list__create-button" type="primary" icon={<PlusOutlined />} onClick={config.onCreateNew}>
+                            {t('admin.dataList.createNewButton')}
+                        </Button>
+                    )}
                 </Col>
                 <Col>
                     {config.search && (
@@ -90,11 +100,11 @@ const DataListTemplate = <T extends { id: string }>( { config }: { config: DataL
 
             <Table<T>
                 className="data-list__table"
-                columns={[...config.columns, actionColumn]}
+                columns={(config.onViewDetail || config.onUpdate || config.onDeleteSelected) ? [...config.columns, actionColumn] : config.columns }
                 dataSource={config.data}
                 rowKey={config.rowKey}
                 pagination={false}
-                onChange={handleTableChange} // Vẫn giữ nguyên logic phân trang và sắp xếp
+                onChange={handleTableChange}
                 rowSelection={{
                     selectedRowKeys: selectedIds,
                     onChange: (keys) => setSelectedIds(keys),
@@ -103,21 +113,23 @@ const DataListTemplate = <T extends { id: string }>( { config }: { config: DataL
 
             <Row justify="space-between" className="data-list__footer" style={{ marginTop: '16px' }}>
                 <Col>
-                    <Popconfirm
-                        title={t('admin.dataList.deleteConfirm')}
-                        onConfirm={() => config.onDeleteSelected(selectedIds)}  // Xóa nhiều mục khi chọn checkbox
-                        okText={t('admin.dataList.deleteSelectedConfirm')}
-                        cancelText={t('admin.dataList.deleteSelectedCancel')}
-                    >
-                        <Button
-                            className="data-list__delete-selected-button"
-                            type="primary"
-                            danger
-                            disabled={selectedIds.length === 0}
+                    {config.onDeleteSelected && (
+                        <Popconfirm
+                            title={t('admin.dataList.deleteConfirm')}
+                            onConfirm={() => config.onDeleteSelected && config.onDeleteSelected(selectedIds)}  // Xóa nhiều mục khi chọn checkbox
+                            okText={t('admin.dataList.deleteSelectedConfirm')}
+                            cancelText={t('admin.dataList.deleteSelectedCancel')}
                         >
-                            {t('admin.dataList.deleteSelectedButton')}
-                        </Button>
-                    </Popconfirm>
+                            <Button
+                                className="data-list__delete-selected-button"
+                                type="primary"
+                                danger
+                                disabled={selectedIds.length === 0}
+                            >
+                                {t('admin.dataList.deleteSelectedButton')}
+                            </Button>
+                        </Popconfirm>
+                    )}
                 </Col>
                 <Col>
                     <Pagination

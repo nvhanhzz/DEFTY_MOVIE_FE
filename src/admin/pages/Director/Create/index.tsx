@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, message, Upload, DatePicker, Select, Row, Col } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Button, Form, Input, message, DatePicker, Select, Row, Col } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
 import './CreateDirector.scss';
-import { RcFile } from "antd/es/upload";
 import {postDirector} from "../../../services/directorService.tsx";
+import CountrySelect from "../../../components/CountrySelect";
+import AvtEditor from "../../../components/AvtEditor";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -18,12 +18,12 @@ export interface DirectorFromValues {
     height: number;
     nationality: string;
     description: string;
-    avatar?: RcFile;
+    avatar?: File;
 }
 
 const CreateDirector: React.FC = () => {
     const [loading, setLoading] = useState(false);
-    const [file, setFile] = useState<RcFile | null>(null);
+    const [file, setFile] = useState<File | null>(null);
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -65,7 +65,7 @@ const CreateDirector: React.FC = () => {
         }
     };
 
-    const handleAvatarChange = ({ file }: { file: RcFile }) => {
+    const handleAvatarSave = (file: File | null) => {
         setFile(file);
     };
 
@@ -122,19 +122,19 @@ const CreateDirector: React.FC = () => {
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.weight')}
+                            label={t('admin.director.weight') + ' (kg)'}
                             name="weight"
                             rules={[{ required: true, message: t('admin.director.create.validation.weight') }]}
                         >
-                            <Input type="number" />
+                            <Input type="number" min={0}/>
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.director.height')}
+                            label={t('admin.director.height') + ' (cm)'}
                             name="height"
                             rules={[{ required: true, message: t('admin.director.create.validation.height') }]}
                         >
-                            <Input type="number" />
+                            <Input type="number" min={0}/>
                         </Form.Item>
 
                         <Form.Item
@@ -142,7 +142,11 @@ const CreateDirector: React.FC = () => {
                             name="nationality"
                             rules={[{ required: true, message: t('admin.director.create.validation.nationality') }]}
                         >
-                            <Input />
+                            <CountrySelect
+                                placeholder={t('admin.form.selectNationality')}
+                                onChange={(value) => form.setFieldsValue({ nationality: value })}
+                                type='nationality'
+                            />
                         </Form.Item>
 
                         <Form.Item
@@ -156,26 +160,10 @@ const CreateDirector: React.FC = () => {
 
                     <Col span={8} className="avatar-col">
                         <Form.Item label={t('admin.director.avatar')} className="avatar-wrapper">
-                            <div className="avatar-preview">
-                                <Upload
-                                    listType="picture-card"
-                                    beforeUpload={(file) => {
-                                        handleAvatarChange({ file });
-                                        return false;  // Không cho phép upload tự động
-                                    }}
-                                    className="avatar-uploader"
-                                    showUploadList={false}  // Ẩn danh sách file sau khi upload
-                                >
-                                    <img
-                                        src={file ? URL.createObjectURL(file as Blob) : 'https://th.bing.com/th/id/OIP.lMA6AEzLnoPpw177nVhYZgHaHa?pid=ImgDet&w=184&h=184&c=7&dpr=1.3'}
-                                        alt="avatar"
-                                        className="avatar-image"
-                                    />
-                                </Upload>
-                                <Button className="upload-button">
-                                    <UploadOutlined /> {t('admin.director.upload')}
-                                </Button>
-                            </div>
+                            <AvtEditor
+                                onSave={handleAvatarSave}
+                                initialImage={file ? URL.createObjectURL(file) : undefined}
+                            />
                         </Form.Item>
                     </Col>
                 </Row>

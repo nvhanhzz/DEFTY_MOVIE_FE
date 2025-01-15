@@ -1,0 +1,1252 @@
+[
+  {
+    "name": "Afghanistan",
+    "flag": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_the_Taliban.svg/320px-Flag_of_the_Taliban.svg.png",
+    "nationality": "Afghan"
+  },
+  {
+    "name": "Åland Islands",
+    "flag": "https://flagcdn.com/w320/ax.png",
+    "nationality": "Ålandish"
+  },
+  {
+    "name": "Albania",
+    "flag": "https://flagcdn.com/w320/al.png",
+    "nationality": "Albanian"
+  },
+  {
+    "name": "Algeria",
+    "flag": "https://flagcdn.com/w320/dz.png",
+    "nationality": "Algerian"
+  },
+  {
+    "name": "American Samoa",
+    "flag": "https://flagcdn.com/w320/as.png",
+    "nationality": "American Samoan"
+  },
+  {
+    "name": "Andorra",
+    "flag": "https://flagcdn.com/w320/ad.png",
+    "nationality": "Andorran"
+  },
+  {
+    "name": "Angola",
+    "flag": "https://flagcdn.com/w320/ao.png",
+    "nationality": "Angolan"
+  },
+  {
+    "name": "Anguilla",
+    "flag": "https://flagcdn.com/w320/ai.png",
+    "nationality": "Anguillian"
+  },
+  {
+    "name": "Antarctica",
+    "flag": "https://flagcdn.com/w320/aq.png",
+    "nationality": "Antarctican"
+  },
+  {
+    "name": "Antigua and Barbuda",
+    "flag": "https://flagcdn.com/w320/ag.png",
+    "nationality": "Antiguan, Barbudan"
+  },
+  {
+    "name": "Argentina",
+    "flag": "https://flagcdn.com/w320/ar.png",
+    "nationality": "Argentine"
+  },
+  {
+    "name": "Armenia",
+    "flag": "https://flagcdn.com/w320/am.png",
+    "nationality": "Armenian"
+  },
+  {
+    "name": "Aruba",
+    "flag": "https://flagcdn.com/w320/aw.png",
+    "nationality": "Aruban"
+  },
+  {
+    "name": "Australia",
+    "flag": "https://flagcdn.com/w320/au.png",
+    "nationality": "Australian"
+  },
+  {
+    "name": "Austria",
+    "flag": "https://flagcdn.com/w320/at.png",
+    "nationality": "Austrian"
+  },
+  {
+    "name": "Azerbaijan",
+    "flag": "https://flagcdn.com/w320/az.png",
+    "nationality": "Azerbaijani"
+  },
+  {
+    "name": "Bahamas",
+    "flag": "https://flagcdn.com/w320/bs.png",
+    "nationality": "Bahamian"
+  },
+  {
+    "name": "Bahrain",
+    "flag": "https://flagcdn.com/w320/bh.png",
+    "nationality": "Bahraini"
+  },
+  {
+    "name": "Bangladesh",
+    "flag": "https://flagcdn.com/w320/bd.png",
+    "nationality": "Bangladeshi"
+  },
+  {
+    "name": "Barbados",
+    "flag": "https://flagcdn.com/w320/bb.png",
+    "nationality": "Barbadian"
+  },
+  {
+    "name": "Belarus",
+    "flag": "https://flagcdn.com/w320/by.png",
+    "nationality": "Belarusian"
+  },
+  {
+    "name": "Belgium",
+    "flag": "https://flagcdn.com/w320/be.png",
+    "nationality": "Belgian"
+  },
+  {
+    "name": "Belize",
+    "flag": "https://flagcdn.com/w320/bz.png",
+    "nationality": "Belizean"
+  },
+  {
+    "name": "Benin",
+    "flag": "https://flagcdn.com/w320/bj.png",
+    "nationality": "Beninese"
+  },
+  {
+    "name": "Bermuda",
+    "flag": "https://flagcdn.com/w320/bm.png",
+    "nationality": "Bermudian"
+  },
+  {
+    "name": "Bhutan",
+    "flag": "https://flagcdn.com/w320/bt.png",
+    "nationality": "Bhutanese"
+  },
+  {
+    "name": "Bolivia",
+    "flag": "https://flagcdn.com/w320/bo.png",
+    "nationality": "Bolivian"
+  },
+  {
+    "name": "Bosnia and Herzegovina",
+    "flag": "https://flagcdn.com/w320/ba.png",
+    "nationality": "Bosnian, Herzegovinian"
+  },
+  {
+    "name": "Botswana",
+    "flag": "https://flagcdn.com/w320/bw.png",
+    "nationality": "Motswana"
+  },
+  {
+    "name": "Bouvet Island",
+    "flag": "https://flagcdn.com/w320/bv.png",
+    "nationality": "Unknown"
+  },
+  {
+    "name": "Brazil",
+    "flag": "https://flagcdn.com/w320/br.png",
+    "nationality": "Brazilian"
+  },
+  {
+    "name": "British Indian Ocean Territory",
+    "flag": "https://flagcdn.com/w320/io.png",
+    "nationality": "Indian"
+  },
+  {
+    "name": "British Virgin Islands",
+    "flag": "https://flagcdn.com/w320/vg.png",
+    "nationality": "Virgin Islander"
+  },
+  {
+    "name": "Brunei",
+    "flag": "https://flagcdn.com/w320/bn.png",
+    "nationality": "Bruneian"
+  },
+  {
+    "name": "Bulgaria",
+    "flag": "https://flagcdn.com/w320/bg.png",
+    "nationality": "Bulgarian"
+  },
+  {
+    "name": "Burkina Faso",
+    "flag": "https://flagcdn.com/w320/bf.png",
+    "nationality": "Burkinabe"
+  },
+  {
+    "name": "Burundi",
+    "flag": "https://flagcdn.com/w320/bi.png",
+    "nationality": "Burundian"
+  },
+  {
+    "name": "Cambodia",
+    "flag": "https://flagcdn.com/w320/kh.png",
+    "nationality": "Cambodian"
+  },
+  {
+    "name": "Cameroon",
+    "flag": "https://flagcdn.com/w320/cm.png",
+    "nationality": "Cameroonian"
+  },
+  {
+    "name": "Canada",
+    "flag": "https://flagcdn.com/w320/ca.png",
+    "nationality": "Canadian"
+  },
+  {
+    "name": "Cape Verde",
+    "flag": "https://flagcdn.com/w320/cv.png",
+    "nationality": "Cape Verdian"
+  },
+  {
+    "name": "Caribbean Netherlands",
+    "flag": "https://flagcdn.com/w320/bq.png",
+    "nationality": "Dutch"
+  },
+  {
+    "name": "Cayman Islands",
+    "flag": "https://flagcdn.com/w320/ky.png",
+    "nationality": "Caymanian"
+  },
+  {
+    "name": "Central African Republic",
+    "flag": "https://flagcdn.com/w320/cf.png",
+    "nationality": "Central African"
+  },
+  {
+    "name": "Chad",
+    "flag": "https://flagcdn.com/w320/td.png",
+    "nationality": "Chadian"
+  },
+  {
+    "name": "Chile",
+    "flag": "https://flagcdn.com/w320/cl.png",
+    "nationality": "Chilean"
+  },
+  {
+    "name": "China",
+    "flag": "https://flagcdn.com/w320/cn.png",
+    "nationality": "Chinese"
+  },
+  {
+    "name": "Christmas Island",
+    "flag": "https://flagcdn.com/w320/cx.png",
+    "nationality": "Christmas Islander"
+  },
+  {
+    "name": "Cocos (Keeling) Islands",
+    "flag": "https://flagcdn.com/w320/cc.png",
+    "nationality": "Cocos Islander"
+  },
+  {
+    "name": "Colombia",
+    "flag": "https://flagcdn.com/w320/co.png",
+    "nationality": "Colombian"
+  },
+  {
+    "name": "Comoros",
+    "flag": "https://flagcdn.com/w320/km.png",
+    "nationality": "Comoran"
+  },
+  {
+    "name": "Cook Islands",
+    "flag": "https://flagcdn.com/w320/ck.png",
+    "nationality": "Cook Islander"
+  },
+  {
+    "name": "Costa Rica",
+    "flag": "https://flagcdn.com/w320/cr.png",
+    "nationality": "Costa Rican"
+  },
+  {
+    "name": "Croatia",
+    "flag": "https://flagcdn.com/w320/hr.png",
+    "nationality": "Croatian"
+  },
+  {
+    "name": "Cuba",
+    "flag": "https://flagcdn.com/w320/cu.png",
+    "nationality": "Cuban"
+  },
+  {
+    "name": "Curaçao",
+    "flag": "https://flagcdn.com/w320/cw.png",
+    "nationality": "Curaçaoan"
+  },
+  {
+    "name": "Cyprus",
+    "flag": "https://flagcdn.com/w320/cy.png",
+    "nationality": "Cypriot"
+  },
+  {
+    "name": "Czechia",
+    "flag": "https://flagcdn.com/w320/cz.png",
+    "nationality": "Czech"
+  },
+  {
+    "name": "Denmark",
+    "flag": "https://flagcdn.com/w320/dk.png",
+    "nationality": "Danish"
+  },
+  {
+    "name": "Djibouti",
+    "flag": "https://flagcdn.com/w320/dj.png",
+    "nationality": "Djibouti"
+  },
+  {
+    "name": "Dominica",
+    "flag": "https://flagcdn.com/w320/dm.png",
+    "nationality": "Dominican"
+  },
+  {
+    "name": "Dominican Republic",
+    "flag": "https://flagcdn.com/w320/do.png",
+    "nationality": "Dominican"
+  },
+  {
+    "name": "DR Congo",
+    "flag": "https://flagcdn.com/w320/cd.png",
+    "nationality": "Congolese"
+  },
+  {
+    "name": "Ecuador",
+    "flag": "https://flagcdn.com/w320/ec.png",
+    "nationality": "Ecuadorean"
+  },
+  {
+    "name": "Egypt",
+    "flag": "https://flagcdn.com/w320/eg.png",
+    "nationality": "Egyptian"
+  },
+  {
+    "name": "El Salvador",
+    "flag": "https://flagcdn.com/w320/sv.png",
+    "nationality": "Salvadoran"
+  },
+  {
+    "name": "Equatorial Guinea",
+    "flag": "https://flagcdn.com/w320/gq.png",
+    "nationality": "Equatorial Guinean"
+  },
+  {
+    "name": "Eritrea",
+    "flag": "https://flagcdn.com/w320/er.png",
+    "nationality": "Eritrean"
+  },
+  {
+    "name": "Estonia",
+    "flag": "https://flagcdn.com/w320/ee.png",
+    "nationality": "Estonian"
+  },
+  {
+    "name": "Eswatini",
+    "flag": "https://flagcdn.com/w320/sz.png",
+    "nationality": "Swazi"
+  },
+  {
+    "name": "Ethiopia",
+    "flag": "https://flagcdn.com/w320/et.png",
+    "nationality": "Ethiopian"
+  },
+  {
+    "name": "Falkland Islands",
+    "flag": "https://flagcdn.com/w320/fk.png",
+    "nationality": "Falkland Islander"
+  },
+  {
+    "name": "Faroe Islands",
+    "flag": "https://flagcdn.com/w320/fo.png",
+    "nationality": "Faroese"
+  },
+  {
+    "name": "Fiji",
+    "flag": "https://flagcdn.com/w320/fj.png",
+    "nationality": "Fijian"
+  },
+  {
+    "name": "Finland",
+    "flag": "https://flagcdn.com/w320/fi.png",
+    "nationality": "Finnish"
+  },
+  {
+    "name": "France",
+    "flag": "https://flagcdn.com/w320/fr.png",
+    "nationality": "French"
+  },
+  {
+    "name": "French Guiana",
+    "flag": "https://flagcdn.com/w320/gf.png",
+    "nationality": "Guianan"
+  },
+  {
+    "name": "French Polynesia",
+    "flag": "https://flagcdn.com/w320/pf.png",
+    "nationality": "French Polynesian"
+  },
+  {
+    "name": "French Southern and Antarctic Lands",
+    "flag": "https://flagcdn.com/w320/tf.png",
+    "nationality": "French"
+  },
+  {
+    "name": "Gabon",
+    "flag": "https://flagcdn.com/w320/ga.png",
+    "nationality": "Gabonese"
+  },
+  {
+    "name": "Gambia",
+    "flag": "https://flagcdn.com/w320/gm.png",
+    "nationality": "Gambian"
+  },
+  {
+    "name": "Georgia",
+    "flag": "https://flagcdn.com/w320/ge.png",
+    "nationality": "Georgian"
+  },
+  {
+    "name": "Germany",
+    "flag": "https://flagcdn.com/w320/de.png",
+    "nationality": "German"
+  },
+  {
+    "name": "Ghana",
+    "flag": "https://flagcdn.com/w320/gh.png",
+    "nationality": "Ghanaian"
+  },
+  {
+    "name": "Gibraltar",
+    "flag": "https://flagcdn.com/w320/gi.png",
+    "nationality": "Gibraltar"
+  },
+  {
+    "name": "Greece",
+    "flag": "https://flagcdn.com/w320/gr.png",
+    "nationality": "Greek"
+  },
+  {
+    "name": "Greenland",
+    "flag": "https://flagcdn.com/w320/gl.png",
+    "nationality": "Greenlandic"
+  },
+  {
+    "name": "Grenada",
+    "flag": "https://flagcdn.com/w320/gd.png",
+    "nationality": "Grenadian"
+  },
+  {
+    "name": "Guadeloupe",
+    "flag": "https://flagcdn.com/w320/gp.png",
+    "nationality": "Guadeloupian"
+  },
+  {
+    "name": "Guam",
+    "flag": "https://flagcdn.com/w320/gu.png",
+    "nationality": "Guamanian"
+  },
+  {
+    "name": "Guatemala",
+    "flag": "https://flagcdn.com/w320/gt.png",
+    "nationality": "Guatemalan"
+  },
+  {
+    "name": "Guernsey",
+    "flag": "https://flagcdn.com/w320/gg.png",
+    "nationality": "Channel Islander"
+  },
+  {
+    "name": "Guinea",
+    "flag": "https://flagcdn.com/w320/gn.png",
+    "nationality": "Guinean"
+  },
+  {
+    "name": "Guinea-Bissau",
+    "flag": "https://flagcdn.com/w320/gw.png",
+    "nationality": "Guinea-Bissauan"
+  },
+  {
+    "name": "Guyana",
+    "flag": "https://flagcdn.com/w320/gy.png",
+    "nationality": "Guyanese"
+  },
+  {
+    "name": "Haiti",
+    "flag": "https://flagcdn.com/w320/ht.png",
+    "nationality": "Haitian"
+  },
+  {
+    "name": "Heard Island and McDonald Islands",
+    "flag": "https://flagcdn.com/w320/hm.png",
+    "nationality": "Heard and McDonald Islander"
+  },
+  {
+    "name": "Honduras",
+    "flag": "https://flagcdn.com/w320/hn.png",
+    "nationality": "Honduran"
+  },
+  {
+    "name": "Hong Kong",
+    "flag": "https://flagcdn.com/w320/hk.png",
+    "nationality": "Hong Konger"
+  },
+  {
+    "name": "Hungary",
+    "flag": "https://flagcdn.com/w320/hu.png",
+    "nationality": "Hungarian"
+  },
+  {
+    "name": "Iceland",
+    "flag": "https://flagcdn.com/w320/is.png",
+    "nationality": "Icelander"
+  },
+  {
+    "name": "India",
+    "flag": "https://flagcdn.com/w320/in.png",
+    "nationality": "Indian"
+  },
+  {
+    "name": "Indonesia",
+    "flag": "https://flagcdn.com/w320/id.png",
+    "nationality": "Indonesian"
+  },
+  {
+    "name": "Iran",
+    "flag": "https://flagcdn.com/w320/ir.png",
+    "nationality": "Iranian"
+  },
+  {
+    "name": "Iraq",
+    "flag": "https://flagcdn.com/w320/iq.png",
+    "nationality": "Iraqi"
+  },
+  {
+    "name": "Ireland",
+    "flag": "https://flagcdn.com/w320/ie.png",
+    "nationality": "Irish"
+  },
+  {
+    "name": "Isle of Man",
+    "flag": "https://flagcdn.com/w320/im.png",
+    "nationality": "Manx"
+  },
+  {
+    "name": "Israel",
+    "flag": "https://flagcdn.com/w320/il.png",
+    "nationality": "Israeli"
+  },
+  {
+    "name": "Italy",
+    "flag": "https://flagcdn.com/w320/it.png",
+    "nationality": "Italian"
+  },
+  {
+    "name": "Ivory Coast",
+    "flag": "https://flagcdn.com/w320/ci.png",
+    "nationality": "Ivorian"
+  },
+  {
+    "name": "Jamaica",
+    "flag": "https://flagcdn.com/w320/jm.png",
+    "nationality": "Jamaican"
+  },
+  {
+    "name": "Japan",
+    "flag": "https://flagcdn.com/w320/jp.png",
+    "nationality": "Japanese"
+  },
+  {
+    "name": "Jersey",
+    "flag": "https://flagcdn.com/w320/je.png",
+    "nationality": "Channel Islander"
+  },
+  {
+    "name": "Jordan",
+    "flag": "https://flagcdn.com/w320/jo.png",
+    "nationality": "Jordanian"
+  },
+  {
+    "name": "Kazakhstan",
+    "flag": "https://flagcdn.com/w320/kz.png",
+    "nationality": "Kazakhstani"
+  },
+  {
+    "name": "Kenya",
+    "flag": "https://flagcdn.com/w320/ke.png",
+    "nationality": "Kenyan"
+  },
+  {
+    "name": "Kiribati",
+    "flag": "https://flagcdn.com/w320/ki.png",
+    "nationality": "I-Kiribati"
+  },
+  {
+    "name": "Kosovo",
+    "flag": "https://flagcdn.com/w320/xk.png",
+    "nationality": "Kosovar"
+  },
+  {
+    "name": "Kuwait",
+    "flag": "https://flagcdn.com/w320/kw.png",
+    "nationality": "Kuwaiti"
+  },
+  {
+    "name": "Kyrgyzstan",
+    "flag": "https://flagcdn.com/w320/kg.png",
+    "nationality": "Kirghiz"
+  },
+  {
+    "name": "Laos",
+    "flag": "https://flagcdn.com/w320/la.png",
+    "nationality": "Laotian"
+  },
+  {
+    "name": "Latvia",
+    "flag": "https://flagcdn.com/w320/lv.png",
+    "nationality": "Latvian"
+  },
+  {
+    "name": "Lebanon",
+    "flag": "https://flagcdn.com/w320/lb.png",
+    "nationality": "Lebanese"
+  },
+  {
+    "name": "Lesotho",
+    "flag": "https://flagcdn.com/w320/ls.png",
+    "nationality": "Mosotho"
+  },
+  {
+    "name": "Liberia",
+    "flag": "https://flagcdn.com/w320/lr.png",
+    "nationality": "Liberian"
+  },
+  {
+    "name": "Libya",
+    "flag": "https://flagcdn.com/w320/ly.png",
+    "nationality": "Libyan"
+  },
+  {
+    "name": "Liechtenstein",
+    "flag": "https://flagcdn.com/w320/li.png",
+    "nationality": "Liechtensteiner"
+  },
+  {
+    "name": "Lithuania",
+    "flag": "https://flagcdn.com/w320/lt.png",
+    "nationality": "Lithuanian"
+  },
+  {
+    "name": "Luxembourg",
+    "flag": "https://flagcdn.com/w320/lu.png",
+    "nationality": "Luxembourger"
+  },
+  {
+    "name": "Macau",
+    "flag": "https://flagcdn.com/w320/mo.png",
+    "nationality": "Macanese"
+  },
+  {
+    "name": "Madagascar",
+    "flag": "https://flagcdn.com/w320/mg.png",
+    "nationality": "Malagasy"
+  },
+  {
+    "name": "Malawi",
+    "flag": "https://flagcdn.com/w320/mw.png",
+    "nationality": "Malawian"
+  },
+  {
+    "name": "Malaysia",
+    "flag": "https://flagcdn.com/w320/my.png",
+    "nationality": "Malaysian"
+  },
+  {
+    "name": "Maldives",
+    "flag": "https://flagcdn.com/w320/mv.png",
+    "nationality": "Maldivan"
+  },
+  {
+    "name": "Mali",
+    "flag": "https://flagcdn.com/w320/ml.png",
+    "nationality": "Malian"
+  },
+  {
+    "name": "Malta",
+    "flag": "https://flagcdn.com/w320/mt.png",
+    "nationality": "Maltese"
+  },
+  {
+    "name": "Marshall Islands",
+    "flag": "https://flagcdn.com/w320/mh.png",
+    "nationality": "Marshallese"
+  },
+  {
+    "name": "Martinique",
+    "flag": "https://flagcdn.com/w320/mq.png",
+    "nationality": "Martinican"
+  },
+  {
+    "name": "Mauritania",
+    "flag": "https://flagcdn.com/w320/mr.png",
+    "nationality": "Mauritanian"
+  },
+  {
+    "name": "Mauritius",
+    "flag": "https://flagcdn.com/w320/mu.png",
+    "nationality": "Mauritian"
+  },
+  {
+    "name": "Mayotte",
+    "flag": "https://flagcdn.com/w320/yt.png",
+    "nationality": "Mahoran"
+  },
+  {
+    "name": "Mexico",
+    "flag": "https://flagcdn.com/w320/mx.png",
+    "nationality": "Mexican"
+  },
+  {
+    "name": "Micronesia",
+    "flag": "https://flagcdn.com/w320/fm.png",
+    "nationality": "Micronesian"
+  },
+  {
+    "name": "Moldova",
+    "flag": "https://flagcdn.com/w320/md.png",
+    "nationality": "Moldovan"
+  },
+  {
+    "name": "Monaco",
+    "flag": "https://flagcdn.com/w320/mc.png",
+    "nationality": "Monegasque"
+  },
+  {
+    "name": "Mongolia",
+    "flag": "https://flagcdn.com/w320/mn.png",
+    "nationality": "Mongolian"
+  },
+  {
+    "name": "Montenegro",
+    "flag": "https://flagcdn.com/w320/me.png",
+    "nationality": "Montenegrin"
+  },
+  {
+    "name": "Montserrat",
+    "flag": "https://flagcdn.com/w320/ms.png",
+    "nationality": "Montserratian"
+  },
+  {
+    "name": "Morocco",
+    "flag": "https://flagcdn.com/w320/ma.png",
+    "nationality": "Moroccan"
+  },
+  {
+    "name": "Mozambique",
+    "flag": "https://flagcdn.com/w320/mz.png",
+    "nationality": "Mozambican"
+  },
+  {
+    "name": "Myanmar",
+    "flag": "https://flagcdn.com/w320/mm.png",
+    "nationality": "Burmese"
+  },
+  {
+    "name": "Namibia",
+    "flag": "https://flagcdn.com/w320/na.png",
+    "nationality": "Namibian"
+  },
+  {
+    "name": "Nauru",
+    "flag": "https://flagcdn.com/w320/nr.png",
+    "nationality": "Nauruan"
+  },
+  {
+    "name": "Nepal",
+    "flag": "https://flagcdn.com/w320/np.png",
+    "nationality": "Nepalese"
+  },
+  {
+    "name": "Netherlands",
+    "flag": "https://flagcdn.com/w320/nl.png",
+    "nationality": "Dutch"
+  },
+  {
+    "name": "New Caledonia",
+    "flag": "https://flagcdn.com/w320/nc.png",
+    "nationality": "New Caledonian"
+  },
+  {
+    "name": "New Zealand",
+    "flag": "https://flagcdn.com/w320/nz.png",
+    "nationality": "New Zealander"
+  },
+  {
+    "name": "Nicaragua",
+    "flag": "https://flagcdn.com/w320/ni.png",
+    "nationality": "Nicaraguan"
+  },
+  {
+    "name": "Niger",
+    "flag": "https://flagcdn.com/w320/ne.png",
+    "nationality": "Nigerien"
+  },
+  {
+    "name": "Nigeria",
+    "flag": "https://flagcdn.com/w320/ng.png",
+    "nationality": "Nigerian"
+  },
+  {
+    "name": "Niue",
+    "flag": "https://flagcdn.com/w320/nu.png",
+    "nationality": "Niuean"
+  },
+  {
+    "name": "Norfolk Island",
+    "flag": "https://flagcdn.com/w320/nf.png",
+    "nationality": "Norfolk Islander"
+  },
+  {
+    "name": "North Korea",
+    "flag": "https://flagcdn.com/w320/kp.png",
+    "nationality": "North Korean"
+  },
+  {
+    "name": "North Macedonia",
+    "flag": "https://flagcdn.com/w320/mk.png",
+    "nationality": "Macedonian"
+  },
+  {
+    "name": "Northern Mariana Islands",
+    "flag": "https://flagcdn.com/w320/mp.png",
+    "nationality": "American"
+  },
+  {
+    "name": "Norway",
+    "flag": "https://flagcdn.com/w320/no.png",
+    "nationality": "Norwegian"
+  },
+  {
+    "name": "Oman",
+    "flag": "https://flagcdn.com/w320/om.png",
+    "nationality": "Omani"
+  },
+  {
+    "name": "Pakistan",
+    "flag": "https://flagcdn.com/w320/pk.png",
+    "nationality": "Pakistani"
+  },
+  {
+    "name": "Palau",
+    "flag": "https://flagcdn.com/w320/pw.png",
+    "nationality": "Palauan"
+  },
+  {
+    "name": "Palestine",
+    "flag": "https://flagcdn.com/w320/ps.png",
+    "nationality": "Palestinian"
+  },
+  {
+    "name": "Panama",
+    "flag": "https://flagcdn.com/w320/pa.png",
+    "nationality": "Panamanian"
+  },
+  {
+    "name": "Papua New Guinea",
+    "flag": "https://flagcdn.com/w320/pg.png",
+    "nationality": "Papua New Guinean"
+  },
+  {
+    "name": "Paraguay",
+    "flag": "https://flagcdn.com/w320/py.png",
+    "nationality": "Paraguayan"
+  },
+  {
+    "name": "Peru",
+    "flag": "https://flagcdn.com/w320/pe.png",
+    "nationality": "Peruvian"
+  },
+  {
+    "name": "Philippines",
+    "flag": "https://flagcdn.com/w320/ph.png",
+    "nationality": "Filipino"
+  },
+  {
+    "name": "Pitcairn Islands",
+    "flag": "https://flagcdn.com/w320/pn.png",
+    "nationality": "Pitcairn Islander"
+  },
+  {
+    "name": "Poland",
+    "flag": "https://flagcdn.com/w320/pl.png",
+    "nationality": "Polish"
+  },
+  {
+    "name": "Portugal",
+    "flag": "https://flagcdn.com/w320/pt.png",
+    "nationality": "Portuguese"
+  },
+  {
+    "name": "Puerto Rico",
+    "flag": "https://flagcdn.com/w320/pr.png",
+    "nationality": "Puerto Rican"
+  },
+  {
+    "name": "Qatar",
+    "flag": "https://flagcdn.com/w320/qa.png",
+    "nationality": "Qatari"
+  },
+  {
+    "name": "Republic of the Congo",
+    "flag": "https://flagcdn.com/w320/cg.png",
+    "nationality": "Congolese"
+  },
+  {
+    "name": "Réunion",
+    "flag": "https://flagcdn.com/w320/re.png",
+    "nationality": "Réunionese"
+  },
+  {
+    "name": "Romania",
+    "flag": "https://flagcdn.com/w320/ro.png",
+    "nationality": "Romanian"
+  },
+  {
+    "name": "Russia",
+    "flag": "https://flagcdn.com/w320/ru.png",
+    "nationality": "Russian"
+  },
+  {
+    "name": "Rwanda",
+    "flag": "https://flagcdn.com/w320/rw.png",
+    "nationality": "Rwandan"
+  },
+  {
+    "name": "Saint Barthélemy",
+    "flag": "https://flagcdn.com/w320/bl.png",
+    "nationality": "Saint Barthélemy Islander"
+  },
+  {
+    "name": "Saint Helena, Ascension and Tristan da Cunha",
+    "flag": "https://flagcdn.com/w320/sh.png",
+    "nationality": "Saint Helenian"
+  },
+  {
+    "name": "Saint Kitts and Nevis",
+    "flag": "https://flagcdn.com/w320/kn.png",
+    "nationality": "Kittitian or Nevisian"
+  },
+  {
+    "name": "Saint Lucia",
+    "flag": "https://flagcdn.com/w320/lc.png",
+    "nationality": "Saint Lucian"
+  },
+  {
+    "name": "Saint Martin",
+    "flag": "https://flagcdn.com/w320/mf.png",
+    "nationality": "Saint Martin Islander"
+  },
+  {
+    "name": "Saint Pierre and Miquelon",
+    "flag": "https://flagcdn.com/w320/pm.png",
+    "nationality": "Saint-Pierrais, Miquelonnais"
+  },
+  {
+    "name": "Saint Vincent and the Grenadines",
+    "flag": "https://flagcdn.com/w320/vc.png",
+    "nationality": "Saint Vincentian"
+  },
+  {
+    "name": "Samoa",
+    "flag": "https://flagcdn.com/w320/ws.png",
+    "nationality": "Samoan"
+  },
+  {
+    "name": "San Marino",
+    "flag": "https://flagcdn.com/w320/sm.png",
+    "nationality": "Sammarinese"
+  },
+  {
+    "name": "São Tomé and Príncipe",
+    "flag": "https://flagcdn.com/w320/st.png",
+    "nationality": "Sao Tomean"
+  },
+  {
+    "name": "Saudi Arabia",
+    "flag": "https://flagcdn.com/w320/sa.png",
+    "nationality": "Saudi Arabian"
+  },
+  {
+    "name": "Senegal",
+    "flag": "https://flagcdn.com/w320/sn.png",
+    "nationality": "Senegalese"
+  },
+  {
+    "name": "Serbia",
+    "flag": "https://flagcdn.com/w320/rs.png",
+    "nationality": "Serbian"
+  },
+  {
+    "name": "Seychelles",
+    "flag": "https://flagcdn.com/w320/sc.png",
+    "nationality": "Seychellois"
+  },
+  {
+    "name": "Sierra Leone",
+    "flag": "https://flagcdn.com/w320/sl.png",
+    "nationality": "Sierra Leonean"
+  },
+  {
+    "name": "Singapore",
+    "flag": "https://flagcdn.com/w320/sg.png",
+    "nationality": "Singaporean"
+  },
+  {
+    "name": "Sint Maarten",
+    "flag": "https://flagcdn.com/w320/sx.png",
+    "nationality": "St. Maartener"
+  },
+  {
+    "name": "Slovakia",
+    "flag": "https://flagcdn.com/w320/sk.png",
+    "nationality": "Slovak"
+  },
+  {
+    "name": "Slovenia",
+    "flag": "https://flagcdn.com/w320/si.png",
+    "nationality": "Slovene"
+  },
+  {
+    "name": "Solomon Islands",
+    "flag": "https://flagcdn.com/w320/sb.png",
+    "nationality": "Solomon Islander"
+  },
+  {
+    "name": "Somalia",
+    "flag": "https://flagcdn.com/w320/so.png",
+    "nationality": "Somali"
+  },
+  {
+    "name": "South Africa",
+    "flag": "https://flagcdn.com/w320/za.png",
+    "nationality": "South African"
+  },
+  {
+    "name": "South Georgia",
+    "flag": "https://flagcdn.com/w320/gs.png",
+    "nationality": "South Georgian South Sandwich Islander"
+  },
+  {
+    "name": "South Korea",
+    "flag": "https://flagcdn.com/w320/kr.png",
+    "nationality": "South Korean"
+  },
+  {
+    "name": "South Sudan",
+    "flag": "https://flagcdn.com/w320/ss.png",
+    "nationality": "South Sudanese"
+  },
+  {
+    "name": "Spain",
+    "flag": "https://flagcdn.com/w320/es.png",
+    "nationality": "Spanish"
+  },
+  {
+    "name": "Sri Lanka",
+    "flag": "https://flagcdn.com/w320/lk.png",
+    "nationality": "Sri Lankan"
+  },
+  {
+    "name": "Sudan",
+    "flag": "https://flagcdn.com/w320/sd.png",
+    "nationality": "Sudanese"
+  },
+  {
+    "name": "Suriname",
+    "flag": "https://flagcdn.com/w320/sr.png",
+    "nationality": "Surinamer"
+  },
+  {
+    "name": "Svalbard and Jan Mayen",
+    "flag": "https://flagcdn.com/w320/sj.png",
+    "nationality": "Norwegian"
+  },
+  {
+    "name": "Sweden",
+    "flag": "https://flagcdn.com/w320/se.png",
+    "nationality": "Swedish"
+  },
+  {
+    "name": "Switzerland",
+    "flag": "https://flagcdn.com/w320/ch.png",
+    "nationality": "Swiss"
+  },
+  {
+    "name": "Syria",
+    "flag": "https://flagcdn.com/w320/sy.png",
+    "nationality": "Syrian"
+  },
+  {
+    "name": "Taiwan",
+    "flag": "https://flagcdn.com/w320/tw.png",
+    "nationality": "Taiwanese"
+  },
+  {
+    "name": "Tajikistan",
+    "flag": "https://flagcdn.com/w320/tj.png",
+    "nationality": "Tadzhik"
+  },
+  {
+    "name": "Tanzania",
+    "flag": "https://flagcdn.com/w320/tz.png",
+    "nationality": "Tanzanian"
+  },
+  {
+    "name": "Thailand",
+    "flag": "https://flagcdn.com/w320/th.png",
+    "nationality": "Thai"
+  },
+  {
+    "name": "Timor-Leste",
+    "flag": "https://flagcdn.com/w320/tl.png",
+    "nationality": "East Timorese"
+  },
+  {
+    "name": "Togo",
+    "flag": "https://flagcdn.com/w320/tg.png",
+    "nationality": "Togolese"
+  },
+  {
+    "name": "Tokelau",
+    "flag": "https://flagcdn.com/w320/tk.png",
+    "nationality": "Tokelauan"
+  },
+  {
+    "name": "Tonga",
+    "flag": "https://flagcdn.com/w320/to.png",
+    "nationality": "Tongan"
+  },
+  {
+    "name": "Trinidad and Tobago",
+    "flag": "https://flagcdn.com/w320/tt.png",
+    "nationality": "Trinidadian"
+  },
+  {
+    "name": "Tunisia",
+    "flag": "https://flagcdn.com/w320/tn.png",
+    "nationality": "Tunisian"
+  },
+  {
+    "name": "Turkey",
+    "flag": "https://flagcdn.com/w320/tr.png",
+    "nationality": "Turkish"
+  },
+  {
+    "name": "Turkmenistan",
+    "flag": "https://flagcdn.com/w320/tm.png",
+    "nationality": "Turkmen"
+  },
+  {
+    "name": "Turks and Caicos Islands",
+    "flag": "https://flagcdn.com/w320/tc.png",
+    "nationality": "Turks and Caicos Islander"
+  },
+  {
+    "name": "Tuvalu",
+    "flag": "https://flagcdn.com/w320/tv.png",
+    "nationality": "Tuvaluan"
+  },
+  {
+    "name": "Uganda",
+    "flag": "https://flagcdn.com/w320/ug.png",
+    "nationality": "Ugandan"
+  },
+  {
+    "name": "Ukraine",
+    "flag": "https://flagcdn.com/w320/ua.png",
+    "nationality": "Ukrainian"
+  },
+  {
+    "name": "United Arab Emirates",
+    "flag": "https://flagcdn.com/w320/ae.png",
+    "nationality": "Emirati"
+  },
+  {
+    "name": "United Kingdom",
+    "flag": "https://flagcdn.com/w320/gb.png",
+    "nationality": "British"
+  },
+  {
+    "name": "United States",
+    "flag": "https://flagcdn.com/w320/us.png",
+    "nationality": "American"
+  },
+  {
+    "name": "United States Minor Outlying Islands",
+    "flag": "https://flagcdn.com/w320/um.png",
+    "nationality": "American Islander"
+  },
+  {
+    "name": "United States Virgin Islands",
+    "flag": "https://flagcdn.com/w320/vi.png",
+    "nationality": "Virgin Islander"
+  },
+  {
+    "name": "Uruguay",
+    "flag": "https://flagcdn.com/w320/uy.png",
+    "nationality": "Uruguayan"
+  },
+  {
+    "name": "Uzbekistan",
+    "flag": "https://flagcdn.com/w320/uz.png",
+    "nationality": "Uzbekistani"
+  },
+  {
+    "name": "Vanuatu",
+    "flag": "https://flagcdn.com/w320/vu.png",
+    "nationality": "Ni-Vanuatu"
+  },
+  {
+    "name": "Vatican City",
+    "flag": "https://flagcdn.com/w320/va.png",
+    "nationality": "Vatican"
+  },
+  {
+    "name": "Venezuela",
+    "flag": "https://flagcdn.com/w320/ve.png",
+    "nationality": "Venezuelan"
+  },
+  {
+    "name": "Vietnam",
+    "flag": "https://flagcdn.com/w320/vn.png",
+    "nationality": "Vietnamese"
+  },
+  {
+    "name": "Wallis and Futuna",
+    "flag": "https://flagcdn.com/w320/wf.png",
+    "nationality": "Wallis and Futuna Islander"
+  },
+  {
+    "name": "Western Sahara",
+    "flag": "https://flagcdn.com/w320/eh.png",
+    "nationality": "Sahrawi"
+  },
+  {
+    "name": "Yemen",
+    "flag": "https://flagcdn.com/w320/ye.png",
+    "nationality": "Yemeni"
+  },
+  {
+    "name": "Zambia",
+    "flag": "https://flagcdn.com/w320/zm.png",
+    "nationality": "Zambian"
+  },
+  {
+    "name": "Zimbabwe",
+    "flag": "https://flagcdn.com/w320/zw.png",
+    "nationality": "Zimbabwean"
+  }
+]

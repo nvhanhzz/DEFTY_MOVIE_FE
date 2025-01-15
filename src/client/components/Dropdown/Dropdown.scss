@@ -1,0 +1,65 @@
+@import '../../../styles/Variable.scss';
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+
+  &__trigger {
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  &__menu {
+    display: none; // Ẩn menu mặc định
+    position: absolute;
+    top: calc(100% + 10px); // Cách trigger một khoảng
+    left: 50%; // Ban đầu menu căn giữa trigger
+    transform: translateX(-50%); // Dịch chuyển menu nằm giữa trigger
+    background-color: #1A1C22;
+    border: 0.5px solid #1A1C22;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 200px;
+    max-width: calc(100vw - 20px); // Giới hạn chiều rộng tối đa dựa trên viewport
+    padding: 8px 0;
+
+    // Điều chỉnh vị trí nếu tràn viền bên phải
+    @media (max-width: 400px) {
+      left: auto;
+      right: 0;
+      transform: none; // Không dịch chuyển nữa
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 10px;
+      border-style: solid;
+      border-color: transparent transparent #1A1C22 transparent;
+    }
+
+    & > * {
+      padding: 15px 40px;
+      text-decoration: none;
+      color: $text_color1;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+
+      &:hover {
+        color: $text_color1_hover;
+        background-color: #2C2E33;
+      }
+    }
+  }
+
+  // Hiển thị menu khi hover vào dropdown
+  &:hover .dropdown__menu {
+    display: block;
+  }
+}

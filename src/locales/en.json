@@ -34,6 +34,8 @@
             "selectOption": "Select an option",
             "enterValue": "Enter a value",
             "selectRange": "Select range",
+            "selectNationality": "Select Nationality",
+            "selectCountry": "Select Country",
             "placeholder": {
                 "search": "Enter search keyword",
                 "select": "Please select",
@@ -408,6 +410,28 @@
             },
             "update": {
                 "title": "Update"
+            }
+        },
+        "user": {
+            "title": "User",
+            "fullName": "Full name",
+            "gender": {
+                "title": "Gender",
+                "placeholder": "Select gender",
+                "male": "Male",
+                "female": "Female",
+                "other": "Other"
+            },
+            "avatar": "Avatar",
+            "dateOfBirth": "Date of birth",
+            "nationality": "Nationality",
+            "username": "Username",
+            "phone": "Phone",
+            "email": "Email",
+            "address": "Address",
+            "detail": {
+                "title": "User detail",
+                "notFound": "User details not found."
             }
         }
     },

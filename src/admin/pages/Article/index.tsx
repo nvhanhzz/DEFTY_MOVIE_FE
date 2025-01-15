@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { message, Spin } from 'antd';
+import {message, Spin, Switch} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getArticles, deleteArticles } from '../../services/articleService';
+import {getArticles, deleteArticles, switchStatusArticle} from '../../services/articleService';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
@@ -35,7 +35,27 @@ const ArticlesPage: React.FC = () => {
             label: t('admin.article.titleColumn'),
             name: 'title',
             placeholder: t('admin.article.titleColumn'),
-        }
+        },
+        {
+            type: 'select',
+            label: t('admin.dataList.status.title'),
+            name: 'status',
+            placeholder: t('admin.dataList.status.title'),
+            options: [
+                {
+                    label: t('admin.dataList.status.active'),
+                    value: '1',
+                },
+                {
+                    label: t('admin.dataList.status.inactive'),
+                    value: '0',
+                },
+                {
+                    label: t('admin.dataList.status.all'),
+                    value: '',
+                },
+            ],
+        },
     ];
 
     const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
@@ -43,6 +63,11 @@ const ArticlesPage: React.FC = () => {
         try {
             const response = await getArticles(page, pageSize, filters);
             const result = await response.json();
+            if (!response.ok || result.status === 404) {
+                setTotalItems(0);
+                setData([]);
+                return;
+            }
             const articles: Article[] = result.data.content;
             setTotalItems(result.data.totalElements);
             setData(articles.map(item => ({ ...item, key: item.id })));
@@ -130,6 +155,28 @@ const ArticlesPage: React.FC = () => {
         navigate(`?${queryParams.toString()}`);
     };
 
+    const handleSwitchStatus = async (id: string, checked: boolean) => {
+        setIsLoading(true);
+        try {
+            const response = await switchStatusArticle(id);
+            const result = await response.json();
+            if (!response.ok || result.status !== 200) {
+                message.error(t('admin.message.updateError'));
+                return;
+            }
+            setData(prevData => prevData.map(item =>
+                item.id === id ? { ...item, status: checked ? 1 : 0 } : item
+            ));
+
+            message.success(t('admin.message.updateSuccess'));
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            message.error(t('admin.message.updateError'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const dataListConfig: DataListConfig<Article> = {
         columns: [
             {
@@ -154,6 +201,17 @@ const ArticlesPage: React.FC = () => {
                 title: t('admin.article.author'),
                 dataIndex: 'author',
                 key: 'author',
+            },
+            {
+                title: t('admin.dataList.status.title'),
+                dataIndex: 'status',
+                key: 'status',
+                render: (status, record) => (
+                    <Switch
+                        checked={status === 1}
+                        onChange={(checked) => handleSwitchStatus(record.id, checked)}
+                    />
+                ),
             },
         ],
         data: data,

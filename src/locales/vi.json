@@ -34,6 +34,8 @@
             "selectOption": "Chọn một tùy chọn",
             "enterValue": "Nhập giá trị",
             "selectRange": "Chọn khoảng",
+            "selectNationality": "Chọn quốc tịch",
+            "selectCountry": "Chọn quốc gia",
             "placeholder": {
                 "search": "Nhập từ khóa tìm kiếm",
                 "select": "Vui lòng chọn",
@@ -404,6 +406,28 @@
             },
             "update": {
                 "title": "Cập nhật"
+            }
+        },
+        "user": {
+            "title": "Người dùng",
+            "fullName": "Họ và tên",
+            "gender": {
+                "title": "Giới tính",
+                "placeholder": "Chọn giới tính",
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            },
+            "avatar": "Ảnh đại diện",
+            "dateOfBirth": "Ngày sinh",
+            "nationality": "Quốc tịch",
+            "username": "Tên đăng nhập",
+            "phone": "Số điện thoại",
+            "email": "Email",
+            "address": "Địa chỉ",
+            "detail": {
+                "title": "Chi tiết người dùng",
+                "notFound": "không tìm thấy người dùng."
             }
         }
     },

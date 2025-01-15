@@ -36,6 +36,7 @@ import ActorPage from "../pages/Actor";
 import CreateActor from "../pages/Actor/Create";
 import UpdateActor from "../pages/Actor/Update";
 import Test from "../pages/Test";
+import UserPage from "../pages/User";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -144,17 +145,38 @@ const DefaultRoutes: RouteType[] = [
         path: 'directors/update/:id',
         element: <UpdateDirector />,
     },
+
     {
-        path: 'membership-packets',
-        element: <MembershipPacketPage />,
+        path: 'categories',
+        element: <CategoryPage />,
     },
     {
-        path: 'membership-packets/update/:id',
-        element: <EditMembershipPacket />,
+        path: 'category/create',
+        element: <CreateCategory />,
     },
     {
-        path: 'membership-packets/create',
-        element: <CreateMembershipPacket />,
+        path: 'category/update/:id',
+        element: <UpdateCategory />,
+    },
+    {
+        path: 'actors',
+        element: <ActorPage />,
+    },
+    {
+        path: 'actors/create',
+        element: <CreateActor />,
+    },
+    {
+        path: 'actors/update/:id',
+        element: <UpdateActor />,
+    },
+    {
+        path: 'users',
+        element: <UserPage />,
+    },
+    {
+        path: 'test',
+        element: <Test />,
     },
     {
         path: 'settings',
