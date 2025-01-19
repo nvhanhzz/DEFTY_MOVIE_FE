@@ -37,6 +37,7 @@ const PermissionsPage: React.FC = () => {
             }));
             setTotalItems(result.data.totalElements);
             setData(permissions);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {

@@ -232,7 +232,7 @@ const DirectorPage: React.FC = () => {
                 dataIndex: 'avatar',
                 key: 'avatar',
                 render: (avatar: string) => (
-                    <img src={avatar} alt="thumbnail" style={{ width: '100px', height: 'auto', borderRadius: '4px' }} />
+                    <img src={avatar} alt="thumbnail" style={{ width: '80px', height: 'auto', borderRadius: '50%' }} />
                 ),
             },
             {

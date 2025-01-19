@@ -184,7 +184,25 @@
         "membership-packet": {
             "title": "Membership Packets",
             "nameColumn": "Membership Packet",
-            "descriptionColumn": "Description"
+            "descriptionColumn": "Description",
+            "create": {
+                "title": "Create Membership Packet",
+                "membership-packetName": "Membership Packet",
+                "price": "Price",
+                "discount": "Discount",
+                "description": "Description",
+                "duration": "Duration",
+                "createMembershipPacketButton": "Create Membership Packet"
+            },
+            "update": {
+                "title": "Update Membership Packet",
+                "membership-packetName": "Membership Packet",
+                "price": "Price",
+                "discount": "Discount",
+                "description": "Description",
+                "duration": "Duration",
+                "updateMembershipPacketButton": "Update Membership Packet"
+            }
         },
         "setting": {
             "title": "Settings",
@@ -253,6 +271,7 @@
             "title": "Movie",
             "createNewPermissionButton": "Create New Movie",
             "titleColumn": "Movie name",
+            "detail": "Detail",
             "description": "Description",
             "actionColumn": "Actions",
             "director": "Director",

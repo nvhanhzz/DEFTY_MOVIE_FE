@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Layout, Menu } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Layout, Menu} from 'antd';
 import {
-    DashboardOutlined,
-    SettingOutlined,
-    SafetyOutlined,
-    KeyOutlined,
-    ReadOutlined,
-    UserOutlined,
-    LinuxOutlined,
-    TagsOutlined,
-    IdcardOutlined,
     CameraOutlined,
-    GiftOutlined
+    DashboardOutlined,
+    GiftOutlined,
+    IdcardOutlined,
+    KeyOutlined,
+    LinuxOutlined,
+    ReadOutlined,
+    SafetyOutlined,
+    TagsOutlined,
+    UserOutlined
 } from '@ant-design/icons';
-import { useNavigate, useLocation } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import './Sider.scss';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -82,11 +81,11 @@ const menuItems: MenuItem[] = [
         label: 'admin.membership-packet.title',
         linkTo: 'membership-packets',
     },
-    {
-        icon: <SettingOutlined />,
-        label: 'admin.setting.title',
-        linkTo: 'settings',
-    },
+    // {
+    //     icon: <SettingOutlined />,
+    //     label: 'admin.setting.title',
+    //     linkTo: 'settings',
+    // },
 ];
 
 const AppSider: React.FC<SiderProps> = ({ collapsed }) => {

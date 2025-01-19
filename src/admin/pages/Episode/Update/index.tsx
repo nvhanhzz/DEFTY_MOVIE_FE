@@ -108,7 +108,7 @@ const UpdateEpisode: React.FC = () => {
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${PREFIX_URL_ADMIN}/dashboard`, name: t('admin.dashboard.title') },
-                { path: `${PREFIX_URL_ADMIN}/movies/${movieId}`, name: t('admin.movie.title') },
+                { path: `${PREFIX_URL_ADMIN}/movies`, name: t('admin.movie.title') },
                 { path: `${PREFIX_URL_ADMIN}/movies/${movieId}/episodes`, name: t('admin.episode.title') },
                 { path: '', name: t('admin.episode.update.title') },
             ]}

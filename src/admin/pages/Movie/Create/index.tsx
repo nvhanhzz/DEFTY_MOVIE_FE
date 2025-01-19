@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import { Button, Form, Input, message, Upload, DatePicker, Select, Row, Col} from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {Button, Col, DatePicker, Form, Input, message, Row, Select, Upload} from 'antd';
+import {useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
-import { postMovie } from "../../../services/movieService";
+import {postMovie} from "../../../services/movieService";
 import './CreateMovie.scss';
-import { RcFile } from "antd/es/upload";
+import {RcFile} from "antd/es/upload";
 import AddOptionModal from "../CreateDirector";
-import { UploadOutlined } from "@ant-design/icons";
+import {UploadOutlined} from "@ant-design/icons";
 import {getDirectors} from "../../../services/directorService.tsx";
 import {Director} from "../../Director";
+import CountrySelect from "../../../components/CountrySelect";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -44,7 +45,6 @@ const CreateMovie: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const [directorOptions, setDirectorOptions] = useState([]);
-    const [nation, setNation] = useState([]);
 
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal state for director
 
@@ -65,24 +65,6 @@ const CreateMovie: React.FC = () => {
             }
         };
         fetchDirectors();
-    }, []);
-
-    useEffect(() => {
-        const fetchCountries = async () => {
-            try {
-                const response = await fetch('https://restcountries.com/v3.1/all');
-                const data = await response.json();
-
-                const countries = data.sort((a: { name: { common: string; }; }, b: { name: { common: never; }; }) =>
-                    a.name.common.localeCompare(b.name.common)
-                );
-
-                setNation(countries);
-            } catch (error) {
-                console.error('Error fetching countries:', error);
-            }
-        };
-        fetchCountries();
     }, []);
 
     const handleCreateMovie = async (values: MovieFormValues) => {
@@ -181,26 +163,10 @@ const CreateMovie: React.FC = () => {
                             name="nation"
                             rules={[{ required: true, message: t('admin.movie.validation.nation') }]}
                         >
-                            <Select
-                                placeholder="Chọn quốc gia"
-                                showSearch
-                                style={{ width: 200 }}
-                                filterOption={(input, option) =>
-                                    (option?.value ?? '').toLowerCase().includes(input.toLowerCase())
-                                }
-                                options={nation.map((country: Country) => ({
-                                    label: (
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <img
-                                                src={country.flags.png}
-                                                alt={`Flag of ${country.name.common}`}
-                                                style={{ width: 20, height: 15, marginRight: 8 }}
-                                            />
-                                            {country.name.common}
-                                        </div>
-                                    ),
-                                    value: country.name.common,
-                                }))}
+                            <CountrySelect
+                                placeholder={t('admin.form.selectNationality')}
+                                onChange={(value) => form.setFieldsValue({ nationality: value })}
+                                type='nationality'
                             />
                         </Form.Item>
 

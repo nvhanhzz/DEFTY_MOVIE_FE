@@ -14,18 +14,22 @@ interface HeaderProps {
 }
 
 const AppHeader: React.FC<HeaderProps> = ({ collapsed, toggleCollapse }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const dispatch = useAdminDispatch();
-    const [isLoading, setIsLoading] = useState<boolean>(false); // Thêm trạng thái loading
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleLogout = async () => {
-        setIsLoading(true); // Bắt đầu loading
+        setIsLoading(true);
         const response = await postLogout();
         if (response.ok) {
             dispatch(setCurrentAccount(null));
             dispatch(addAlert(t('admin.logout.successTitle'), t('admin.logout.successMessage'), 5));
         }
-        setIsLoading(false); // Kết thúc loading
+        setIsLoading(false);
+    };
+
+    const handleLanguageChange = (lang: string) => {
+        i18n.changeLanguage(lang);
     };
 
     const userMenuItems: MenuProps['items'] = [
@@ -42,7 +46,7 @@ const AppHeader: React.FC<HeaderProps> = ({ collapsed, toggleCollapse }) => {
                 </span>
             ),
             label: t('admin.header.logout'),
-            onClick: isLoading ? undefined : handleLogout, // Ngăn không cho thực hiện khi đang loading
+            onClick: isLoading ? undefined : handleLogout,
         },
     ];
 
@@ -55,13 +59,31 @@ const AppHeader: React.FC<HeaderProps> = ({ collapsed, toggleCollapse }) => {
                 className="collapse-button"
             />
 
-            <Dropdown
-                menu={{ items: userMenuItems }}
-                trigger={['click']}
-                placement="bottomRight"
-            >
-                <Avatar size="large" icon={<UserOutlined />} className="avatar-button" />
-            </Dropdown>
+            <div className="header-right">
+                <div className="language-switcher">
+                    <img
+                        src="/assets/images/English.png"
+                        alt="English"
+                        className="language-flag"
+                        onClick={() => handleLanguageChange('en')}
+                    />
+                    <img
+                        src="/assets/images/VN.jpg"
+                        alt="Vietnamese"
+                        className="language-flag"
+                        onClick={() => handleLanguageChange('vi')}
+                    />
+                </div>
+
+                <Dropdown
+                    menu={{items: userMenuItems}}
+                    trigger={['click']}
+                    placement="bottomRight"
+                >
+                    <Avatar size="large" icon={<UserOutlined/>} className="avatar-button"/>
+                </Dropdown>
+            </div>
+
         </div>
     );
 };

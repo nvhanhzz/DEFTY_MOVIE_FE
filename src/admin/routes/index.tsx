@@ -1,4 +1,4 @@
-import { useAuth } from "../hooks/useAuth";
+import {useAuth} from "../hooks/useAuth";
 import AdminLayoutDefault from "../layouts/AdminLayoutDefault";
 import AdminAuthLayout from "../layouts/AdminAuthLayout";
 import LoginPage from "../pages/Login";
@@ -6,7 +6,6 @@ import DashboardPage from "../pages/Dashboard";
 import RolePage from "../pages/Role";
 import CreateRole from "../pages/Role/Create"; // Import trang tạo mới Role
 import EditRole from "../pages/Role/Update"; // Import trang sửa Role
-import SettingPage from "../pages/Setting";
 import PermissionsPage from "../pages/Permission";
 import CreatePermission from "../pages/Permission/Create";
 import EditPermission from "../pages/Permission/Update";
@@ -84,6 +83,18 @@ const DefaultRoutes: RouteType[] = [
     {
         path: 'permissions',
         element: <PermissionsPage />,
+    },
+    {
+        path: 'membership-packets',
+        element: <MembershipPacketPage />,
+    },
+    {
+        path: 'membership-packets/Create',
+        element: <CreateMembershipPacket />,
+    },
+    {
+        path: 'membership-packets/Update/:id',
+        element: <EditMembershipPacket />,
     },
     {
         path: 'articles',
@@ -178,10 +189,10 @@ const DefaultRoutes: RouteType[] = [
         path: 'test',
         element: <Test />,
     },
-    {
-        path: 'settings',
-        element: <SettingPage />,
-    },
+    // {
+    //     path: 'settings',
+    //     element: <SettingPage />,
+    // },
     {
         path: '',
         element: <DashboardPage />,

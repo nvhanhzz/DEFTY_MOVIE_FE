@@ -75,6 +75,7 @@ const EditRole: React.FC = () => {
         setIsSubmitting(true);
         try {
             const response = await updateRoleById(id as string, { ...values, rolePermissions: selectedPermissions });
+
             if (response.ok) {
                 message.success(t('admin.message.updateSuccess'));
             } else {

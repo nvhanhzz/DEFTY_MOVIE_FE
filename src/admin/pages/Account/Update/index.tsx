@@ -12,6 +12,7 @@ import { Role } from "../../Role";
 import { AccountFormValues } from "../Create";
 import { Account } from "../index.tsx";
 import dayjs from 'dayjs';
+import AvtEditor from "../../../components/AvtEditor";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -112,16 +113,14 @@ const UpdateAccount: React.FC = () => {
         }
     };
 
-    // Hàm xử lý khi chọn avatar
-    const handleAvatarChange = ({ file }: { file: RcFile }) => {
-        console.log(file)
+    const handleAvatarSave = (file: File | null) => {
         setFile(file);
     };
 
-    // Hàm xử lý khi reset form, bao gồm reset avatar
+
     const handleResetForm = () => {
-        form.resetFields();  // Reset các trường trong form
-        setFile(null);       // Reset avatar về null
+        form.resetFields();
+        setFile(null);
     };
 
     return (
@@ -228,31 +227,12 @@ const UpdateAccount: React.FC = () => {
                             </Select>
                         </Form.Item>
                     </Col>
-
                     <Col span={8} className="avatar-col">
                         <Form.Item label={t('admin.account.avatar')} className="avatar-wrapper">
-                            <div className="avatar-preview">
-                                <Upload
-                                    listType="picture-card"
-                                    beforeUpload={(file) => {
-                                        handleAvatarChange({ file });
-                                        return false; // Không upload tự động
-                                    }}
-                                    showUploadList={false}
-                                >
-                                    {avatarUrl ? (
-                                        <img src={avatarUrl} alt="avatar" style={{ width: '100%' }} />
-                                    ) : (
-                                        <div>
-                                            <UploadOutlined />
-                                            <div style={{ marginTop: 8 }}>{t('admin.director.upload')}</div>
-                                        </div>
-                                    )}
-                                </Upload>
-                                <Button className="upload-button">
-                                    <UploadOutlined /> {t('admin.account.upload')}
-                                </Button>
-                            </div>
+                            <AvtEditor
+                                onSave={handleAvatarSave}
+                                initialImage={avatarUrl as string}
+                            />
                         </Form.Item>
                     </Col>
                 </Row>

@@ -161,6 +161,29 @@
                 }
             }
         },
+        "membership-packet": {
+            "title": "Gói Thành Viên",
+            "nameColumn": "Tên Gói Thành Viên",
+            "descriptionColumn": "Mô Tả",
+            "create": {
+                "title": "Tạo Gói Thành Viên",
+                "membership-packetName": "Tên Gói Thành Viên",
+                "price": "Giá",
+                "discount": "Chiết Khấu",
+                "description": "Mô Tả",
+                "duration": "Thời Gian",
+                "createMembershipPacketButton": "Tạo Gói Thành Viên"
+            },
+            "update": {
+                "title": "Cập Nhật Gói Thành Viên",
+                "membership-packetName": "Tên Gói Thành Viên",
+                "price": "Giá",
+                "discount": "Chiết Khấu",
+                "description": "Mô Tả",
+                "duration": "Thời Gian",
+                "updateMembershipPacketButton": "Cập Nhật Gói Thành Viên"
+            }
+        },
 
         "permission": {
             "title": "Quyền",
@@ -250,6 +273,7 @@
             "createNewPermissionButton": "Tạo phim mới",
             "titleColumn": "Tên phim",
             "descriptionColumn": "Mô tả",
+            "detail": "Chi tiết",
             "actionColumn": "Hành động",
             "description": "Mô tả",
             "trailer": "Trailer",

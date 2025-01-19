@@ -93,7 +93,7 @@ const CreateMembershipPacket: React.FC = () => {
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" loading={loading}>
-                        {t('admin.membership-packet.create.createPermissionButton')}
+                        {t('admin.membership-packet.create.createMembershipPacketButton')}
                     </Button>
                 </Form.Item>
             </Form>

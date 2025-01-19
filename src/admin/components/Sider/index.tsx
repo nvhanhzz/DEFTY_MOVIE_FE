@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Layout, Menu } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Layout, Menu, Input } from 'antd';
 import {
-    DashboardOutlined,
     SettingOutlined,
-    SafetyOutlined,
-    KeyOutlined,
-    ReadOutlined,
-    UserOutlined,
-    LinuxOutlined,
-    TagsOutlined,
-    IdcardOutlined,
     CameraOutlined,
-    GiftOutlined
+    DashboardOutlined,
+    GiftOutlined,
     IdcardOutlined,
-    TeamOutlined
+    KeyOutlined,
+    VideoCameraOutlined,
+    ReadOutlined,
+    SafetyOutlined,
+    TagsOutlined,
+    TeamOutlined,
+    UserOutlined
 } from '@ant-design/icons';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Sider.scss';
 import { useTranslation } from 'react-i18next';
 
@@ -31,6 +30,7 @@ interface MenuItem {
     icon: React.ReactNode;
     label: string;
     linkTo: string;
+    subMenu?: MenuItem[];
 }
 
 const menuItems: MenuItem[] = [
@@ -40,39 +40,36 @@ const menuItems: MenuItem[] = [
         linkTo: 'dashboard',
     },
     {
-        icon: <LinuxOutlined />,
+        icon: <VideoCameraOutlined />,
         label: 'admin.movie.title',
-        linkTo: 'movies',
-    },
-    {
-        icon: <TagsOutlined  />,
-        label: 'admin.category.title',
-        linkTo: 'categories',
-    },
-    {
-        icon: <CameraOutlined />,
-        label: 'admin.director.title',
-        linkTo: 'directors',
-    },
-    {
-        icon: <IdcardOutlined />,
-        label: 'admin.actor.title',
-        linkTo: 'actors',
-    },
-    {
-        icon: <UserOutlined />,
-        label: 'admin.account.title',
-        linkTo: 'accounts',
-    },
-    {
-        icon: <SafetyOutlined />,
-        label: 'admin.role.title',
-        linkTo: 'roles',
-    },
-    {
-        icon: <KeyOutlined />,
-        label: 'admin.permission.title',
-        linkTo: 'permissions',
+        linkTo: '',
+        subMenu: [
+            {
+                icon: <VideoCameraOutlined />,
+                label: 'admin.movie.title',
+                linkTo: 'movies',
+            },
+            {
+                icon: <TagsOutlined />,
+                label: 'admin.category.title',
+                linkTo: 'categories',
+            },
+            {
+                icon: <CameraOutlined />,
+                label: 'admin.director.title',
+                linkTo: 'directors',
+            },
+            {
+                icon: <IdcardOutlined />,
+                label: 'admin.actor.title',
+                linkTo: 'actors',
+            },
+            {
+                icon: <GiftOutlined />,
+                label: 'admin.membership-packet.title',
+                linkTo: 'membership-packets',
+            },
+        ],
     },
     {
         icon: <ReadOutlined />,
@@ -80,19 +77,31 @@ const menuItems: MenuItem[] = [
         linkTo: 'articles',
     },
     {
+        icon: <UserOutlined />,
+        label: 'admin.account.title',
+        linkTo: 'accounts',
+    },
+    {
         icon: <TeamOutlined />,
         label: 'admin.user.title',
         linkTo: 'users',
     },
     {
-        icon: <GiftOutlined />,
-        label: 'admin.membership-packet.title',
-        linkTo: 'membership-packets',
-    },
-    {
         icon: <SettingOutlined />,
-        label: 'admin.setting.title',
-        linkTo: 'settings',
+        label: 'admin.role.title',
+        linkTo: '',
+        subMenu: [
+            {
+                icon: <SafetyOutlined />,
+                label: 'admin.role.title',
+                linkTo: 'roles',
+            },
+            {
+                icon: <KeyOutlined />,
+                label: 'admin.permission.title',
+                linkTo: 'permissions',
+            },
+        ],
     },
 ];
 
@@ -102,6 +111,37 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
     const { t } = useTranslation();
 
     const [selectedKey, setSelectedKey] = useState<string>('1');
+    const [filteredItems, setFilteredItems] = useState<any[]>([]);
+    const [searchValue, setSearchValue] = useState<string>('');
+
+    useEffect(() => {
+        // Initialize filtered items
+        setFilteredItems(generateMenuItems(menuItems));
+    }, []);
+
+    useEffect(() => {
+        if (searchValue.trim() === '') {
+            setFilteredItems(generateMenuItems(menuItems));
+        } else {
+            const lowerSearchValue = searchValue.toLowerCase();
+            const filterMenu = (menu: any[]) =>
+                menu
+                    .map(item => {
+                        if (item.children) {
+                            const filteredChildren = filterMenu(item.children);
+                            if (filteredChildren.length > 0) {
+                                return { ...item, children: filteredChildren };
+                            }
+                        }
+                        if (t(item.label).toLowerCase().includes(lowerSearchValue)) {
+                            return item;
+                        }
+                        return null;
+                    })
+                    .filter(Boolean);
+            setFilteredItems(filterMenu(generateMenuItems(menuItems)));
+        }
+    }, [searchValue, t]);
 
     useEffect(() => {
         const matchingItem = menuItems.find(item => item.linkTo === location.pathname.split('/')[2]);
@@ -120,12 +160,28 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
         setSelectedKey('1');
     };
 
-    const items = menuItems.map((item, index) => ({
-        key: index.toString(),
-        icon: item.icon,
-        label: t(item.label),
-        onClick: () => handleItemClick(item.linkTo, index.toString()),
-    }));
+    const generateMenuItems = (menus: MenuItem[]) =>
+        menus.map((item, index) => {
+            if (item.subMenu) {
+                return {
+                    key: index.toString(),
+                    icon: item.icon,
+                    label: t(item.label),
+                    children: item.subMenu.map((subItem, subIndex) => ({
+                        key: `${index}-${subIndex}`,
+                        icon: subItem.icon,
+                        label: t(subItem.label),
+                        onClick: () => handleItemClick(subItem.linkTo, `${index}-${subIndex}`),
+                    })),
+                };
+            }
+            return {
+                key: index.toString(),
+                icon: item.icon,
+                label: t(item.label),
+                onClick: () => handleItemClick(item.linkTo, index.toString()),
+            };
+        });
 
     return (
         <Sider
@@ -142,12 +198,30 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
                 transition: 'width 0.2s',
             }}
         >
-            <div className="logo" onClick={handleLogoClick}></div>
+            <div className="logo" onClick={handleLogoClick}>
+                <img
+                    src="/assets/images/defty.png"
+                    alt="Logo"
+                    className="logo-img"
+                />
+                {!collapsed && <span className="logo-text">DEFTY MOVIE</span>}
+            </div>
+            {!collapsed && (
+                <div className="search-bar">
+                    <Input.Search
+                        placeholder={"Search ..."}
+                        allowClear
+                        onChange={e => setSearchValue(e.target.value)}
+                        value={searchValue}
+                        style={{ marginBottom: 16, padding: '0 16px' }}
+                    />
+                </div>
+            )}
             <Menu
                 theme="dark"
                 mode="inline"
                 selectedKeys={[selectedKey]}
-                items={items}
+                items={filteredItems}
             />
         </Sider>
     );

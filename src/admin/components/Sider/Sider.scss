@@ -3,21 +3,43 @@
 .app-sider {
     min-height: 100vh;
     background-color: $main_dark_color !important;
-
     .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         height: 64px;
         background: $main_dark_color;
+        border-bottom: 1px solid #ffffff1a;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        .logo-img {
+            max-width: 100%;
+            max-height: 50px;
+            object-fit: contain;
+        }
+        .logo-text {
+            margin-left: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+    }
+    .search-bar {
+        background: $main_dark_color;
+        //padding: 8px 16px;
+        margin-top: 20px;
+        border-bottom: 1px solid #ffffff1a;
     }
 
     .ant-menu {
         background-color: transparent;
 
         .ant-menu-item-selected {
-            background-color: $main_dark_color_hover;
-            margin: 0;
-            width: 100%;
-            border-radius: 0;
+            background-color: $main_dark_color_hover !important;
+            color: #fff !important;
+            border-radius: 8px;
+        }
+        .ant-menu-sub.ant-menu-inline{
+            background: $main_dark_color !important;
         }
     }
 }

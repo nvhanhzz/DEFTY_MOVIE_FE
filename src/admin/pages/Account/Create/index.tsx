@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, message, Upload, DatePicker, Select, Row, Col } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import React, {useEffect, useState} from 'react';
+import {Button, Col, DatePicker, Form, Input, message, Row, Select} from 'antd';
+import {useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
-import { postAccount } from "../../../services/accountService";
-import { getRoles } from "../../../services/roleSevice.tsx";
+import {postAccount} from "../../../services/accountService";
+import {getRoles} from "../../../services/roleSevice.tsx";
 import './CreateAccount.scss';
-import { RcFile } from "antd/es/upload";
-import { Role } from "../../Role";
+import {RcFile} from "antd/es/upload";
+import {Role} from "../../Role";
+import AvtEditor from "../../../components/AvtEditor";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -92,9 +92,10 @@ const CreateAccount: React.FC = () => {
         }
     };
 
-    const handleAvatarChange = ({ file }: { file: RcFile }) => {
+    const handleAvatarSave = (file: File | null) => {
         setFile(file);
     };
+
 
     const handleResetForm = () => {
         form.resetFields();
@@ -208,31 +209,15 @@ const CreateAccount: React.FC = () => {
                             </Select>
                         </Form.Item>
                     </Col>
-
                     <Col span={8} className="avatar-col">
                         <Form.Item label={t('admin.account.avatar')} className="avatar-wrapper">
-                            <div className="avatar-preview">
-                                <Upload
-                                    listType="picture-card"
-                                    beforeUpload={(file) => {
-                                        handleAvatarChange({ file });
-                                        return false;
-                                    }}
-                                    className="avatar-uploader"
-                                    showUploadList={false}
-                                >
-                                    <img
-                                        src={file ? URL.createObjectURL(file as Blob) : 'https://th.bing.com/th/id/OIP.lMA6AEzLnoPpw177nVhYZgHaHa?pid=ImgDet&w=184&h=184&c=7&dpr=1.3'}
-                                        alt="avatar"
-                                        className="avatar-image"
-                                    />
-                                </Upload>
-                                <Button className="upload-button">
-                                    <UploadOutlined /> {t('admin.account.upload')}
-                                </Button>
-                            </div>
+                            <AvtEditor
+                                onSave={handleAvatarSave}
+                                initialImage={file ? URL.createObjectURL(file) : undefined}
+                            />
                         </Form.Item>
                     </Col>
+
                 </Row>
                 <div className="form-actions">
                     <Button

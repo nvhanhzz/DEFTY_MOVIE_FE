@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {message, Spin, Switch, Tag} from 'antd';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import {getMovies, deleteMovie, switchStatusMovie} from '../../services/movieService';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
+import {deleteMovie, getMovies, switchStatusMovie} from '../../services/movieService';
 import OutletTemplate from '../../templates/Outlet';
+import type {DataListConfig} from '../../templates/DataList';
 import DataListTemplate from '../../templates/DataList';
-import type { DataListConfig } from '../../templates/DataList';
-import { LoadingOutlined } from '@ant-design/icons';
-import {Role} from "../Role";
-import {switchStatusAccount} from "../../services/accountService.tsx";
+import {EyeOutlined, LoadingOutlined} from '@ant-design/icons';
 
 export interface Movie {
     id: string;
@@ -52,6 +50,7 @@ const MoviePage: React.FC = () => {
                 key: item.id,
             }));
             setTotalItems(result.totalItems);
+            console.log(result)
             setData(movies.map(item => ({ ...item, key: item.id })));
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
@@ -227,7 +226,6 @@ const MoviePage: React.FC = () => {
                 dataIndex: 'status',
                 key: 'status',
                 align: 'center',
-                sorter: (a: Role, b: Role) => a.status - b.status,
                 render: (status, record) => (
                     <Switch
                         checked={status === 1}
@@ -235,6 +233,20 @@ const MoviePage: React.FC = () => {
                     />
                 ),
             },
+            {
+                title: t('admin.movie.detail'),
+                dataIndex: 'detail',
+                key: 'detail',
+                align: 'center',
+                render: (_text, record) => {
+                    return (
+                        <a onClick={() => navigate(`/admin/movies/${record.id}/episodes`)}>
+                            <EyeOutlined />
+                        </a>
+                    );
+                },
+            }
+
         ],
         data: data,
         rowKey: 'id',

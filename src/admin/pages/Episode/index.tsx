@@ -263,7 +263,7 @@ const EpisodePage: React.FC = () => {
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}`, name: t('admin.dashboard.title') },
-                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/movies/${movieId}`, name: t('admin.movie.title') },
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/movies`, name: t('admin.movie.title') },
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/movies/${movieId}/episode`, name: t('admin.episode.title') },
             ]}
         >
