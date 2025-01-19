@@ -37,8 +37,10 @@ const AppHeader: React.FC = () => {
                         <span>Language</span>
                     </div>
                     <div className="header__right--information--item">
-                        <FiUser/>
-                        <span>Me</span>
+                        <Link to="/profile" className="profile-link">
+                            <FiUser className="profile-icon"/>
+                            <span className="profile-text">Me</span>
+                        </Link>
                     </div>
                 </div>
                 <div className="header__right--vip">

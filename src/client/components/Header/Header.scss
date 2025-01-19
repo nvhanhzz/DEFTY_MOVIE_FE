@@ -134,13 +134,29 @@
 
       &--item {
         display: flex;
-        flex-direction: column; /* Icon và chữ xếp theo cột */
-        align-items: center; /* Căn giữa theo trục ngang */
-        justify-content: center; /* Căn giữa theo trục dọc */
-        color: rgba(255, 255, 255, 0.8); /* Màu chữ */
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.8);
         font-size: 14px;
         cursor: pointer;
         transition: color 0.3s;
+        .profile-link {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .profile-icon {
+          font-size: 24px; /* Kích thước của icon */
+        }
+
+        .profile-text {
+          margin-top: 4px; /* Khoảng cách giữa icon và chữ */
+          font-size: 14px; /* Kích thước chữ */
+        }
 
         svg {
           font-size: 24px; /* Kích thước icon */
