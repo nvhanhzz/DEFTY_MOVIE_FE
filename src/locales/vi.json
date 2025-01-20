@@ -290,6 +290,7 @@
             "addNewOption": "Thêm mới",
             "addNewMembershipType": "Thêm loại thành viên mới",
             "newMembershipType": "Loại thành viên mới",
+            "coverImage": "Ảnh bìa",
             "newMembershipTypePlaceholder": "Nhập loại thành viên mới",
             "create": {
                 "title": "Tạo phim mới",

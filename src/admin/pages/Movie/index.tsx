@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {message, Spin, Switch, Tag} from 'antd';
+import {message, Spin, Switch, Tag, Image} from 'antd';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {deleteMovie, getMovies, switchStatusMovie} from '../../services/movieService';
@@ -174,9 +174,14 @@ const MoviePage: React.FC = () => {
                 key: 'thumbnail',
                 align: 'center',
                 render: (thumbnail: string) => (
-                    <img src={thumbnail} alt="thumbnail" style={{ width: '100px', height: 'auto', borderRadius: '4px' }} />
+                    <Image
+                        style={{ borderRadius: '5px' }}
+                        src={thumbnail}
+                        width={120}
+                    />
                 ),
             },
+
             {
                 title: t('admin.movie.director'),
                 dataIndex: 'director',

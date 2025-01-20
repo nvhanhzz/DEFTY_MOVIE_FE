@@ -289,10 +289,10 @@
             "addNewMembershipType": "Add new membership type",
             "newMembershipType": "New membership type",
             "newMembershipTypePlaceholder": "Enter new membership type",
+            "coverImage": "Cover image",
             "create": {
                 "title": "Create movie",
-                "titleMovie": "Title movie",
-                "coverImage": "Cover image"
+                "titleMovie": "Title movie"
             },
             "placeholder": {
                 "nation": "Select a country",

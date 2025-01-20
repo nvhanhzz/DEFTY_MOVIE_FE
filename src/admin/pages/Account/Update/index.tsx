@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, message, Upload, DatePicker, Select, Row, Col } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import React, {useEffect, useState} from 'react';
+import {Button, Col, DatePicker, Form, Input, message, Row, Select} from 'antd';
+import {useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
-import { getAccountById, updateAccountById } from "../../../services/accountService";
-import { getRoles } from "../../../services/roleSevice.tsx";
+import {getAccountById, updateAccountById} from "../../../services/accountService";
+import {getRoles} from "../../../services/roleSevice.tsx";
 import './UpdateAccount.scss';
-import { RcFile } from "antd/es/upload";
-import { Role } from "../../Role";
-import { AccountFormValues } from "../Create";
-import { Account } from "../index.tsx";
+import {RcFile} from "antd/es/upload";
+import {Role} from "../../Role";
+import {AccountFormValues} from "../Create";
+import {Account} from "../index.tsx";
 import dayjs from 'dayjs';
 import AvtEditor from "../../../components/AvtEditor";
 
@@ -239,7 +238,7 @@ const UpdateAccount: React.FC = () => {
                 <div className="form-actions">
                     <Button
                         htmlType="button"
-                        onClick={handleResetForm}  // Gọi hàm reset khi bấm nút Reset
+                        onClick={handleResetForm}
                         className="reset-button"
                     >
                         {t('admin.form.reset')}

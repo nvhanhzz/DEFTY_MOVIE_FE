@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Col, DatePicker, Form, Input, message, Row, Select, Upload} from 'antd';
+import {Button, Col, DatePicker, Form, Input, message, Row, Select} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
@@ -7,10 +7,10 @@ import {postMovie} from "../../../services/movieService";
 import './CreateMovie.scss';
 import {RcFile} from "antd/es/upload";
 import AddOptionModal from "../CreateDirector";
-import {UploadOutlined} from "@ant-design/icons";
 import {getDirectors} from "../../../services/directorService.tsx";
 import {Director} from "../../Director";
 import CountrySelect from "../../../components/CountrySelect";
+import AvtEditor from "../../../components/AvtEditor";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -101,7 +101,7 @@ const CreateMovie: React.FC = () => {
         }
     };
 
-    const handleAvatarChange = ({ file }: { file: RcFile }) => {
+    const handleThumbnailSave = (file: File | null) => {
         setThumbnail(file);
     };
 
@@ -133,7 +133,7 @@ const CreateMovie: React.FC = () => {
                 className="create-movie-form"
             >
                 <Row gutter={10}>
-                    <Col span={16}>
+                    <Col span={14}>
                         <Form.Item
                             label={t('admin.movie.create.titleMovie')}
                             name="title"
@@ -229,49 +229,32 @@ const CreateMovie: React.FC = () => {
                                     </Select.Option>
                                 ))}
                             </Select>
-                            {/*<Select*/}
-                            {/*    options={directorOptions}*/}
-                            {/*    placeholder={t('admin.movie.directorPlaceholder')}*/}
-                            {/*    dropdownRender={(menu) => (*/}
-                            {/*        <>*/}
-                            {/*            {menu}*/}
-                            {/*            <Button type="link" onClick={() => showAddOptionModal("director")}>*/}
-                            {/*                + {t('admin.movie.addNewOption')}*/}
-                            {/*            </Button>*/}
-                            {/*        </>*/}
-                            {/*    )}*/}
-                            {/*/>*/}
                         </Form.Item>
                     </Col>
 
-                    <Col span={8} className="thumbnail-col">
+                    <Col span={10} className="thumbnail-col">
                         <Form.Item label={t('admin.movie.thumbnail')} className="thumbnail-wrapper">
-                            <div className="thumbnail-preview">
-                                <Upload
-                                    listType="picture-card"
-                                    beforeUpload={(file) => {
-                                        handleAvatarChange({ file });
-                                        return false;
-                                    }}
-                                    showUploadList={false}
-                                    className="thumbnail-uploader"
-                                >
-                                    <div className={"thumbnail-upload"}>
-                                        {thumbnail ? (
-                                            <img
-                                                src={URL.createObjectURL(thumbnail)}
-                                                alt="thumbnail"
-                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                            />
-                                        ) : (
-                                            <UploadOutlined style={{ fontSize: '24px' }} />
-                                        )}
-                                    </div>
-                                </Upload>
-                                <Button className="upload-button">
-                                    <UploadOutlined /> {t('admin.movie.upload')}
-                                </Button>
-                            </div>
+                            <AvtEditor
+                                onSave={handleThumbnailSave}
+                                initialImage={
+                                    thumbnail
+                                        ? URL.createObjectURL(thumbnail)
+                                        : '/assets/images/background-default.jpg'
+                                }
+                                shape="rectangle"
+                            />
+                        </Form.Item>
+
+                        <Form.Item label={t('admin.movie.coverImage')} className="thumbnail-wrapper">
+                            <AvtEditor
+                                onSave={handleThumbnailSave}
+                                initialImage={
+                                    thumbnail
+                                        ? URL.createObjectURL(thumbnail)
+                                        : '/assets/images/background-default.jpg'
+                                }
+                                shape="rectangle"
+                            />
                         </Form.Item>
                     </Col>
                 </Row>

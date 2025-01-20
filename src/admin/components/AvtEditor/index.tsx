@@ -7,11 +7,12 @@ import imageCompression from "browser-image-compression";
 import "./AvtEditor.scss";
 
 interface AvtEditorProps {
-    onSave: (file: File | null) => void; // Trả về File thay vì string
-    initialImage?: string; // Ảnh ban đầu nếu có
+    onSave: (file: File | null) => void;
+    initialImage?: string;
+    shape?: "circle" | "rectangle";
 }
 
-const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage }) => {
+const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage, shape = "circle" }) => {
     const [src, setSrc] = useState<string | null>(initialImage || null);
     const [preview, setPreview] = useState<string | null>(initialImage || null); // Preview ảnh
     const [modalOpen, setModalOpen] = useState(false);
@@ -123,7 +124,7 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage }) => {
             ) : (
                 preview && (
                     <div
-                        className="avt-editor__preview"
+                        className={`avt-editor__preview ${shape === "rectangle" ? "rectangle" : "circle"}`} // Thay đổi class theo shape
                         onClick={() => setModalOpen(true)} // Click vào ảnh mở modal
                     >
                         <img src={preview} alt="Avatar Preview" />
@@ -145,9 +146,13 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage }) => {
                             image={src}
                             scale={slideValue / 10}
                             border={50}
-                            borderRadius={150}
-                            className="avt-editor__canvas"
+                            borderRadius={shape === "circle" ? 150 : 0}
+                            className={`avt-editor__canvas ${shape === "rectangle" ? "rectangle" : "circle"}`}
+                            width={shape === "rectangle" ? 350 : 200}
+                            height={shape === "rectangle" ? 200 : 200}
                         />
+
+
                         <Slider
                             min={10}
                             max={50}

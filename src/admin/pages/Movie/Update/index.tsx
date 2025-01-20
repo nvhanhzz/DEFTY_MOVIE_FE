@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, message, Upload, DatePicker, Select, Row, Col } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import React, {useEffect, useState} from 'react';
+import {Button, Col, DatePicker, Form, Input, message, Row, Select} from 'antd';
+import {useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
-import { getMovieById, updateMovieById } from "../../../services/movieService";
+import {getMovieById, updateMovieById} from "../../../services/movieService";
 import './UpdateMovie.scss';
-import { RcFile } from "antd/es/upload";
+import {RcFile} from "antd/es/upload";
 import {Country, MovieFormValues} from "../Create";
-import { Movie } from "../index.tsx";
+import {Movie} from "../index.tsx";
 import dayjs from 'dayjs';
 import {getDirectors} from "../../../services/directorService.tsx";
+import AvtEditor from "../../../components/AvtEditor";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -18,6 +18,7 @@ const UpdateMovie: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [loading, setLoading] = useState(false);
     const [thumbnail, setThumbnail] = useState<RcFile | null>(null);
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const [form] = Form.useForm();
     const { t } = useTranslation();
     const [directorOptions, setDirectorOptions] = useState([]);
@@ -62,7 +63,7 @@ const UpdateMovie: React.FC = () => {
                         releaseDate: data.releaseDate ? dayjs(data.releaseDate) : null,
                     });
                     if (data.thumbnail) {
-                        form.setFieldsValue({ thumbnail: data.thumbnail });
+                        setAvatarUrl(data.thumbnail);
                     }
                 }
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -127,13 +128,10 @@ const UpdateMovie: React.FC = () => {
         }
     };
 
-    // Hàm xử lý khi chọn thumbnail
-    const handleAvatarChange = ({ file }: { file: RcFile }) => {
-        console.log(file)
+    const handleThumbnailSave = (file: File | null) => {
         setThumbnail(file);
     };
 
-    // Hàm xử lý khi reset form, bao gồm reset thumbnail
     const handleResetForm = () => {
         form.resetFields();
         setThumbnail(null);
@@ -154,7 +152,7 @@ const UpdateMovie: React.FC = () => {
                 className="update-movie-form"
             >
                 <Row gutter={10}>
-                    <Col span={16}>
+                    <Col span={14}>
                         <Form.Item
                             label={t('admin.movie.create.titleMovie')}
                             name="title"
@@ -250,41 +248,39 @@ const UpdateMovie: React.FC = () => {
 
                     </Col>
 
-                    <Col span={8} className="thumbnail-col">
+                    <Col span={10} className="thumbnail-col">
+                        {/* Thumbnail */}
                         <Form.Item label={t('admin.movie.thumbnail')} className="thumbnail-wrapper">
-                            <div className="thumbnail-preview">
-                                <Upload
-                                    listType="picture-card"
-                                    beforeUpload={(file) => {
-                                        handleAvatarChange({ file });
-                                        return false;
-                                    }}
-                                    showUploadList={false}
-                                    className="thumbnail-uploader"
-                                >
-                                    <div className={"thumbnail-upload"}>
-                                        {thumbnail ? (
-                                            <img
-                                                src={URL.createObjectURL(thumbnail)}
-                                                alt="thumbnail"
-                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                            />
-                                        ) : (
-                                            <UploadOutlined style={{ fontSize: '24px' }} />
-                                        )}
-                                    </div>
-                                </Upload>
-                                <Button className="upload-button">
-                                    <UploadOutlined /> {t('admin.movie.upload')}
-                                </Button>
-                            </div>
+                            <AvtEditor
+                                onSave={handleThumbnailSave}
+                                initialImage={
+                                    avatarUrl
+                                        ? avatarUrl
+                                        : '/assets/images/default-thumbnail.jpg'
+                                }
+                                shape="rectangle"
+                            />
+                        </Form.Item>
+
+                        {/* Cover Image */}
+                        <Form.Item label={t('admin.movie.coverImage')} className="thumbnail-wrapper">
+                            <AvtEditor
+                                onSave={handleThumbnailSave}
+                                initialImage={
+                                    avatarUrl
+                                        ? avatarUrl
+                                        : '/assets/images/default-cover.jpg'
+                                }
+                                shape="rectangle"
+                            />
                         </Form.Item>
                     </Col>
+
                 </Row>
                 <div className="form-actions">
                     <Button
                         htmlType="button"
-                        onClick={handleResetForm}  // Gọi hàm reset khi bấm nút Reset
+                        onClick={handleResetForm}
                         className="reset-button"
                     >
                         {t('admin.form.reset')}
