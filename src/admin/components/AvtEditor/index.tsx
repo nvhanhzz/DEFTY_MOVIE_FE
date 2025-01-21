@@ -23,6 +23,7 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage, shape = "ci
     // Xử lý initialImage khi prop thay đổi
     useEffect(() => {
         if (initialImage) {
+            console.log(initialImage);
             const fetchAndSetImage = async () => {
                 setIsLoading(true); // Bật loading
                 try {
@@ -109,10 +110,11 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage, shape = "ci
             <label htmlFor="upload-avatar" className="avt-editor__upload-btn">
                 <Button
                     icon={<UploadOutlined />}
+                    style={{ position: "absolute", top: src ? "-35px" : 0, right: 0 }}
                     loading={isLoading} // Loading trạng thái trên nút upload
                     onClick={() => document.getElementById("upload-avatar")?.click()} // Kích hoạt input ẩn
                 >
-                    Upload
+                    {src ? 'Change' : 'Upload'}
                 </Button>
             </label>
 
@@ -151,7 +153,6 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage, shape = "ci
                             width={shape === "rectangle" ? 350 : 200}
                             height={shape === "rectangle" ? 200 : 200}
                         />
-
 
                         <Slider
                             min={10}

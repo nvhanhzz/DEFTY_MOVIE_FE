@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './CustomTransfer.scss';
-import { Button, Modal, message } from 'antd';
+import { Button, Modal, message, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons'; // Import biểu tượng từ Ant Design
 import { assignPermission, unassignPermission } from '../../services/roleSevice';
 import { useTranslation } from 'react-i18next'; // Import hook useTranslation
@@ -110,11 +110,12 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
                                     onChange={() => handleSourceCheckboxChange(item.id)}
                                 />
                                 <span className="permission-title">{item.name}</span>
-                                {/* Xóa tooltip cho icon */}
-                                <InfoCircleOutlined className="info-icon"/>
+                                {/* Sử dụng Tooltip để hiển thị mô tả khi hover vào icon */}
+                                <Tooltip title={item.description}>
+                                    <InfoCircleOutlined className="info-icon"/>
+                                </Tooltip>
                             </li>
                         ))}
-
                 </ul>
             </div>
 
@@ -151,8 +152,9 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
                                 onChange={() => handleTargetCheckboxChange(item.id)}
                             />
                             <span className="permission-title">{item.name}</span>
-                            {/* Xóa tooltip cho icon */}
-                            <InfoCircleOutlined className="info-icon"/>
+                            <Tooltip title={item.description}>
+                                <InfoCircleOutlined className="info-icon"/>
+                            </Tooltip>
                         </li>
                     ))}
                 </ul>

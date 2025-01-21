@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {message, Spin, Switch} from 'antd';
+import {Image, message, Spin, Switch} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import OutletTemplate from '../../templates/Outlet';
@@ -148,6 +148,30 @@ const AccountPage: React.FC = () => {
                 sorter: (a: Account, b: Account) => Number(a.id) - Number(b.id),
             },
             {
+                title: t('admin.account.fullName'),
+                dataIndex: 'fullName',
+                key: 'fullName',
+                align: 'center',
+                sorter: (a: Account, b: Account) => (a.fullName || '').localeCompare(b.fullName || ''),
+            },
+            {
+                title: t('admin.account.avatar'),
+                dataIndex: 'avatar',
+                key: 'avatar',
+                render: (avatar: string) => (
+                    <Image
+                        width={80}  // Điều chỉnh kích thước ảnh nếu cần
+                        height={80}
+                        style={{
+                            objectFit: 'cover',
+                            borderRadius: '4px'
+                        }}
+                        src={avatar}  // Đường dẫn ảnh
+                        alt="avatar"
+                    />
+                ),
+            },
+            {
                 title: t('admin.account.username'),
                 dataIndex: 'username',
                 key: 'username',
@@ -160,13 +184,6 @@ const AccountPage: React.FC = () => {
                 key: 'email',
                 align: 'center',
                 sorter: (a: Account, b: Account) => (a.email || '').localeCompare(b.email || ''),
-            },
-            {
-                title: t('admin.account.fullName'),
-                dataIndex: 'fullName',
-                key: 'fullName',
-                align: 'center',
-                sorter: (a: Account, b: Account) => (a.fullName || '').localeCompare(b.fullName || ''),
             },
             {
                 title: t('admin.account.phone'),

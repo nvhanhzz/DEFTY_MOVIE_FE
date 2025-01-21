@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {message, Spin, Switch} from 'antd';
+import {message, Spin, Switch, Image} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
@@ -121,7 +121,7 @@ const DirectorPage: React.FC = () => {
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
-        const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
+        const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
         const filtersFromUrl: Record<string, string> = {};
         const initialSearchValues: Record<string, any> = {};
 
@@ -232,7 +232,16 @@ const DirectorPage: React.FC = () => {
                 dataIndex: 'avatar',
                 key: 'avatar',
                 render: (avatar: string) => (
-                    <img src={avatar} alt="thumbnail" style={{ width: '80px', height: 'auto', borderRadius: '50%' }} />
+                    <Image
+                        width={80}  // Điều chỉnh kích thước ảnh nếu cần
+                        height={80}
+                        style={{
+                            objectFit: 'cover',
+                            borderRadius: '4px'
+                        }}
+                        src={avatar}  // Đường dẫn ảnh
+                        alt="avatar"
+                    />
                 ),
             },
             {

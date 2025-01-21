@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {message, Spin, Switch} from 'antd';
+import {Image, message, Spin, Switch} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import dayjs from 'dayjs'; // Use dayjs instead of moment
@@ -27,6 +27,7 @@ export interface Actor {
 }
 
 const ActorPage: React.FC = () => {
+    const location = useLocation();
     const { t } = useTranslation();
     const [data, setData] = useState<Actor[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -35,7 +36,6 @@ const ActorPage: React.FC = () => {
     const [pageSize, setPageSize] = useState<number>(10);
     const [filters, setFilters] = useState<Record<string, string>>({});
     const navigate = useNavigate();
-    const location = useLocation();
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
 
     const searchFields = [
@@ -103,7 +103,6 @@ const ActorPage: React.FC = () => {
         try {
             const response = await getActors(page, pageSize, filters); // Gọi API với từ khóa
             const result = await response.json();
-            console.log(result);
             if (!response.ok || result.status === 404) {
                 setTotalItems(0);
                 setData([]);
@@ -111,7 +110,6 @@ const ActorPage: React.FC = () => {
             }
 
             const content: Actor[] = result.data.content;
-            console.log(content);
             const actors = content.map((item: Actor) => ({
                 ...item,
                 key: item.id,
@@ -130,7 +128,7 @@ const ActorPage: React.FC = () => {
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
-        const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
+        const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
         const filtersFromUrl: Record<string, string> = {};
         const initialSearchValues: Record<string, any> = {};
 
@@ -148,7 +146,6 @@ const ActorPage: React.FC = () => {
         setPageSize(pageSizeFromUrl);
         setFilters(filtersFromUrl);
         setInitialValues(initialSearchValues);
-        console.log(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {
@@ -243,7 +240,16 @@ const ActorPage: React.FC = () => {
                 dataIndex: 'avatar',
                 key: 'avatar',
                 render: (avatar: string) => (
-                    <img src={avatar} alt="thumbnail" style={{ width: '100px', height: 'auto', borderRadius: '4px' }} />
+                    <Image
+                        width={80}  // Điều chỉnh kích thước ảnh nếu cần
+                        height={80}
+                        style={{
+                            objectFit: 'cover',
+                            borderRadius: '4px'
+                        }}
+                        src={avatar}  // Đường dẫn ảnh
+                        alt="avatar"
+                    />
                 ),
             },
             {
