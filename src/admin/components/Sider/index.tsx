@@ -128,7 +128,7 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
                 menu
                     .map(item => {
                         if (item.children) {
-                            const filteredChildren = filterMenu(item.children);
+                            const filteredChildren: MenuItem[] = filterMenu(item.children);
                             if (filteredChildren.length > 0) {
                                 return { ...item, children: filteredChildren };
                             }

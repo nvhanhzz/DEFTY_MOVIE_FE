@@ -14,7 +14,8 @@ export const StoreProvider: React.FC<StoreProviderProps> = ({ children }) => {
     const location = useLocation();
     const isAdmin = location.pathname.startsWith(PREFIX_URL_ADMIN);
 
-    const store = isAdmin ? adminStore : clientStore;
+    const store = isAdmin ? (adminStore as any) : (clientStore as any);
+
 
     return (
         <ReduxProvider store={store}>

@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {message, Spin, Switch} from 'antd';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../templates/Outlet';
+import type {DataListConfig} from '../../templates/DataList';
 import DataListTemplate from '../../templates/DataList';
-import type { DataListConfig } from '../../templates/DataList';
-import { LoadingOutlined } from '@ant-design/icons';
+import {LoadingOutlined} from '@ant-design/icons';
 import {deleteAccounts, getAccounts, switchStatusAccount} from '../../services/accountService.tsx';
-import {Role} from "../Role";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -191,7 +190,6 @@ const AccountPage: React.FC = () => {
                 dataIndex: 'status',
                 key: 'status',
                 align: 'center',
-                sorter: (a: Role, b: Role) => a.status - b.status,
                 render: (status, record) => (
                     <Switch
                         checked={status === 1}

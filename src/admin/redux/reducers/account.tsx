@@ -18,3 +18,6 @@ const accountReducer = (state = initialState, action: { type: string; account: A
 }
 
 export default accountReducer;
+
+export class currentUserState {
+}

@@ -82,6 +82,7 @@ const UpdateArticle: React.FC = () => {
 
             message.success(t('admin.message.updateSuccess'));
             navigate(`${PREFIX_URL_ADMIN}/articles`);  // Sau khi update, điều hướng đến danh sách bài viết
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {

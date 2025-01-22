@@ -34,7 +34,7 @@ export const getArticleById = (id: string): Promise<Response> => {
     return handleRequest(get(url));
 };
 
-export const updateArticleById = (id: string, option: FormData): Promise<Response> => {
+export const updateArticleById = (id: string | undefined, option: FormData): Promise<Response> => {
     const url = `${PREFIX_ARTICLE}/${id}`;
     return handleRequest(patchFormData(url, option));
 };

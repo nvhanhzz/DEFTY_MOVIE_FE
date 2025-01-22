@@ -129,6 +129,7 @@ const UpdateMovie: React.FC = () => {
     };
 
     const handleThumbnailSave = (file: File | null) => {
+        // @ts-ignore
         setThumbnail(file);
     };
 
