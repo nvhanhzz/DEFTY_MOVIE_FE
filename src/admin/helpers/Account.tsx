@@ -16,6 +16,9 @@ export const setCurrentAccountHelper = async (): Promise<Account | null> => {
         fullName: result.data.fullName,
         phone: result.data.phone,
         status: result.data.status,
-        roleId: result.data.roleId
+        role: result.data.role,
+        dateOfBirth: result.data.dateOfBirth,
+        address: result.data.address,
+        gender: result.data.gender
     };
 };

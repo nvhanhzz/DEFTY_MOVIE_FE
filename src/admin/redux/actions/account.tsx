@@ -8,7 +8,10 @@ export interface Account {
     email: string,
     phone: string,
     status: string,
-    roleId: string
+    role: string,
+    dateOfBirth: string,
+    address: string,
+    gender: string,
 }
 
 export const setCurrentAccount = (account: Account | null) => ({
