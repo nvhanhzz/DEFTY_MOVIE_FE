@@ -77,7 +77,7 @@ const Carousel: React.FC = () => {
         nextSlide();
         resetInterval();
     };
-//hello
+//hello 1
     // Xử lý khi người dùng bấm nút Prev
     const handlePrev = () => {
         prevSlide();
