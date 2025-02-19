@@ -1,7 +1,7 @@
 import { useAdminDispatch } from './useAdminDispatch';
 import { useAdminSelector } from './useAdminSelector';
 import { useEffect } from 'react';
-import { setCurrentAccount } from '../redux/actions/account';
+import { setCurrentAccount } from '../redux/actions/accountRedux.tsx';
 import { setCurrentAccountHelper } from '../helpers/Account';
 
 export const useAuth = () => {
