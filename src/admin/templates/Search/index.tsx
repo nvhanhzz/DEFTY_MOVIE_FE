@@ -1,10 +1,11 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Form, DatePicker, Select, Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import "./Search.scss";
 import dayjs from "dayjs";
 import CountrySelect from "../../components/CountrySelect";
+import { useNavigate } from "react-router-dom";
 
 export interface SearchFormField {
     type: 'dateRange' | 'select' | 'input' | 'nationality' | 'country' | string;
@@ -25,10 +26,20 @@ export interface SearchFormConfig {
 const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields, initialValues = {} }) => {
     const { t } = useTranslation();
     const [form] = Form.useForm();
+    const navigate = useNavigate();
+    let clear = 0;
+
+    const onClear = () => {
+        navigate('', { replace: true });
+        ++clear;
+    };
 
     useEffect(() => {
+        if (JSON.stringify(initialValues) === "{}") {
+            form.resetFields();
+        }
         form.setFieldsValue(initialValues);
-    }, [initialValues]);
+    }, [initialValues, clear]);
 
     return (
         <Form
@@ -73,7 +84,7 @@ const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields, init
                                     const formattedStart = start ? dayjs(start, 'DD/MM/YYYY', true).isValid() ? dayjs(start, 'DD/MM/YYYY').format('DD/MM/YYYY') : '' : '';
                                     const formattedEnd = end ? dayjs(end, 'DD/MM/YYYY', true).isValid() ? dayjs(end, 'DD/MM/YYYY').format('DD/MM/YYYY') : '' : '';
 
-                                    const result = formattedStart || formattedEnd ? `${formattedStart} - ${formattedEnd}` : '';;
+                                    const result = formattedStart || formattedEnd ? `${formattedStart} - ${formattedEnd}` : '';
 
                                     form.setFieldsValue({
                                         [field.name]: result,
@@ -117,6 +128,7 @@ const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields, init
                     )}
                 </Form.Item>
             ))}
+
             <Form.Item>
                 <Button
                     type="default"
@@ -124,6 +136,13 @@ const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields, init
                     onClick={() => form.resetFields()} // Reset toàn bộ form
                 >
                     {t('admin.form.reset')}
+                </Button>
+                <Button
+                    type="default"
+                    style={{ marginRight: '8px' }}
+                    onClick={onClear} // Xóa sạch params và reset form
+                >
+                    {t('admin.form.clear')}
                 </Button>
                 <Button
                     type="primary"

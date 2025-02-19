@@ -7,6 +7,8 @@ import { postLogout } from '../../services/authService';
 import { useAdminDispatch } from '../../hooks/useAdminDispatch';
 import { setCurrentAccount } from '../../redux/actions/account';
 import { addAlert } from '../../redux/actions/alert';
+import {useAdminSelector} from "../../hooks/useAdminSelector.tsx";
+import {useNavigate} from "react-router-dom";
 
 interface HeaderProps {
     collapsed: boolean;
@@ -17,6 +19,8 @@ const AppHeader: React.FC<HeaderProps> = ({ collapsed, toggleCollapse }) => {
     const { t, i18n } = useTranslation();
     const dispatch = useAdminDispatch();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const navigate = useNavigate();
+    const currentAccount = useAdminSelector((state) => state.currentAccount.account);
 
     const handleLogout = async () => {
         setIsLoading(true);
@@ -37,6 +41,7 @@ const AppHeader: React.FC<HeaderProps> = ({ collapsed, toggleCollapse }) => {
             key: 'profile',
             icon: <UserOutlined />,
             label: t('admin.header.profile'),
+            onClick: () => {navigate("/admin/profile")}
         },
         {
             key: 'logout',
@@ -80,7 +85,12 @@ const AppHeader: React.FC<HeaderProps> = ({ collapsed, toggleCollapse }) => {
                     trigger={['click']}
                     placement="bottomRight"
                 >
-                    <Avatar size="large" icon={<UserOutlined/>} className="avatar-button"/>
+                    <Avatar
+                        size="large"
+                        src={currentAccount?.avatar || undefined} // Hiển thị avatar nếu có
+                        icon={!currentAccount?.avatar ? <UserOutlined /> : null} // Hiển thị icon nếu không có avatar
+                        className="avatar-button"
+                    />
                 </Dropdown>
             </div>
 

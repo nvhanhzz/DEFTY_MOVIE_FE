@@ -20,6 +20,7 @@
         },
         "form": {
             "reset": "Đặt lại",
+            "clear": "Xóa",
             "create": "Tạo mới",
             "update": "Cập nhật",
             "delete": "Xóa",

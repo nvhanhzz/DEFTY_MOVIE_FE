@@ -9,7 +9,7 @@ export const getWithParams = async (url: string, params: Params = {}) => {
     const queryParams = new URLSearchParams();
 
     Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined) {
+        if (value !== undefined && key !== 'pageSize') {
             if (key === 'page') {
                 value = value as number - 1;
             }

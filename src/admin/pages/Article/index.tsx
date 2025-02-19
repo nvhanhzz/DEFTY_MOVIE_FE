@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {message, Spin, Switch} from 'antd';
+import {Image, message, Spin, Switch} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {getArticles, deleteArticles, switchStatusArticle} from '../../services/articleService';
@@ -28,6 +28,7 @@ const ArticlesPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
+    const [initialValues, setInitialValues] = useState<Record<string, any>>({});
 
     const searchFields = [
         {
@@ -81,18 +82,24 @@ const ArticlesPage: React.FC = () => {
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
-        const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
+        const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
         const filtersFromUrl: Record<string, string> = {};
+        const initialSearchValues: Record<string, any> = {};
 
         searchParams.forEach((value, key) => {
             if (key !== 'page' && key !== 'size') {
                 filtersFromUrl[key] = value;
+                const field = searchFields.find((f) => f.name === key);
+                if (field) {
+                    initialSearchValues[key] = value;
+                }
             }
         });
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
         setFilters(filtersFromUrl);
+        setInitialValues(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {
@@ -194,7 +201,15 @@ const ArticlesPage: React.FC = () => {
                 dataIndex: 'thumbnail',
                 key: 'thumbnail',
                 render: (thumbnail: string) => (
-                    <img src={thumbnail} alt="thumbnail" style={{ width: '100px', height: 'auto', borderRadius: '4px' }} />
+                    <Image
+                        width={80}
+                        style={{
+                            objectFit: 'cover',
+                            borderRadius: '4px'
+                        }}
+                        src={thumbnail}  // Đường dẫn ảnh
+                        alt="thumbnail"
+                    />
                 ),
             },
             {
@@ -234,10 +249,7 @@ const ArticlesPage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/articles`, name: t('admin.article.title') },
             ]}
         >
-            <SearchFormTemplate
-                fields={searchFields}
-                onSearch={handleSearch}
-            />
+            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

@@ -133,7 +133,7 @@ const EpisodePage: React.FC = () => {
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
-        const pageSizeFromUrl = parseInt(searchParams.get('size') || '10', 10);
+        const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
         const filtersFromUrl: Record<string, string> = {};
         const initialSearchValues: Record<string, any> = {};
 

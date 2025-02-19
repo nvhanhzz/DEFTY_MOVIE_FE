@@ -36,6 +36,8 @@ import CreateActor from "../pages/Actor/Create";
 import UpdateActor from "../pages/Actor/Update";
 import Test from "../pages/Test";
 import UserPage from "../pages/User";
+import Profile from "../pages/Profile";
+import UpdateProfile from "../pages/Profile/Update";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -188,6 +190,14 @@ const DefaultRoutes: RouteType[] = [
     {
         path: 'test',
         element: <Test />,
+    },
+    {
+        path: 'profile',
+        element: <Profile />
+    },
+    {
+        path: 'profile/update',
+        element: <UpdateProfile />
     },
     // {
     //     path: 'settings',

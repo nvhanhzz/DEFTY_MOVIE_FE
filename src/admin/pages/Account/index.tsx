@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {message, Spin, Switch} from 'antd';
-import {useLocation, useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import React, { useEffect, useState } from 'react';
+import {Image, message, Spin, Switch} from 'antd';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import OutletTemplate from '../../templates/Outlet';
-import type {DataListConfig} from '../../templates/DataList';
 import DataListTemplate from '../../templates/DataList';
-import {LoadingOutlined} from '@ant-design/icons';
+import type { DataListConfig } from '../../templates/DataList';
+import { LoadingOutlined } from '@ant-design/icons';
 import {deleteAccounts, getAccounts, switchStatusAccount} from '../../services/accountService.tsx';
+import {Role} from "../Role";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -147,6 +148,30 @@ const AccountPage: React.FC = () => {
                 sorter: (a: Account, b: Account) => Number(a.id) - Number(b.id),
             },
             {
+                title: t('admin.account.fullName'),
+                dataIndex: 'fullName',
+                key: 'fullName',
+                align: 'center',
+                sorter: (a: Account, b: Account) => (a.fullName || '').localeCompare(b.fullName || ''),
+            },
+            {
+                title: t('admin.account.avatar'),
+                dataIndex: 'avatar',
+                key: 'avatar',
+                render: (avatar: string) => (
+                    <Image
+                        width={80}  // Điều chỉnh kích thước ảnh nếu cần
+                        height={80}
+                        style={{
+                            objectFit: 'cover',
+                            borderRadius: '4px'
+                        }}
+                        src={avatar}  // Đường dẫn ảnh
+                        alt="avatar"
+                    />
+                ),
+            },
+            {
                 title: t('admin.account.username'),
                 dataIndex: 'username',
                 key: 'username',
@@ -190,6 +215,7 @@ const AccountPage: React.FC = () => {
                 dataIndex: 'status',
                 key: 'status',
                 align: 'center',
+                sorter: (a: Role, b: Role) => a.status - b.status,
                 render: (status, record) => (
                     <Switch
                         checked={status === 1}
