@@ -3,9 +3,9 @@ import { MdOutlineStar } from "react-icons/md";
 import { FaCirclePlay } from "react-icons/fa6";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { Movie } from "../MovieCard";
-import "./RecommendedMovie.scss";
+import "./RecommendedBanner.scss";
 
-const RecommendedMovie: React.FC<Movie> = ({
+const RecommendedBanner: React.FC<Movie> = ({
                                                                name,
                                                                category,
                                                                rating,
@@ -15,28 +15,28 @@ const RecommendedMovie: React.FC<Movie> = ({
                                                            }) => {
     return (
         <div
-            className="recommended-movie"
+            className="recommended-banner"
             style={{ backgroundImage: `url(${thumbnail})` }}
         >
-            <div className="recommended-movie-overlay">
-                <div className="recommended-movie-content">
-                    <h1 className="movie-title">{name}</h1>
-                    <p className="movie-info">
-                        <span className="movie-rating">
+            <div className="recommended-banner-overlay">
+                <div className="recommended-banner-content">
+                    <h1 className="banner-title">{name}</h1>
+                    <p className="banner-info">
+                        <span className="banner-rating">
                             <MdOutlineStar/> {rating}
                         </span> |{" "}
-                        <span className="movie-release-date">{releaseDate}</span>
+                        <span className="banner-release-date">{releaseDate}</span>
                     </p>
-                    <div className="movie-category">
+                    <div className="banner-category">
                         {category.map((tag, index) => (
-                            <span key={index} className="movie-tag">
+                            <span key={index} className="banner-tag">
                                 {tag}
                             </span>
                         ))}
                     </div>
-                    <p className="movie-description">{description}</p>
+                    <p className="banner-description">{description}</p>
                 </div>
-                <div className="recommended-movie-buttons">
+                <div className="recommended-banner-buttons">
                     <FaCirclePlay className="play-icon"/>
                     <MdOutlineBookmarkAdd className="bookmark-icon"/>
                 </div>
@@ -45,4 +45,4 @@ const RecommendedMovie: React.FC<Movie> = ({
     );
 };
 
-export default RecommendedMovie;
+export default RecommendedBanner;

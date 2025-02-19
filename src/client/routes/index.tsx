@@ -7,6 +7,7 @@ import History from "../pages/Profile/History";
 import Favorites from "../pages/Profile/Favorites";
 import Booked from "../pages/Profile/Booked";
 import Subtitles from "../pages/Profile/Subtitles";
+import MovieDetail from "../pages/MovieDetail";
 
 const ClientRoutes = () => [
     {
@@ -15,6 +16,7 @@ const ClientRoutes = () => [
         children: [
             { path: '', element: <Home /> },
             { path: 'test', element: <Test /> },
+            { path: '/album/:slug', element: <MovieDetail /> },
             {
                 path: 'profile',
                 element: <Profile />,

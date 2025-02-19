@@ -1,0 +1,7 @@
+.list-episode {
+  width: calc(100% - 2 * 72px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 72px;
+}
