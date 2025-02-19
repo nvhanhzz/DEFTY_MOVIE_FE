@@ -1,4 +1,9 @@
 .avt-editor {
+  max-width: 250px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+
   &__upload-btn {
     cursor: pointer;
     display: inline-block;
@@ -28,6 +33,7 @@
   }
 
   &__preview {
+    margin-top: 15px;
     width: 200px; /* Kích thước hình tròn mặc định */
     height: 200px;
     border-radius: 50%; /* Hình tròn mặc định */

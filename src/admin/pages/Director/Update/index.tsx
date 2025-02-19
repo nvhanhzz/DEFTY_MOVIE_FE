@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { DirectorFromValues } from "../Create";
 import CountrySelect from "../../../components/CountrySelect";
 import AvtEditor from "../../../components/AvtEditor";
+import {standardization} from "../../../helpers/Date.tsx";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -135,7 +136,16 @@ const UpdateDirector: React.FC = () => {
                             name="datePicker"
                             rules={[{ required: true, message: t('admin.director.validation.dateOfBirth') }]}
                         >
-                            <DatePicker format="YYYY-MM-DD" />
+                            <DatePicker
+                                format="YYYY-MM-DD"
+                                onChange={(_date, dateString) => { form.setFieldsValue({ dateOfBirth: standardization(dateString as string) }) }}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="dateOfBirth"
+                            hidden
+                        >
+                            <Input />
                         </Form.Item>
 
                         <Form.Item
@@ -187,7 +197,7 @@ const UpdateDirector: React.FC = () => {
                         </Form.Item>
                     </Col>
 
-                    <Col span={8}>
+                    <Col span={8} style={{display: 'flex', justifyContent: 'center'}}>
                         <Form.Item label={t('admin.director.avatar')} className="avatar-wrapper">
                             <AvtEditor
                                 onSave={handleAvatarSave}
