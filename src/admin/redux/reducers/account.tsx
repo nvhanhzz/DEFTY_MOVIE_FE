@@ -1,12 +1,12 @@
-import { SET_CURRENT_ACCOUNT, Account } from "../actions/account";
+import { SET_CURRENT_ACCOUNT, AccountRedux } from "../actions/accountRedux.tsx";
 
 export interface accountState {
-    account: Account | null
+    account: AccountRedux | null
 }
 
 const initialState: accountState | null = null;
 
-const accountReducer = (state = initialState, action: { type: string; account: Account | null }): accountState | null => {
+const accountReducer = (state = initialState, action: { type: string; account: AccountRedux | null }): accountState | null => {
     switch (action.type) {
         case SET_CURRENT_ACCOUNT:
             return {

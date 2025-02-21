@@ -454,6 +454,19 @@
                 "title": "User detail",
                 "notFound": "User details not found."
             }
+        },
+        "homeConfig": {
+            "title": "Home config",
+            "contentType": "Content type",
+            "contentName": "Content name",
+            "position": "Position",
+            "note": "Note",
+            "create": {
+                "title": "Create show on"
+            },
+            "update": {
+                "title": "Update show on"
+            }
         }
     },
     "client": {}

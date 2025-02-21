@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './Header.scss';
 import { postLogout } from '../../services/authService';
 import { useAdminDispatch } from '../../hooks/useAdminDispatch';
-import { setCurrentAccount } from '../../redux/actions/account';
+import { setCurrentAccount } from '../../redux/actions/accountRedux.tsx';
 import { addAlert } from '../../redux/actions/alert';
 import {useAdminSelector} from "../../hooks/useAdminSelector.tsx";
 import {useNavigate} from "react-router-dom";

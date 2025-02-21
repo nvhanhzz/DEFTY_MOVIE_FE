@@ -1,39 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import {message, Spin, Switch} from 'antd';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { message, Spin, Switch} from 'antd';
+import {useNavigate, useLocation, Link} from 'react-router-dom';
 import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
-import {getCategories, deleteCategories, switchStatusCategory} from "../../services/categoryService.tsx";
+import {deleteShowOns, getShowOns, switchStatusShowOn} from "../../services/homeConfigService.tsx";
 import SearchFormTemplate from "../../templates/Search";
+import {useTranslation} from "react-i18next";
 
-export interface Category {
+const prefixAdmin: string = import.meta.env.VITE_PREFIX_URL_ADMIN;
+
+export interface ShowOn {
     id: string;
-    name: string;
-    description: string;
-    status: number;
+    position: number;
+    contentName: number;
+    contentType: string;
+    note: string
 }
 
-const CategoryPage: React.FC = () => {
-    const { t } = useTranslation(); // Khởi tạo t từ useTranslation
-    const [data, setData] = useState<Category[]>([]);
+const HomeConfigPage: React.FC = () => {
+    const location = useLocation();
+    const { t } = useTranslation();
+    const [data, setData] = useState<ShowOn[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [filters, setFilters] = useState<Record<string, string>>({});
     const navigate = useNavigate();
-    const location = useLocation();
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
 
     const searchFields = [
         {
             type: 'input',
-            label: t('admin.category.name'),
-            name: 'name',
-            placeholder: t('admin.category.name'),
+            label: t('admin.homeConfig.contentType'),
+            name: 'contentType',
+            placeholder: t('admin.homeConfig.contentType'),
+        },
+        {
+            type: 'input',
+            label: t('admin.homeConfig.contentName'),
+            name: 'contentName',
+            placeholder: t('admin.homeConfig.contentName'),
         },
         {
             type: 'select',
@@ -60,22 +69,24 @@ const CategoryPage: React.FC = () => {
     const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
         setIsLoading(true);
         try {
-            const response = await getCategories(page, pageSize, filters);
+            const response = await getShowOns(page, pageSize, filters); // Gọi API với từ khóa
             const result = await response.json();
-
             if (!response.ok || result.status === 404) {
                 setTotalItems(0);
                 setData([]);
                 return;
             }
-            const content: Category[] = result.data.content;
-            const categories = content.map((item: Category) => ({
+
+            const content: ShowOn[] = result.data.content;
+            const showOns = content.map((item: ShowOn) => ({
                 ...item,
                 key: item.id,
             }));
             setTotalItems(result.data.totalElements);
-            setData(categories);
+            setData(showOns);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
+            console.log(error);
             message.error(t('admin.message.fetchError'));
         } finally {
             setIsLoading(false);
@@ -103,7 +114,6 @@ const CategoryPage: React.FC = () => {
         setPageSize(pageSizeFromUrl);
         setFilters(filtersFromUrl);
         setInitialValues(initialSearchValues);
-        console.log(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {
@@ -128,17 +138,17 @@ const CategoryPage: React.FC = () => {
     };
 
     const handleUpdate = (id: string) => {
-        navigate(`/admin/category/update/${id}`);
+        navigate(`update/${id}`);
     };
 
     const handleCreateNewPermission = () => {
-        navigate('/admin/category/create');
+        navigate('create');
     };
 
     const handleDeleteSelected = async (ids: React.Key[]) => {
         setIsLoading(true);
         try {
-            const response = await deleteCategories(ids as string[]);
+            const response = await deleteShowOns(ids as string[]);
             if (response.ok) {
                 setData((prevData) => prevData.filter((item) => !ids.includes(item.id)));
                 message.success(t('admin.message.deleteSuccess')); // Dùng t() cho thông báo
@@ -146,6 +156,7 @@ const CategoryPage: React.FC = () => {
                 const result = await response.json();
                 message.error(result.message || t('admin.message.deleteError')); // Dùng t() cho thông báo
             }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.deleteError'));
         } finally {
@@ -153,10 +164,16 @@ const CategoryPage: React.FC = () => {
         }
     };
 
+    const onPageChange = (page: number, pageSize?: number) => {
+        setCurrentPage(page);
+        setPageSize(pageSize || 10);
+        navigate(`?page=${page}&pageSize=${pageSize || 10}`);
+    };
+
     const handleSwitchStatus = async (id: string, checked: boolean) => {
         setIsLoading(true);
         try {
-            const response = await switchStatusCategory(id);
+            const response = await switchStatusShowOn(id);
             const result = await response.json();
             if (!response.ok || result.status !== 200) {
                 message.error(t('admin.message.updateError'));
@@ -175,28 +192,50 @@ const CategoryPage: React.FC = () => {
         }
     };
 
-    const onPageChange = (page: number, pageSize?: number) => {
-        setCurrentPage(page);
-        setPageSize(pageSize || 10);
-        navigate(`?page=${page}&pageSize=${pageSize || 10}`);
-    };
-
-    const dataListConfig: DataListConfig<Category> = {
+    const dataListConfig: DataListConfig<ShowOn> = {
         columns: [
             {
-                title: 'No.', // Dùng t() cho tiêu đề cột
+                title: 'No.',
                 key: 'no',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
             },
             {
-                title: t('admin.category.name'),
-                dataIndex: 'name',
-                key: 'name',
+                title: t('admin.homeConfig.contentName'),
+                dataIndex: 'contentName',
+                key: 'contentName',
+                render: (contentName, record) => {
+                    let linkTo = '#';
+                    switch (record.contentType) {
+                        case 'category':
+                            linkTo = `${prefixAdmin}/category/update/${record.id}`;
+                            break;
+                        case 'actor':
+                            linkTo = `${prefixAdmin}/actors/update/${record.id}`;
+                            break;
+                        case 'director':
+                            linkTo = `${prefixAdmin}/directors/update/${record.id}`;
+                            break;
+                        default:
+                            break;
+                    }
+                    return <Link to={linkTo}>{contentName}</Link>;
+                }
+            },
+
+            {
+                title: t('admin.homeConfig.contentType'),
+                dataIndex: 'contentType',
+                key: 'contentType',
             },
             {
-                title: t('admin.category.description'),
-                dataIndex: 'description',
-                key: 'description',
+                title: t('admin.homeConfig.position'),
+                dataIndex: 'position',
+                key: 'position',
+            },
+            {
+                title: t('admin.homeConfig.note'),
+                dataIndex: 'note',
+                key: 'note',
             },
             {
                 title: t('admin.dataList.status.title'),
@@ -227,7 +266,7 @@ const CategoryPage: React.FC = () => {
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}`, name: t('admin.dashboard.title') },
-                { path: ``, name: t('admin.category.title') },
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.homeConfig.title') },
             ]}
         >
             <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
@@ -242,4 +281,4 @@ const CategoryPage: React.FC = () => {
     );
 };
 
-export default CategoryPage;
+export default HomeConfigPage;

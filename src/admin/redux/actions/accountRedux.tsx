@@ -1,6 +1,6 @@
 export const SET_CURRENT_ACCOUNT = 'SET_CURRENT_ACCOUNT';
 
-export interface Account {
+export interface AccountRedux {
     id: string,
     avatar: string,
     fullName: string,
@@ -14,7 +14,7 @@ export interface Account {
     gender: string,
 }
 
-export const setCurrentAccount = (account: Account | null) => ({
+export const setCurrentAccount = (account: AccountRedux | null) => ({
     type: SET_CURRENT_ACCOUNT,
     account: account
 });

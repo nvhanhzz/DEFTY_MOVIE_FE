@@ -7,6 +7,7 @@ import './CreateActor.scss';
 import {postActor} from "../../../services/actorService.tsx";
 import AvtEditor from "../../../components/AvtEditor";
 import CountrySelect from "../../../components/CountrySelect";
+import {standardization} from "../../../helpers/Date.tsx";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -42,7 +43,6 @@ const CreateActor: React.FC = () => {
             if (file) {
                 formData.append('avatar', file);
             }
-            console.log(formData.getAll('avatar'));
 
             const response = await postActor(formData);
             const result = await response.json();
@@ -97,13 +97,19 @@ const CreateActor: React.FC = () => {
 
                         <Form.Item
                             label={t('admin.actor.dateOfBirth')}
-                            name="datePicker"
+                            name="datepicker"
                             rules={[{ required: true, message: t('admin.actor.create.validation.dateOfBirth') }]}
                         >
                             <DatePicker
                                 format="YYYY-MM-DD"
-                                onChange={(_date, dateString) => form.setFieldsValue({ dateOfBirth: dateString })}
+                                onChange={(_date, dateString) => { form.setFieldsValue({ dateOfBirth: standardization(dateString as string) }) }}
                             />
+                        </Form.Item>
+                        <Form.Item
+                            name="dateOfBirth"
+                            hidden
+                        >
+                            <Input />
                         </Form.Item>
 
                         <Form.Item
