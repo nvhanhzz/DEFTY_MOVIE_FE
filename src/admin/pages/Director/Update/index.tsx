@@ -9,6 +9,7 @@ import { DirectorFromValues } from "../Create";
 import CountrySelect from "../../../components/CountrySelect";
 import AvtEditor from "../../../components/AvtEditor";
 import {standardization} from "../../../helpers/Date.tsx";
+import {Director} from "../index.tsx";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -20,6 +21,7 @@ const UpdateDirector: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const [initData, setInitData] = useState<Director | null>(null);
 
     // Fetch director data when the component mounts
     useEffect(() => {
@@ -43,6 +45,7 @@ const UpdateDirector: React.FC = () => {
                     if (data.avatar) {
                         setAvatarUrl(data.avatar);
                     }
+                    setInitData(data);
                 } else {
                     message.error(t('admin.message.fetchError'));
                 }
@@ -102,9 +105,14 @@ const UpdateDirector: React.FC = () => {
 
     // Reset form
     const handleResetForm = () => {
-        form.resetFields();
-        setFile(null);
-        setAvatarUrl(null);
+        form.setFieldsValue(initData);
+        if (initData?.avatar === null) {
+            setFile(null);
+            setAvatarUrl('null' + avatarUrl);
+        } else {
+            setFile(null);
+            setAvatarUrl(avatarUrl + " " as string);
+        }
     };
 
     return (

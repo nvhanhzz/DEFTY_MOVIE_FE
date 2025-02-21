@@ -19,6 +19,7 @@ const UpdateActor: React.FC = () => {
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const [form] = Form.useForm();
     const { t } = useTranslation();
+    const [initData, setInitData] = useState<ActorFromValues | null>(null);
 
     useEffect(() => {
         const fetchActor = async () => {
@@ -41,6 +42,8 @@ const UpdateActor: React.FC = () => {
                     if (data.avatar) {
                         setAvatarUrl(data.avatar);
                     }
+                    setInitData(data);
+
                 } else {
                     message.error(t('admin.message.fetchError'));
                 }
@@ -94,11 +97,15 @@ const UpdateActor: React.FC = () => {
         setFile(file);
     };
 
-    // Reset form
     const handleResetForm = () => {
-        form.resetFields();
-        setFile(null);
-        setAvatarUrl(null);
+        form.setFieldsValue(initData);
+        if (initData?.avatar === null) {
+            setFile(null);
+            setAvatarUrl('null' + avatarUrl);
+        } else {
+            setFile(null);
+            setAvatarUrl(avatarUrl + " " as string);
+        }
     };
 
     return (
