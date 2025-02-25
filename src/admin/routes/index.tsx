@@ -38,6 +38,9 @@ import Test from "../pages/Test";
 import UserPage from "../pages/User";
 import Profile from "../pages/Profile";
 import UpdateProfile from "../pages/Profile/Update";
+import Banner from "../pages/Banner";
+import CreateBanner from "../pages/Banner/Create";
+import UpdateBanner from "../pages/Banner/Update";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -182,6 +185,22 @@ const DefaultRoutes: RouteType[] = [
     {
         path: 'actors/update/:id',
         element: <UpdateActor />,
+    },
+    {
+        path: 'users',
+        element: <UserPage />,
+    },
+    {
+        path: 'banners',
+        element: <Banner />,
+    },
+    {
+        path: 'banners/create',
+        element: <CreateBanner />,
+    },
+    {
+        path: 'banners/update/:id',
+        element: <UpdateBanner />,
     },
     {
         path: 'users',

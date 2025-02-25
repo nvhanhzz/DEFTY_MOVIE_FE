@@ -12,7 +12,8 @@ import {
     SafetyOutlined,
     TagsOutlined,
     TeamOutlined,
-    UserOutlined
+    UserOutlined,
+    AppstoreAddOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Sider.scss';
@@ -63,6 +64,11 @@ const menuItems: MenuItem[] = [
                 icon: <IdcardOutlined />,
                 label: 'admin.actor.title',
                 linkTo: 'actors',
+            },
+            {
+                icon:  <AppstoreAddOutlined />,
+                label: 'admin.banner.title',
+                linkTo: 'banners',
             },
             {
                 icon: <GiftOutlined />,
