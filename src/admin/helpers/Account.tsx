@@ -1,7 +1,7 @@
 import { getCurrentAccount } from "../services/authService";
-import { Account } from "../redux/actions/account";
+import { AccountRedux } from "../redux/actions/accountRedux.tsx";
 
-export const setCurrentAccountHelper = async (): Promise<Account | null> => {
+export const setCurrentAccountHelper = async (): Promise<AccountRedux | null> => {
     const response = await getCurrentAccount();
     const result = await response.json();
     if (!response.ok || result.status !== 200) {

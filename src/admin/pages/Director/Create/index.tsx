@@ -7,6 +7,7 @@ import './CreateDirector.scss';
 import {postDirector} from "../../../services/directorService.tsx";
 import CountrySelect from "../../../components/CountrySelect";
 import AvtEditor from "../../../components/AvtEditor";
+import {standardization} from "../../../helpers/Date.tsx";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -105,8 +106,14 @@ const CreateDirector: React.FC = () => {
                         >
                             <DatePicker
                                 format="YYYY-MM-DD"
-                                onChange={(_date, dateString) => form.setFieldsValue({ dateOfBirth: dateString })}
+                                onChange={(_date, dateString) => { form.setFieldsValue({ dateOfBirth: standardization(dateString as string) }) }}
                             />
+                        </Form.Item>
+                        <Form.Item
+                            name="dateOfBirth"
+                            hidden
+                        >
+                            <Input />
                         </Form.Item>
 
                         <Form.Item

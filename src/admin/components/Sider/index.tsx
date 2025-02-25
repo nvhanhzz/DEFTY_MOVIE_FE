@@ -13,6 +13,7 @@ import {
     TagsOutlined,
     TeamOutlined,
     UserOutlined,
+    HomeOutlined,
     AppstoreAddOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -76,6 +77,11 @@ const menuItems: MenuItem[] = [
                 linkTo: 'membership-packets',
             },
         ],
+    },
+    {
+        icon: <HomeOutlined />,
+        label: 'admin.homeConfig.title',
+        linkTo: 'home-config',
     },
     {
         icon: <ReadOutlined />,

@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 import "./Carousel.scss";
-import RecommendedMovie from "../RecommendedMovie";
+import RecommendedBanner from "../RecommendedBanner";
 import { Movie } from "../MovieCard";
 
 const Carousel: React.FC = () => {
@@ -77,7 +77,7 @@ const Carousel: React.FC = () => {
         nextSlide();
         resetInterval();
     };
-
+//hello 1
     // Xử lý khi người dùng bấm nút Prev
     const handlePrev = () => {
         prevSlide();
@@ -105,7 +105,7 @@ const Carousel: React.FC = () => {
             >
                 {movies.map((movie, index) => (
                     <div className="carousel-slide" key={index}>
-                        <RecommendedMovie {...movie} />
+                        <RecommendedBanner {...movie} />
                     </div>
                 ))}
             </div>

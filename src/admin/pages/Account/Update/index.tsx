@@ -12,6 +12,9 @@ import {AccountFormValues} from "../Create";
 import {Account} from "../index.tsx";
 import dayjs from 'dayjs';
 import AvtEditor from "../../../components/AvtEditor";
+import {useAdminDispatch} from "../../../hooks/useAdminDispatch.tsx";
+import {useAdminSelector} from "../../../hooks/useAdminSelector.tsx";
+import {AccountRedux, setCurrentAccount} from "../../../redux/actions/accountRedux.tsx";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -23,6 +26,8 @@ const UpdateAccount: React.FC = () => {
     const [roles, setRoles] = useState<Role[]>([]);
     const [form] = Form.useForm();
     const { t } = useTranslation();
+    const dispatch = useAdminDispatch();
+    const currentAccount = useAdminSelector((state) => state.currentAccount.account);
 
     // Fetch dữ liệu tài khoản và roles
     useEffect(() => {
@@ -103,6 +108,13 @@ const UpdateAccount: React.FC = () => {
                 return;
             }
 
+            console.log('id', id, currentAccount?.id);
+            if (id == currentAccount?.id) {
+                const responseA = await getAccountById(id as string);
+                const resultA = await responseA.json();
+                const account: AccountRedux = resultA.data;
+                dispatch(setCurrentAccount(account));
+            }
             message.success(t('admin.message.updateSuccess'));
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {

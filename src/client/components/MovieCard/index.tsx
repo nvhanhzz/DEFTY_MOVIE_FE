@@ -2,10 +2,11 @@ import React from "react";
 import "./MovieCard.scss";
 import {FaCirclePlay} from "react-icons/fa6";
 import {MdOutlineBookmarkAdd} from "react-icons/md";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 export interface Movie {
-    name: string; // Tên phim
+    title: string; // Tên phim,
+    badge: string[];
     category: string[]; // Danh mục thể loại
     rating: number; // Đánh giá phim
     releaseDate: string; // Ngày phát hành
@@ -14,19 +15,25 @@ export interface Movie {
 }
 
 const MovieCard: React.FC<Movie> = ({
-                                        name,
+                                        title,
                                         category,
                                         rating,
                                         releaseDate,
                                         description,
                                         thumbnail,
                                     }) => {
+    const navigate = useNavigate();
+
+    const handleNavigateDetail = () => {
+        navigate("/album/one-piece");
+    }
+
     return (
-        <div className="movie-card">
+        <div className="movie-card" onClick = {handleNavigateDetail}>
             <div className="info">
                 <img src={thumbnail} alt="thumbnail"/>
                 <div className="top-badge">Badge</div>
-                <h4>{name}</h4>
+                <h4>{title}</h4>
             </div>
             <div className="info-hover">
             <div className="top-badge">Badge</div>
@@ -37,7 +44,7 @@ const MovieCard: React.FC<Movie> = ({
                         <MdOutlineBookmarkAdd className="bookmark-icon"/>
                     </div>
                     <div className="info-container">
-                        <h3>{name}</h3>
+                        <h3>{title}</h3>
                         <p className="rating">⭐ {rating}</p>
                         <div className="movie-card-category">
                             {category.map((tag, index) => (

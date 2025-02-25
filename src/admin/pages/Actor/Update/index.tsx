@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, message, DatePicker, Select, Row, Col } from 'antd';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
 import { getActorById, updateActorById } from "../../../services/actorService.tsx";
@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { ActorFromValues } from "../Create";
 import CountrySelect from "../../../components/CountrySelect";
 import AvtEditor from "../../../components/AvtEditor";
+import {standardization} from "../../../helpers/Date.tsx";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -17,8 +18,8 @@ const UpdateActor: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const [form] = Form.useForm();
-    const navigate = useNavigate();
     const { t } = useTranslation();
+    const [initData, setInitData] = useState<ActorFromValues | null>(null);
 
     useEffect(() => {
         const fetchActor = async () => {
@@ -41,6 +42,8 @@ const UpdateActor: React.FC = () => {
                     if (data.avatar) {
                         setAvatarUrl(data.avatar);
                     }
+                    setInitData(data);
+
                 } else {
                     message.error(t('admin.message.fetchError'));
                 }
@@ -68,6 +71,7 @@ const UpdateActor: React.FC = () => {
             formData.append('height', String(values.height));
             formData.append('nationality', values.nationality);
             formData.append('description', values.description);
+            console.log(formData);
 
             if (file) {
                 formData.append('avatar', file);
@@ -81,7 +85,6 @@ const UpdateActor: React.FC = () => {
             }
 
             message.success(t('admin.message.updateSuccess'));
-            navigate(`${PREFIX_URL_ADMIN}/actors`);
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
@@ -94,11 +97,15 @@ const UpdateActor: React.FC = () => {
         setFile(file);
     };
 
-    // Reset form
     const handleResetForm = () => {
-        form.resetFields();
-        setFile(null);
-        setAvatarUrl(null);
+        form.setFieldsValue(initData);
+        if (initData?.avatar === null) {
+            setFile(null);
+            setAvatarUrl('null' + avatarUrl);
+        } else {
+            setFile(null);
+            setAvatarUrl(avatarUrl + " " as string);
+        }
     };
 
     return (
@@ -130,7 +137,16 @@ const UpdateActor: React.FC = () => {
                             name="datePicker"
                             rules={[{ required: true, message: t('admin.actor.validation.dateOfBirth') }]}
                         >
-                            <DatePicker format="YYYY-MM-DD" />
+                            <DatePicker
+                                format="YYYY-MM-DD"
+                                onChange={(_date, dateString) => { form.setFieldsValue({ dateOfBirth: standardization(dateString as string) }) }}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="dateOfBirth"
+                            hidden
+                        >
+                            <Input />
                         </Form.Item>
 
                         <Form.Item
@@ -182,7 +198,7 @@ const UpdateActor: React.FC = () => {
                         </Form.Item>
                     </Col>
 
-                    <Col span={8}>
+                    <Col span={8} style={{display: 'flex', justifyContent: 'center'}}>
                         <Form.Item label={t('admin.actor.avatar')} className="avatar-wrapper">
                             <AvtEditor
                                 onSave={handleAvatarSave}

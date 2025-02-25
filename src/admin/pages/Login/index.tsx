@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Typography } from 'antd';
 import './LoginPage.scss';
 import { useAdminDispatch } from '../../hooks/useAdminDispatch';
-import { setCurrentAccount } from '../../redux/actions/account';
+import { setCurrentAccount } from '../../redux/actions/accountRedux.tsx';
 import { addAlert } from '../../redux/actions/alert';
 import { postLogin } from '../../services/authService';
 import { setCurrentAccountHelper } from '../../helpers/Account';

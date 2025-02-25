@@ -38,6 +38,9 @@ import Test from "../pages/Test";
 import UserPage from "../pages/User";
 import Profile from "../pages/Profile";
 import UpdateProfile from "../pages/Profile/Update";
+import HomeConfigPage from "../pages/HomeConfig";
+import CreateShowOn from "../pages/HomeConfig/Create";
+import UpdateShowOn from "../pages/HomeConfig/Update";
 import Banner from "../pages/Banner";
 import CreateBanner from "../pages/Banner/Create";
 import UpdateBanner from "../pages/Banner/Update";
@@ -185,6 +188,18 @@ const DefaultRoutes: RouteType[] = [
     {
         path: 'actors/update/:id',
         element: <UpdateActor />,
+    },
+    {
+        path: 'home-config',
+        element: <HomeConfigPage />,
+    },
+    {
+        path: 'home-config/create',
+        element: <CreateShowOn />,
+    },
+    {
+        path: 'home-config/update/:id',
+        element: <UpdateShowOn />,
     },
     {
         path: 'users',

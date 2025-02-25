@@ -472,6 +472,19 @@
                 "title": "Chi tiết người dùng",
                 "notFound": "không tìm thấy người dùng."
             }
+        },
+        "homeConfig": {
+            "title": "Thiết lập trang chủ",
+            "contentType": "Kiểu nội dung",
+            "contentName": "Tên nội dung",
+            "position": "Vị trí",
+            "note": "Ghi chú",
+            "create": {
+                "title": "Tạo mới hiển thị"
+            },
+            "update": {
+                "title": "Cập nhật hiển thị"
+            }
         }
     },
     "client": {}

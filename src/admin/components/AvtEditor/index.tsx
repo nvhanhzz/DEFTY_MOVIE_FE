@@ -22,8 +22,13 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage, shape = "ci
 
     // Xử lý initialImage khi prop thay đổi
     useEffect(() => {
+        console.log(initialImage, "AvtEditor")
         if (initialImage) {
-            console.log(initialImage);
+            if (initialImage.startsWith('null')) {
+                setSrc(null);
+                setPreview(null);
+                return;
+            }
             const fetchAndSetImage = async () => {
                 setIsLoading(true); // Bật loading
                 try {
@@ -135,6 +140,7 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage, shape = "ci
             )}
 
             {/* Modal chỉnh sửa */}
+            {/* Modal chỉnh sửa */}
             {src && (
                 <Modal
                     visible={modalOpen}
@@ -162,6 +168,14 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage, shape = "ci
                             className="avt-editor__slider"
                         />
                         <div className="avt-editor__buttons">
+                            {/*<Button danger onClick={() => {*/}
+                            {/*    setSrc(null);*/}
+                            {/*    setPreview(null);*/}
+                            {/*    onSave(null); // Gửi null về component cha*/}
+                            {/*    setModalOpen(false); // Đóng modal*/}
+                            {/*}}>*/}
+                            {/*    Delete*/}
+                            {/*</Button>*/}
                             <Button onClick={() => setModalOpen(false)}>Cancel</Button>
                             <Button type="primary" onClick={handleSave}>
                                 Save
