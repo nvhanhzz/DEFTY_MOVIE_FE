@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Col, Form, Input, message, Row, Select} from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
 import './CreateBanner.scss';
-import { postBanner } from '../../../services/bannerService.tsx';
+import {getContentName, postBanner} from '../../../services/bannerService.tsx';
 import AvtEditor from '../../../components/AvtEditor';
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
@@ -18,6 +18,11 @@ export interface BannerFormValues {
     contentType: string;
     contentId: number;
 }
+export interface Content {
+    id: string;
+    name?: string;
+    title?: string;
+}
 
 const CreateBanner: React.FC = () => {
     const [loading, setLoading] = useState(false);
@@ -25,6 +30,39 @@ const CreateBanner: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const [contentType, setContentType] = useState<string>('');
+    const [contents, setContents] = useState<Content[]>([]);
+
+    const fetchContentName = async () => {
+        if (!contentType) {
+            setContents([]);
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await getContentName(contentType);
+            const result = await response.json();
+
+            if (!response.ok || !result.data || result.status === 404) {
+                setContents([]);
+                return;
+            }
+
+            const content = result.data;
+            // console.log(content)
+            setContents(content);
+        } catch (error) {
+            console.error("Error fetching content name:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchContentName();
+    }, [contentType]);
 
     const handleCreateBanner = async (values: BannerFormValues) => {
         setLoading(true);
@@ -93,31 +131,11 @@ const CreateBanner: React.FC = () => {
                     </Col>
                     <Col span={12}>
                         <Form.Item
-                            label={t('admin.banner.link')}
-                            name="link"
-                            rules={[{ required: true, message: t('admin.banner.create.validation.link') }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col span={12}>
-                        <Form.Item
                             label={t('admin.banner.position')}
                             name="position"
                             rules={[{ required: true, message: t('admin.banner.create.validation.position') }]}
                         >
                             <Input type="number" min={0} />
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            label={t('admin.banner.key')}
-                            name="key"
-                            rules={[{ required: true, message: t('admin.banner.create.validation.key') }]}
-                        >
-                            <Input />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -126,15 +144,51 @@ const CreateBanner: React.FC = () => {
                         <Form.Item
                             label={t("admin.banner.contentType")}
                             name="contentType"
+
                             rules={[{ required: true, message: t("admin.banner.validation.contentType") }]}
                         >
-                            <Select placeholder={t("admin.banner.placeholder.contentType")}>
-                                <Select.Option disabled>--- Choose content Type ---</Select.Option>
-                                <Select.Option value="1">Movie</Select.Option>
-                                <Select.Option value="2">Category</Select.Option>
+                            <Select
+                                placeholder={t("admin.banner.contentType")}
+                                allowClear
+                                onChange={(value) => {
+                                    setContentType(value as string)
+                                    form.setFieldsValue({contentId: undefined})
+                                }}
+                            >
+                                <Select.Option value="" disabled>--- Choose content Type ---</Select.Option>
+                                <Select.Option value="Movie">Movie</Select.Option>
+                                <Select.Option value="Category">Category</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
+                    {contentType && (
+                        <Col span={12}>
+                            <Form.Item
+                                label={t('admin.banner.contentName')}
+                                name="contentId"
+                                rules={[{
+                                    required: true,
+                                    message: t('admin.message.requiredMessage')
+                                }]}
+                            >
+                                <Select
+                                    placeholder={t('admin.banner.contentName')}
+                                    allowClear
+                                    showSearch
+                                    filterOption={(input, option) =>
+                                        (option?.children as unknown as string)?.toLowerCase().includes(input.toLowerCase())
+                                    }
+                                >
+                                    {contents.map((item: Content) => (
+                                        <Select.Option key={item.id} value={item.id}>
+                                            {contentType === "Movie" ? item.title : item.name}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    )}
+
                 </Row>
                 <Row>
                     <Col span={12}>

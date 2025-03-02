@@ -401,6 +401,7 @@
             "status": "Status",
             "key": "Key",
             "contentType": "Content Type",
+            "contentName": "Content Name",
             "create": {
                 "title": "Create"
             },
