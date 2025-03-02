@@ -1,51 +1,114 @@
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { MdOutlineStar } from "react-icons/md";
 import { FaPlay } from "react-icons/fa";
 import { RiVipCrown2Fill } from "react-icons/ri";
 import { MdOutlineIosShare } from "react-icons/md";
 import { IoDownloadOutline } from "react-icons/io5";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
-import { Movie } from "../MovieCard";
 import "./MovieInformation.scss";
 import SelectCustom from "../SelectCustom";
+import { MovieDetailProps } from "../../pages/MovieDetail";
+import dayjs from "dayjs";
+import {DownOutlined} from "@ant-design/icons";
 
-const MovieInformation: React.FC<Movie> = ({
-                                                title,
-                                                category,
-                                                rating,
-                                                releaseDate,
-                                                description,
-                                                thumbnail,
+const MovieInformation: React.FC<MovieDetailProps> = ({
+                                                 title,
+                                                 rating,
+                                                 releaseDate,
+                                                 duration,
+                                                 description,
+                                                 image,
+                                                 trailer,
+                                                 director,
+                                                 category,
+                                                 actor
                                             }) => {
+    console.log(trailer);
+
+    const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+    const [descriptionClamped, setDescriptionClamped] = useState(false);
+    const descriptionRef = useRef<HTMLParagraphElement>(null);
+    useEffect(() => {
+        if (descriptionRef.current) {
+            const lineHeight = parseInt(window.getComputedStyle(descriptionRef.current).lineHeight, 10);
+            const totalHeight = descriptionRef.current.scrollHeight;
+            const totalLines = Math.floor(totalHeight / lineHeight);
+
+            setDescriptionClamped(totalLines > 3);
+        }
+    }, [description]);
+
     return (
-        <div className="movie-information">
-            <div className="movie-information-overlay">
-                <div className="movie-information-content">
-                    <h1 className="movie-title">{title}</h1>
-                    <p className="movie-info">
-                        <span className="movie-rating">
-                            <MdOutlineStar/> {rating}
-                        </span> |{" "}
-                        <span className="movie-release-date">{releaseDate}</span>
-                    </p>
-                    <div className="movie-category">
-                        {category.map((tag, index) => (
-                            <span key={index} className="movie-tag">
-                                {tag}
+        <div className="movie-information-container">
+            <div className="movie-information">
+                <div className="movie-information-overlay">
+                    <div className="movie-information-content">
+                        <h1 className="movie-title">{title}</h1>
+                        <div className="movie-badge">
+                            <span className="movie-badge-top">TOP 1</span>
+                            <span className="movie-badge-hot">Hot</span>
+                        </div>
+                        <p className="movie-info">
+                            <span className="movie-rating">
+                                <MdOutlineStar/> {rating ? rating : '0'}
                             </span>
-                        ))}
+                            |
+                            <span className="movie-release-date">{releaseDate ? dayjs(releaseDate).format('DD/MM/YYYY') : ''}</span>
+                            |
+                            <span className="movie-duration">{duration ? duration : ''}</span>
+                        </p>
+                        {category && (
+                            <div className="movie-category">
+                                {category.map((tag, index) => (
+                                    <span key={index} className="movie-tag">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+                        <div className="vip-button">
+                            <RiVipCrown2Fill className="vip-button-icon" /> First month only đ23,000
+                        </div>
+                        {director && (
+                            <p className="movie-cast">Director: <span className="movie-cast-content">{director}</span></p>
+                        )}
+                        {actor && (
+                            <p className="movie-cast">Cast: <span className="movie-cast-content">
+                                {
+                                    actor.map((item, index) => (index !== actor.length - 1 ? <span key={index}>{item}, </span> :
+                                        <span key={index}>{item}</span>))
+                                }
+                            </span></p>
+                        )}
+                        <p
+                            className={`movie-description ${descriptionExpanded ? "expanded" : "clamped"}`}
+                            ref={descriptionRef}
+                        >
+                            {/*<span className="movie-description-title">Description:</span> Chu Li just graduated from university. With a passion towards publishing, she successfully entered Yuan Yue Publishing House. However, at the moment the publishing industry undergoes huge changes. As a fresh editor, she was shocked by the state of the publishing industry but she stayed true and gave it all in becoming an author focusing on producing good books. Together with Yuan Yue Publishing House, they braved the impact of social change. With sincerity and professionalism, she impressed the renowned author and joined them as the exclusive editor. Chu Li also helped authors that are in struggle and transformed them. She discovered new authors with her unique vision. In the end, she overcame obstacles in career and paved her way becoming the top editor. With that, she earned a love relationship with a renowned author that involved work interaction, argument and happiness.*/}
+                            <span className="movie-description-title">Description:</span> {description}
+                        </p>
+                        {descriptionClamped && (
+                            <button className="toggle-button" onClick={() => setDescriptionExpanded(!descriptionExpanded)}>
+                                {descriptionExpanded ? "Collapse " : "More "}
+                                <DownOutlined className={`icon ${descriptionExpanded ? "open" : ""}`} />
+                            </button>
+                        )}
                     </div>
-                    <div className="vip-button">
-                        <RiVipCrown2Fill className="vip-button-icon" /> First month only đ23,000
+                    <div className="movie-information-buttons">
+                        <div className="button play-button"><FaPlay /> Play</div>
+                        <div className="button other-button"><MdOutlineIosShare /> Share</div>
+                        <div className="button other-button"><IoDownloadOutline /> APP</div>
+                        <div className="button other-button"><MdOutlineBookmarkAdd /> Watch Later</div>
                     </div>
-                    <p className="movie-description">Description: <span className="movie-description-content">{description}</span></p>
                 </div>
-                <div className="movie-information-buttons">
-                    <div className="button play-button"><FaPlay /> Play</div>
-                    <div className="button other-button"><MdOutlineIosShare /> Share</div>
-                    <div className="button other-button"><IoDownloadOutline /> APP</div>
-                    <div className="button other-button"><MdOutlineBookmarkAdd /> Watch Later</div>
+
+                <div className="movie-information-thumbnail">
+                    <img src={image} alt="cover-image" />
+                    <div className="left-layer"></div>
+                    <div className="bottom-layer"></div>
                 </div>
+            </div>
+            <div className="movie-information-bottom">
                 <div className="movie-information-navs">
                     <div className="nav nav-choose">Episodes</div>
                     <div className="nav">Cast</div>
@@ -54,12 +117,6 @@ const MovieInformation: React.FC<Movie> = ({
                 </div>
                 <hr className="movie-information-divider" />
                 <SelectCustom />
-            </div>
-
-            <div className="movie-information-thumbnail">
-                <img src={thumbnail} alt="thumbnail" />
-                <div className="left-layer"></div>
-                <div className="bottom-layer"></div>
             </div>
         </div>
     );

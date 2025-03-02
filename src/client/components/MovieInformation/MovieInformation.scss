@@ -1,142 +1,260 @@
 @import "../../../styles/Variable";
 
-.movie-information {
-  position: relative;
-  width: 100%;
-  height: 530px;
-  background-size: cover;
-  background-position: top;
-  display: flex;
-  justify-content: space-between;
-  background-color: #111319;
+.movie-information-container {
+  min-height: 530px;
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    //background: rgba(0, 0, 0, 0.5); // Overlay màu đen
-    z-index: 1;
+  .movie-information {
+    position: relative;
+    width: 100%;
+    background-size: cover;
+    background-position: top;
+    display: flex;
+    justify-content: space-between;
+    background-color: #111319;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      //background: rgba(0, 0, 0, 0.5); // Overlay màu đen
+      z-index: 1;
+    }
+
+    .movie-information-overlay {
+      margin-left: 72px;
+      margin-top: 120px;
+      position: relative;
+      z-index: 2;
+      color: #fff;
+      text-align: left;
+      width: 40%;
+
+      .movie-information-content {
+        position: relative;
+      }
+
+      .movie-title {
+        font-size: 40px;
+        font-weight: bold;
+        margin: 0 0 30px;
+      }
+
+      .movie-badge {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+
+        .movie-badge-top {
+          background-color: #1cc749; // Màu xanh lá
+          color: #fff;
+          font-weight: bold;
+          padding: 5px 10px;
+          border-radius: 3px 0 0 3px;
+          font-size: 14px;
+        }
+
+        .movie-badge-hot {
+          background-color: #3a3d42; // Màu xám đậm
+          color: #fff;
+          font-weight: bold;
+          padding: 5px 10px;
+          border-radius: 0 3px 3px 0;
+          font-size: 14px;
+        }
+      }
+
+      .movie-info {
+        font-size: 17px;
+        margin-bottom: 15px;
+
+        .movie-rating {
+          color: rgb(28, 199, 73);
+          font-weight: bold;
+        }
+
+        .movie-release-date {
+          margin-left: 10px;
+        }
+      }
+
+      .movie-category {
+        margin-bottom: 15px;
+
+        .movie-tag {
+          font-size: 12px !important;
+          display: inline-block;
+          margin-right: 8px;
+          padding: 5px 10px;
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 2px;
+        }
+      }
+
+      .vip-button {
+        position: relative;
+        display: inline-flex;
+        -moz-box-align: center;
+        align-items: center;
+        background-size: 100%;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-color: rgb(242, 191, 131);
+        color: rgb(17, 19, 25);
+        border-radius: 4px;
+        box-sizing: border-box;
+        cursor: pointer;
+        font-weight: 700;
+        padding: 6px 24px;
+        font-size: 14px;
+        max-width: 600px;
+        width: auto;
+        height: 36px;
+        margin-bottom: 15px;
+
+        &:hover {
+          background-color: rgb(234, 207, 174);
+        }
+      }
+
+      .movie-description {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease-in-out;
+        line-height: 23px;
+
+        .movie-description-title {
+          color: #828387;
+        }
+
+        &.clamped {
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        &.expanded {
+          display: block; /* Hiển thị đầy đủ khi mở rộng */
+        }
+      }
+
+      .toggle-button {
+        background: none;
+        border: none;
+        color: #1cc749;
+        font-weight: bold;
+        cursor: pointer;
+        position: absolute;
+        bottom: -20px;
+        right: 0;
+        font-size: 14px;
+
+        .icon {
+          transition: transform 0.2s;
+        }
+
+        .open {
+          transform: rotate(180deg);
+        }
+      }
+
+      .movie-cast {
+        font-size: 17px;
+        line-height: 1.6;
+        color: #828387;
+        display: flex;
+
+        .movie-cast-content {
+          margin-left: 5px;
+          color: #fff;
+          overflow: hidden; /* Bắt buộc để sử dụng text-overflow */
+          text-overflow: ellipsis; /* Thêm dấu "..." nếu vượt quá chiều rộng */
+          display: -webkit-box; /* Cần thiết để hỗ trợ line-clamp */
+          -webkit-line-clamp: 3; /* Giới hạn số dòng hiển thị */
+          -webkit-box-orient: vertical; /* Cần thiết để hỗ trợ line-clamp */
+          margin-bottom: 5px;
+        }
+      }
+
+      .movie-information-buttons {
+        display: flex;
+        justify-content: left;
+        margin-top: 15px;
+        margin-bottom: 25px;
+
+        .button {
+          padding: 10px 22px 15px 22px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-weight: 600;
+        }
+
+        .play-button {
+          background-color: #1cc749;
+
+          &:hover {
+            background-color: rgb(73, 210, 109);
+          }
+        }
+
+        .other-button {
+          background: #2d2f34;
+          margin-left: 10px;
+
+          &:hover {
+            background: rgb(86, 87, 91);
+          }
+        }
+      }
+    }
+
+    .movie-information-thumbnail {
+      width: 60%;
+      position: relative;
+      overflow: hidden;
+      max-height: 630px;
+
+      img {
+        width: 100%;
+      }
+
+      .left-layer {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 28%;
+        background-image: linear-gradient(
+                        270deg,
+                        rgba(17, 19, 25, 0) 0%,
+                        rgba(17, 19, 25, 0.05) 16%,
+                        rgba(17, 19, 25, 0.2) 30%,
+                        rgba(17, 19, 25, 0.39) 43%,
+                        rgba(17, 19, 25, 0.61) 55%,
+                        rgba(17, 19, 25, 0.8) 68%,
+                        rgba(17, 19, 25, 0.95) 82%,
+                        rgb(17, 19, 25) 98%
+        );
+        z-index: 2;
+      }
+
+      .bottom-layer {
+        width: 100%;
+        height: 36%;
+        background-image: linear-gradient(179deg, rgba(17, 19, 25, 0) 1%, rgba(17, 19, 25, 0.05) 17%, rgba(17, 19, 25, 0.2) 31%, rgba(17, 19, 25, 0.39) 44%, rgba(17, 19, 25, 0.61) 56%, rgba(17, 19, 25, 0.8) 69%, rgba(17, 19, 25, 0.95) 83%, rgb(17, 19, 25) 99%);
+        border-radius: 1px;
+        z-index: 100;
+        position: absolute;
+        bottom: 0;
+      }
+    }
   }
 
-  .movie-information-overlay {
-    margin-left: 72px;
-    margin-top: 120px;
-    position: relative;
-    z-index: 2;
-    color: #fff;
-    text-align: left;
-    width: 100%;
-    max-width: 500px;
-
-    .movie-title {
-      font-size: 40px;
-      font-weight: bold;
-      margin: 0 0 20px;
-    }
-
-    .movie-info {
-      font-size: 17px;
-      margin-bottom: 15px;
-
-      .movie-rating {
-        color: rgb(28, 199, 73);
-        font-weight: bold;
-      }
-
-      .movie-release-date {
-        margin-left: 10px;
-      }
-    }
-
-    .movie-category {
-      margin-bottom: 15px;
-
-      .movie-tag {
-        font-size: 12px !important;
-        display: inline-block;
-        margin-right: 8px;
-        padding: 5px 10px;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 2px;
-      }
-    }
-
-    .vip-button {
-      position: relative;
-      display: inline-flex;
-      -moz-box-align: center;
-      align-items: center;
-      background-size: 100%;
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-color: rgb(242, 191, 131);
-      color: rgb(17, 19, 25);
-      border-radius: 4px;
-      box-sizing: border-box;
-      cursor: pointer;
-      font-weight: 700;
-      padding: 6px 24px;
-      font-size: 14px;
-      max-width: 600px;
-      width: auto;
-      height: 36px;
-      margin-bottom: 15px;
-
-      &:hover {
-        background-color: rgb(234, 207, 174);
-      }
-    }
-
-    .movie-description {
-      font-size: 17px;
-      line-height: 1.6;
-      color: #828387;
-      display: flex;
-
-      .movie-description-content {
-        margin-left: 5px;
-        color: #fff;
-        overflow: hidden; /* Bắt buộc để sử dụng text-overflow */
-        text-overflow: ellipsis; /* Thêm dấu "..." nếu vượt quá chiều rộng */
-        display: -webkit-box; /* Cần thiết để hỗ trợ line-clamp */
-        -webkit-line-clamp: 3; /* Giới hạn số dòng hiển thị */
-        -webkit-box-orient: vertical; /* Cần thiết để hỗ trợ line-clamp */
-        margin-bottom: 15px;
-      }
-    }
-
-    .movie-information-buttons {
-      display: flex;
-      justify-content: left;
-      margin-bottom: 25px;
-
-      .button {
-        padding: 10px 22px 15px 22px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: 600;
-      }
-
-      .play-button {
-        background-color: #1cc749;
-
-        &:hover {
-          background-color: rgb(73, 210, 109);
-        }
-      }
-
-      .other-button {
-        background: #2d2f34;
-        margin-left: 10px;
-
-        &:hover {
-          background: rgb(86, 87, 91);
-        }
-      }
-    }
+  .movie-information-bottom {
+    margin: 0 72px;
 
     .movie-information-navs {
       display: flex;
@@ -162,49 +280,6 @@
 
     .movie-information-divider {
       color: #5a5454;
-    }
-  }
-
-  .movie-information-thumbnail {
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-
-    img {
-      display: block;
-      height: 100%;
-      width: auto;
-      overflow: hidden;
-    }
-
-    .left-layer {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 28%;
-      background-image: linear-gradient(
-                      270deg,
-                      rgba(17, 19, 25, 0) 0%,
-                      rgba(17, 19, 25, 0.05) 16%,
-                      rgba(17, 19, 25, 0.2) 30%,
-                      rgba(17, 19, 25, 0.39) 43%,
-                      rgba(17, 19, 25, 0.61) 55%,
-                      rgba(17, 19, 25, 0.8) 68%,
-                      rgba(17, 19, 25, 0.95) 82%,
-                      rgb(17, 19, 25) 98%
-      );
-      z-index: 2;
-    }
-
-    .bottom-layer {
-      width: 100%;
-      height: 36%;
-      background-image: linear-gradient(179deg, rgba(17, 19, 25, 0) 1%, rgba(17, 19, 25, 0.05) 17%, rgba(17, 19, 25, 0.2) 31%, rgba(17, 19, 25, 0.39) 44%, rgba(17, 19, 25, 0.61) 56%, rgba(17, 19, 25, 0.8) 69%, rgba(17, 19, 25, 0.95) 83%, rgb(17, 19, 25) 99%);
-      border-radius: 1px;
-      z-index: 100;
-      position: absolute;
-      bottom: 0px;
     }
   }
 }
