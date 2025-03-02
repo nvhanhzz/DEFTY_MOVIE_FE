@@ -1,12 +1,10 @@
-import React, { useState } from 'react';  // Import useRef
-import { Button, Form, Input, message, Upload } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { postArticle } from '../../../services/articleService';
+import React, {useState} from 'react'; // Import useRef
+import {Button, Form, Input, message, Upload} from 'antd';
+import {useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
+import {postArticle} from '../../../services/articleService';
 import OutletTemplate from '../../../templates/Outlet';
-import { Editor } from '@tinymce/tinymce-react';
-import { tinyMceConfig } from '../../../utils/tinyMceConfig';
-import { RcFile } from 'antd/es/upload';  // Import RcFile
+import {RcFile} from 'antd/es/upload'; // Import RcFile
 import './CreateArticle.scss';
 import {UploadOutlined} from "@ant-design/icons";
 
@@ -53,6 +51,7 @@ const CreateArticle: React.FC = () => {
 
             message.success(t('admin.message.createSuccess'));
             navigate(`${PREFIX_URL_ADMIN}/articles`);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {

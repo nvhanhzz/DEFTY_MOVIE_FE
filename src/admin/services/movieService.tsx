@@ -1,6 +1,6 @@
 // import {getWithParams} from "../utils/getWithParams.tsx";
 import handleRequest from "../utils/handleRequest.tsx";
-import {del, get, patchFormData, patchStatus, post, postFormData} from "../utils/request.tsx";
+import {del, get, patchFormData, patchStatus, postFormData} from "../utils/request.tsx";
 import React from "react";
 import {getWithParams} from "../utils/getWithParams.tsx";
 

@@ -392,6 +392,23 @@
                 "title": "Cập nhật"
             }
         },
+        "banner": {
+            "title": "Biểu ngữ",
+            "name": "Tên",
+            "description": "Mô tả",
+            "thumbnail": "Hình thu nhỏ",
+            "link": "Liên kết",
+            "position": "Vị trí",
+            "status": "Trạng thái",
+            "key": "Khóa",
+            "create": {
+                "title": "Tạo mới"
+            },
+            "update": {
+                "title": "Cập nhật"
+            }
+        },
+
         "actor": {
             "title": "Diễn viên",
             "fullName": "Họ và tên",

@@ -25,10 +25,10 @@ const PermissionsPage: React.FC = () => {
     const location = useLocation();
     const { t } = useTranslation();
 
-    const fetchData = async (page: number, pageSize: number, keyword: string) => {
+    const fetchData = async (page: number, pageSize: number) => {
         setIsLoading(true);
         try {
-            const response = await getPermissions(page, pageSize, 'name', keyword); // Gọi API với từ khóa
+            const response = await getPermissions(page, pageSize); // Gọi API với từ khóa
             const result = await response.json();
             const content: Permission[] = result.data.content;
             const permissions = content.map((item: any) => ({
@@ -57,7 +57,7 @@ const PermissionsPage: React.FC = () => {
     }, [location.search]);
 
     useEffect(() => {
-        fetchData(currentPage, pageSize, searchKeyword); // Gọi fetchData với từ khóa tìm kiếm
+        fetchData(currentPage, pageSize); // Gọi fetchData với từ khóa tìm kiếm
     }, [currentPage, pageSize, searchKeyword]);
 
     const handleUpdate = (id: string) => {
@@ -80,6 +80,7 @@ const PermissionsPage: React.FC = () => {
                 const result = await response.json();
                 message.error(result.message || t('admin.message.deleteError')); // Thông báo khi xóa nhiều lỗi
             }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.deleteError')); // Thông báo khi xóa nhiều thất bại
         } finally {

@@ -1,5 +1,6 @@
-import { combineReducers, createStore } from 'redux';
-import CurrentUserReducer, { currentUserState } from '../../admin/redux/reducers/account';
+import {combineReducers, createStore} from 'redux';
+import CurrentUserReducer, {currentUserState} from '../../admin/redux/reducers/account';
+
 
 export interface ClientRootState {
     currentUser: currentUserState;

@@ -186,6 +186,13 @@ const AccountPage: React.FC = () => {
                 sorter: (a: Account, b: Account) => (a.email || '').localeCompare(b.email || ''),
             },
             {
+                title: t('admin.account.fullName'),
+                dataIndex: 'fullName',
+                key: 'fullName',
+                align: 'center',
+                sorter: (a: Account, b: Account) => (a.fullName || '').localeCompare(b.fullName || ''),
+            },
+            {
                 title: t('admin.account.phone'),
                 dataIndex: 'phone',
                 key: 'phone',

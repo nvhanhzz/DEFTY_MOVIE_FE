@@ -4,7 +4,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { DirectorFromValues } from "../../Director/Create";
 import { postDirector } from "../../../services/directorService.tsx";
-import { RcFile } from "antd/es/upload";
+import {RcFile, UploadChangeParam} from "antd/es/upload";
 import { useNavigate } from "react-router-dom";
 import "./CreateDirector.scss";
 
@@ -76,7 +76,13 @@ const AddDirectorPopup = ({ visible, onCancel, onAdd }: AddDirectorPopupProps) =
         }
     };
 
-    const handleAvatarChange = ({ file }: { file: RcFile }) => {
+    const handleAvatarChange = ({ file }: UploadChangeParam) => {
+        if (file.status === 'done') {
+            message.success(`${file.name} file uploaded successfully`);
+        } else if (file.status === 'error') {
+            message.error(`${file.name} file upload failed.`);
+        }
+        // @ts-ignore
         setFile(file);
     };
 
@@ -142,10 +148,16 @@ const AddDirectorPopup = ({ visible, onCancel, onAdd }: AddDirectorPopupProps) =
                                 options={nation}
                                 placeholder={t('admin.movie.placeholder.nation')}
                                 showSearch
-                                filterOption={(input, option) =>
-                                    option.label.toLowerCase().includes(input.toLowerCase())
-                                }
+                                filterOption={(input, option) => {
+                                    // @ts-ignore
+                                    if (option && option.label) {
+                                        // @ts-ignore
+                                        return option.label.toLowerCase().includes(input.toLowerCase());
+                                    }
+                                    return false;
+                                }}
                             />
+
                         </Form.Item>
                     </Col>
 

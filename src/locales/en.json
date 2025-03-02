@@ -391,6 +391,23 @@
                 "title": "Update"
             }
         },
+        "banner": {
+            "title": "Banner",
+            "name": "Name",
+            "description": "Description",
+            "thumbnail": "Thumbnail",
+            "link": "Link",
+            "position": "Position",
+            "status": "Status",
+            "key": "Key",
+            "contentType": "Content Type",
+            "create": {
+                "title": "Create"
+            },
+            "update": {
+                "title": "Update"
+            }
+        },
         "actor": {
             "title": "Actor",
             "fullName": "Full name",

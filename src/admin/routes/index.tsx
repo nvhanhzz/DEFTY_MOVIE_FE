@@ -38,9 +38,9 @@ import Test from "../pages/Test";
 import UserPage from "../pages/User";
 import Profile from "../pages/Profile";
 import UpdateProfile from "../pages/Profile/Update";
-import HomeConfigPage from "../pages/HomeConfig";
-import CreateShowOn from "../pages/HomeConfig/Create";
-import UpdateShowOn from "../pages/HomeConfig/Update";
+import Banner from "../pages/Banner";
+import CreateBanner from "../pages/Banner/Create";
+import UpdateBanner from "../pages/Banner/Update";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -187,16 +187,20 @@ const DefaultRoutes: RouteType[] = [
         element: <UpdateActor />,
     },
     {
-        path: 'home-config',
-        element: <HomeConfigPage />,
+        path: 'users',
+        element: <UserPage />,
     },
     {
-        path: 'home-config/create',
-        element: <CreateShowOn />,
+        path: 'banners',
+        element: <Banner />,
     },
     {
-        path: 'home-config/update/:id',
-        element: <UpdateShowOn />,
+        path: 'banners/create',
+        element: <CreateBanner />,
+    },
+    {
+        path: 'banners/update/:id',
+        element: <UpdateBanner />,
     },
     {
         path: 'users',

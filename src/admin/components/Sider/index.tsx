@@ -13,7 +13,7 @@ import {
     TagsOutlined,
     TeamOutlined,
     UserOutlined,
-    HomeOutlined
+    AppstoreAddOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Sider.scss';
@@ -66,16 +66,16 @@ const menuItems: MenuItem[] = [
                 linkTo: 'actors',
             },
             {
+                icon:  <AppstoreAddOutlined />,
+                label: 'admin.banner.title',
+                linkTo: 'banners',
+            },
+            {
                 icon: <GiftOutlined />,
                 label: 'admin.membership-packet.title',
                 linkTo: 'membership-packets',
             },
         ],
-    },
-    {
-        icon: <HomeOutlined />,
-        label: 'admin.homeConfig.title',
-        linkTo: 'home-config',
     },
     {
         icon: <ReadOutlined />,
@@ -134,7 +134,7 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
                 menu
                     .map(item => {
                         if (item.children) {
-                            const filteredChildren = filterMenu(item.children);
+                            const filteredChildren: MenuItem[] = filterMenu(item.children);
                             if (filteredChildren.length > 0) {
                                 return { ...item, children: filteredChildren };
                             }

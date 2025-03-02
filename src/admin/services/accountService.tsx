@@ -1,5 +1,5 @@
 import {del, get, patchFormData, patchStatus, postFormData} from "../utils/request";
-import { getWithParams } from "../utils/getWithParams.tsx";
+import {getWithParams} from "../utils/getWithParams.tsx";
 import handleRequest from "../utils/handleRequest.tsx";
 // import {AccountFormValues} from "../pages/Account/Create";
 

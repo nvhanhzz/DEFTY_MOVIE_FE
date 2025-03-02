@@ -1,35 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import {Image, message, Spin, Switch} from 'antd';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
-import dayjs from 'dayjs'; // Use dayjs instead of moment
-import customParseFormat from 'dayjs/plugin/customParseFormat'; // Plugin for custom date formats
-import OutletTemplate from '../../templates/Outlet';
-import DataListTemplate from '../../templates/DataList';
-import type { DataListConfig } from '../../templates/DataList';
-import { LoadingOutlined } from '@ant-design/icons';
-import {deleteActors, getActors, switchStatusActor} from "../../services/actorService.tsx";
+import {useLocation, useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
+import React, {useEffect, useState} from "react";
+import {deleteBanners, getBanners, switchStatusBanner} from "../../services/bannerService.tsx";
+import {Image, message, Spin, Switch} from "antd";
+import DataListTemplate, {DataListConfig} from "../../templates/DataList";
+import OutletTemplate from "../../templates/Outlet";
 import SearchFormTemplate from "../../templates/Search";
+import {LoadingOutlined} from "@ant-design/icons";
 
-// Extend dayjs with the customParseFormat plugin
-dayjs.extend(customParseFormat);
-
-export interface Actor {
+export interface Banner{
     id: string;
-    fullName: string,
-    gender: string,
-    dateOfBirth: Date,
-    weight: number,
-    height: number,
-    nationality: string,
-    description: string,
-    avatar: string
+    key: string;
+    title: string;
+    link: string;
+    thumbnail: string;
+    status: number;
+    position: number;
+    contentType: string;
+    contentId: string;
 }
 
-const ActorPage: React.FC = () => {
+const BannerPage: React.FC = () => {
     const location = useLocation();
     const { t } = useTranslation();
-    const [data, setData] = useState<Actor[]>([]);
+    const [data, setData] = useState<Banner[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -41,35 +35,15 @@ const ActorPage: React.FC = () => {
     const searchFields = [
         {
             type: 'input',
-            label: t('admin.actor.fullName'),
-            name: 'name',
-            placeholder: t('admin.actor.fullName'),
+            label: t('admin.banner.title'),
+            name: 'title',
+            placeholder: t('admin.banner.title'),
         },
         {
             type: 'select',
-            label: t('admin.actor.gender.title'),
-            name: 'gender',
-            placeholder: t('admin.actor.gender.title'),
-            options: [
-                {
-                    label: t('admin.actor.gender.male'),
-                    value: 'male',
-                },
-                {
-                    label: t('admin.actor.gender.female'),
-                    value: 'female',
-                },
-                {
-                    label: t('admin.actor.gender.other'),
-                    value: 'other',
-                },
-            ],
-        },
-        {
-            type: 'dateRange',
-            label: t('admin.director.dateOfBirth'),
-            name: 'date_of_birth',
-            placeholder: t('admin.director.dateOfBirth'),
+            label: t('admin.banner.position'),
+            name: 'position',
+            placeholder: t('admin.banner.position'),
         },
         {
             type: 'select',
@@ -91,32 +65,26 @@ const ActorPage: React.FC = () => {
                 },
             ],
         },
-        {
-            type: 'nationality',
-            label: t('admin.user.nationality'),
-            name: 'nationality',
-        }
     ];
-
     const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
         setIsLoading(true);
         try {
-            const response = await getActors(page, pageSize, filters); // Gọi API với từ khóa
+            const response = await getBanners(page, pageSize, filters); // Gọi API với từ khóa
             const result = await response.json();
             if (!response.ok || result.status === 404) {
                 setTotalItems(0);
                 setData([]);
                 return;
             }
+            console.log(result)
 
-            const content: Actor[] = result.data.content;
-            const actors = content.map((item: Actor) => ({
+            const content: Banner[] = result.data.content;
+            const banners = content.map((item: Banner) => ({
                 ...item,
                 key: item.id,
             }));
             setTotalItems(result.data.totalElements);
-            setData(actors);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            setData(banners);
         } catch (error) {
             console.log(error);
             message.error(t('admin.message.fetchError'));
@@ -180,7 +148,7 @@ const ActorPage: React.FC = () => {
     const handleDeleteSelected = async (ids: React.Key[]) => {
         setIsLoading(true);
         try {
-            const response = await deleteActors(ids as string[]);
+            const response = await deleteBanners(ids as string[]);
             if (response.ok) {
                 setData((prevData) => prevData.filter((item) => !ids.includes(item.id)));
                 message.success(t('admin.message.deleteSuccess')); // Dùng t() cho thông báo
@@ -205,7 +173,7 @@ const ActorPage: React.FC = () => {
     const handleSwitchStatus = async (id: string, checked: boolean) => {
         setIsLoading(true);
         try {
-            const response = await switchStatusActor(id);
+            const response = await switchStatusBanner(id);
             const result = await response.json();
             if (!response.ok || result.status !== 200) {
                 message.error(t('admin.message.updateError'));
@@ -224,73 +192,49 @@ const ActorPage: React.FC = () => {
         }
     };
 
-    const dataListConfig: DataListConfig<Actor> = {
+    const dataListConfig: DataListConfig<Banner> = {
         columns: [
             {
                 title: 'No.',
                 key: 'no',
                 align: 'center',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
+
             },
             {
-                title: t('admin.actor.fullName'),
-                dataIndex: 'fullName',
-                key: 'fullName',
+                title: t('admin.banner.title'),
+                dataIndex: 'title',
+                key: 'title',
                 align: 'center',
             },
             {
-                title: t('admin.actor.avatar'),
-                dataIndex: 'avatar',
-                key: 'avatar',
+                title: t('admin.banner.thumbnail'),
+                dataIndex: 'thumbnail',
+                key: 'thumbnail',
                 align: 'center',
-                render: (avatar: string) => (
+                render: (thumbnail: string) => (
                     <Image
-                        width={80}  // Điều chỉnh kích thước ảnh nếu cần
+                        width={80}
                         height={80}
                         style={{
                             objectFit: 'cover',
                             borderRadius: '4px'
                         }}
-                        src={avatar}  // Đường dẫn ảnh
-                        alt="avatar"
+                        src={thumbnail}
+                        alt="thumbnail"
                     />
                 ),
             },
             {
-                title: t('admin.actor.gender.title'),
-                dataIndex: 'gender',
-                key: 'gender',
+                title: t('admin.banner.link'),
+                dataIndex: 'link',
+                key: 'link',
                 align: 'center',
             },
             {
-                title: t('admin.actor.dateOfBirth'),
-                dataIndex: 'dateOfBirth',
-                key: 'dateOfBirth',
-                align: 'center',
-                render: (dateOfBirth: Date) => (dateOfBirth ? dayjs(dateOfBirth).format('DD/MM/YYYY') : ''),
-            },
-            {
-                title: t('admin.actor.weight'),
-                dataIndex: 'weight',
-                key: 'weight',
-                align: 'center',
-            },
-            {
-                title: t('admin.actor.height'),
-                dataIndex: 'height',
-                key: 'height',
-                align: 'center',
-            },
-            {
-                title: t('admin.actor.nationality'),
-                dataIndex: 'nationality',
-                key: 'nationality',
-                align: 'center',
-            },
-            {
-                title: t('admin.actor.description'),
-                dataIndex: 'description',
-                key: 'description',
+                title: t('admin.banner.position'),
+                dataIndex: 'position',
+                key: 'position',
                 align: 'center',
             },
             {
@@ -323,7 +267,7 @@ const ActorPage: React.FC = () => {
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}`, name: t('admin.dashboard.title') },
-                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.actor.title') },
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.banner.title') },
             ]}
         >
             <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
@@ -336,6 +280,6 @@ const ActorPage: React.FC = () => {
             )}
         </OutletTemplate>
     );
-};
+}
 
-export default ActorPage;
+export default BannerPage;

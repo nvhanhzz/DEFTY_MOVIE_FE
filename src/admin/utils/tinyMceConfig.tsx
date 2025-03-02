@@ -18,6 +18,6 @@ export const tinyMceConfig = {
         { value: 'First.Name', title: 'First Name' },
         { value: 'Email', title: 'Email' },
     ],
-    ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+    ai_request: (_request: any, respondWith: any) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
     apiKey: PREFIX_TINY_MCE_API_KEY, // Thêm API key của bạn vào đây
 };
