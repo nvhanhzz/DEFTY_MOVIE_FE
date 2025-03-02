@@ -10,6 +10,7 @@ import SelectCustom from "../SelectCustom";
 import { MovieDetailProps } from "../../pages/MovieDetail";
 import dayjs from "dayjs";
 import {DownOutlined} from "@ant-design/icons";
+import {Link} from "react-router-dom";
 
 const MovieInformation: React.FC<MovieDetailProps> = ({
                                                  title,
@@ -24,6 +25,8 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                                                  actor
                                             }) => {
     console.log(trailer);
+    console.log(dayjs(releaseDate).format('YYYY'));
+    console.log(duration);
 
     const [descriptionExpanded, setDescriptionExpanded] = useState(false);
     const [descriptionClamped, setDescriptionClamped] = useState(false);
@@ -52,17 +55,25 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                             <span className="movie-rating">
                                 <MdOutlineStar/> {rating ? rating : '0'}
                             </span>
-                            |
-                            <span className="movie-release-date">{releaseDate ? dayjs(releaseDate).format('DD/MM/YYYY') : ''}</span>
-                            |
-                            <span className="movie-duration">{duration ? duration : ''}</span>
+                            {releaseDate && (
+                                <>
+                                    <span className="movie-info-break">|</span>
+                                    <span className="movie-release-date">{dayjs(releaseDate).format('YYYY')}</span>
+                                </>
+                            )}
+                            {duration !== null && duration !== undefined && (
+                                <>
+                                    <span className="movie-info-break">|</span>
+                                    <span className="movie-duration">{duration}</span>
+                                </>
+                            )}
                         </p>
                         {category && (
                             <div className="movie-category">
                                 {category.map((tag, index) => (
-                                    <span key={index} className="movie-tag">
+                                    <Link to="" key={index} className="movie-tag">
                                         {tag}
-                                    </span>
+                                    </Link>
                                 ))}
                             </div>
                         )}
@@ -70,15 +81,20 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                             <RiVipCrown2Fill className="vip-button-icon" /> First month only đ23,000
                         </div>
                         {director && (
-                            <p className="movie-cast">Director: <span className="movie-cast-content">{director}</span></p>
+                            <p className="movie-cast">Director: <Link to="" className="movie-cast-content">{director}</Link></p>
                         )}
                         {actor && (
-                            <p className="movie-cast">Cast: <span className="movie-cast-content">
+                            <p className="movie-cast">
+                                Cast:
                                 {
-                                    actor.map((item, index) => (index !== actor.length - 1 ? <span key={index}>{item}, </span> :
-                                        <span key={index}>{item}</span>))
+                                    actor.map((item, index) => (
+                                        index !== actor.length - 1 ?
+                                            <Link to="" className="movie-cast-content" key={index}>{item}, </Link> :
+                                            <Link to="" className="movie-cast-content" key={index}>{item}</Link>
+                                        )
+                                    )
                                 }
-                            </span></p>
+                            </p>
                         )}
                         <p
                             className={`movie-description ${descriptionExpanded ? "expanded" : "clamped"}`}

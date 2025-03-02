@@ -2,6 +2,7 @@
   width: calc(100% - 2 * 72px);
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-left: 72px;
+  margin-top: 50px;
 }

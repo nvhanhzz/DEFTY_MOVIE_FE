@@ -69,14 +69,17 @@
       .movie-info {
         font-size: 17px;
         margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+
+        .movie-info-break {
+          color: #686666;
+          margin: 0 5px;
+        }
 
         .movie-rating {
           color: rgb(28, 199, 73);
           font-weight: bold;
-        }
-
-        .movie-release-date {
-          margin-left: 10px;
         }
       }
 
@@ -90,6 +93,8 @@
           padding: 5px 10px;
           background: rgba(255, 255, 255, 0.08);
           border-radius: 2px;
+          color: #fff;
+          text-decoration: none;
         }
       }
 
@@ -176,6 +181,11 @@
           -webkit-line-clamp: 3; /* Giới hạn số dòng hiển thị */
           -webkit-box-orient: vertical; /* Cần thiết để hỗ trợ line-clamp */
           margin-bottom: 5px;
+          text-decoration: none;
+
+          &:hover {
+            color: rgb(0, 194, 52);
+          }
         }
       }
 

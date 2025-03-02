@@ -6,13 +6,13 @@
   left: 0;
   width: calc(100% - 2 * 64px);
   height: 72px;
-  //background-color: rgba(10, 12, 15, 0); /* Màu nền mờ */
   backdrop-filter: blur(3px); /* Làm mờ phần nền phía sau */
   z-index: 1000; /* Đảm bảo nằm trên các phần tử khác */
   display: flex;
   justify-content: space-between;
   padding: 0 64px;
   align-items: center;
+  transition: background-color 0.3s ease-in-out;
 
   /* Left Section */
   &__left {
@@ -210,5 +210,10 @@
       }
     }
 
+  }
+
+  &--scrolled {
+    background-color: #0a0c0f; // Màu tối hơn khi scroll xuống
+    z-index: 9999;
   }
 }

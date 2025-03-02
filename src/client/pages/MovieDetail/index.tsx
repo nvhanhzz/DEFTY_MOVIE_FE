@@ -8,6 +8,7 @@ import {useTranslation} from "react-i18next";
 import {getMovieBySlug} from "../../services/movieService.tsx";
 import {LoadingOutlined} from "@ant-design/icons";
 import "./MovieDetail.scss";
+import {getEpisodesByMovie} from "../../services/episodeService.tsx";
 
 export interface MovieDetailProps {
     title: string;
@@ -27,6 +28,7 @@ const MovieDetail: React.FC = () => {
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [movie, setMovie] = useState<MovieDetailProps | null>(null);
+    const [episodes, setEpisodes] = useState<Episode[]>([]);
 
     const fetchMovieDetail = async () => {
         setIsLoading(true);
@@ -46,20 +48,33 @@ const MovieDetail: React.FC = () => {
         }
     }
 
+    const fetchEpisodes = async () => {
+        setIsLoading(true);
+        try {
+            const response = await getEpisodesByMovie(slug as string);
+            const result = await response.json();
+            if (!response.ok || result.status === 404) {
+                return;
+            }
+
+            const eps: Episode[] = result.data.map((ep: Episode) => ({
+                ...ep,
+                movieTitle: movie?.title
+            }));
+
+            setEpisodes(eps);
+        } catch (error) {
+            console.log(error);
+            message.error(t('client.message.fetchError'));
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
         fetchMovieDetail();
+        fetchEpisodes()
     }, [])
-
-    const episodes: Episode[] = [
-    ]
-
-    // for (let i = 0; i < 24; i++) {
-    //     episodes.push( {
-    //         title: movie.title,
-    //         thumbnail: "https://danviet.mediacdn.vn/296231569849192448/2023/6/18/one-piece-header2000x1270-1687049323660685039990.jpg",
-    //         number: 889
-    //     });
-    // }
 
     if (isLoading) {
         return (
