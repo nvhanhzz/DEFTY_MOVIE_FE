@@ -115,16 +115,18 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                     </div>
                     <div className="movie-information-buttons">
                         <div className="button play-button"><FaPlay /> Play</div>
-                        <div className="button other-button"><MdOutlineIosShare /> Share</div>
-                        <div className="button other-button"><IoDownloadOutline /> APP</div>
-                        <div className="button other-button"><MdOutlineBookmarkAdd /> Watch Later</div>
+                        <div className="button other-button"><MdOutlineIosShare /><span>Share</span></div>
+                        <div className="button other-button"><IoDownloadOutline /><span>APP</span></div>
+                        <div className="button other-button"><MdOutlineBookmarkAdd /><span>Watch Later</span></div>
                     </div>
                 </div>
 
                 <div className="movie-information-thumbnail">
-                    <img src={coverImage} alt="cover-image" />
-                    <div className="left-layer"></div>
-                    <div className="bottom-layer"></div>
+                    <div className="movie-information-thumbnail-inner">
+                        <img src={coverImage} alt="cover-image" />
+                        <div className="left-layer"></div>
+                        <div className="bottom-layer"></div>
+                    </div>
                 </div>
             </div>
         </div>

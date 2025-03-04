@@ -200,6 +200,10 @@
           border-radius: 5px;
           cursor: pointer;
           font-weight: 600;
+
+          span {
+            margin-left: 5px;
+          }
         }
 
         .play-button {
@@ -223,42 +227,118 @@
 
     .movie-information-thumbnail {
       width: 60%;
-      position: relative;
       overflow: hidden;
       max-height: 630px;
 
-      img {
+      .movie-information-thumbnail-inner {
         width: 100%;
+        aspect-ratio: 16/9;
+        position: relative;
+
+        img {
+          width: 100%;
+        }
+
+        .left-layer {
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 28%;
+          background-image: linear-gradient(
+                          270deg,
+                          rgba(17, 19, 25, 0) 0%,
+                          rgba(17, 19, 25, 0.05) 16%,
+                          rgba(17, 19, 25, 0.2) 30%,
+                          rgba(17, 19, 25, 0.39) 43%,
+                          rgba(17, 19, 25, 0.61) 55%,
+                          rgba(17, 19, 25, 0.8) 68%,
+                          rgba(17, 19, 25, 0.95) 82%,
+                          rgb(17, 19, 25) 98%
+          );
+          z-index: 2;
+        }
+
+        .bottom-layer {
+          width: 100%;
+          height: 36%;
+          background-image: linear-gradient(179deg, rgba(17, 19, 25, 0) 1%, rgba(17, 19, 25, 0.05) 17%, rgba(17, 19, 25, 0.2) 31%, rgba(17, 19, 25, 0.39) 44%, rgba(17, 19, 25, 0.61) 56%, rgba(17, 19, 25, 0.8) 69%, rgba(17, 19, 25, 0.95) 83%, rgb(17, 19, 25) 99%);
+          border-radius: 1px;
+          z-index: 100;
+          position: absolute;
+          bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .movie-information-container {
+    .movie-information {
+      .movie-information-overlay {
+        .movie-information-buttons {
+          .button {
+            padding: 7px 12px 10px 12px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .movie-information-container {
+    .movie-information {
+      flex-direction: column;
+
+      .movie-information-thumbnail {
+        width: 100%;
+        order: -1;
       }
 
-      .left-layer {
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 28%;
-        background-image: linear-gradient(
-                        270deg,
-                        rgba(17, 19, 25, 0) 0%,
-                        rgba(17, 19, 25, 0.05) 16%,
-                        rgba(17, 19, 25, 0.2) 30%,
-                        rgba(17, 19, 25, 0.39) 43%,
-                        rgba(17, 19, 25, 0.61) 55%,
-                        rgba(17, 19, 25, 0.8) 68%,
-                        rgba(17, 19, 25, 0.95) 82%,
-                        rgb(17, 19, 25) 98%
-        );
-        z-index: 2;
-      }
-
-      .bottom-layer {
+      .movie-information-overlay {
         width: 100%;
-        height: 36%;
-        background-image: linear-gradient(179deg, rgba(17, 19, 25, 0) 1%, rgba(17, 19, 25, 0.05) 17%, rgba(17, 19, 25, 0.2) 31%, rgba(17, 19, 25, 0.39) 44%, rgba(17, 19, 25, 0.61) 56%, rgba(17, 19, 25, 0.8) 69%, rgba(17, 19, 25, 0.95) 83%, rgb(17, 19, 25) 99%);
-        border-radius: 1px;
-        z-index: 100;
-        position: absolute;
-        bottom: 0;
+        margin-top: 0;
+        margin-left: 50px;
+
+        .movie-title {
+          font-size: 32px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .movie-information-container {
+    .movie-information {
+      .movie-information-overlay {
+        margin-left: 24px;
+        .movie-information-buttons {
+          .play-button {
+            padding: 7px 22px 10px 22px;
+          }
+
+          .other-button {
+            padding: 0;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-left: 20px;
+            color: #bcbdbe;
+
+            &:hover {
+              background: transparent;
+            }
+
+            span {
+              display: none;
+            }
+          }
+        }
       }
     }
   }
