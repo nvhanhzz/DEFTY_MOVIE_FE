@@ -13,6 +13,7 @@ import {
     TagsOutlined,
     TeamOutlined,
     UserOutlined,
+    HomeOutlined,
     AppstoreAddOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
