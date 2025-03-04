@@ -1,0 +1,105 @@
+.episode-card {
+  width: calc((100% - 15px * 5) / 6);
+  margin-top: 40px;
+  margin-right: 15px;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+  position: relative;
+
+  &:nth-child(6n) {
+    margin-right: 0;
+  }
+
+  img {
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 2px;
+  }
+
+  span {
+    color: #cdcbcb;
+    font-size: 16px;
+    transition: color 0.3s ease-in-out;
+  }
+
+  .play-icon {
+    display: none;
+  }
+
+  &:hover {
+    z-index: 1001;
+    transform: scale(1.05);
+
+    .play-icon {
+      position: absolute;
+      bottom: 35px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border-radius: 50%;
+      color: white;
+      background-color: #04c936;
+      border: none;
+      font-size: 17px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  &:hover span {
+    color: #12dc35;
+  }
+}
+
+@media (max-width: 1600px) {
+  .episode-card {
+    width: calc((100% - 15px * 3) / 4);
+    margin-right: 15px;
+
+    // Reset lại nth-child cũ
+    &:nth-child(6n) {
+      margin-right: 15px; // Trả lại giá trị cũ nếu bị ảnh hưởng
+    }
+
+    &:nth-child(4n) {
+      margin-right: 0;
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .episode-card {
+    width: calc((100% - 15px * 2) / 3);
+    margin-right: 15px;
+
+    // Reset lại nth-child cũ
+    &:nth-child(6n),
+    &:nth-child(4n) {
+      margin-right: 15px;
+    }
+
+    &:nth-child(3n) {
+      margin-right: 0;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .episode-card {
+    width: calc((100% - 10px * 1) / 2);
+    margin-right: 10px;
+
+    // Reset lại nth-child cũ
+    &:nth-child(6n),
+    &:nth-child(4n),
+    &:nth-child(3n) {
+      margin-right: 10px;
+    }
+
+    &:nth-child(2n) {
+      margin-right: 0;
+    }
+  }
+}

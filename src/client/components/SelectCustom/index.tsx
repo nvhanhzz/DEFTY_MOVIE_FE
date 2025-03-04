@@ -3,16 +3,11 @@ import { DownOutlined } from "@ant-design/icons";
 import "./SelectCustom.scss";
 
 const options = [
-    "889-912",
-    "913-936",
-    "937-960",
-    "961-984",
-    "985-1008",
-    "1009-1032",
-    "1033-1056",
-    "1057-1080",
-    "1081-1104",
-    "1105-1123",
+    "...",
+    "...",
+    "...",
+    "...",
+    "...",
 ];
 
 const SelectCustom: React.FC = () => {

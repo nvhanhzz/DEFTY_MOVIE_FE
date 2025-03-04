@@ -1,5 +1,5 @@
 import React from 'react';
-import MovieCard, {Movie} from "../../components/MovieCard";
+import MovieCard, {Movie} from "../MovieCard";
 import "./ListMovieCard.scss";
 
 interface ListMovieCardProps {

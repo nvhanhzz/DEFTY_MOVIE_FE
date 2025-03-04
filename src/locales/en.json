@@ -486,5 +486,24 @@
             }
         }
     },
-    "client": {}
+    "client": {
+        "message": {
+            "deleteConfirm": "Are you sure you want to delete this item?",
+            "deleteSelectedConfirm": "Are you sure you want to delete selected items?",
+            "createSuccess": "Item created successfully!",
+            "createError": "Failed to create item.",
+            "updateSuccess": "Item updated successfully!",
+            "updateError": "Failed to update item.",
+            "deleteSuccess": "Item deleted successfully!",
+            "deleteError": "Failed to delete item.",
+            "deleteSelectedSuccess": "Selected items deleted successfully!",
+            "deleteSelectedError": "Failed to delete selected items.",
+            "loadingMessage": "Loading data...",
+            "requiredMessage": "Please input this field!",
+            "assignPermissionConfirm": "Yes",
+            "assignPermissionCancel": "No",
+            "fetchSuccess": "Data fetched successfully!",
+            "fetchError": "Failed to fetch data."
+        }
+    }
 }

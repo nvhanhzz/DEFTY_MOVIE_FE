@@ -190,16 +190,20 @@ const DefaultRoutes: RouteType[] = [
         element: <UpdateActor />,
     },
     {
-        path: 'home-config',
-        element: <HomeConfigPage />,
+        path: 'users',
+        element: <UserPage />,
     },
     {
-        path: 'home-config/create',
-        element: <CreateShowOn />,
+        path: 'banners',
+        element: <Banner />,
     },
     {
-        path: 'home-config/update/:id',
-        element: <UpdateShowOn />,
+        path: 'banners/create',
+        element: <CreateBanner />,
+    },
+    {
+        path: 'banners/update/:id',
+        element: <UpdateBanner />,
     },
     {
         path: 'users',

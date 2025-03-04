@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './Header.scss';
 import { CiSearch } from "react-icons/ci";
 import { RiHistoryFill } from "react-icons/ri";
@@ -9,8 +9,25 @@ import { Link } from "react-router-dom";
 import Dropdown from "../Dropdown";
 
 const AppHeader: React.FC = () => {
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 50) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
     return (
-        <header className="header">
+        <header className={`header ${isScrolled ? "header--scrolled" : ""}`}>
             <div className="header__left">
                 <Link to="/" className="header__left--logo">
                     <img src="/assets/images/defty.png" alt="logo" />

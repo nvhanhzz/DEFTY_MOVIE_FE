@@ -6,13 +6,14 @@ import { Movie } from "../MovieCard";
 import "./RecommendedBanner.scss";
 
 const RecommendedBanner: React.FC<Movie> = ({
-                                                               name,
+                                                               title,
                                                                category,
                                                                rating,
                                                                releaseDate,
                                                                description,
                                                                thumbnail,
                                                            }) => {
+    console.log("RecommendedBanner", title, category, rating, releaseDate);
     return (
         <div
             className="recommended-banner"
@@ -20,7 +21,7 @@ const RecommendedBanner: React.FC<Movie> = ({
         >
             <div className="recommended-banner-overlay">
                 <div className="recommended-banner-content">
-                    <h1 className="banner-title">{name}</h1>
+                    <h1 className="banner-title">{title}</h1>
                     <p className="banner-info">
                         <span className="banner-rating">
                             <MdOutlineStar/> {rating}

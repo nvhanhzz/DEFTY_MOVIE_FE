@@ -6,7 +6,8 @@ import { Movie } from "../MovieCard";
 const Carousel: React.FC = () => {
     const movies: Movie[] = [
         {
-            name: "Titanic",
+            title: "Titanic",
+            badge: [],
             category: ["Drama", "Romance", "Classic"],
             rating: 9.5,
             releaseDate: "1997-12-19",
@@ -15,7 +16,8 @@ const Carousel: React.FC = () => {
         },
         // Lặp lại 4 lần nữa
         {
-            name: "Naruto",
+            title: "Naruto",
+            badge: [],
             category: ["Anime"],
             rating: 9.5,
             releaseDate: "1997-12-19",
@@ -23,7 +25,8 @@ const Carousel: React.FC = () => {
             thumbnail: "https://img4.goodfon.com/wallpaper/nbig/3/28/by-dennisstelly-uchiha-sasuke-uzumaki-naruto-naruto-anime-ja.jpg",
         },
         {
-            name: "Titanic3",
+            title: "Titanic3",
+            badge: [],
             category: ["Drama", "Romance", "Classic"],
             rating: 9.5,
             releaseDate: "1997-12-19",
@@ -31,7 +34,8 @@ const Carousel: React.FC = () => {
             thumbnail: "https://th.bing.com/th/id/R.667009e0b2d0878fed8c8a2b45af4376?rik=CTuVDirCs9KsrQ&riu=http%3a%2f%2fhdqwalls.com%2fwallpapers%2ftitanic-movie-full-hd.jpg&ehk=shuYoCshdWaPmf8iswXCLMCuKFbhdMKIwKhFoDL2slk%3d&risl=&pid=ImgRaw&r=0",
         },
         {
-            name: "Titanic",
+            title: "Titanic",
+            badge: [],
             category: ["Drama", "Romance", "Classic"],
             rating: 9.5,
             releaseDate: "1997-12-19",
@@ -39,7 +43,8 @@ const Carousel: React.FC = () => {
             thumbnail: "https://th.bing.com/th/id/R.667009e0b2d0878fed8c8a2b45af4376?rik=CTuVDirCs9KsrQ&riu=http%3a%2f%2fhdqwalls.com%2fwallpapers%2ftitanic-movie-full-hd.jpg&ehk=shuYoCshdWaPmf8iswXCLMCuKFbhdMKIwKhFoDL2slk%3d&risl=&pid=ImgRaw&r=0",
         },
         {
-            name: "Titanic",
+            title: "Titanic",
+            badge: [],
             category: ["Drama", "Romance", "Classic"],
             rating: 9.5,
             releaseDate: "1997-12-19",
