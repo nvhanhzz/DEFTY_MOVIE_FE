@@ -1,4 +1,4 @@
-@import "../../../styles/Variable";
+@import "../../../../styles/Variable";
 
 .movie-information-container {
   min-height: 530px;
@@ -260,36 +260,6 @@
         position: absolute;
         bottom: 0;
       }
-    }
-  }
-
-  .movie-information-bottom {
-    margin: 0 72px;
-
-    .movie-information-navs {
-      display: flex;
-      justify-content: left;
-      margin-bottom: 20px;
-
-      .nav {
-        cursor: pointer;
-        font-size: 14px;
-        color: #828387;
-        margin-right: 40px;
-
-        &:hover {
-          color: #fff;
-        }
-      }
-
-      .nav-choose {
-        color: #fff;
-        font-weight: 600;
-      }
-    }
-
-    .movie-information-divider {
-      color: #5a5454;
     }
   }
 }

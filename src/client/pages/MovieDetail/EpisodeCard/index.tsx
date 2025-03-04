@@ -1,5 +1,5 @@
 import React from "react";
-import { IoMdPlayCircle } from "react-icons/io";
+import { FaPlay } from "react-icons/fa";
 import "./EpisodeCard.scss";
 
 export interface Episode {
@@ -19,7 +19,7 @@ const EpisodeCard: React.FC<Episode> = ({thumbnail, number, movieTitle}) => {
             <img src={thumbnail} alt="thumbnail"/>
             <span className="episode-number">{movieTitle} Episode {number}</span>
             <div className="play-icon">
-                <IoMdPlayCircle />
+                <FaPlay />
             </div>
         </div>
     )

@@ -6,11 +6,14 @@ import { MdOutlineIosShare } from "react-icons/md";
 import { IoDownloadOutline } from "react-icons/io5";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 import "./MovieInformation.scss";
-import SelectCustom from "../SelectCustom";
-import { MovieDetailProps } from "../../pages/MovieDetail";
+import { MovieDetailProps } from "../index.tsx";
 import dayjs from "dayjs";
 import {DownOutlined} from "@ant-design/icons";
 import {Link} from "react-router-dom";
+
+const PREFIX_URL_CATEGORY = import.meta.env.VITE_PREFIX_URL_CATEGORY as string;
+const PREFIX_URL_ACTOR = import.meta.env.VITE_PREFIX_URL_ACTOR as string;
+const PREFIX_URL_DIRECTOR = import.meta.env.VITE_PREFIX_URL_DIRECTOR as string;
 
 const MovieInformation: React.FC<MovieDetailProps> = ({
                                                  title,
@@ -18,7 +21,7 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                                                  releaseDate,
                                                  duration,
                                                  description,
-                                                 image,
+                                                 coverImage,
                                                  trailer,
                                                  director,
                                                  category,
@@ -71,8 +74,8 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                         {category && (
                             <div className="movie-category">
                                 {category.map((tag, index) => (
-                                    <Link to="" key={index} className="movie-tag">
-                                        {tag}
+                                    <Link to={`/${PREFIX_URL_CATEGORY}/${tag.slug}`} key={index} className="movie-tag">
+                                        {tag.name}
                                     </Link>
                                 ))}
                             </div>
@@ -81,7 +84,7 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                             <RiVipCrown2Fill className="vip-button-icon" /> First month only đ23,000
                         </div>
                         {director && (
-                            <p className="movie-cast">Director: <Link to="" className="movie-cast-content">{director}</Link></p>
+                            <p className="movie-cast">Director: <Link to={`/${PREFIX_URL_DIRECTOR}/${director.slug}`} className="movie-cast-content">{director.fullName}</Link></p>
                         )}
                         {actor && (
                             <p className="movie-cast">
@@ -89,8 +92,8 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                                 {
                                     actor.map((item, index) => (
                                         index !== actor.length - 1 ?
-                                            <Link to="" className="movie-cast-content" key={index}>{item}, </Link> :
-                                            <Link to="" className="movie-cast-content" key={index}>{item}</Link>
+                                            <Link to={`/${PREFIX_URL_ACTOR}/${item.slug}`} className="movie-cast-content" key={index}>{item.fullName}, </Link> :
+                                            <Link to={`/${PREFIX_URL_ACTOR}/${item.slug}`} className="movie-cast-content" key={index}>{item.fullName}</Link>
                                         )
                                     )
                                 }
@@ -119,20 +122,10 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                 </div>
 
                 <div className="movie-information-thumbnail">
-                    <img src={image} alt="cover-image" />
+                    <img src={coverImage} alt="cover-image" />
                     <div className="left-layer"></div>
                     <div className="bottom-layer"></div>
                 </div>
-            </div>
-            <div className="movie-information-bottom">
-                <div className="movie-information-navs">
-                    <div className="nav nav-choose">Episodes</div>
-                    <div className="nav">Cast</div>
-                    <div className="nav">Collections</div>
-                    <div className="nav">Recommended</div>
-                </div>
-                <hr className="movie-information-divider" />
-                <SelectCustom />
             </div>
         </div>
     );

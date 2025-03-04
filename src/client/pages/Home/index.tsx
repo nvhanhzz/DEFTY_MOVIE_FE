@@ -1,12 +1,13 @@
-import Carousel from "../../components/Carousel";
-import ListMovieCard from "../../components/ListMovieCard";
-import {Movie} from "../../components/MovieCard";
+import Carousel from "./Carousel";
+import ListMovieCard from "./ListMovieCard";
+import {Movie} from "./MovieCard";
 
 function Home() {
 
     const movies: Movie[] = [
         {
-            name: "Titanic",
+            title: "Titanic",
+            badge: [],
             category: ["Drama", "Romance", "Classic"],
             rating: 9.5,
             releaseDate: "1997-12-19",
@@ -15,7 +16,8 @@ function Home() {
         },
         // Lặp lại 4 lần nữa
         {
-            name: "Naruto",
+            title: "Naruto",
+            badge: [],
             category: ["Anime"],
             rating: 9.5,
             releaseDate: "1997-12-19",
@@ -23,7 +25,8 @@ function Home() {
             "thumbnail": "https://th.bing.com/th/id/R.ef7acaddd7c1e6f080e11ffb5fb934a9?rik=spacnim%2f8s29Sw&riu=http%3a%2f%2fpm1.aminoapps.com%2f6282%2f50dd338e4d8514842990da19aa56b4a24e919269_00.jpg&ehk=ORB5UqgwdnQEGecOFPnSeOnBTogwYUaK9uA1T1gUufs%3d&risl=&pid=ImgRaw&r=0",
         },
         {
-            name: "Titanic3",
+            title: "Titanic3",
+            badge: [],
             category: ["Drama", "Romance", "Classic"],
             rating: 9.5,
             releaseDate: "1997-12-19",
@@ -31,7 +34,8 @@ function Home() {
             thumbnail: "https://th.bing.com/th/id/R.667009e0b2d0878fed8c8a2b45af4376?rik=CTuVDirCs9KsrQ&riu=http%3a%2f%2fhdqwalls.com%2fwallpapers%2ftitanic-movie-full-hd.jpg&ehk=shuYoCshdWaPmf8iswXCLMCuKFbhdMKIwKhFoDL2slk%3d&risl=&pid=ImgRaw&r=0",
         },
         {
-            name: "Titanic",
+            title: "Titanic",
+            badge: [],
             category: ["Drama", "Romance", "Classic"],
             rating: 9.5,
             releaseDate: "1997-12-19",
@@ -39,7 +43,8 @@ function Home() {
             thumbnail: "https://th.bing.com/th/id/R.667009e0b2d0878fed8c8a2b45af4376?rik=CTuVDirCs9KsrQ&riu=http%3a%2f%2fhdqwalls.com%2fwallpapers%2ftitanic-movie-full-hd.jpg&ehk=shuYoCshdWaPmf8iswXCLMCuKFbhdMKIwKhFoDL2slk%3d&risl=&pid=ImgRaw&r=0",
         },
         {
-            name: "Titanic",
+            title: "Titanic",
+            badge: [],
             category: ["Drama", "Romance", "Classic"],
             rating: 9.5,
             releaseDate: "1997-12-19",
@@ -47,7 +52,8 @@ function Home() {
             thumbnail: "https://th.bing.com/th/id/R.667009e0b2d0878fed8c8a2b45af4376?rik=CTuVDirCs9KsrQ&riu=http%3a%2f%2fhdqwalls.com%2fwallpapers%2ftitanic-movie-full-hd.jpg&ehk=shuYoCshdWaPmf8iswXCLMCuKFbhdMKIwKhFoDL2slk%3d&risl=&pid=ImgRaw&r=0",
         },
         {
-            name: "Naruto",
+            title: "Naruto",
+            badge: [],
             category: ["Anime"],
             rating: 9.5,
             releaseDate: "1997-12-19",
@@ -55,7 +61,8 @@ function Home() {
             "thumbnail": "https://th.bing.com/th/id/R.ef7acaddd7c1e6f080e11ffb5fb934a9?rik=spacnim%2f8s29Sw&riu=http%3a%2f%2fpm1.aminoapps.com%2f6282%2f50dd338e4d8514842990da19aa56b4a24e919269_00.jpg&ehk=ORB5UqgwdnQEGecOFPnSeOnBTogwYUaK9uA1T1gUufs%3d&risl=&pid=ImgRaw&r=0",
         },
         {
-            name: "Naruto",
+            title: "Naruto",
+            badge: [],
             category: ["Anime"],
             rating: 9.5,
             releaseDate: "1997-12-19",
@@ -63,7 +70,8 @@ function Home() {
             "thumbnail": "https://th.bing.com/th/id/R.ef7acaddd7c1e6f080e11ffb5fb934a9?rik=spacnim%2f8s29Sw&riu=http%3a%2f%2fpm1.aminoapps.com%2f6282%2f50dd338e4d8514842990da19aa56b4a24e919269_00.jpg&ehk=ORB5UqgwdnQEGecOFPnSeOnBTogwYUaK9uA1T1gUufs%3d&risl=&pid=ImgRaw&r=0",
         },
         {
-            name: "Naruto",
+            title: "Naruto",
+            badge: [],
             category: ["Anime"],
             rating: 9.5,
             releaseDate: "1997-12-19",
