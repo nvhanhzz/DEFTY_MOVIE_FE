@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Col, DatePicker, Form, Input, message, Row, Select} from 'antd';
+import {Button, Col, DatePicker, Form, Input, message, Row, Select, Upload} from 'antd';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
@@ -11,6 +11,7 @@ import {Movie} from "../index.tsx";
 import dayjs from 'dayjs';
 import {getDirectors} from "../../../services/directorService.tsx";
 import AvtEditor from "../../../components/AvtEditor";
+import {UploadOutlined} from "@ant-design/icons";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -23,6 +24,9 @@ const UpdateMovie: React.FC = () => {
     const { t } = useTranslation();
     const [directorOptions, setDirectorOptions] = useState([]);
     const [nation, setNation] = useState([]);
+    const [trailerUrl, setTrailerUrl] = useState<string | null>(null);
+    const [trailerFile, setTrailerFile] = useState<RcFile | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchDirectors = async () => {
@@ -50,20 +54,21 @@ const UpdateMovie: React.FC = () => {
                 const result = await response.json();
                 if (response.ok && result.status === 200) {
                     const data: Movie = result.data;
-                    // console.log(data)
                     form.setFieldsValue({
                         title: data.title,
                         description: data.description,
                         trailer: data.trailer,
                         nation: data.nation,
                         ranking: data.ranking,
-                        // releaseDate: data.releaseDate,
+                        releaseDate: data.releaseDate ? dayjs(data.releaseDate) : null,
                         membershipType: data.membershipType,
                         director: data.director,
-                        releaseDate: data.releaseDate ? dayjs(data.releaseDate) : null,
                     });
                     if (data.thumbnail) {
                         setAvatarUrl(data.thumbnail);
+                    }
+                    if (data.trailer) {
+                        setTrailerUrl(data.trailer);
                     }
                 }
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -73,6 +78,7 @@ const UpdateMovie: React.FC = () => {
         };
         fetchMovie();
     }, [id, form]);
+
 
     useEffect(() => {
         const fetchCountries = async () => {
@@ -98,7 +104,7 @@ const UpdateMovie: React.FC = () => {
             const formData = new FormData();
             formData.append('title', values.title);
             formData.append('description', values.description);
-            formData.append('trailer', values.trailer);
+            // formData.append('trailer', values.trailer);
             formData.append('nation', values.nation);
             formData.append('ranking', values.ranking);
             formData.append('releaseDate', values.releaseDate);
@@ -106,6 +112,9 @@ const UpdateMovie: React.FC = () => {
             formData.append('director', values.director);
             if (thumbnail) {
                 formData.append('thumbnail', thumbnail);
+            }
+            if (trailerUrl) {
+                formData.append('trailer', trailerUrl);
             }
 
             const response = await updateMovieById(id as string, formData);
@@ -128,8 +137,13 @@ const UpdateMovie: React.FC = () => {
         }
     };
 
+    const handleTrailerUpload = (file: RcFile) => {
+        setTrailerFile(file);
+        setPreviewUrl(URL.createObjectURL(file)); // Tạo URL tạm thời
+        return false; // Ngăn Ant Design tự động upload
+    };
+
     const handleThumbnailSave = (file: File | null) => {
-        // @ts-ignore
         setThumbnail(file);
     };
 
@@ -175,9 +189,23 @@ const UpdateMovie: React.FC = () => {
                             name="trailer"
                             rules={[{ required: true, message: t('admin.movie.validation.trailer') }]}
                         >
-                            <Input />
+                            {!trailerUrl && !previewUrl ? (
+                                <Upload
+                                    beforeUpload={handleTrailerUpload}
+                                    accept="video/*"
+                                    showUploadList={false}
+                                >
+                                    <Button icon={<UploadOutlined />}>Upload Trailer</Button>
+                                </Upload>
+                            ) : (
+                                <div style={{ marginTop: 10 }}>
+                                    <video width="100%" height="300" controls>
+                                        <source src={previewUrl || trailerUrl} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                            )}
                         </Form.Item>
-
                         <Form.Item
                             label={t('admin.movie.nation')}
                             name="nation"

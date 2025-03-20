@@ -4,8 +4,8 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {SaveOutlined, UndoOutlined} from "@ant-design/icons";
 import OutletTemplate from "../../../templates/Outlet";
-import {getBannerById, updateBannerById} from "../../../services/bannerService.tsx";
-import {BannerFromValues} from "../Create";
+import {getBannerById, getContentName, updateBannerById} from "../../../services/bannerService.tsx";
+import {BannerFormValues, Content} from "../Create";
 import AvtEditor from "../../../components/AvtEditor";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
@@ -18,6 +18,40 @@ const UpdateBanner: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const [contents, setContents] = useState<Content[]>([]);
+    const [contentType, setContentType] = useState<string>('');
+
+
+    const fetchContentName = async () => {
+        if (!contentType) {
+            setContents([]);
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await getContentName(contentType);
+            const result = await response.json();
+
+            if (!response.ok || !result.data || result.status === 404) {
+                setContents([]);
+                return;
+            }
+
+            const content = result.data;
+            // console.log(content)
+            setContents(content);
+        } catch (error) {
+            console.error("Error fetching content name:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchContentName();
+    }, [contentType]);
 
     useEffect(() => {
         const fetchBanner = async () => {
@@ -36,12 +70,18 @@ const UpdateBanner: React.FC = () => {
                         contentType: data.contentType,
                         contentId: data.contentId,
                     });
+
+                    if (data.contentType) {
+                        setContentType(data.contentType); // Cập nhật contentType để kích hoạt fetchContentName()
+                    }
+
                     if (data.thumbnail) {
                         setThumbnail(data.thumbnail);
                     }
                 } else {
                     message.error(t("admin.message.fetchError"));
                 }
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (e) {
                 message.error(t("admin.message.fetchError"));
             } finally {
@@ -52,7 +92,22 @@ const UpdateBanner: React.FC = () => {
         fetchBanner();
     }, [id, form, t]);
 
-    const handleUpdateBanner = async (values: BannerFromValues) => {
+    useEffect(() => {
+        fetchContentName();
+    }, [contentType]);
+
+// Khi `contents` thay đổi, cập nhật lại contentId trong form nếu có
+    useEffect(() => {
+        if (contents.length > 0) {
+            const currentContentId = form.getFieldValue("contentId");
+            if (!currentContentId) {
+                form.setFieldsValue({ contentId: contents[0].id });
+            }
+        }
+    }, [contents, form]);
+
+
+    const handleUpdateBanner = async (values: BannerFormValues) => {
         setLoading(true);
         try {
             if (!id) return;
@@ -76,6 +131,7 @@ const UpdateBanner: React.FC = () => {
 
             message.success(t("admin.message.updateSuccess"));
             navigate(`${PREFIX_URL_ADMIN}/banners`);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t("admin.message.fetchError"));
         } finally {
@@ -115,33 +171,11 @@ const UpdateBanner: React.FC = () => {
                         </Col>
                         <Col span={12}>
                             <Form.Item
-                                label={t("admin.banner.link")}
-                                name="link"
-                                rules={[{ required: true, message: t("admin.banner.validation.link") }]}
-                            >
-                                <Input placeholder={t("admin.banner.placeholder.link")} />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-
-                    {/* Row 2: Position & Key */}
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item
                                 label={t("admin.banner.position")}
                                 name="position"
                                 rules={[{ required: true, message: t("admin.banner.validation.position") }]}
                             >
                                 <Input type="number" min={0} placeholder={t("admin.banner.placeholder.position")} />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                label={t("admin.banner.key")}
-                                name="key"
-                                rules={[{ required: true, message: t("admin.banner.validation.key") }]}
-                            >
-                                <Input placeholder={t("admin.banner.placeholder.key")} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -151,15 +185,50 @@ const UpdateBanner: React.FC = () => {
                             <Form.Item
                                 label={t("admin.banner.contentType")}
                                 name="contentType"
+
                                 rules={[{ required: true, message: t("admin.banner.validation.contentType") }]}
                             >
-                                <Select placeholder={t("admin.banner.placeholder.contentType")}>
-                                    <Select.Option disabled>--- Choose content Type ---</Select.Option>
-                                    <Select.Option value="1">Movie</Select.Option>
-                                    <Select.Option value="2">Category</Select.Option>
+                                <Select
+                                    placeholder={t("admin.banner.contentType")}
+                                    allowClear
+                                    onChange={(value) => {
+                                        setContentType(value as string)
+                                        form.setFieldsValue({contentId: undefined})
+                                    }}
+                                >
+                                    <Select.Option value="" disabled>--- Choose content Type ---</Select.Option>
+                                    <Select.Option value="Movie">Movie</Select.Option>
+                                    <Select.Option value="Category">Category</Select.Option>
                                 </Select>
                             </Form.Item>
                         </Col>
+                        {contentType && (
+                            <Col span={12}>
+                                <Form.Item
+                                    label={t('admin.banner.contentName')}
+                                    name="contentId"
+                                    rules={[{
+                                        required: true,
+                                        message: t('admin.message.requiredMessage')
+                                    }]}
+                                >
+                                    <Select
+                                        placeholder={t('admin.banner.contentName')}
+                                        allowClear
+                                        showSearch
+                                        filterOption={(input, option) =>
+                                            (option?.children as unknown as string)?.toLowerCase().includes(input.toLowerCase())
+                                        }
+                                    >
+                                        {contents.map((item: Content) => (
+                                            <Select.Option key={item.id} value={item.id}>
+                                                {contentType === "Movie" ? item.title : item.name}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                        )}
                     </Row>
 
                     <Row gutter={16}>

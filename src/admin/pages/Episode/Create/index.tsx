@@ -25,7 +25,7 @@ const CreateEpisode: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { id: movieId } = useParams<{ id: string }>(); // Get movieId from URL params
+    const { id: movieId } = useParams<{ id: string }>();
 
     const handleCreateEpisode = async (values: EpisodeFormValues) => {
         if (!movieId) {
@@ -59,6 +59,7 @@ const CreateEpisode: React.FC = () => {
 
             message.success(t('admin.message.createSuccess'));
             navigate(`${PREFIX_URL_ADMIN}/movies/${movieId}/episode`);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {

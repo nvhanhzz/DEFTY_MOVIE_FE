@@ -401,6 +401,8 @@
             "position": "Vị trí",
             "status": "Trạng thái",
             "key": "Khóa",
+            "contentName": "Content Name",
+            "contentType": "Content Type",
             "create": {
                 "title": "Tạo mới"
             },

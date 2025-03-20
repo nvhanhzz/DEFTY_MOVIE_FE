@@ -226,6 +226,12 @@ const BannerPage: React.FC = () => {
                 ),
             },
             {
+                title: t('admin.banner.contentType'),
+                dataIndex: 'contentType',
+                key: 'contentType',
+                align: 'center',
+            },
+            {
                 title: t('admin.banner.link'),
                 dataIndex: 'link',
                 key: 'link',

@@ -42,3 +42,14 @@ export const updateBannerById = (id: string, option: FormData): Promise<Response
 export const switchStatusBanner = (id: string): Promise<Response> => {
     return handleRequest(patchJson(`${PREFIX_BANNER}/status/${id}`, {}));
 };
+
+export const getContentName = async (
+    contentType: string,
+    title?: string
+): Promise<Response> => {
+    const url = `${PREFIX_BANNER}/content-name`;
+    const params = {
+        contentType,
+        title };
+    return handleRequest(getWithParams(url, params));
+};

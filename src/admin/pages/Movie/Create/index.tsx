@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Col, DatePicker, Form, Input, message, Row, Select} from 'antd';
+import {Button, Col, DatePicker, Form, Input, message, Row, Select, Upload} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
@@ -11,13 +11,14 @@ import {getDirectors} from "../../../services/directorService.tsx";
 import {Director} from "../../Director";
 import CountrySelect from "../../../components/CountrySelect";
 import AvtEditor from "../../../components/AvtEditor";
+import {UploadOutlined} from "@ant-design/icons";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
 export interface MovieFormValues {
     title: string;
     description: string;
-    trailer: string;
+    trailer?: RcFile;
     nation: string;
     ranking: string;
     releaseDate: string;
@@ -45,8 +46,9 @@ const CreateMovie: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const [directorOptions, setDirectorOptions] = useState([]);
-
-    const [isModalOpen, setIsModalOpen] = useState(false); // Modal state for director
+    const [trailer, setTrailer] = useState<RcFile | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [trailerPreview, setTrailerPreview] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchDirectors = async () => {
@@ -74,7 +76,7 @@ const CreateMovie: React.FC = () => {
             const formData = new FormData();
             formData.append('title', values.title);
             formData.append('description', values.description);
-            formData.append('trailer', values.trailer);
+            // formData.append('trailer', values.trailer);
             formData.append('nation', values.nation);
             formData.append('ranking', values.ranking);
             formData.append('releaseDate', values.releaseDate);
@@ -82,6 +84,9 @@ const CreateMovie: React.FC = () => {
             formData.append('director', values.director);
             if (thumbnail) {
                 formData.append('thumbnail', thumbnail);
+            }
+            if (trailer) {
+                formData.append('trailer', trailer);
             }
 
             const response = await postMovie(formData);
@@ -100,11 +105,16 @@ const CreateMovie: React.FC = () => {
             setLoading(false);
         }
     };
+    const handleTrailerSave = (file: File) => {
+        const videoURL = URL.createObjectURL(file);
+        setTrailer(file);
+        setTrailerPreview(videoURL);
+    };
 
     const handleThumbnailSave = (file: File | null) => {
-        // @ts-ignore
         setThumbnail(file);
     };
+
 
     const handleResetForm = () => {
         form.resetFields();
@@ -152,11 +162,30 @@ const CreateMovie: React.FC = () => {
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.movie.trailer')}
+                            label="Trailer"
                             name="trailer"
-                            rules={[{ required: true, message: t('admin.movie.validation.trailer') }]}
+                            rules={[{ required: true, message: "Vui lòng tải lên trailer!" }]}
                         >
-                            <Input placeholder={t('admin.movie.placeholder.trailer')}/>
+                            <Upload
+                                beforeUpload={(file) => {
+                                    handleTrailerSave(file);
+                                    return false;
+                                }}
+                                accept="video/*"
+                                maxCount={1}
+                            >
+                                <Button icon={<UploadOutlined />}>Upload Trailer</Button>
+                            </Upload>
+
+                            {/* Hiển thị video preview khi có file */}
+                            {trailerPreview && (
+                                <div style={{ marginTop: 10 }}>
+                                    <video width="100%" controls>
+                                        <source src={trailerPreview} type="video/mp4" />
+                                        Trình duyệt của bạn không hỗ trợ video.
+                                    </video>
+                                </div>
+                            )}
                         </Form.Item>
 
                         <Form.Item
