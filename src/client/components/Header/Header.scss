@@ -4,15 +4,15 @@
   position: fixed; /* Cố định header ở trên cùng */
   top: 0;
   left: 0;
-  width: calc(100% - 2 * 64px);
+  width: 100%;
   height: 72px;
-  //background-color: rgba(10, 12, 15, 0); /* Màu nền mờ */
   backdrop-filter: blur(3px); /* Làm mờ phần nền phía sau */
   z-index: 1000; /* Đảm bảo nằm trên các phần tử khác */
   display: flex;
   justify-content: space-between;
-  padding: 0 64px;
+  padding: 0 72px;
   align-items: center;
+  transition: background-color 0.3s ease-in-out;
 
   /* Left Section */
   &__left {
@@ -34,6 +34,8 @@
     &--logo {
       margin-right: 16px;
       height: 100%;
+      display: flex;
+      align-items: center;
 
       img {
         height: 100%;
@@ -210,5 +212,110 @@
       }
     }
 
+  }
+
+  &--scrolled {
+    background-color: #0a0c0f; // Màu tối hơn khi scroll xuống
+    z-index: 9999999;
+  }
+}
+
+@media (max-width: 1200px) {
+  .header__right > * {
+    margin-left: 20px;
+  }
+
+  .header__right--search {
+    width: 200px;
+  }
+}
+
+@media (max-width: 992px) {
+  .header {
+    padding: 0 50px;
+  }
+
+  .header__left--link {
+    font-size: 14px;
+    margin-right: 12px;
+  }
+
+  .header__right--search {
+    width: 180px;
+
+    input {
+      font-size: 13px;
+    }
+  }
+
+  .header__right--information {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: 60px;
+    padding: 0 24px;
+    background-color: #0a0c0f;
+    z-index: 9999999;
+  }
+
+  .header__left {
+    &--logo {
+      margin-right: 8px;
+
+      img {
+        height: 40px;
+      }
+    }
+
+    &--link {
+      display: none; // Ẩn link khi màn nhỏ
+    }
+  }
+
+  .header__right {
+    &--search {
+      display: none; // Ẩn thanh tìm kiếm trên màn nhỏ
+    }
+
+    &--information {
+      gap: 12px;
+
+      &--item {
+        font-size: 12px;
+
+        .profile-icon {
+          font-size: 20px;
+        }
+
+        .profile-text {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .header {
+    height: 50px;
+  }
+
+  .header__left {
+    &--logo img {
+      height: 35px;
+    }
+  }
+
+  .header__right {
+    &--vip {
+      display: none; // Ẩn VIP trên màn hình nhỏ
+    }
+
+    &--information {
+      gap: 8px;
+    }
   }
 }
