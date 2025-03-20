@@ -44,6 +44,7 @@ import UpdateShowOn from "../pages/HomeConfig/Update";
 import Banner from "../pages/Banner";
 import CreateBanner from "../pages/Banner/Create";
 import UpdateBanner from "../pages/Banner/Update";
+import MovieOfCategory from "../pages/Category/MovieOfCategory";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -176,6 +177,10 @@ const DefaultRoutes: RouteType[] = [
     {
         path: 'category/update/:id',
         element: <UpdateCategory />,
+    },
+    {
+        path: 'moviesOfCategory/:id',
+        element: <MovieOfCategory />,
     },
     {
         path: 'actors',
