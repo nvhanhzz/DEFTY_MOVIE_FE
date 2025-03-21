@@ -79,6 +79,11 @@ const menuItems: MenuItem[] = [
         ],
     },
     {
+        icon: <HomeOutlined />,
+        label: 'admin.homeConfig.title',
+        linkTo: 'home-config',
+    },
+    {
         icon: <ReadOutlined />,
         label: 'admin.article.title',
         linkTo: 'articles',

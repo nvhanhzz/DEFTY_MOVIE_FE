@@ -8,6 +8,7 @@ import {AccountFormValues} from "../../Account/Create";
 import dayjs from "dayjs";
 import {getRoles} from "../../../services/roleSevice.tsx";
 import {Role} from "../../Role";
+import {updateProfile} from "../../../services/accountService.tsx";
 
 const UpdateProfile: React.FC = () => {
     const { t } = useTranslation();
@@ -53,7 +54,9 @@ const UpdateProfile: React.FC = () => {
         }
 
         try {
-            // Giả lập API hoặc dispatch action
+            const response = await updateProfile(formData);
+            console.log(response);
+
             console.log("FormData Sent: ", formData);
             message.success("Profile updated successfully!");
         } catch (error) {

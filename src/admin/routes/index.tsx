@@ -222,6 +222,18 @@ const DefaultRoutes: RouteType[] = [
         element: <UpdateBanner />,
     },
     {
+        path: 'home-config',
+        element: <HomeConfigPage />,
+    },
+    {
+        path: 'home-config/create',
+        element: <CreateShowOn />,
+    },
+    {
+        path: 'home-config/update/:id',
+        element: <UpdateShowOn />,
+    },
+    {
         path: 'users',
         element: <UserPage />,
     },

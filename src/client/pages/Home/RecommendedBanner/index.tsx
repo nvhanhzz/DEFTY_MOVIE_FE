@@ -1,47 +1,82 @@
 import React from "react";
 import { MdOutlineStar } from "react-icons/md";
-import { FaCirclePlay } from "react-icons/fa6";
+import { FaPlay } from "react-icons/fa";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
-import { Movie } from "../MovieCard";
 import "./RecommendedBanner.scss";
+import {Banner} from "../Carousel";
+import dayjs from "dayjs";
+import {Link, useNavigate} from "react-router-dom";
 
-const RecommendedBanner: React.FC<Movie> = ({
-                                                               title,
-                                                               category,
-                                                               rating,
-                                                               releaseDate,
-                                                               description,
-                                                               thumbnail,
-                                                           }) => {
-    console.log("RecommendedBanner", title, category, rating, releaseDate);
+const PREFIX_URL_CATEGORY: string = import.meta.env.VITE_PREFIX_URL_CATEGORY as string;
+const PREFIX_URL_ALBUM: string = import.meta.env.VITE_PREFIX_URL_ALBUM as string;
+
+const RecommendedBanner: React.FC<Banner> = (banner: Banner) => {
+    const bannerItemKeys: string[] = Object.keys(banner.bannerItems);
+    const bannerItemValues: string[] = Object.values(banner.bannerItems);
+    const navigate = useNavigate();
+    const linkTo =
+        banner.contentType === "movie"
+            ? `${PREFIX_URL_ALBUM}/${banner.contentSlug}`
+            : banner.contentType === "category"
+                ? `${PREFIX_URL_CATEGORY}/${banner.contentSlug}`
+                : null;
+
     return (
         <div
             className="recommended-banner"
-            style={{ backgroundImage: `url(${thumbnail})` }}
+            style={{ backgroundImage: `url(${banner.thumbnail})` }}
+            onClick={() => navigate(linkTo as string)}
         >
             <div className="recommended-banner-overlay">
                 <div className="recommended-banner-content">
-                    <h1 className="banner-title">{title}</h1>
+                    <h1 className="banner-title">{banner.contentName}</h1>
                     <p className="banner-info">
                         <span className="banner-rating">
-                            <MdOutlineStar/> {rating}
-                        </span> |{" "}
-                        <span className="banner-release-date">{releaseDate}</span>
+                            <MdOutlineStar/> {5}
+                        </span>
+                        {banner.subBannerResponse.releaseDate &&
+                            (
+                                <>
+                                    {" "}|{" "}
+                                    <span className="banner-release-date">{dayjs(banner.subBannerResponse.releaseDate).format("YYYY")}</span>
+                                </>
+                            )
+                        }
+                        {banner.subBannerResponse.numberOfChild as number > 0 &&
+                            (
+                                <>
+                                    {" "}|{" "}
+                                    <span className="banner-number-of-child">{banner.subBannerResponse.numberOfChild} Episodes</span>
+                                </>
+                            )
+                        }
                     </p>
                     <div className="banner-category">
-                        {category.map((tag, index) => (
-                            <span key={index} className="banner-tag">
-                                {tag}
-                            </span>
+                        {
+                            bannerItemKeys.map((category, index) => (
+                            <Link to={`${PREFIX_URL_CATEGORY}/${bannerItemValues[index]}`}
+                                key={category + banner.id}
+                                className="banner-tag"
+                            >
+                                {category}
+                            </Link>
                         ))}
                     </div>
-                    <p className="banner-description">{description}</p>
+                    <p className="banner-description">{banner.subBannerResponse.description}</p>
                 </div>
                 <div className="recommended-banner-buttons">
-                    <FaCirclePlay className="play-icon"/>
-                    <MdOutlineBookmarkAdd className="bookmark-icon"/>
+                    <div className="play-icon">
+                        <FaPlay />
+                    </div>
+                    <div className="bookmark-icon">
+                        <MdOutlineBookmarkAdd />
+                    </div>
                 </div>
             </div>
+            <div className="left-layer"></div>
+            <div className="top-layer"></div>
+            <div className="right-layer"></div>
+            <div className="bottom-layer"></div>
         </div>
     );
 };

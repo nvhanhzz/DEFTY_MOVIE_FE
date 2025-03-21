@@ -124,6 +124,7 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                 <div className="movie-information-thumbnail">
                     <div className="movie-information-thumbnail-inner">
                         <img src={coverImage} alt="cover-image" />
+                        <div className="top-layer"></div>
                         <div className="left-layer"></div>
                         <div className="bottom-layer"></div>
                     </div>
