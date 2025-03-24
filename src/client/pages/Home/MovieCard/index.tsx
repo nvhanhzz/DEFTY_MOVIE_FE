@@ -1,27 +1,20 @@
 import React from "react";
 import "./MovieCard.scss";
-import {FaCirclePlay} from "react-icons/fa6";
 import {MdOutlineBookmarkAdd} from "react-icons/md";
 import {Link, useNavigate} from "react-router-dom";
+import {FaPlay} from "react-icons/fa";
+import { IoMdStar } from "react-icons/io";
+import dayjs from "dayjs";
 
-export interface Movie {
-    title: string; // Tên phim,
-    badge: string[];
-    category: string[]; // Danh mục thể loại
-    rating: number; // Đánh giá phim
-    releaseDate: string; // Ngày phát hành
-    description: string; // Mô tả phim
-    thumbnail: string; // URL ảnh nền
+export interface MovieShowOn {
+    movieThumbnail: string;
+    movieTitle: string;
+    description: string;
+    numberOfChild: number;
+    releaseDate: string | null;
 }
 
-const MovieCard: React.FC<Movie> = ({
-                                        title,
-                                        category,
-                                        rating,
-                                        releaseDate,
-                                        description,
-                                        thumbnail,
-                                    }) => {
+const MovieCard: React.FC<MovieShowOn> = (movieShowOn: MovieShowOn) => {
     const navigate = useNavigate();
 
     const handleNavigateDetail = () => {
@@ -30,32 +23,53 @@ const MovieCard: React.FC<Movie> = ({
 
     return (
         <div className="movie-card" onClick = {handleNavigateDetail}>
-            <div className="info">
-                <img src={thumbnail} alt="thumbnail"/>
-                <div className="top-badge">Badge</div>
-                <h4>{title}</h4>
-            </div>
-            <div className="info-hover">
-            <div className="top-badge">Badge</div>
-                <div className="hover-info">
-                    <img src={thumbnail} alt="thumbnail"/>
-                    <div className="movie-card-buttons">
-                        <FaCirclePlay className="play-icon"/>
-                        <MdOutlineBookmarkAdd className="bookmark-icon"/>
-                    </div>
-                    <div className="info-container">
-                        <h3>{title}</h3>
-                        <p className="rating">⭐ {rating}</p>
-                        <div className="movie-card-category">
-                            {category.map((tag, index) => (
-                                <span key={index} className="movie-tag">
-                                {tag}
-                            </span>
-                            ))}
+            <div className="movie-card-wrapper">
+                <div className="info">
+                    <img src={movieShowOn.movieThumbnail} alt="thumbnail"/>
+                    <div className="movie-title">{movieShowOn.movieTitle}</div>
+                </div>
+                <div className="info-hover">
+                    <div className="hover-info">
+                        <img src={movieShowOn.movieThumbnail} alt="thumbnail"/>
+                        <div className="movie-card-buttons">
+                            <div className="play-icon">
+                                <FaPlay />
+                            </div>
+                            <div className="bookmark-icon">
+                                <MdOutlineBookmarkAdd />
+                            </div>
                         </div>
-                        <p>{releaseDate}</p>
-                        <p className="description">{description}</p>
-                        <Link to="" className="more-info">More info {">"}</Link>
+                        <div className="info-container">
+                            <div className="movie-title-hover">{movieShowOn.movieTitle}</div>
+                            <div className="info-details">
+                                <span className="rating"><IoMdStar/>9.5</span>
+                                    {movieShowOn.releaseDate &&
+                                        (
+                                            <>
+                                                <span className="info-details-break"> | </span>
+                                                <span className="movie-release-date">{dayjs(movieShowOn.releaseDate).format("YYYY")}</span>
+                                            </>
+                                        )
+                                    }
+                                    {movieShowOn.numberOfChild > 0 &&
+                                        (
+                                            <>
+                                                <span className="info-details-break"> | </span>
+                                                <span className="movie-eps">{movieShowOn.numberOfChild} eps</span>
+                                            </>
+                                        )
+                                    }
+                            </div>
+                            <div className="movie-card-category">
+                                {["anime", "fake"].map((tag, index) => (
+                                    <span key={index} className="movie-tag">
+                                    {tag}
+                                </span>
+                                ))}
+                            </div>
+                            <p className="description">{movieShowOn.description}</p>
+                            <Link to="" className="more-info">More info {">"}</Link>
+                        </div>
                     </div>
                 </div>
             </div>

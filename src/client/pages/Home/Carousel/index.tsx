@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 import "./Carousel.scss";
 import RecommendedBanner from "../RecommendedBanner";
-// import { Movie } from "../MovieCard";
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 import {message, Spin} from "antd";

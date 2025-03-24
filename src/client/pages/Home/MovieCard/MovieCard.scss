@@ -1,21 +1,182 @@
 @import "../../../../styles/Variable";
 
 .movie-card {
-  width: 210px;
-  height: 330px;
-  border-radius: 4px;
-  overflow: hidden;
+  margin-right: 16px;
+  aspect-ratio: 9 / 16;
+  overflow: visible;
   position: relative;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  color: #fff;
   font-family: Arial, sans-serif;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  .movie-card-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: transparent;
+    will-change: transform;
+
+    .info,
+    .info-hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .info {
+      img {
+        width: 100%;
+        height: 90%;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+
+      .movie-title {
+        margin-top: 10px;
+        color: #fff;
+      }
+    }
+
+    .info-hover {
+      background-color: #111319;
+      opacity: 0;
+      visibility: hidden;
+      color: #fff;
+      border: 0.5px solid #0c0e13;
+      border-radius: 5px;
+      box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+
+      .hover-info {
+        img {
+          width: 100%;
+          height: 150px;
+          object-fit: cover;
+          border-radius: 4px 4px 0 0;
+          margin-bottom: 10px;
+        }
+
+        .movie-card-buttons {
+          position: absolute;
+          right: 10px;
+          top: 110px;
+          display: flex;
+
+          .play-icon, .bookmark-icon {
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            font-size: 13px;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+          }
+
+          .play-icon {
+            margin-right: 10px;
+            color: white;
+            background-color: #04c936;
+
+            &:hover {
+              background-color: #31d65b !important;
+            }
+          }
+
+          .bookmark-icon {
+            background-color: rgb(255, 255, 255);
+            color: rgb(55, 54, 54);
+
+            &:hover {
+              background-color: #c1baba !important;
+            }
+          }
+        }
+
+        .info-container {
+          padding: 0 0 0 10px;
+
+          .movie-title-hover {
+            font-size: 22px;
+            margin: 0;
+            display: inline-block;
+
+            &:hover {
+              color: #00d63b;
+            }
+          }
+
+          .info-details {
+            margin-top: 10px;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            .info-details-break {
+              font-size: 12px;
+              opacity: 0.5;
+            }
+
+            .rating {
+              padding: 0;
+              font-weight: bold;
+              color: #04c936;
+              display: flex;
+              align-items: center;
+            }
+          }
+
+          .movie-card-category {
+            margin: 10px 0;
+
+            .movie-tag {
+              font-size: 12px !important;
+              display: inline-block;
+              margin-right: 4px;
+              padding: 2px 6px;
+              background: rgba(255, 255, 255, 0.08);
+              border-radius: 2px;
+            }
+          }
+
+          .description {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            font-size: 14px;
+            line-height: 20px;
+          }
+
+          .more-info {
+            color: $text_color1_hover;
+            text-decoration: none;
+            font-size: 12px;
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+
+            &:hover {
+              color: #7cff01;
+            }
+          }
+        }
+      }
+    }
+  }
 
   &:hover {
     z-index: 1001;
-    transform: scale(1.2);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+
+    .card-wrapper {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
 
     .info {
       opacity: 0;
@@ -27,158 +188,26 @@
       visibility: visible;
     }
   }
+}
 
-  .info,
-  .info-hover {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+.slick-arrow {
+  display: none !important;
+}
+
+@media (max-width: 1600px) {
+  .movie-card {
+    margin-right: 14px;
   }
+}
 
-  .info {
-    img {
-      width: 100%; /* Hình ảnh chiếm toàn bộ chiều rộng */
-      height: 90%; /* Đảm bảo hình ảnh lấp đầy toàn bộ container */
-      object-fit: cover; /* Cắt hình ảnh để vừa khít container */
-    }
-
-    .top-badge {
-      position: absolute;
-      top: 0;
-      right: 0;
-      background-color: #32cd32;
-      color: #fff;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    h4 {
-      position: absolute;
-      bottom: 0;
-      margin: 0;
-      font-size: 16px;
-    }
+@media (max-width: 992px) {
+  .movie-card {
+    margin-right: 10px;
   }
+}
 
-  .info-hover {
-    background-color: rgba(0, 0, 0, 0.95);
-    opacity: 0;
-    visibility: hidden;
-
-    .top-badge {
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      background-color: #ff4500;
-      color: #fff;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .hover-info {
-      img {
-        width: 100%;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 4px;
-        margin-bottom: 10px;
-      }
-
-      .movie-card-buttons {
-        position: absolute;
-        right: 10px;
-        top: 110px;
-
-        .play-icon {
-          cursor: pointer;
-          color: rgb(34, 158, 66);
-          margin-right: 10px;
-          font-size: 30px;
-
-          &:hover {
-            color: rgb(28, 199, 73);
-          }
-        }
-
-        .bookmark-icon {
-          cursor: pointer;
-          font-size: 20px;
-          background-color: rgb(216, 209, 209);
-          border-radius: 50%;
-          padding: 5px;
-          color: rgb(55, 54, 54);
-          font-weight: 600;
-
-          &:hover {
-            background-color: #fff;
-            color: rgb(51, 37, 37);
-          }
-        }
-      }
-
-      .info-container {
-        padding: 0 0 0 10px;
-
-        h3 {
-          font-size: 18px;
-          font-weight: bold;
-          margin: 0;
-        }
-
-        .rating {
-          margin-bottom: 8px;
-          font-size: 14px;
-          font-weight: bold;
-          color: #ffdd00;
-        }
-
-        p {
-          margin: 4px 0;
-          font-size: 12px;
-          color: #ccc;
-        }
-
-        .movie-card-category {
-          margin: 10px 0;
-
-          .movie-tag {
-            font-size: 12px !important;
-            display: inline-block;
-            margin-right: 4px;
-            padding: 2px 6px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 2px;
-          }
-        }
-
-        .description {
-          overflow: hidden; /* Bắt buộc để sử dụng text-overflow */
-          text-overflow: ellipsis; /* Thêm dấu "..." nếu vượt quá chiều rộng */
-          display: -webkit-box; /* Cần thiết để hỗ trợ line-clamp */
-          -webkit-line-clamp: 3; /* Giới hạn số dòng hiển thị */
-          -webkit-box-orient: vertical; /* Cần thiết để hỗ trợ line-clamp */
-        }
-
-        .more-info {
-          color: $text_color1_hover;
-          text-decoration: none;
-          font-size: 12px;
-          position: absolute;
-          right: 10px;
-          bottom: 10px;
-
-          &:hover {
-            color: #01FF45FF;
-          }
-        }
-      }
-    }
+@media (max-width: 768px) {
+  .movie-card {
+    margin-right: 7px;
   }
 }
