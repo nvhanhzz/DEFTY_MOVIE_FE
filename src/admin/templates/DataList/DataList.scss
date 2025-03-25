@@ -44,21 +44,29 @@
     }
 
     &__table {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         border: 1px solid #ddd;
 
         .ant-table-cell {
-            border-bottom: 1px solid #ddd; // Viền mỏng cho mỗi ô
-            vertical-align: middle; // Căn giữa theo chiều dọc
-            //text-align: center; // Căn giữa nội dung theo chiều ngang (nếu cần)
+            border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            vertical-align: middle;
+
+            &:last-child {
+                border-right: none;
+            }
         }
 
         .ant-table-tbody>tr:nth-child(odd) {
-            background-color: $main_light_color; // Màu nền cho hàng lẻ
+            background-color: $main_light_color;
         }
 
         .ant-table-tbody>tr:nth-child(even) {
             background-color: #fafafa; // Màu nền cho hàng chẵn
         }
     }
+}
+
+.ant-table-wrapper .ant-table-container table > thead > tr:first-child > :last-child {
+    border-start-end-radius: 0;
 }
