@@ -18,6 +18,8 @@ export interface Banner{
     position: number;
     contentType: string;
     contentId: string;
+    contentName: string;
+    contentSlug: string;
 }
 
 const BannerPage: React.FC = () => {
@@ -232,9 +234,9 @@ const BannerPage: React.FC = () => {
                 align: 'center',
             },
             {
-                title: t('admin.banner.link'),
-                dataIndex: 'link',
-                key: 'link',
+                title: t('admin.banner.contentName'),
+                dataIndex: 'contentName',
+                key: 'contentName',
                 align: 'center',
             },
             {
