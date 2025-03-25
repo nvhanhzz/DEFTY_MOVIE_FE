@@ -1,7 +1,8 @@
 @import "../../../../styles/Variable";
 
 .movie-card {
-  margin-right: 16px;
+  margin-left: 8px;
+  margin-right: 8px;
   aspect-ratio: 9 / 16;
   overflow: visible;
   position: relative;
@@ -196,18 +197,21 @@
 
 @media (max-width: 1600px) {
   .movie-card {
-    margin-right: 14px;
+    margin-left: 7px;
+    margin-right: 7px;
   }
 }
 
 @media (max-width: 992px) {
   .movie-card {
-    margin-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
   }
 }
 
 @media (max-width: 768px) {
   .movie-card {
-    margin-right: 7px;
+    margin-left: 3px;
+    margin-right: 3px;
   }
 }
