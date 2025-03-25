@@ -1,33 +1,33 @@
 import React, { useState } from 'react';
 import './CustomTransfer.scss';
 import { Button, Modal, message, Tooltip } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons'; // Import biểu tượng từ Ant Design
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { assignPermission, unassignPermission } from '../../services/roleSevice';
-import { useTranslation } from 'react-i18next'; // Import hook useTranslation
+import { useTranslation } from 'react-i18next';
 
 interface Permission {
-    id: string; // Khóa duy nhất cho quyền
-    name: string; // Tên hiển thị của quyền
-    description: string; // Mô tả quyền
+    id: string;
+    name: string;
+    description: string;
 }
 
 interface CustomTransferProps {
     dataSource: Permission[];
-    target: Permission[]; // Cập nhật kiểu target là Permission[]
-    onChange: (nextTarget: Permission[]) => void; // Callback để cập nhật quyền đã chọn
-    roleId: string; // ID của vai trò
-    statusRole: number; // Trạng thái của vai trò
+    target: Permission[];
+    onChange: (nextTarget: Permission[]) => void;
+    roleId: string;
+    statusRole: number;
 }
 
 const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onChange, roleId, statusRole }) => {
-    const { t } = useTranslation(); // Sử dụng hook để lấy hàm dịch
+    const { t } = useTranslation();
     const [selectedSourceKeys, setSelectedSourceKeys] = useState<string[]>([]);
     const [selectedTargetKeys, setSelectedTargetKeys] = useState<string[]>([]);
     const [isConfirmVisible, setIsConfirmVisible] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(false); // Trạng thái loading
-    const [action, setAction] = useState<'add' | 'remove'>('add'); // 'add' or 'remove'
-    const [sourceSearch, setSourceSearch] = useState<string>(''); // Tìm kiếm cho bảng nguồn
-    const [targetSearch, setTargetSearch] = useState<string>(''); // Tìm kiếm cho bảng đích
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [action, setAction] = useState<'add' | 'remove'>('add');
+    const [sourceSearch, setSourceSearch] = useState<string>('');
+    const [targetSearch, setTargetSearch] = useState<string>('');
 
     const handleSourceCheckboxChange = (key: string) => {
         setSelectedSourceKeys(prev =>
@@ -41,36 +41,47 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
         );
     };
 
+    const toggleSelectAllSource = () => {
+        if (selectedSourceKeys.length === filteredSourceData.length) {
+            setSelectedSourceKeys([]);
+        } else {
+            setSelectedSourceKeys(filteredSourceData.map(item => item.id));
+        }
+    };
+
+    const toggleSelectAllTarget = () => {
+        if (selectedTargetKeys.length === filteredTargetData.length) {
+            setSelectedTargetKeys([]);
+        } else {
+            setSelectedTargetKeys(filteredTargetData.map(item => item.id));
+        }
+    };
+
     const showConfirm = (action: 'add' | 'remove') => {
         setAction(action);
         setIsConfirmVisible(true);
     };
 
     const confirmAction = async () => {
-        setIsLoading(true); // Bắt đầu loading
+        setIsLoading(true);
         try {
             if (action === 'add') {
-                const idsToAdd = selectedSourceKeys; // IDs của quyền được chọn để thêm
-                await assignPermission(idsToAdd, roleId); // Gọi hàm phân quyền
-                const newTarget = [
-                    ...target,
-                    ...dataSource.filter(item => selectedSourceKeys.includes(item.id)),
-                ];
-                onChange(newTarget); // Cập nhật target mới
-                setSelectedSourceKeys([]); // Reset selected keys after moving
-            } else if (action === 'remove') {
-                const idsToRemove = selectedTargetKeys; // IDs của quyền được chọn để xóa
-                await unassignPermission(idsToRemove, roleId); // Gọi hàm xóa quyền
+                await assignPermission(selectedSourceKeys, roleId);
+                const newTarget = [...target, ...dataSource.filter(item => selectedSourceKeys.includes(item.id))];
+                onChange(newTarget);
+                setSelectedSourceKeys([]);
+            } else {
+                await unassignPermission(selectedTargetKeys, roleId);
                 const newTarget = target.filter(item => !selectedTargetKeys.includes(item.id));
-                onChange(newTarget); // Cập nhật target mới
-                setSelectedTargetKeys([]); // Reset selected keys after moving
+                onChange(newTarget);
+                setSelectedTargetKeys([]);
             }
         } catch (error) {
             console.error("Error updating permissions:", error);
-            message.error(t("admin.role.Update.permissions.errorMessage")); // Hiển thị thông báo lỗi
+            message.error(t("admin.role.Update.permissions.errorMessage"));
         } finally {
             setIsConfirmVisible(false);
-            setIsLoading(false); // Kết thúc loading
+            setIsLoading(false);
         }
     };
 
@@ -99,9 +110,17 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
                     value={sourceSearch}
                     onChange={e => setSourceSearch(e.target.value)}
                 />
+                <div className="select-all">
+                    <input
+                        type="checkbox"
+                        checked={selectedSourceKeys.length === filteredSourceData.length && filteredSourceData.length > 0}
+                        onChange={toggleSelectAllSource}
+                    />
+                    <span>{t("admin.role.update.permissions.selectAll")}</span>
+                </div>
                 <ul>
                     {filteredSourceData
-                        .filter(item => !target.some(t => t.id === item.id)) // Kiểm tra quyền đã có trong target chưa
+                        .filter(item => !target.some(t => t.id === item.id))
                         .map(item => (
                             <li key={item.id}>
                                 <input
@@ -110,7 +129,6 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
                                     onChange={() => handleSourceCheckboxChange(item.id)}
                                 />
                                 <span className="permission-title">{item.name}</span>
-                                {/* Sử dụng Tooltip để hiển thị mô tả khi hover vào icon */}
                                 <Tooltip title={item.description}>
                                     <InfoCircleOutlined className="info-icon"/>
                                 </Tooltip>
@@ -122,13 +140,13 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
             <div className="transfer-buttons">
                 <button
                     onClick={() => showConfirm('add')}
-                    disabled={selectedSourceKeys.length === 0 || isLoading || statusRole === 0} // Thêm điều kiện kiểm tra statusRole
+                    disabled={selectedSourceKeys.length === 0 || isLoading || statusRole === 0}
                 >
                     &gt;
                 </button>
                 <button
                     onClick={() => showConfirm('remove')}
-                    disabled={selectedTargetKeys.length === 0 || isLoading || statusRole === 0} // Thêm điều kiện kiểm tra statusRole
+                    disabled={selectedTargetKeys.length === 0 || isLoading || statusRole === 0}
                 >
                     &lt;
                 </button>
@@ -143,6 +161,14 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
                     value={targetSearch}
                     onChange={e => setTargetSearch(e.target.value)}
                 />
+                <div className="select-all">
+                    <input
+                        type="checkbox"
+                        checked={selectedTargetKeys.length === filteredTargetData.length && filteredTargetData.length > 0}
+                        onChange={toggleSelectAllTarget}
+                    />
+                    <span>{t("admin.role.update.permissions.selectAll")}</span>
+                </div>
                 <ul>
                     {filteredTargetData.map(item => (
                         <li key={item.id}>
@@ -160,10 +186,9 @@ const CustomTransfer: React.FC<CustomTransferProps> = ({ dataSource, target, onC
                 </ul>
             </div>
 
-            {/* Modal Confirm */}
             <Modal
-                title={action === 'add' ? t("admin.role.update.permissions.confirmTransferMessage") : t("admin.role.update.permissions.confirmTransferMessage")}
-                visible={isConfirmVisible}
+                title={t("admin.role.update.permissions.confirmTransferMessage")}
+                open={isConfirmVisible}
                 onOk={confirmAction}
                 onCancel={cancelAction}
                 footer={[

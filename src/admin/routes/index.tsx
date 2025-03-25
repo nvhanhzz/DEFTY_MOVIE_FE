@@ -38,13 +38,13 @@ import Test from "../pages/Test";
 import UserPage from "../pages/User";
 import Profile from "../pages/Profile";
 import UpdateProfile from "../pages/Profile/Update";
-import HomeConfigPage from "../pages/HomeConfig";
-import CreateShowOn from "../pages/HomeConfig/Create";
-import UpdateShowOn from "../pages/HomeConfig/Update";
 import Banner from "../pages/Banner";
 import CreateBanner from "../pages/Banner/Create";
 import UpdateBanner from "../pages/Banner/Update";
 import MovieOfCategory from "../pages/Category/MovieOfCategory";
+import HomeConfigPage from "../pages/HomeConfig";
+import CreateShowOn from "../pages/HomeConfig/Create";
+import UpdateShowOn from "../pages/HomeConfig/Update";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 

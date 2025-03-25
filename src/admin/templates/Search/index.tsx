@@ -98,13 +98,21 @@ const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields, init
                     )}
                     {field.type === 'select' && (
                         <Select
+                            showSearch
                             placeholder={field.placeholder || t('admin.form.selectOption')}
                             options={field.options}
-                            style={field.style || { width: '150px' }}
+                            style={field.style || { width: '220px' }}
                             value={initialValues[field.name]}
                             allowClear
+                            filterOption={(input, option) => {
+                                if (option?.label) {
+                                    return option.label.toLowerCase().includes(input.toLowerCase());
+                                }
+                                return false;
+                            }}
                         />
                     )}
+
                     {field.type === 'input' && (
                         <Input
                             placeholder={field.placeholder as string || t('admin.form.enterValue')}

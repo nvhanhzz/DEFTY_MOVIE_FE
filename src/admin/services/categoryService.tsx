@@ -36,3 +36,44 @@ export const updateCategoryById = (id: string, option: Category): Promise<Respon
 export const switchStatusCategory = (id: string): Promise<Response> => {
     return handleRequest(patchJson(`${PREFIX_CATEGORY}/status/${id}`, {}));
 };
+
+export const getMoviesInCategory = async (
+    categoryId: number | null,
+    page?: number,
+    size?: number,
+    filters?: Record<string, string | number>
+): Promise<Response> => {
+    const url = `${PREFIX_CATEGORY}/${categoryId}/movies`;
+    const params = {
+        page,
+        size,
+        ...filters,
+    };
+    return handleRequest(getWithParams(url, params));
+};
+
+export const addMovieInCategory = (categoryId: number | null, ids: React.Key[]): Promise<Response> => {
+    const url = `${PREFIX_CATEGORY}/${categoryId}/${ids.join(',')}`;
+    return handleRequest(patchJson(url, ids));
+};
+
+export const getMoviesNotInCategory = async (
+    categoryId: number,
+    page?: number,
+    size?: number,
+    filters?: Record<string, string | number>
+): Promise<Response> => {
+    const url = `${PREFIX_CATEGORY}/${categoryId}/other-movies`;
+    const params = {
+        page,
+        size,
+        ...filters,
+    };
+    return handleRequest(getWithParams(url, params));
+};
+
+export const deleteMovieOfCategory = (categoryId: number | null, ids: React.Key[]): Promise<Response> => {
+    const url = `${PREFIX_CATEGORY}/${categoryId}/${ids.join(',')}`;
+    return handleRequest(del(url));
+};
+

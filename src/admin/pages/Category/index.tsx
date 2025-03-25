@@ -14,7 +14,7 @@ export interface Category {
     name: string;
     description: string;
     status: number;
-    numberOfMovie: number;
+    numberOfMovies: number;
 }
 
 const CategoryPage: React.FC = () => {
@@ -187,7 +187,7 @@ const CategoryPage: React.FC = () => {
     const dataListConfig: DataListConfig<Category> = {
         columns: [
             {
-                title: 'No.', // Dùng t() cho tiêu đề cột
+                title: 'No.',
                 key: 'no',
                 align: 'center',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
@@ -206,8 +206,8 @@ const CategoryPage: React.FC = () => {
             },
             {
                 title: t('admin.category.numberOfMovies'),
-                dataIndex: 'numberOfMovie',
-                key: 'numberOfMovie',
+                dataIndex: 'numberOfMovies',
+                key: 'numberOfMovies',
                 align: 'center',
             },
             {

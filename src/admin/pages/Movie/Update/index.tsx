@@ -10,7 +10,6 @@ import {Country, MovieFormValues} from "../Create";
 import {Movie} from "../index.tsx";
 import dayjs from 'dayjs';
 import {getDirectors} from "../../../services/directorService.tsx";
-import AvtEditor from "../../../components/AvtEditor";
 import {UploadOutlined} from "@ant-design/icons";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
@@ -19,14 +18,15 @@ const UpdateMovie: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [loading, setLoading] = useState(false);
     const [thumbnail, setThumbnail] = useState<RcFile | null>(null);
-    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+    const [coverImage, setCoverImage] = useState<RcFile | null>(null);
+    const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+    const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
     const [form] = Form.useForm();
     const { t } = useTranslation();
     const [directorOptions, setDirectorOptions] = useState([]);
     const [nation, setNation] = useState([]);
-    const [trailerUrl, setTrailerUrl] = useState<string | null>(null);
-    const [trailerFile, setTrailerFile] = useState<RcFile | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [trailer, setTrailer] = useState<RcFile | null>(null);
+    const [trailerPreview, setTrailerPreview] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchDirectors = async () => {
@@ -65,10 +65,13 @@ const UpdateMovie: React.FC = () => {
                         director: data.director,
                     });
                     if (data.thumbnail) {
-                        setAvatarUrl(data.thumbnail);
+                        setThumbnailUrl(data.thumbnail);
+                    }
+                    if (data.coverImage) {
+                        setCoverImageUrl(data.coverImage);
                     }
                     if (data.trailer) {
-                        setTrailerUrl(data.trailer);
+                        setTrailer(data.trailer);
                     }
                 }
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -113,8 +116,11 @@ const UpdateMovie: React.FC = () => {
             if (thumbnail) {
                 formData.append('thumbnail', thumbnail);
             }
-            if (trailerUrl) {
-                formData.append('trailer', trailerUrl);
+            if (coverImage) {
+                formData.append('coverImage', coverImage);
+            }
+            if (trailer) {
+                formData.append('trailer', trailer);
             }
 
             const response = await updateMovieById(id as string, formData);
@@ -137,19 +143,28 @@ const UpdateMovie: React.FC = () => {
         }
     };
 
-    const handleTrailerUpload = (file: RcFile) => {
-        setTrailerFile(file);
-        setPreviewUrl(URL.createObjectURL(file)); // Tạo URL tạm thời
-        return false; // Ngăn Ant Design tự động upload
+    const handleTrailerSave = (file: File) => {
+        const videoURL = URL.createObjectURL(file);
+        setTrailer(file);
+        setTrailerPreview(videoURL);
     };
 
-    const handleThumbnailSave = (file: File | null) => {
-        setThumbnail(file);
+    const handleImageUpload = (file: RcFile, type: "thumbnail" | "coverImage") => {
+        const previewUrl = URL.createObjectURL(file);
+        if (type === "thumbnail") {
+            setThumbnail(file);
+            setThumbnailUrl(previewUrl);
+        } else {
+            setCoverImage(file);
+            setCoverImageUrl(previewUrl);
+        }
+        return false;
     };
 
     const handleResetForm = () => {
         form.resetFields();
         setThumbnail(null);
+        setCoverImage(null);
     };
 
     return (
@@ -185,27 +200,31 @@ const UpdateMovie: React.FC = () => {
                         </Form.Item>
 
                         <Form.Item
-                            label={t('admin.movie.trailer')}
+                            label="Trailer"
                             name="trailer"
-                            rules={[{ required: true, message: t('admin.movie.validation.trailer') }]}
+                            rules={[{ required: true, message: "Vui lòng tải lên trailer!" }]}
                         >
-                            {!trailerUrl && !previewUrl ? (
-                                <Upload
-                                    beforeUpload={handleTrailerUpload}
-                                    accept="video/*"
-                                    showUploadList={false}
-                                >
-                                    <Button icon={<UploadOutlined />}>Upload Trailer</Button>
-                                </Upload>
-                            ) : (
+                            <Upload
+                                beforeUpload={(file) => {
+                                    handleTrailerSave(file);
+                                    return false;
+                                }}
+                                accept="video/*"
+                                maxCount={1}
+                            >
+                                <Button icon={<UploadOutlined />}>Upload Trailer</Button>
+                            </Upload>
+
+                            {trailerPreview && (
                                 <div style={{ marginTop: 10 }}>
-                                    <video width="100%" height="300" controls>
-                                        <source src={previewUrl || trailerUrl} type="video/mp4" />
-                                        Your browser does not support the video tag.
+                                    <video width="100%" controls>
+                                        <source src={trailerPreview} type="video/mp4" />
+                                        Trình duyệt của bạn không hỗ trợ video.
                                     </video>
                                 </div>
                             )}
                         </Form.Item>
+
                         <Form.Item
                             label={t('admin.movie.nation')}
                             name="nation"
@@ -278,31 +297,55 @@ const UpdateMovie: React.FC = () => {
                     </Col>
 
                     <Col span={10} className="thumbnail-col">
-                        {/* Thumbnail */}
-                        <Form.Item label={t('admin.movie.thumbnail')} className="thumbnail-wrapper">
-                            <AvtEditor
-                                onSave={handleThumbnailSave}
-                                initialImage={
-                                    avatarUrl
-                                        ? avatarUrl
-                                        : '/assets/images/default-thumbnail.jpg'
-                                }
-                                shape="rectangle"
-                            />
+                        <Form.Item label={t('admin.movie.thumbnail')}>
+                            <Upload
+                                beforeUpload={(file) => handleImageUpload(file, "thumbnail")}
+                                accept="image/*"
+                                showUploadList={false}
+                            >
+                                <Button icon={<UploadOutlined />}>Upload Thumbnail</Button>
+                            </Upload>
+                            {thumbnailUrl && (
+                                <img
+                                    src={thumbnailUrl}
+                                    alt="Thumbnail preview"
+                                    style={{
+                                        marginTop: 10,
+                                        width: '350px',
+                                        height: '220px',
+                                        objectFit: 'cover',
+                                        borderRadius: '5px',
+                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+                                    }}
+                                />
+                            )}
                         </Form.Item>
 
-                        {/* Cover Image */}
-                        <Form.Item label={t('admin.movie.coverImage')} className="thumbnail-wrapper">
-                            <AvtEditor
-                                onSave={handleThumbnailSave}
-                                initialImage={
-                                    avatarUrl
-                                        ? avatarUrl
-                                        : '/assets/images/default-cover.jpg'
-                                }
-                                shape="rectangle"
-                            />
+                        <Form.Item label={t('admin.movie.coverImage')}>
+                            <Upload
+                                beforeUpload={(file) => handleImageUpload(file, "coverImage")}
+                                accept="image/*"
+                                showUploadList={false}
+                            >
+                                <Button icon={<UploadOutlined />}>Upload Cover Image</Button>
+                            </Upload>
+                            {coverImageUrl && (
+                                <img
+                                    src={coverImageUrl}
+                                    alt="Cover Image preview"
+                                    style={{
+                                        marginTop: 10,
+                                        width: '350px',
+                                        height: '220px',
+                                        objectFit: 'cover',
+                                        borderRadius: '5px',
+                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+                                    }}
+                                />
+                            )}
                         </Form.Item>
+
+
                     </Col>
 
                 </Row>

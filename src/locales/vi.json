@@ -153,6 +153,7 @@
                 "assignPermission": "Gán quyền",
                 "confirmUpdateMessage": "Bạn có chắc chắn muốn cập nhật vai trò này không?",
                 "permissions": {
+                    "selectAll": "Chọn tất cả",
                     "permissionAvailable": "Quyền có sẵn",
                     "rolePermission": "Quyền của vai trò",
                     "searchPlaceholder": "Tìm kiếm quyền...",
@@ -271,6 +272,7 @@
         },
         "movie": {
             "title": "Phim",
+            "episode": "Tập phim",
             "createNewPermissionButton": "Tạo phim mới",
             "titleColumn": "Tên phim",
             "descriptionColumn": "Mô tả",
@@ -387,6 +389,7 @@
             "description": "Mô tả",
             "numberOfMovies": "Số lượng phim",
             "detailMovies":"Phim",
+            "moviesOfCategory": "Phim của danh mục",
             "create": {
                 "title": "Tạo mới"
             },

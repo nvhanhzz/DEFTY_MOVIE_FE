@@ -153,6 +153,7 @@
                 "assignPermission": "Assign Permissions",
                 "confirmUpdateMessage": "Are you sure you want to update this role?",
                 "permissions": {
+                    "selectAll": "Select All",
                     "permissionAvailable": "Available Permissions",
                     "rolePermission": "Role Permissions",
                     "searchPlaceholder": "Search permissions...",
@@ -278,6 +279,7 @@
             "actionColumn": "Actions",
             "director": "Director",
             "nation": "Nation",
+            "episode": "Episode",
             "membershipType": "Membership type",
             "releaseDate": "Release date",
             "ranking": "Ranking",
@@ -386,6 +388,7 @@
             "description": "Description",
             "numberOfMovies": "Number of movies",
             "detailMovies": "Movie",
+            "moviesOfCategory": "Movies of category",
             "create": {
                 "title": "Create"
             },
