@@ -9,11 +9,12 @@ import "./MovieInformation.scss";
 import { MovieDetailProps } from "../index.tsx";
 import dayjs from "dayjs";
 import {DownOutlined} from "@ant-design/icons";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const PREFIX_URL_CATEGORY = import.meta.env.VITE_PREFIX_URL_CATEGORY as string;
 const PREFIX_URL_ACTOR = import.meta.env.VITE_PREFIX_URL_ACTOR as string;
 const PREFIX_URL_DIRECTOR = import.meta.env.VITE_PREFIX_URL_DIRECTOR as string;
+const PREFIX_URL_PLAY = import.meta.env.VITE_PREFIX_URL_PLAY as string;
 
 const MovieInformation: React.FC<MovieDetailProps> = ({
                                                  title,
@@ -25,11 +26,11 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                                                  trailer,
                                                  director,
                                                  category,
-                                                 actor
+                                                 actor,
+                                                slug
                                             }) => {
+    const navigate = useNavigate();
     console.log(trailer);
-    console.log(dayjs(releaseDate).format('YYYY'));
-    console.log(duration);
 
     const [descriptionExpanded, setDescriptionExpanded] = useState(false);
     const [descriptionClamped, setDescriptionClamped] = useState(false);
@@ -114,7 +115,7 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                         )}
                     </div>
                     <div className="movie-information-buttons">
-                        <div className="button play-button"><FaPlay /> Play</div>
+                        <div className="button play-button" onClick={() => {navigate(`/${PREFIX_URL_PLAY}/${slug}`)}}><FaPlay /> Play</div>
                         <div className="button other-button"><MdOutlineIosShare /><span>Share</span></div>
                         <div className="button other-button"><IoDownloadOutline /><span>APP</span></div>
                         <div className="button other-button"><MdOutlineBookmarkAdd /><span>Watch Later</span></div>

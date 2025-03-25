@@ -10,6 +10,8 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import { IoMenu } from "react-icons/io5";
 import Dropdown from "../Dropdown";
 
+const PREFIX_URL_PROFILE: string = import.meta.env.VITE_PREFIX_URL_PROFILE as string;
+
 const AppHeader: React.FC = () => {
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -60,7 +62,7 @@ const AppHeader: React.FC = () => {
                             <span>Language</span>
                         </div>
                         <div className="header__right--information--item">
-                            <Link to="/profile" className="profile-link">
+                            <Link to={PREFIX_URL_PROFILE} className="profile-link">
                                 <FiUser className="profile-icon"/>
                                 <span className="profile-text">Me</span>
                             </Link>
