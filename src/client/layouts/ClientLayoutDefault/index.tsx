@@ -5,13 +5,13 @@ import "./ClientLayoutDefault.scss";
 
 function ClientLayoutDefault() {
     return (
-        <>
+        <div className="defty-movie">
             <Header />
             <div className="content">
                 <Outlet />
             </div>
             <Footer />
-        </>
+        </div>
     );
 }
 
