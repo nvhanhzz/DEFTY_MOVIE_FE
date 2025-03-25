@@ -385,6 +385,8 @@
             "title": "Danh mục",
             "name": "Tên",
             "description": "Mô tả",
+            "numberOfMovies": "Số lượng phim",
+            "detailMovies":"Phim",
             "create": {
                 "title": "Tạo mới"
             },

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {message, Spin, Switch} from 'antd';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../templates/Outlet';
+import type {DataListConfig} from '../../templates/DataList';
 import DataListTemplate from '../../templates/DataList';
-import type { DataListConfig } from '../../templates/DataList';
-import { LoadingOutlined } from '@ant-design/icons';
-import {getCategories, deleteCategories, switchStatusCategory} from "../../services/categoryService.tsx";
+import {LoadingOutlined, VideoCameraOutlined} from '@ant-design/icons';
+import {deleteCategories, getCategories, switchStatusCategory} from "../../services/categoryService.tsx";
 import SearchFormTemplate from "../../templates/Search";
 
 export interface Category {
@@ -14,6 +14,7 @@ export interface Category {
     name: string;
     description: string;
     status: number;
+    numberOfMovie: number;
 }
 
 const CategoryPage: React.FC = () => {
@@ -75,6 +76,7 @@ const CategoryPage: React.FC = () => {
             }));
             setTotalItems(result.data.totalElements);
             setData(categories);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
@@ -146,6 +148,7 @@ const CategoryPage: React.FC = () => {
                 const result = await response.json();
                 message.error(result.message || t('admin.message.deleteError')); // Dùng t() cho thông báo
             }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.deleteError'));
         } finally {
@@ -186,27 +189,51 @@ const CategoryPage: React.FC = () => {
             {
                 title: 'No.', // Dùng t() cho tiêu đề cột
                 key: 'no',
+                align: 'center',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
             },
             {
                 title: t('admin.category.name'),
                 dataIndex: 'name',
                 key: 'name',
+                align: 'center',
             },
             {
                 title: t('admin.category.description'),
                 dataIndex: 'description',
                 key: 'description',
+                align: 'center',
+            },
+            {
+                title: t('admin.category.numberOfMovies'),
+                dataIndex: 'numberOfMovie',
+                key: 'numberOfMovie',
+                align: 'center',
             },
             {
                 title: t('admin.dataList.status.title'),
                 dataIndex: 'status',
                 key: 'status',
+                align: 'center',
                 render: (status, record) => (
                     <Switch
                         checked={status === 1}
                         onChange={(checked) => handleSwitchStatus(record.id, checked)}
                     />
+                ),
+            },
+            {
+                title: t('admin.category.detailMovies'),
+                dataIndex: 'numberOfMovie',
+                key: 'numberOfMovie',
+                align: 'center',
+                render: (text, record) => (<>
+                        <span>{text}</span>
+                        <VideoCameraOutlined
+                            style={{color: "#1890ff", cursor: "pointer"}}
+                            onClick={() => navigate(`/admin/moviesOfCategory/${record.id}`)}
+                        />
+                    </>
                 ),
             },
         ],

@@ -384,6 +384,8 @@
             "title": "Category",
             "name": "Name",
             "description": "Description",
+            "numberOfMovies": "Number of movies",
+            "detailMovies": "Movie",
             "create": {
                 "title": "Create"
             },
