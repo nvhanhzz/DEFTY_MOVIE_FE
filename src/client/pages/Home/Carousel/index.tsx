@@ -1,135 +1,131 @@
 import React, {useState, useEffect, useRef} from "react";
 import "./Carousel.scss";
 import RecommendedBanner from "../RecommendedBanner";
-import { Movie } from "../MovieCard";
+import { GrPrevious } from "react-icons/gr";
+import { GrNext } from "react-icons/gr";
+import {message, Spin} from "antd";
+import {getBanners} from "../../../services/bannerService.tsx";
+import {LoadingOutlined} from "@ant-design/icons";
+import {useTranslation} from "react-i18next";
+
+export interface Banner {
+    id: number;
+    thumbnail: string;
+    title: string;
+    link: string;
+    contentType: "movie" | "category";
+    position: number;
+    status: number;
+    contentName: string | null;
+    contentSlug: string | null;
+    subBannerResponse: {
+        description: string | null;
+        numberOfChild: number | null;
+        releaseDate: string | null;
+    };
+    bannerItems: [];
+}
 
 const Carousel: React.FC = () => {
-    const movies: Movie[] = [
-        {
-            title: "Titanic",
-            badge: [],
-            category: ["Drama", "Romance", "Classic"],
-            rating: 9.5,
-            releaseDate: "1997-12-19",
-            description: "Titanic is a 1997 American epic romantic disaster film directed, written, co-produced and co-edited by James Cameron. Incorporating both historical and fictionalized aspects, it is based on accounts of the sinking of RMS Titanic in 1912. Leonardo DiCaprio and Kate Winslet star as members of different social classes who fall in love during the ship's maiden voyage. The film also features an ensemble cast of Billy Zane, Kathy Bates, Frances Fisher, Bernard Hill, Jonathan Hyde, Danny Nucci, David Warner and Bill Paxton.",
-            thumbnail: "https://th.bing.com/th/id/R.667009e0b2d0878fed8c8a2b45af4376?rik=CTuVDirCs9KsrQ&riu=http%3a%2f%2fhdqwalls.com%2fwallpapers%2ftitanic-movie-full-hd.jpg&ehk=shuYoCshdWaPmf8iswXCLMCuKFbhdMKIwKhFoDL2slk%3d&risl=&pid=ImgRaw&r=0",
-        },
-        // Lặp lại 4 lần nữa
-        {
-            title: "Naruto",
-            badge: [],
-            category: ["Anime"],
-            rating: 9.5,
-            releaseDate: "1997-12-19",
-            description: "Titanic is a 1997 American epic romantic disaster film directed, written, co-produced and co-edited by James Cameron. Incorporating both historical and fictionalized aspects, it is based on accounts of the sinking of RMS Titanic in 1912. Leonardo DiCaprio and Kate Winslet star as members of different social classes who fall in love during the ship's maiden voyage. The film also features an ensemble cast of Billy Zane, Kathy Bates, Frances Fisher, Bernard Hill, Jonathan Hyde, Danny Nucci, David Warner and Bill Paxton.",
-            thumbnail: "https://img4.goodfon.com/wallpaper/nbig/3/28/by-dennisstelly-uchiha-sasuke-uzumaki-naruto-naruto-anime-ja.jpg",
-        },
-        {
-            title: "Titanic3",
-            badge: [],
-            category: ["Drama", "Romance", "Classic"],
-            rating: 9.5,
-            releaseDate: "1997-12-19",
-            description: "Titanic is a 1997 American epic romantic disaster film directed, written, co-produced and co-edited by James Cameron. Incorporating both historical and fictionalized aspects, it is based on accounts of the sinking of RMS Titanic in 1912. Leonardo DiCaprio and Kate Winslet star as members of different social classes who fall in love during the ship's maiden voyage. The film also features an ensemble cast of Billy Zane, Kathy Bates, Frances Fisher, Bernard Hill, Jonathan Hyde, Danny Nucci, David Warner and Bill Paxton.",
-            thumbnail: "https://th.bing.com/th/id/R.667009e0b2d0878fed8c8a2b45af4376?rik=CTuVDirCs9KsrQ&riu=http%3a%2f%2fhdqwalls.com%2fwallpapers%2ftitanic-movie-full-hd.jpg&ehk=shuYoCshdWaPmf8iswXCLMCuKFbhdMKIwKhFoDL2slk%3d&risl=&pid=ImgRaw&r=0",
-        },
-        {
-            title: "Titanic",
-            badge: [],
-            category: ["Drama", "Romance", "Classic"],
-            rating: 9.5,
-            releaseDate: "1997-12-19",
-            description: "Titanic is a 1997 American epic romantic disaster film directed, written, co-produced and co-edited by James Cameron. Incorporating both historical and fictionalized aspects, it is based on accounts of the sinking of RMS Titanic in 1912. Leonardo DiCaprio and Kate Winslet star as members of different social classes who fall in love during the ship's maiden voyage. The film also features an ensemble cast of Billy Zane, Kathy Bates, Frances Fisher, Bernard Hill, Jonathan Hyde, Danny Nucci, David Warner and Bill Paxton.",
-            thumbnail: "https://th.bing.com/th/id/R.667009e0b2d0878fed8c8a2b45af4376?rik=CTuVDirCs9KsrQ&riu=http%3a%2f%2fhdqwalls.com%2fwallpapers%2ftitanic-movie-full-hd.jpg&ehk=shuYoCshdWaPmf8iswXCLMCuKFbhdMKIwKhFoDL2slk%3d&risl=&pid=ImgRaw&r=0",
-        },
-        {
-            title: "Titanic",
-            badge: [],
-            category: ["Drama", "Romance", "Classic"],
-            rating: 9.5,
-            releaseDate: "1997-12-19",
-            description: "Titanic is a 1997 American epic romantic disaster film directed, written, co-produced and co-edited by James Cameron. Incorporating both historical and fictionalized aspects, it is based on accounts of the sinking of RMS Titanic in 1912. Leonardo DiCaprio and Kate Winslet star as members of different social classes who fall in love during the ship's maiden voyage. The film also features an ensemble cast of Billy Zane, Kathy Bates, Frances Fisher, Bernard Hill, Jonathan Hyde, Danny Nucci, David Warner and Bill Paxton.",
-            thumbnail: "https://th.bing.com/th/id/R.667009e0b2d0878fed8c8a2b45af4376?rik=CTuVDirCs9KsrQ&riu=http%3a%2f%2fhdqwalls.com%2fwallpapers%2ftitanic-movie-full-hd.jpg&ehk=shuYoCshdWaPmf8iswXCLMCuKFbhdMKIwKhFoDL2slk%3d&risl=&pid=ImgRaw&r=0",
-        },
-    ];
+    const { t } = useTranslation();
+    const [banners, setBanners] = useState<Banner[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const intervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
+    const [direction, setDirection] = useState<"next" | "prev">("next");
+    const [indexes, setIndexes] = useState({ prevIndex: -1, currentIndex: 0 });
 
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    // Sử dụng useRef để giữ reference của interval
-    const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-    // Hàm khởi động lại interval
-    const resetInterval = () => {
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current); // Xóa interval cũ
-        }
-        intervalRef.current = setInterval(nextSlide, 5000); // Tạo interval mới
-    };
-
-    // Chuyển đến slide tiếp theo
     const nextSlide = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
+        setDirection("next");
+        setIndexes((prev) => ({
+            prevIndex: prev.currentIndex,
+            currentIndex: (prev.currentIndex + 1) % banners.length,
+        }));
     };
 
-    // Chuyển đến slide trước đó
     const prevSlide = () => {
-        setCurrentIndex((prevIndex) =>
-            prevIndex === 0 ? movies.length - 1 : prevIndex - 1
-        );
+        setDirection("prev");
+        setIndexes((prev) => ({
+            prevIndex: prev.currentIndex,
+            currentIndex: prev.currentIndex === 0 ? banners.length - 1 : prev.currentIndex - 1
+        }));
     };
 
-    const handleNext = () => {
-        nextSlide();
-        resetInterval();
-    };
-//hello 1
-    // Xử lý khi người dùng bấm nút Prev
-    const handlePrev = () => {
-        prevSlide();
-        resetInterval();
-    };
-
-    // Tự động chuyển slide khi component mount
     useEffect(() => {
-        resetInterval(); // Khởi động interval khi component được mount
+        const fetchBanners = async () => {
+            setIsLoading(true);
+            try {
+                const response = await getBanners();
+                const result = await response.json();
+                if (!response.ok || result.status === 404) return;
 
-        return () => {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current); // Dọn dẹp interval khi unmount
+                const sortedBanners: Banner[] = result.data.content.sort((a: Banner, b: Banner) => a.position - b.position);
+
+                setBanners(sortedBanners);
+            } catch (e) {
+                console.error(e);
+                message.error(t('client.message.fetchError'));
+            } finally {
+                setIsLoading(false);
             }
         };
-    }, [movies.length]);
+
+        fetchBanners();
+    }, []);
+
+    useEffect(() => {
+        if (banners.length === 0) return;
+
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        intervalRef.current = setInterval(nextSlide, 5000);
+
+        return () => clearInterval(intervalRef.current);
+    }, [indexes.currentIndex, banners]);
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
+                <Spin indicator={<LoadingOutlined spin />} />
+            </div>
+        );
+    }
 
     return (
         <div className="carousel">
-            <div
-                className="carousel-container"
-                style={{
-                    transform: `translateX(-${currentIndex * 100}%)`,
-                }}
-            >
-                {movies.map((movie, index) => (
-                    <div className="carousel-slide" key={index}>
-                        <RecommendedBanner {...movie} />
-                    </div>
-                ))}
-            </div>
+            {banners.map((banner, index) => (
+                <div
+                    key={banner.id}
+                    className={`carousel-slide 
+                    ${index === indexes.currentIndex ? "active" : ""} 
+                    ${index === indexes.prevIndex ? (direction === "next" ? "exit-left" : "exit-right") : ""}`}
+                >
+                    <RecommendedBanner
+                        id={banner.id}
+                        thumbnail={banner.thumbnail}
+                        title={banner.title}
+                        link={banner.link}
+                        contentType={banner.contentType}
+                        position={banner.position}
+                        status={banner.status}
+                        contentName={banner.contentName}
+                        contentSlug={banner.contentSlug}
+                        subBannerResponse={banner.subBannerResponse}
+                        bannerItems={banner.bannerItems}
+                    />
+                </div>
+            ))}
 
-            {/* Nút chuyển slide */}
-            <button className="carousel-button prev" onClick={handlePrev}>
-                ❮
+            <button className="carousel-button prev" onClick={() => { prevSlide(); }}>
+                <GrPrevious/>
             </button>
-            <button className="carousel-button next" onClick={handleNext}>
-                ❯
+            <button className="carousel-button next" onClick={() => { nextSlide(); }}>
+                <GrNext/>
             </button>
 
-            {/* Dots điều hướng */}
             <div className="carousel-dots">
-                {movies.map((_, index) => (
+                {banners.map((_, index) => (
                     <span
                         key={index}
-                        className={`dot ${index === currentIndex ? "active" : ""}`}
-                        onClick={() => setCurrentIndex(index)}
+                        className={`dot ${index === indexes.currentIndex ? "active" : ""}`}
                     ></span>
                 ))}
             </div>

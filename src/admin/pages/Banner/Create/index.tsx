@@ -73,7 +73,7 @@ const CreateBanner: React.FC = () => {
             formData.append('link', values.link);
             formData.append('key', values.key);
             formData.append('position', String(values.position));
-            formData.append('contentType', values.contentType);
+            formData.append('contentType', values.contentType.toLowerCase());
             if (file) {
                 formData.append('thumbnail', file);
             }

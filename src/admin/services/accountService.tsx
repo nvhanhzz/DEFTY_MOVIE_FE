@@ -34,3 +34,8 @@ export const updateAccountById = (id: string, option: FormData): Promise<Respons
     const url = `${PREFIX_ACCOUNT}/${id}`;
     return handleRequest(patchFormData(url, option));
 };
+
+export const updateProfile = (option: FormData): Promise<Response> => {
+    const url = `${PREFIX_ACCOUNT}/profile`;
+    return handleRequest(patchFormData(url, option));
+}
