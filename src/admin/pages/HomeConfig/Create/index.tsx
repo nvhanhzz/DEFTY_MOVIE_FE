@@ -58,7 +58,7 @@ const CreateShowOn: React.FC = () => {
         try {
             const formData = new FormData();
             formData.append('contentId', String(values.contentId));
-            formData.append('contentType', values.contentType);
+            formData.append('contentType', values.contentType.toLowerCase());
             formData.append('position', String(values.contentId));
             formData.append('note', values.note);
             const response = await postShowOn(formData);

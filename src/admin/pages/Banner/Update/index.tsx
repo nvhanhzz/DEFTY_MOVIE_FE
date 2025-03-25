@@ -67,7 +67,7 @@ const UpdateBanner: React.FC = () => {
                         link: data.link,
                         key: data.key,
                         position: data.position,
-                        contentType: data.contentType,
+                        contentType: data.contentType.toLowerCase(),
                         contentId: data.contentId,
                     });
 

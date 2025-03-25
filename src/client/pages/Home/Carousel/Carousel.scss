@@ -2,7 +2,8 @@
   position: relative;
   width: 100%;
   aspect-ratio: 17 / 9;
-  margin-bottom: 20px;
+  //margin-bottom: calc(-100% + 40% + 34%);
+  margin-bottom: -10%;
 
   .carousel-container {
     position: relative;
@@ -93,63 +94,69 @@
       bottom: calc(100% - 45% - 30%);
     }
   }
+}
 
-  @media (max-width: 1200px) {
-    .carousel {
-      .carousel-dots {
-        bottom: calc(100% - 50% - 25%);
+@media (max-width: 1200px) {
+  .carousel {
+    margin-bottom: -12%;
 
-        .dot {
-          width: 6px;
-          height: 6px;
-          margin: 0 3px;
+    .carousel-dots {
+      bottom: calc(100% - 50% - 25%);
 
-          &.active {
-            width: 11px;
-          }
+      .dot {
+        width: 6px;
+        height: 6px;
+        margin: 0 3px;
+
+        &.active {
+          width: 11px;
         }
       }
     }
   }
+}
 
-  @media (max-width: 992px) {
-    .carousel {
-      .carousel-button {
-        font-size: 25px;
+@media (max-width: 992px) {
+  .carousel {
+    margin-bottom: -14%;
 
-        &.prev {
-          left: 10px;
-        }
+    .carousel-button {
+      font-size: 25px;
 
-        &.next {
-          right: 10px;
-        }
+      &.prev {
+        left: 10px;
       }
 
-      .carousel-dots {
-        right: 50px;
+      &.next {
+        right: 10px;
       }
     }
+
+    .carousel-dots {
+      right: 50px;
+    }
   }
+}
 
-  @media (max-width: 768px) {
-    .carousel {
-      .carousel-button {
-        display: none;
-      }
+@media (max-width: 768px) {
+  .carousel {
+    margin-bottom: 0;
 
-      .carousel-dots {
-        right: 24px;
-        bottom: 20px;
+    .carousel-button {
+      display: none;
+    }
 
-        .dot {
-          width: 4px;
-          height: 4px;
-          margin: 0 2px;
+    .carousel-dots {
+      right: 24px;
+      bottom: 20px;
 
-          &.active {
-            width: 7px;
-          }
+      .dot {
+        width: 4px;
+        height: 4px;
+        margin: 0 2px;
+
+        &.active {
+          width: 7px;
         }
       }
     }
