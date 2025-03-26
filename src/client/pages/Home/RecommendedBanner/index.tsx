@@ -8,15 +8,15 @@ import dayjs from "dayjs";
 import {Link, useNavigate} from "react-router-dom";
 
 const PREFIX_URL_CATEGORY: string = import.meta.env.VITE_PREFIX_URL_CATEGORY as string;
-const PREFIX_URL_ALBUM: string = import.meta.env.VITE_PREFIX_URL_ALBUM as string;
+const PREFIX_URL_PLAY: string = import.meta.env.VITE_PREFIX_URL_PLAY as string;
 
 const RecommendedBanner: React.FC<Banner> = (banner: Banner) => {
-    const bannerItemKeys: string[] = Object.keys(banner.bannerItems);
-    const bannerItemValues: string[] = Object.values(banner.bannerItems);
+    const bannerItemKeys: string[] = banner.bannerItems !== null ? Object.keys(banner.bannerItems) : [];
+    const bannerItemValues: string[] = banner.bannerItems !== null ? Object.values(banner.bannerItems) : [];
     const navigate = useNavigate();
     const linkTo =
         banner.contentType === "movie"
-            ? `${PREFIX_URL_ALBUM}/${banner.contentSlug}`
+            ? `${PREFIX_URL_PLAY}/${banner.contentSlug}`
             : banner.contentType === "category"
                 ? `${PREFIX_URL_CATEGORY}/${banner.contentSlug}`
                 : null;
