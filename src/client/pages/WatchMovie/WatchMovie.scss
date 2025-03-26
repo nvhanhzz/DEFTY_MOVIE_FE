@@ -99,5 +99,10 @@
 @media (max-width: 768px) {
   .watch-movie-wrapper {
     margin-top: 90px;
+    .watch-movie-container {
+      .watch-movie-bottom-block {
+        padding: 0 24px;
+      }
+    }
   }
 }

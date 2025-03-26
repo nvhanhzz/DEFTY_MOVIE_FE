@@ -73,7 +73,7 @@ const Carousel: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (banners.length === 0) return;
+        if (banners.length <= 1) return;
 
         if (intervalRef.current) clearInterval(intervalRef.current);
         intervalRef.current = setInterval(nextSlide, 5000);
@@ -113,22 +113,27 @@ const Carousel: React.FC = () => {
                     />
                 </div>
             ))}
+            {
+                banners.length > 1 && (
+                    <>
+                        <button className="carousel-button prev" onClick={() => { prevSlide(); }}>
+                            <GrPrevious/>
+                        </button>
+                        <button className="carousel-button next" onClick={() => { nextSlide(); }}>
+                            <GrNext/>
+                        </button>
 
-            <button className="carousel-button prev" onClick={() => { prevSlide(); }}>
-                <GrPrevious/>
-            </button>
-            <button className="carousel-button next" onClick={() => { nextSlide(); }}>
-                <GrNext/>
-            </button>
-
-            <div className="carousel-dots">
-                {banners.map((_, index) => (
-                    <span
-                        key={index}
-                        className={`dot ${index === indexes.currentIndex ? "active" : ""}`}
-                    ></span>
-                ))}
-            </div>
+                        <div className="carousel-dots">
+                            {banners.map((_, index) => (
+                                <span
+                                    key={index}
+                                    className={`dot ${index === indexes.currentIndex ? "active" : ""}`}
+                                ></span>
+                            ))}
+                        </div>
+                    </>
+                )
+            }
         </div>
     );
 };

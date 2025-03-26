@@ -20,7 +20,7 @@ const AppHeader: React.FC = () => {
     const getHeaderClass = () => {
         const path = location.pathname;
 
-        return (path.startsWith(PREFIX_URL_ALBUM) || path === '/');
+        return (path.startsWith("/" + PREFIX_URL_ALBUM) || path === '/');
     };
 
     useEffect(() => {
