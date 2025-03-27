@@ -42,6 +42,7 @@ export interface Country {
 const CreateMovie: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [thumbnail, setThumbnail] = useState<RcFile | null>(null);
+    const [coverImage, setCoverImage] = useState<RcFile | null>(null);
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -85,6 +86,9 @@ const CreateMovie: React.FC = () => {
             if (thumbnail) {
                 formData.append('thumbnail', thumbnail);
             }
+            if (coverImage) {
+                formData.append('coverImage', coverImage);
+            }
             if (trailer) {
                 formData.append('trailer', trailer);
             }
@@ -111,14 +115,27 @@ const CreateMovie: React.FC = () => {
         setTrailerPreview(videoURL);
     };
 
-    const handleThumbnailSave = (file: File | null) => {
-        setThumbnail(file);
+    const handleThumbnailChange = (info: { fileList: string | any[]; }) => {
+        if (info.fileList.length > 0) {
+            setThumbnail(info.fileList[0].originFileObj);
+        } else {
+            setThumbnail(null);
+        }
+    };
+
+    const handleCoverImageChange = (info: { fileList: string | any[]; }) => {
+        if (info.fileList.length > 0) {
+            setCoverImage(info.fileList[0].originFileObj);
+        } else {
+            setCoverImage(null);
+        }
     };
 
 
     const handleResetForm = () => {
         form.resetFields();
         setThumbnail(null);
+        setCoverImage(null);
     };
 
     const handleAddOption = () => {
@@ -261,30 +278,23 @@ const CreateMovie: React.FC = () => {
                             </Select>
                         </Form.Item>
                     </Col>
-
                     <Col span={10} className="thumbnail-col">
-                        <Form.Item label={t('admin.movie.thumbnail')} className="thumbnail-wrapper">
-                            <AvtEditor
-                                onSave={handleThumbnailSave}
-                                initialImage={
-                                    thumbnail
-                                        ? URL.createObjectURL(thumbnail)
-                                        : '/assets/images/background-default.jpg'
-                                }
-                                shape="rectangle"
-                            />
+                        <Form.Item label="Thumbnail">
+                            <Upload beforeUpload={() => false} onChange={handleThumbnailChange}>
+                                <Button icon={<UploadOutlined />}>Upload Thumbnail</Button>
+                            </Upload>
+                            {thumbnail &&
+                                <img src={URL.createObjectURL(thumbnail)} alt="Thumbnail"
+                                     style={{ width: 100, marginTop: 10 }} />}
                         </Form.Item>
 
-                        <Form.Item label={t('admin.movie.coverImage')} className="thumbnail-wrapper">
-                            <AvtEditor
-                                onSave={handleThumbnailSave}
-                                initialImage={
-                                    thumbnail
-                                        ? URL.createObjectURL(thumbnail)
-                                        : '/assets/images/background-default.jpg'
-                                }
-                                shape="rectangle"
-                            />
+                        <Form.Item label="Cover Image">
+                            <Upload beforeUpload={() => false} onChange={handleCoverImageChange}>
+                                <Button icon={<UploadOutlined />}>Upload Cover Image</Button>
+                            </Upload>
+                            {coverImage &&
+                                <img src={URL.createObjectURL(coverImage)} alt="Cover Image"
+                                     style={{ width: 100, marginTop: 10 }} />}
                         </Form.Item>
                     </Col>
                 </Row>
