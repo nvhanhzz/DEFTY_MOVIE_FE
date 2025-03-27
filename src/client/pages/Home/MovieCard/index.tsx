@@ -6,19 +6,22 @@ import {FaPlay} from "react-icons/fa";
 import { IoMdStar } from "react-icons/io";
 import dayjs from "dayjs";
 
+const PREFIX_URL_ALBUM: string = import.meta.env.VITE_PREFIX_URL_ALBUM as string;
+
 export interface MovieShowOn {
     movieThumbnail: string;
     movieTitle: string;
     description: string;
     numberOfChild: number;
     releaseDate: string | null;
+    slug: string;
 }
 
 const MovieCard: React.FC<MovieShowOn> = (movieShowOn: MovieShowOn) => {
     const navigate = useNavigate();
 
     const handleNavigateDetail = () => {
-        navigate("/album/one-piece");
+        navigate(`/${PREFIX_URL_ALBUM}/${movieShowOn.slug}`);
     }
 
     return (

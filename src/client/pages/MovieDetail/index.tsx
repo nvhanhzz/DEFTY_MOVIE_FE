@@ -21,6 +21,7 @@ export interface MovieDetailProps {
     description: string;
     coverImage: string;
     trailer: string;
+    slug: string;
     category: {
         name: string;
         slug: string;
@@ -51,7 +52,7 @@ const MovieDetail: React.FC = () => {
             if (!response.ok || result.status === 404) {
                 return;
             }
-            setMovie(result.data);
+            setMovie({...result.data, slug: slug as string});
         } catch (error) {
             console.log(error);
             message.error(t('client.message.fetchError'));
@@ -70,6 +71,7 @@ const MovieDetail: React.FC = () => {
             }
             const eps: Episode[] = result.data.map((ep: Episode) => ({
                 ...ep,
+                movieSlug: slug as string,
                 movieTitle: movie?.title
             }));
             setNavContents(eps);
