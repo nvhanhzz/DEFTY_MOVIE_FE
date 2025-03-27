@@ -202,22 +202,26 @@ const UserPage: React.FC = () => {
             {
                 title: 'No.',
                 key: 'no',
+                align: 'center',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
             },
             {
                 title: t('admin.user.username'),
                 dataIndex: 'username',
                 key: 'username',
+                align: 'center',
             },
             {
                 title: t('admin.user.fullName'),
                 dataIndex: 'fullName',
                 key: 'fullName',
+                align: 'center',
             },
             {
                 title: t('admin.user.avatar'),
                 dataIndex: 'avatar',
                 key: 'avatar',
+                align: 'center',
                 render: (avatar: string) => (
                     <Image
                         width={80}  // Điều chỉnh kích thước ảnh nếu cần
@@ -235,37 +239,44 @@ const UserPage: React.FC = () => {
                 title: t('admin.user.email'),
                 dataIndex: 'email',
                 key: 'email',
+                align: 'center',
             },
             {
                 title: t('admin.user.phone'),
                 dataIndex: 'phone',
                 key: 'phone',
+                align: 'center',
             },
             {
                 title: t('admin.user.address'),
                 dataIndex: 'address',
                 key: 'address',
+                align: 'center',
             },
             {
                 title: t('admin.user.gender.title'),
                 dataIndex: 'gender',
                 key: 'gender',
+                align: 'center',
             },
             {
                 title: t('admin.user.dateOfBirth'),
                 dataIndex: 'dateOfBirth',
                 key: 'dateOfBirth',
+                align: 'center',
                 render: (dateOfBirth: Date) => (dateOfBirth ? dayjs(dateOfBirth).format('DD/MM/YYYY') : ''),
             },
             {
                 title: t('admin.director.nationality'),
                 dataIndex: 'nationality',
                 key: 'nationality',
+                align: 'center',
             },
             {
                 title: t('admin.dataList.status.title'),
                 dataIndex: 'status',
                 key: 'status',
+                align: 'center',
                 render: (status, record) => (
                     <Switch
                         checked={status === 1}

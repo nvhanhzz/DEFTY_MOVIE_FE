@@ -59,7 +59,7 @@ const CreateShowOn: React.FC = () => {
             const formData = new FormData();
             formData.append('contentId', String(values.contentId));
             formData.append('contentType', values.contentType.toLowerCase());
-            formData.append('position', String(values.contentId));
+            formData.append('position', String(values.position));
             formData.append('note', values.note);
             const response = await postShowOn(formData);
             const result = await response.json();
@@ -92,7 +92,7 @@ const CreateShowOn: React.FC = () => {
                 onFinish={handleCreateShowOn}
                 layout="vertical"
             >
-                <Row gutter={[16, 16]}>
+                <Row gutter={16}>
                     <Col span={12}>
                         <Form.Item
                             label={t('admin.homeConfig.contentType')}
@@ -114,6 +114,38 @@ const CreateShowOn: React.FC = () => {
                             </Select>
                         </Form.Item>
                     </Col>
+                    {contentType && (
+                        <Col span={12}>
+                            <Form.Item
+                                label={t('admin.homeConfig.contentName')}
+                                name="contentId"
+                                rules={contentType === 'category' ? [{
+                                    required: true,
+                                    message: t('admin.message.requiredMessage')
+                                }] : []}
+                            >
+                                <Select
+                                    placeholder={t('admin.homeConfig.contentName')}
+                                    allowClear
+                                >
+                                    {(() => {
+                                        switch (contentType) {
+                                            case 'category':
+                                                return contents.map((item: Category) => (
+                                                    <Select.Option key={item.id} value={item.id}>
+                                                        {item.name}
+                                                    </Select.Option>
+                                                ));
+                                            default:
+                                                return;
+                                        }
+                                    })()}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    )}
+                </Row>
+                <Row gutter={16}>
                     <Col span={12}>
                         <Form.Item
                             label={t('admin.homeConfig.position')}
@@ -124,34 +156,6 @@ const CreateShowOn: React.FC = () => {
                             }]}
                         >
                             <Input type="number"/>
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            label={t('admin.homeConfig.contentName')}
-                            name="contentId"
-                            rules={contentType === 'category' ? [{
-                                required: true,
-                                message: t('admin.message.requiredMessage')
-                            }] : []}
-                        >
-                            <Select
-                                placeholder={t('admin.homeConfig.contentName')}
-                                allowClear
-                            >
-                                {(() => {
-                                    switch (contentType) {
-                                        case 'category':
-                                            return contents.map((item: Category) => (
-                                                <Select.Option key={item.id} value={item.id}>
-                                                    {item.name}
-                                                </Select.Option>
-                                            ));
-                                        default:
-                                            return;
-                                    }
-                                })()}
-                            </Select>
                         </Form.Item>
                     </Col>
                     <Col span={12}>

@@ -1,5 +1,10 @@
 {
     "admin": {
+        "common": {
+            "content": "Nội dung",
+            "system": "Hệ thống",
+            "configurations": "Cấu hình"
+        },
         "message": {
             "deleteConfirm": "Bạn có chắc chắn muốn xóa mục này không?",
             "deleteSelectedConfirm": "Bạn có chắc chắn muốn xóa các mục đã chọn không?",

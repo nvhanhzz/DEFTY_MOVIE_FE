@@ -43,12 +43,6 @@ const BannerPage: React.FC = () => {
         },
         {
             type: 'select',
-            label: t('admin.banner.position'),
-            name: 'position',
-            placeholder: t('admin.banner.position'),
-        },
-        {
-            type: 'select',
             label: t('admin.dataList.status.title'),
             name: 'status',
             placeholder: t('admin.dataList.status.title'),
@@ -216,14 +210,9 @@ const BannerPage: React.FC = () => {
                 align: 'center',
                 render: (thumbnail: string) => (
                     <Image
-                        width={80}
-                        height={80}
-                        style={{
-                            objectFit: 'cover',
-                            borderRadius: '4px'
-                        }}
+                        style={{ borderRadius: '5px' }}
                         src={thumbnail}
-                        alt="thumbnail"
+                        width={80}
                     />
                 ),
             },

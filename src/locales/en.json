@@ -1,5 +1,11 @@
 {
     "admin": {
+        "common": {
+            "content": "Content",
+            "configurations": "Configurations",
+            "settings": "Settings",
+            "system": "System"
+        },
         "message": {
             "deleteConfirm": "Are you sure you want to delete this item?",
             "deleteSelectedConfirm": "Are you sure you want to delete selected items?",

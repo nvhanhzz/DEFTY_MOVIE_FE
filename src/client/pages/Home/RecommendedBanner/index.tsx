@@ -11,8 +11,8 @@ const PREFIX_URL_CATEGORY: string = import.meta.env.VITE_PREFIX_URL_CATEGORY as 
 const PREFIX_URL_ALBUM: string = import.meta.env.VITE_PREFIX_URL_ALBUM as string;
 
 const RecommendedBanner: React.FC<Banner> = (banner: Banner) => {
-    const bannerItemKeys: string[] = Object.keys(banner.bannerItems);
-    const bannerItemValues: string[] = Object.values(banner.bannerItems);
+    const bannerItemKeys: string[] = banner.bannerItems !== null ? Object.keys(banner.bannerItems) : [];
+    const bannerItemValues: string[] = banner.bannerItems !== null ? Object.values(banner.bannerItems) : [];
     const navigate = useNavigate();
     const linkTo =
         banner.contentType === "movie"

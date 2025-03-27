@@ -32,6 +32,7 @@ const MembershipPacketPage: React.FC = () => {
         try {
             const response = await getMembershipPackets(page, pageSize, 'name', keyword);
             const result = await response.json();
+            console.log(result)
             const content: MembershipPackage[] = result.data.content;
             const membershipPackets = content.map((item: any) => ({
                 ...item,

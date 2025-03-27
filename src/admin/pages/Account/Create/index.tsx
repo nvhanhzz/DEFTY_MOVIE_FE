@@ -214,7 +214,10 @@ const CreateAccount: React.FC = () => {
                         <Form.Item label={t('admin.account.avatar')} className="avatar-wrapper">
                             <AvtEditor
                                 onSave={handleAvatarSave}
-                                initialImage={file ? URL.createObjectURL(file) : undefined}
+                                initialImage={file
+                                    ? URL.createObjectURL(file)
+                                    :  '/assets/images/avatarDefault.jpeg'
+                                }
                             />
                         </Form.Item>
                     </Col>

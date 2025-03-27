@@ -33,10 +33,25 @@ const HomeConfigPage: React.FC = () => {
 
     const searchFields = [
         {
-            type: 'input',
+            type: 'select',
             label: t('admin.homeConfig.contentType'),
             name: 'contentType',
             placeholder: t('admin.homeConfig.contentType'),
+            options: [
+                {
+                    label: "-- Choose content type --",
+                    value: '',
+                    disabled: true,
+                },
+                {
+                    label: "Movie",
+                    value: 'Movie',
+                },
+                {
+                    label: "Category",
+                    value: 'Category',
+                }
+            ],
         },
         {
             type: 'input',
@@ -196,6 +211,7 @@ const HomeConfigPage: React.FC = () => {
         columns: [
             {
                 title: 'No.',
+                align: 'center',
                 key: 'no',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
             },
@@ -203,6 +219,7 @@ const HomeConfigPage: React.FC = () => {
                 title: t('admin.homeConfig.contentName'),
                 dataIndex: 'contentName',
                 key: 'contentName',
+                align: 'center',
                 render: (contentName, record) => {
                     let linkTo = '#';
                     switch (record.contentType) {
@@ -225,22 +242,26 @@ const HomeConfigPage: React.FC = () => {
             {
                 title: t('admin.homeConfig.contentType'),
                 dataIndex: 'contentType',
+                align: 'center',
                 key: 'contentType',
             },
             {
                 title: t('admin.homeConfig.position'),
                 dataIndex: 'position',
+                align: 'center',
                 key: 'position',
             },
             {
                 title: t('admin.homeConfig.note'),
                 dataIndex: 'note',
                 key: 'note',
+                align: 'center',
             },
             {
                 title: t('admin.dataList.status.title'),
                 dataIndex: 'status',
                 key: 'status',
+                align: 'center',
                 render: (status, record) => (
                     <Switch
                         checked={status === 1}

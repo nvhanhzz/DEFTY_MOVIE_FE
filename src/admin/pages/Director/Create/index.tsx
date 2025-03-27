@@ -28,6 +28,8 @@ const CreateDirector: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const avatarDefault = "/assets/images/default.jpg";
+
 
     const handleCreateDirector = async (values: DirectorFromValues) => {
         console.log(values);
@@ -90,7 +92,7 @@ const CreateDirector: React.FC = () => {
                 className="create-account-form"
             >
                 <Row gutter={10}>
-                    <Col span={16}>
+                    <Col span={12}>
                         <Form.Item
                             label={t('admin.director.fullName')}
                             name="fullName"
@@ -164,12 +166,14 @@ const CreateDirector: React.FC = () => {
                             <Input.TextArea />
                         </Form.Item>
                     </Col>
-
                     <Col span={8} className="avatar-col">
                         <Form.Item label={t('admin.director.avatar')} className="avatar-wrapper">
                             <AvtEditor
                                 onSave={handleAvatarSave}
-                                initialImage={file ? URL.createObjectURL(file) : undefined}
+                                initialImage={file
+                                    ? URL.createObjectURL(file)
+                                    :  '/assets/images/avatarDefault.jpeg'
+                            }
                             />
                         </Form.Item>
                     </Col>

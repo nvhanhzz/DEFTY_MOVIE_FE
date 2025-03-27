@@ -15,6 +15,8 @@ import {
     UserOutlined,
     HomeOutlined,
     AppstoreAddOutlined,
+    ControlOutlined,
+    ProductOutlined
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Sider.scss';
@@ -42,8 +44,8 @@ const menuItems: MenuItem[] = [
         linkTo: 'dashboard',
     },
     {
-        icon: <VideoCameraOutlined />,
-        label: 'admin.movie.title',
+        icon: <ProductOutlined />,
+        label: 'admin.common.content',
         linkTo: '',
         subMenu: [
             {
@@ -67,6 +69,23 @@ const menuItems: MenuItem[] = [
                 linkTo: 'actors',
             },
             {
+                icon: <ReadOutlined />,
+                label: 'admin.article.title',
+                linkTo: 'articles',
+            },
+        ],
+    },
+    {
+        icon: <ControlOutlined />,
+        label: 'admin.common.configurations',
+        linkTo: '',
+        subMenu: [
+            {
+                icon: <HomeOutlined />,
+                label: 'admin.homeConfig.title',
+                linkTo: 'home-config',
+            },
+            {
                 icon:  <AppstoreAddOutlined />,
                 label: 'admin.banner.title',
                 linkTo: 'banners',
@@ -76,33 +95,23 @@ const menuItems: MenuItem[] = [
                 label: 'admin.membership-packet.title',
                 linkTo: 'membership-packets',
             },
-        ],
-    },
-    {
-        icon: <HomeOutlined />,
-        label: 'admin.homeConfig.title',
-        linkTo: 'home-config',
-    },
-    {
-        icon: <ReadOutlined />,
-        label: 'admin.article.title',
-        linkTo: 'articles',
-    },
-    {
-        icon: <UserOutlined />,
-        label: 'admin.account.title',
-        linkTo: 'accounts',
-    },
-    {
-        icon: <TeamOutlined />,
-        label: 'admin.user.title',
-        linkTo: 'users',
+        ]
     },
     {
         icon: <SettingOutlined />,
-        label: 'admin.role.title',
+        label: 'admin.common.system',
         linkTo: '',
         subMenu: [
+            {
+                icon: <UserOutlined />,
+                label: 'admin.account.title',
+                linkTo: 'accounts',
+            },
+            {
+                icon: <TeamOutlined />,
+                label: 'admin.user.title',
+                linkTo: 'users',
+            },
             {
                 icon: <SafetyOutlined />,
                 label: 'admin.role.title',

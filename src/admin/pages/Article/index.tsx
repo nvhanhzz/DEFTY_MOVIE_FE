@@ -189,16 +189,19 @@ const ArticlesPage: React.FC = () => {
             {
                 title: 'No.',
                 key: 'no',
+                align: 'center',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
             },
             {
                 title: t('admin.article.titleColumn'),
                 dataIndex: 'title',
                 key: 'title',
+                align: 'center',
             },
             {
                 title: t('admin.article.thumbnail'),
                 dataIndex: 'thumbnail',
+                align: 'center',
                 key: 'thumbnail',
                 render: (thumbnail: string) => (
                     <Image
@@ -216,11 +219,13 @@ const ArticlesPage: React.FC = () => {
                 title: t('admin.article.author'),
                 dataIndex: 'author',
                 key: 'author',
+                align: 'center',
             },
             {
                 title: t('admin.dataList.status.title'),
                 dataIndex: 'status',
                 key: 'status',
+                align: 'center',
                 render: (status, record) => (
                     <Switch
                         checked={status === 1}

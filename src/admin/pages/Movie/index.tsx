@@ -94,12 +94,17 @@ const MoviePage: React.FC = () => {
         try {
             const response = await getMovies(page, pageSize, filters);
             const result = await response.json();
+            if (!response.ok || result.status === 404) {
+                setTotalItems(0);
+                setData([]);
+                return;
+            }
             const content: Movie[] = result.data.content;
             const movies = content.map((item) => ({
                 ...item,
                 key: item.id,
             }));
-            setTotalItems(result.totalItems);
+            setTotalItems(result.data.totalElements);
             console.log(result)
             setData(movies);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -148,15 +153,14 @@ const MoviePage: React.FC = () => {
 
 
     const handleSearch = (newFilters: Record<string, any>) => {
-        const formattedFilters: Record<string, any> = { ...newFilters };
         setCurrentPage(1);
-        setFilters(formattedFilters);
+        setFilters(newFilters);
 
         const queryParams = new URLSearchParams();
         queryParams.append('page', '1');
         queryParams.append('size', pageSize.toString());
 
-        Object.entries(formattedFilters).forEach(([key, value]) => {
+        Object.entries(newFilters).forEach(([key, value]) => {
             if (value) queryParams.append(key, value.toString());
         });
 
@@ -322,9 +326,9 @@ const MoviePage: React.FC = () => {
         onUpdate: handleUpdate,
         onDeleteSelected: handleDeleteSelected,
         pagination: {
-            currentPage: currentPage,
-            totalItems: totalItems,
-            pageSize: pageSize,
+            currentPage,
+            totalItems,
+            pageSize,
             onPaginationChange: onPageChange,
         }
     };

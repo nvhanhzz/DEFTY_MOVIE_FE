@@ -220,17 +220,20 @@ const DirectorPage: React.FC = () => {
             {
                 title: 'No.',
                 key: 'no',
+                align: 'center',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
             },
             {
                 title: t('admin.director.fullName'),
                 dataIndex: 'fullName',
                 key: 'fullName',
+                align: 'center',
             },
             {
                 title: t('admin.director.avatar'),
                 dataIndex: 'avatar',
                 key: 'avatar',
+                align: 'center',
                 render: (avatar: string) => (
                     <Image
                         width={80}  // Điều chỉnh kích thước ảnh nếu cần
@@ -248,37 +251,44 @@ const DirectorPage: React.FC = () => {
                 title: t('admin.director.gender.title'),
                 dataIndex: 'gender',
                 key: 'gender',
+                align: 'center',
             },
             {
                 title: t('admin.director.dateOfBirth'),
                 dataIndex: 'dateOfBirth',
                 key: 'dateOfBirth',
+                align: 'center',
                 render: (dateOfBirth: Date) => (dateOfBirth ? dayjs(dateOfBirth).format('DD/MM/YYYY') : ''),
             },
             {
                 title: t('admin.director.weight') + ' (kg)',
                 dataIndex: 'weight',
                 key: 'weight',
+                align: 'center',
             },
             {
                 title: t('admin.director.height') + ' (cm)',
                 dataIndex: 'height',
                 key: 'height',
+                align: 'center',
             },
             {
                 title: t('admin.director.nationality'),
                 dataIndex: 'nationality',
                 key: 'nationality',
+                align: 'center',
             },
             {
                 title: t('admin.director.description'),
                 dataIndex: 'description',
                 key: 'description',
+                align: 'center',
             },
             {
                 title: t('admin.dataList.status.title'),
                 dataIndex: 'status',
                 key: 'status',
+                align: 'center',
                 render: (status, record) => (
                     <Switch
                         checked={status === 1}
