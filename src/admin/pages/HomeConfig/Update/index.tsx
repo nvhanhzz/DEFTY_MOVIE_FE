@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Col, Form, Input, message, Row, Select} from 'antd';
 import {useParams} from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
-import {getShowOnById, updateShowOnById} from "../../../services/homeConfigService.tsx";
-import {getCategories} from "../../../services/categoryService.tsx";
+import {getContentByContentType, getShowOnById, updateShowOnById} from "../../../services/homeConfigService.tsx";
 import {Category} from "../../Category";
 import {ShowOnFromValue} from "../Create";
+
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
 const UpdateShowOn: React.FC = () => {
@@ -17,6 +17,7 @@ const UpdateShowOn: React.FC = () => {
     const [contentType, setContentType] = useState<string>('');
     const [contents, setContents] = useState<Category[] | any>([]);
     const [initData, setInitData] = useState<ShowOnFromValue | null>(null);
+    const [currentContentName, setCurrentContentName] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchShowOn = async () => {
@@ -31,10 +32,11 @@ const UpdateShowOn: React.FC = () => {
                         contentId: data.contentId,
                         contentType: data.contentType,
                         note: data.note,
-                        position: data.position
+                        position: data.position,
                     });
                     setInitData(data);
                     setContentType(data.contentType);
+                    setCurrentContentName(data.contentName);
                 } else {
                     message.error(t('admin.message.fetchError'));
                 }
@@ -48,29 +50,30 @@ const UpdateShowOn: React.FC = () => {
         fetchShowOn();
     }, [id, form, t]);
 
-    const fetchCategories = async () => {
+    const fetchContentByContentType = async (contentType: string) => {
         setLoading(true);
         try {
-            const response = await getCategories(0, 99999999999);
-            const result = await response.json();
-
-            if (!response.ok || result.status === 404) {
+            const response = await getContentByContentType(contentType);
+            if (!response.ok || response.status === 404) {
                 setContents([]);
                 return;
             }
-            const content: Category[] = result.data.content;
+
+            const result = await response.json();
+            const content: Category[] = result.data;
             setContents(content);
         } catch (error) {
-            console.error(error);
+            console.error("Error fetching content:", error);
+            setContents([]);
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
         switch (contentType) {
             case 'category':
-                fetchCategories();
+                fetchContentByContentType(contentType);
                 break;
             default:
                 break;
@@ -135,41 +138,10 @@ const UpdateShowOn: React.FC = () => {
                                 }}
                             >
                                 <Select.Option value="category">{t('admin.category.title')}</Select.Option>
+                                <Select.Option value="movie">{t('admin.movie.title')}</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
-                    {contentType && (
-                        <Col span={12}>
-                            <Form.Item
-                                label={t('admin.homeConfig.contentName')}
-                                name="contentId"
-                                rules={contentType === 'category' ? [{
-                                    required: true,
-                                    message: t('admin.message.requiredMessage')
-                                }] : []}
-                            >
-                                <Select
-                                    placeholder={t('admin.homeConfig.contentName')}
-                                    allowClear
-                                >
-                                    {(() => {
-                                        switch (contentType) {
-                                            case 'category':
-                                                return contents.map((item: Category) => (
-                                                    <Select.Option key={item.id} value={item.id}>
-                                                        {item.name}
-                                                    </Select.Option>
-                                                ));
-                                            default:
-                                                return;
-                                        }
-                                    })()}
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    )}
-                </Row>
-                <Row gutter={16}>
                     <Col span={12}>
                         <Form.Item
                             label={t('admin.homeConfig.position')}
@@ -179,9 +151,57 @@ const UpdateShowOn: React.FC = () => {
                                 message: t('admin.message.requiredMessage')
                             }]}
                         >
-                            <Input type="number"/>
+                            <Input type="number" min={1}/>
                         </Form.Item>
                     </Col>
+                </Row>
+                <Row gutter={16}>
+                    {contentType && (
+                        <Col span={12}>
+                            <Form.Item
+                                label={t('admin.homeConfig.contentName')}
+                                name="contentId"
+                                rules={[{
+                                    required: true,
+                                    message: t('admin.message.requiredMessage')
+                                }]}
+                            >
+                                <Select
+                                    placeholder={t('admin.homeConfig.contentName')}
+                                    allowClear
+                                >
+                                    {(() => {
+                                        const options: JSX.Element[] = [];
+                                        // Thêm option cho contentName hiện tại (nếu có)
+                                        if (initData?.contentId && currentContentName) {
+                                            options.push(
+                                                <Select.Option key={initData.contentId} value={initData.contentId}>
+                                                    {currentContentName}
+                                                </Select.Option>
+                                            );
+                                        }
+                                        // Thêm các option từ contents
+                                        switch (contentType) {
+                                            case 'category':
+                                                contents.forEach((item: Category) => {
+                                                    // Không thêm nếu item.id trùng với contentId hiện tại (đã thêm ở trên)
+                                                    if (item.id !== initData?.contentId) {
+                                                        options.push(
+                                                            <Select.Option key={item.id} value={item.id}>
+                                                                {item.name}
+                                                            </Select.Option>
+                                                        );
+                                                    }
+                                                });
+                                                return options;
+                                            default:
+                                                return null;
+                                        }
+                                    })()}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    )}
                     <Col span={12}>
                         <Form.Item
                             label={t('admin.homeConfig.note')}

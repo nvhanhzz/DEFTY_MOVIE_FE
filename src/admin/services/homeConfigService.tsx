@@ -19,6 +19,18 @@ export const getShowOns = async (
     return handleRequest(getWithParams(url, params));
 };
 
+export const getContentByContentType = async (
+    contentType: string,
+    filters?: Record<string, string | number>
+): Promise<Response> => {
+    const url = `${PREFIX_HOME_CONFIG}/all-content`;
+    const params = {
+        contentType,
+        ...filters,
+    };
+    return handleRequest(getWithParams(url, params));
+};
+
 export const postShowOn = (option: FormData): Promise<Response> => {
     const url = `${PREFIX_HOME_CONFIG}`;
     return handleRequest(postFormData(url, option));

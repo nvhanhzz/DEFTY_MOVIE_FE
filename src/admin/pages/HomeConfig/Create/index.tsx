@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Col, Form, Input, message, Row, Select} from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../../templates/Outlet';
-import {postShowOn} from "../../../services/homeConfigService.tsx";
-import {getCategories} from "../../../services/categoryService.tsx";
+import {getContentByContentType, postShowOn} from "../../../services/homeConfigService.tsx";
 import {Category} from "../../Category";
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -14,6 +13,7 @@ export interface ShowOnFromValue {
     contentId: number;
     contentType: string;
     note: string
+    contentName: string;
 }
 
 const CreateShowOn: React.FC = () => {
@@ -24,29 +24,30 @@ const CreateShowOn: React.FC = () => {
     const [contentType, setContentType] = useState<string>('');
     const [contents, setContents] = useState<Category[] | any>([]);
 
-    const fetchCategories = async () => {
+    const fetchContentByContentType = async (contentType: string) => {
         setLoading(true);
         try {
-            const response = await getCategories(0, 99999999999);
-            const result = await response.json();
-
-            if (!response.ok || result.status === 404) {
+            const response = await getContentByContentType(contentType);
+            if (!response.ok || response.status === 404) {
                 setContents([]);
                 return;
             }
-            const content: Category[] = result.data.content;
+
+            const result = await response.json();
+            const content: Category[] = result.data;
             setContents(content);
         } catch (error) {
-            console.error(error);
+            console.error("Error fetching content:", error);
+            setContents([]);
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
         switch (contentType) {
             case 'category':
-                fetchCategories();
+                fetchContentByContentType(contentType);
                 break;
             default:
                 break;
@@ -111,9 +112,24 @@ const CreateShowOn: React.FC = () => {
                                 }}
                             >
                                 <Select.Option value="category">{t('admin.category.title')}</Select.Option>
+                                <Select.Option value="movie">{t('admin.movie.title')}</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            label={t('admin.homeConfig.position')}
+                            name="position"
+                            rules={[{
+                                required: true,
+                                message: t('admin.message.requiredMessage')
+                            }]}
+                        >
+                            <Input type="number"/>
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={16}>
                     {contentType && (
                         <Col span={12}>
                             <Form.Item
@@ -144,20 +160,7 @@ const CreateShowOn: React.FC = () => {
                             </Form.Item>
                         </Col>
                     )}
-                </Row>
-                <Row gutter={16}>
-                    <Col span={12}>
-                        <Form.Item
-                            label={t('admin.homeConfig.position')}
-                            name="position"
-                            rules={[{
-                                required: true,
-                                message: t('admin.message.requiredMessage')
-                            }]}
-                        >
-                            <Input type="number"/>
-                        </Form.Item>
-                    </Col>
+
                     <Col span={12}>
                         <Form.Item
                             label={t('admin.homeConfig.note')}
