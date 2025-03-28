@@ -13,12 +13,14 @@ import {getDirectors} from "../../../services/directorService.tsx";
 import {UploadOutlined} from "@ant-design/icons";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
+const DEFAULT_IMAGE_URL = 'https://res.cloudinary.com/drsmkfjfo/image/upload/v1743092499/b6924968-f4d3-49f6-9165-8237402ba096_background-default.jpg';
+
 
 const UpdateMovie: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [loading, setLoading] = useState(false);
-    const [thumbnail, setThumbnail] = useState<RcFile | null>(null);
-    const [coverImage, setCoverImage] = useState<RcFile | null>(null);
+    const [thumbnail, setThumbnail] = useState<File | null>(null);
+    const [coverImage, setCoverImage] = useState<File | null>(null);
     const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
     const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
     const [form] = Form.useForm();
@@ -54,6 +56,12 @@ const UpdateMovie: React.FC = () => {
                 const result = await response.json();
                 if (response.ok && result.status === 200) {
                     const data: Movie = result.data;
+                    // Tìm directorId từ directorOptions dựa trên tên director
+                    const selectedDirector = directorOptions.find(
+                        (dir: { fullName: string; id: string }) => dir.fullName === data.director
+                    );
+                    const directorId = selectedDirector ? selectedDirector.id : undefined;
+
                     form.setFieldsValue({
                         title: data.title,
                         description: data.description,
@@ -62,7 +70,7 @@ const UpdateMovie: React.FC = () => {
                         ranking: data.ranking,
                         releaseDate: data.releaseDate ? dayjs(data.releaseDate) : null,
                         membershipType: data.membershipType,
-                        director: data.director,
+                        directorId: directorId,
                     });
                     if (data.thumbnail) {
                         setThumbnailUrl(data.thumbnail);
@@ -71,16 +79,16 @@ const UpdateMovie: React.FC = () => {
                         setCoverImageUrl(data.coverImage);
                     }
                     if (data.trailer) {
-                        setTrailer(data.trailer);
+                        setTrailerPreview(data.trailer);
                     }
                 }
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error) {
                 message.error('Error fetching movie data');
+                console.error(error);
             }
         };
         fetchMovie();
-    }, [id, form]);
+    }, [id, form, directorOptions]); // Thêm directorOptions vào dependency
 
 
     useEffect(() => {
@@ -107,12 +115,11 @@ const UpdateMovie: React.FC = () => {
             const formData = new FormData();
             formData.append('title', values.title);
             formData.append('description', values.description);
-            // formData.append('trailer', values.trailer);
             formData.append('nation', values.nation);
             formData.append('ranking', values.ranking);
             formData.append('releaseDate', values.releaseDate);
             formData.append('membershipType', values.membershipType);
-            formData.append('director', values.director);
+            formData.append('directorId', String(values.directorId));
             if (thumbnail) {
                 formData.append('thumbnail', thumbnail);
             }
@@ -122,7 +129,7 @@ const UpdateMovie: React.FC = () => {
             if (trailer) {
                 formData.append('trailer', trailer);
             }
-
+            console.log('FormData:', [...formData.entries()]);
             const response = await updateMovieById(id as string, formData);
             const result = await response.json();
             if (!response.ok) {
@@ -143,28 +150,52 @@ const UpdateMovie: React.FC = () => {
         }
     };
 
-    const handleTrailerSave = (file: File) => {
+    const handleTrailerSave = (file: RcFile) => {
+        const isVideo = file.type.startsWith('video/');
+        const isLt100M = file.size / 1024 / 1024 < 100; // Giới hạn 100MB
+
+        if (!isVideo) {
+            message.error('Vui lòng upload file video!');
+            return false;
+        }
+        if (!isLt100M) {
+            message.error('File video phải nhỏ hơn 100MB!');
+            return false;
+        }
+
         const videoURL = URL.createObjectURL(file);
         setTrailer(file);
         setTrailerPreview(videoURL);
+        return false;
     };
 
-    const handleImageUpload = (file: RcFile, type: "thumbnail" | "coverImage") => {
-        const previewUrl = URL.createObjectURL(file);
-        if (type === "thumbnail") {
+    const handleThumbnailChange = (info: any) => {
+        const file = info.file.originFileObj as File;
+        if (file) {
+            const previewUrl = URL.createObjectURL(file);
             setThumbnail(file);
             setThumbnailUrl(previewUrl);
-        } else {
+        }
+    };
+
+    const handleCoverImageChange = (info: any) => {
+        const file = info.file.originFileObj as File;
+        if (file) {
+            const previewUrl = URL.createObjectURL(file);
             setCoverImage(file);
             setCoverImageUrl(previewUrl);
         }
-        return false;
     };
 
     const handleResetForm = () => {
         form.resetFields();
         setThumbnail(null);
         setCoverImage(null);
+    };
+
+    const handleRemoveTrailer = () => {
+        setTrailer(null);
+        setTrailerPreview(null);
     };
 
     return (
@@ -202,22 +233,21 @@ const UpdateMovie: React.FC = () => {
                         <Form.Item
                             label="Trailer"
                             name="trailer"
-                            rules={[{ required: true, message: "Vui lòng tải lên trailer!" }]}
+                            // rules={[{ required: true, message: "Vui lòng tải lên trailer!" }]} // Bỏ required nếu không bắt buộc
                         >
                             <Upload
-                                beforeUpload={(file) => {
-                                    handleTrailerSave(file);
-                                    return false;
-                                }}
+                                beforeUpload={handleTrailerSave}
                                 accept="video/*"
                                 maxCount={1}
+                                fileList={[]}
+                                showUploadList={{ showRemoveIcon: true }}
+                                onRemove={handleRemoveTrailer}
                             >
                                 <Button icon={<UploadOutlined />}>Upload Trailer</Button>
                             </Upload>
-
                             {trailerPreview && (
                                 <div style={{ marginTop: 10 }}>
-                                    <video width="100%" controls>
+                                    <video width="100%" controls key={trailerPreview}>
                                         <source src={trailerPreview} type="video/mp4" />
                                         Trình duyệt của bạn không hỗ trợ video.
                                     </video>
@@ -282,12 +312,12 @@ const UpdateMovie: React.FC = () => {
 
                         <Form.Item
                             label={t('admin.movie.director')}
-                            name="director"
+                            name="directorId"
                             rules={[{ required: true, message: t('admin.movie.validation.director') }]}
                         >
                             <Select placeholder={t('admin.movie.directorPlaceholder')}>
                                 {directorOptions.map((director: { fullName: string; id: string }) => (
-                                    <Select.Option key={director.id} value={director.fullName}>
+                                    <Select.Option key={director.id} value={director.id}>
                                         {director.fullName}
                                     </Select.Option>
                                 ))}
@@ -299,48 +329,46 @@ const UpdateMovie: React.FC = () => {
                     <Col span={10} className="thumbnail-col">
                         <Form.Item label={t('admin.movie.thumbnail')}>
                             <Upload
-                                beforeUpload={(file) => handleImageUpload(file, "thumbnail")}
+                                onChange={handleThumbnailChange}
                                 accept="image/*"
                                 showUploadList={false}
                             >
                                 <Button icon={<UploadOutlined />}>Upload Thumbnail</Button>
                             </Upload>
-                            {thumbnailUrl && (
+                            {thumbnailUrl ? (
                                 <img
                                     src={thumbnailUrl}
-                                    alt="Thumbnail preview"
-                                    style={{
-                                        marginTop: 10,
-                                        width: '350px',
-                                        height: '220px',
-                                        objectFit: 'cover',
-                                        borderRadius: '5px',
-                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
-                                    }}
+                                    alt="Thumbnail"
+                                    style={{ width: 300, height: 200, objectFit: 'cover', marginTop: 10, borderRadius: 5 }}
+                                />
+                            ) : (
+                                <img
+                                    src={DEFAULT_IMAGE_URL}
+                                    alt="Default Thumbnail"
+                                    style={{ width: 300, height: 200, objectFit: 'cover', marginTop: 10, borderRadius: 5 }}
                                 />
                             )}
                         </Form.Item>
 
                         <Form.Item label={t('admin.movie.coverImage')}>
                             <Upload
-                                beforeUpload={(file) => handleImageUpload(file, "coverImage")}
+                                onChange={handleCoverImageChange}
                                 accept="image/*"
                                 showUploadList={false}
                             >
                                 <Button icon={<UploadOutlined />}>Upload Cover Image</Button>
                             </Upload>
-                            {coverImageUrl && (
+                            {coverImageUrl ? (
                                 <img
                                     src={coverImageUrl}
-                                    alt="Cover Image preview"
-                                    style={{
-                                        marginTop: 10,
-                                        width: '350px',
-                                        height: '220px',
-                                        objectFit: 'cover',
-                                        borderRadius: '5px',
-                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
-                                    }}
+                                    alt="Cover Image"
+                                    style={{ width: 300, height: 200, objectFit: 'cover', marginTop: 10, borderRadius: 5 }}
+                                />
+                            ) : (
+                                <img
+                                    src={DEFAULT_IMAGE_URL}
+                                    alt="Default Thumbnail"
+                                    style={{ width: 300, height: 200, objectFit: 'cover', marginTop: 10, borderRadius: 5 }}
                                 />
                             )}
                         </Form.Item>

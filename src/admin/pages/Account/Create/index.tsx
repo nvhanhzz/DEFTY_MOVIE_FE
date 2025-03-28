@@ -93,7 +93,6 @@ const CreateAccount: React.FC = () => {
     };
 
     const handleAvatarSave = (file: File | null) => {
-        // @ts-ignore
         setFile(file);
     };
 
