@@ -82,7 +82,7 @@ const UpdateCategory: React.FC = () => {
                         label={t('admin.category.description')}
                         name="description"
                     >
-                        <Input.TextArea/>
+                        <Input.TextArea autoSize={{ minRows: 3, maxRows: 100 }} />
                     </Form.Item>
                     <div className="form-actions">
                         <Button

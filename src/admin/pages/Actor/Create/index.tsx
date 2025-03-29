@@ -118,9 +118,9 @@ const CreateActor: React.FC = () => {
                             rules={[{ required: true, message: t('admin.actor.create.validation.gender') }]}
                         >
                             <Select placeholder={t('admin.actor.gender.placeholder')}>
-                                <Select.Option value="male">{t('admin.actor.gender.male')}</Select.Option>
-                                <Select.Option value="female">{t('admin.actor.gender.female')}</Select.Option>
-                                <Select.Option value="other">{t('admin.actor.gender.other')}</Select.Option>
+                                <Select.Option value="Male">{t('admin.actor.gender.male')}</Select.Option>
+                                <Select.Option value="Female">{t('admin.actor.gender.female')}</Select.Option>
+                                <Select.Option value="Other">{t('admin.actor.gender.other')}</Select.Option>
                             </Select>
                         </Form.Item>
 
@@ -157,7 +157,7 @@ const CreateActor: React.FC = () => {
                             name="description"
                             rules={[{ required: true, message: t('admin.actor.create.validation.description') }]}
                         >
-                            <Input.TextArea />
+                            <Input.TextArea autoSize={{ minRows: 3, maxRows: 100 }} />
                         </Form.Item>
                     </Col>
 

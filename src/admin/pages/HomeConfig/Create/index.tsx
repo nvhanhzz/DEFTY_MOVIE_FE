@@ -96,6 +96,18 @@ const CreateShowOn: React.FC = () => {
                 <Row gutter={16}>
                     <Col span={12}>
                         <Form.Item
+                            label={t('admin.homeConfig.position')}
+                            name="position"
+                            rules={[{
+                                required: true,
+                                message: t('admin.message.requiredMessage')
+                            }]}
+                        >
+                            <Input type="number"/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
                             label={t('admin.homeConfig.contentType')}
                             name="contentType"
                             rules={[{
@@ -116,20 +128,17 @@ const CreateShowOn: React.FC = () => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            label={t('admin.homeConfig.position')}
-                            name="position"
-                            rules={[{
-                                required: true,
-                                message: t('admin.message.requiredMessage')
-                            }]}
-                        >
-                            <Input type="number"/>
-                        </Form.Item>
-                    </Col>
+
                 </Row>
                 <Row gutter={16}>
+                    <Col span={12}>
+                        <Form.Item
+                            label={t('admin.homeConfig.note')}
+                            name="note"
+                        >
+                            <Input.TextArea autoSize={{ minRows: 3, maxRows: 100 }} />
+                        </Form.Item>
+                    </Col>
                     {contentType && (
                         <Col span={12}>
                             <Form.Item
@@ -161,14 +170,7 @@ const CreateShowOn: React.FC = () => {
                         </Col>
                     )}
 
-                    <Col span={12}>
-                        <Form.Item
-                            label={t('admin.homeConfig.note')}
-                            name="note"
-                        >
-                            <Input.TextArea/>
-                        </Form.Item>
-                    </Col>
+
                 </Row>
                 <div className="form-actions">
                     <Button

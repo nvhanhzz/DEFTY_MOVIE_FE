@@ -201,8 +201,9 @@ const UpdateDirector: React.FC = () => {
                             name="description"
                             rules={[{ required: true, message: t('admin.director.validation.description') }]}
                         >
-                            <Input.TextArea />
+                            <Input.TextArea autoSize={{ minRows: 5, maxRows: 100 }} />
                         </Form.Item>
+
                     </Col>
 
                     <Col span={8} style={{display: 'flex', justifyContent: 'center'}}>

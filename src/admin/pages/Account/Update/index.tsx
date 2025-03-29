@@ -219,9 +219,9 @@ const UpdateAccount: React.FC = () => {
                             rules={[{ required: true, message: t('admin.account.validation.gender') }]}
                         >
                             <Select placeholder={t('admin.account.gender.placeholder')}>
-                                <Select.Option value="male">{t('admin.account.gender.male')}</Select.Option>
-                                <Select.Option value="female">{t('admin.account.gender.female')}</Select.Option>
-                                <Select.Option value="other">{t('admin.account.gender.other')}</Select.Option>
+                                <Select.Option value="Male">{t('admin.account.gender.male')}</Select.Option>
+                                <Select.Option value="Female">{t('admin.account.gender.female')}</Select.Option>
+                                <Select.Option value="Other">{t('admin.account.gender.other')}</Select.Option>
                             </Select>
                         </Form.Item>
 

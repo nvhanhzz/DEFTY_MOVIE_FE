@@ -3,7 +3,9 @@
         "common": {
             "content": "Nội dung",
             "system": "Hệ thống",
-            "configurations": "Cấu hình"
+            "configurations": "Cấu hình",
+            "more": "Xem thêm",
+            "less": "Xem bớt"
         },
         "message": {
             "deleteConfirm": "Bạn có chắc chắn muốn xóa mục này không?",
@@ -33,6 +35,7 @@
             "submit": "Gửi",
             "save": "Lưu",
             "cancel": "Hủy",
+            "selectAll": "Chọn tất cả",
             "confirm": "Xác nhận",
             "selectDate": "Chọn ngày",
             "startDate": "Ngày bắt đầu",
@@ -172,14 +175,26 @@
             "title": "Gói Thành Viên",
             "nameColumn": "Tên Gói Thành Viên",
             "descriptionColumn": "Mô Tả",
+            "chooseMembershipPacket": "-- Chọn Gói Thành Viên --",
+            "month": "Tháng",
+            "price": "Giá",
+            "chooseDuration": "-- Chọn thời gian --",
+            "select": {
+                "description": "Nhập mô tả",
+                "basePrice": "Base Price",
+                "selectMembershipPacketButton": "Chọn Gói Thành Viên",
+                "selectDuration": "Chọn thời gian"
+            },
             "create": {
                 "title": "Tạo Gói Thành Viên",
                 "membership-packetName": "Tên Gói Thành Viên",
                 "price": "Giá",
                 "discount": "Chiết Khấu",
                 "description": "Mô Tả",
+                "basePrice": "Giá Cơ Bản",
                 "duration": "Thời Gian",
-                "createMembershipPacketButton": "Tạo Gói Thành Viên"
+                "createMembershipPacketButton": "Tạo Gói Thành Viên",
+                "selectDuration": "Chọn thời gian"
             },
             "update": {
                 "title": "Cập Nhật Gói Thành Viên",

@@ -105,7 +105,7 @@ const MoviePage: React.FC = () => {
                 key: item.id,
             }));
             setTotalItems(result.data.totalElements);
-            console.log(result)
+            // console.log(result)
             setData(movies);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
@@ -136,7 +136,7 @@ const MoviePage: React.FC = () => {
         setPageSize(pageSizeFromUrl);
         setFilters(filtersFromUrl);
         setInitialValues(initialSearchValues);
-        console.log(initialSearchValues);
+        // console.log(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {
@@ -288,7 +288,7 @@ const MoviePage: React.FC = () => {
                 render: (membershipType) => {
                     return (
                         <Tag color={membershipType === 1 ? 'green' : 'orange'}>
-                            {membershipType === 1 ? 'VIP' : 'Normal'}
+                            {membershipType === 1 ? 'Premium' : 'Normal'}
                         </Tag>
                     );
                 },

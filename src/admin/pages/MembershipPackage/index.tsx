@@ -7,6 +7,7 @@ import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
 import {deleteMembershipPacket, getMembershipPackets} from "../../services/membershipPackageService.tsx";
+import SearchFormTemplate from "../../templates/Search";
 
 export interface MembershipPackage {
     id: string;
@@ -14,6 +15,7 @@ export interface MembershipPackage {
     description: string;
     price: number;
     discount: number;
+    membershipType: number;
 }
 
 const MembershipPacketPage: React.FC = () => {
@@ -22,17 +24,47 @@ const MembershipPacketPage: React.FC = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
-    const [searchKeyword, setSearchKeyword] = useState<string>(''); // State cho từ khóa tìm kiếm
+    const [filters, setFilters] = useState<Record<string, string>>({});
+    const [initialValues, setInitialValues] = useState<Record<string, any>>({});
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
 
-    const fetchData = async (page: number, pageSize: number, keyword: string) => {
+
+    const searchFields = [
+        {
+            type: 'select',
+            label: t('admin.membership-packet.nameColumn'),
+            name: 'name',
+            placeholder: t('admin.membership-packet.nameColumn'),
+            options: [
+                { label: 'Normal', value: "Normal"},
+                { label: 'Premium', value: "Premium" },
+                { label: 'Free Trial', value: "Free Trial" },
+            ],
+        },
+        {
+            type: 'select',
+            label: t('admin.membership-packet.create.duration'),
+            name: 'duration',
+            placeholder: t('admin.membership-packet.create.duration'),
+            options: [
+                { label: '0 tháng', value: 0 },
+                { label: '1 tháng', value: 1 },
+                { label: '3 tháng', value: 3 },
+                { label: '6 tháng', value: 6 },
+                { label: '9 tháng', value: 9 },
+                { label: '12 tháng', value: 12 },
+            ],
+        }
+
+    ];
+    const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
         setIsLoading(true);
         try {
-            const response = await getMembershipPackets(page, pageSize, 'name', keyword);
+            const response = await getMembershipPackets(page, pageSize, filters);
             const result = await response.json();
-            console.log(result)
+            // console.log(result)
             const content: MembershipPackage[] = result.data.content;
             const membershipPackets = content.map((item: any) => ({
                 ...item,
@@ -52,16 +84,28 @@ const MembershipPacketPage: React.FC = () => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
         const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
-        const keywordFromUrl = searchParams.get('keyword') || ''; // Lấy từ khóa tìm kiếm từ URL
+        const filtersFromUrl: Record<string, string> = {};
+        const initialSearchValues: Record<string, any> = {};
+
+        searchParams.forEach((value, key) => {
+            if (key !== 'page' && key !== 'size') {
+                filtersFromUrl[key] = value;
+                const field = searchFields.find((f) => f.name === key);
+                if (field) {
+                    initialSearchValues[key] = value;
+                }
+            }
+        });
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
-        setSearchKeyword(keywordFromUrl); // Cập nhật từ khóa tìm kiếm
+        setFilters(filtersFromUrl);
+        setInitialValues(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {
-        fetchData(currentPage, pageSize, searchKeyword); // Gọi fetchData với từ khóa tìm kiếm
-    }, [currentPage, pageSize, searchKeyword]);
+        fetchData(currentPage, pageSize, filters);
+    }, [currentPage, pageSize, filters]);
 
     const handleUpdate = (id: string) => {
         navigate(`update/${id}`);
@@ -91,18 +135,25 @@ const MembershipPacketPage: React.FC = () => {
         }
     };
 
-    // Hàm xử lý khi thay đổi trang
+    const handleSearch = (newFilters: Record<string, any>) => {
+        setCurrentPage(1);
+        setFilters(newFilters);
+
+        const queryParams = new URLSearchParams();
+        queryParams.append('page', '1');
+        queryParams.append('size', pageSize.toString());
+
+        Object.entries(newFilters).forEach(([key, value]) => {
+            if (value) queryParams.append(key, value.toString());
+        });
+
+        navigate(`?${queryParams.toString()}`);
+    };
+
     const onPageChange = (page: number, pageSize?: number) => {
         setCurrentPage(page);
         setPageSize(pageSize || 10);
-        navigate(`?page=${page}&pageSize=${pageSize || 10}&keyword=${searchKeyword}`); // Cập nhật URL với từ khóa tìm kiếm
-    };
-
-    // Hàm xử lý tìm kiếm
-    const handleSearch = (keyword: string) => {
-        setSearchKeyword(keyword);
-        setCurrentPage(1); // Reset lại trang về 1 khi tìm kiếm
-        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`); // Cập nhật URL khi tìm kiếm
+        navigate(`?page=${page}&pageSize=${pageSize || 10}`);
     };
 
     const dataListConfig: DataListConfig<MembershipPackage> = {
@@ -122,6 +173,21 @@ const MembershipPacketPage: React.FC = () => {
                 sorter: (a: MembershipPackage, b: MembershipPackage) => a.name.localeCompare(b.name),
             },
             {
+                title: t('admin.membership-packet.create.duration'),
+                dataIndex: 'duration',
+                key: 'duration',
+                align: 'center',
+                render: (value) => `${value ?? 0} ${t('admin.membership-packet.month')}`,
+            },
+            {
+                title: t('admin.membership-packet.price'),
+                dataIndex: 'price',
+                key: 'price',
+                align: 'center',
+                render: (value) => `${value ?? 0} VNĐ`,
+            },
+
+            {
                 title: t('admin.membership-packet.descriptionColumn'),
                 dataIndex: 'description',
                 key: 'description',
@@ -134,14 +200,10 @@ const MembershipPacketPage: React.FC = () => {
         onCreateNew: handleCreateNewMembershipPacket,
         onUpdate: handleUpdate,
         onDeleteSelected: handleDeleteSelected, // Sử dụng onDeleteSelected thay vì onDelete
-        search: {
-            keyword: searchKeyword, // Truyền từ khóa tìm kiếm vào cấu hình
-            onSearch: handleSearch, // Hàm tìm kiếm
-        },
         pagination: {
-            currentPage: currentPage,
-            totalItems: totalItems,
-            pageSize: pageSize,
+            currentPage,
+            totalItems,
+            pageSize,
             onPaginationChange: onPageChange,
         }
     };
@@ -153,6 +215,7 @@ const MembershipPacketPage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/membership-packets`, name: t('admin.membership-packet.title') }
             ]}
         >
+            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

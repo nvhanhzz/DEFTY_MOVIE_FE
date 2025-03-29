@@ -119,7 +119,7 @@ const EditRole: React.FC = () => {
                             name="description"
                             rules={[{ required: true, message: t('admin.message.requiredMessage') }]}
                         >
-                            <Input.TextArea />
+                            <Input.TextArea autoSize={{ minRows: 3, maxRows: 100 }} />
                         </Form.Item>
                         <Form.Item>
                             <Popconfirm

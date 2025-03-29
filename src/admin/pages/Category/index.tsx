@@ -105,7 +105,7 @@ const CategoryPage: React.FC = () => {
         setPageSize(pageSizeFromUrl);
         setFilters(filtersFromUrl);
         setInitialValues(initialSearchValues);
-        console.log(initialSearchValues);
+        // console.log(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {

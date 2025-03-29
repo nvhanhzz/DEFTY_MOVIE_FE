@@ -1,5 +1,5 @@
-import { useNavigate, useParams } from "react-router-dom";
-import {Checkbox, Image, message, Modal, Spin, Table, Tag} from "antd";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import { Checkbox, Image, message, Modal, Spin, Table, Tag } from "antd";
 import DataListTemplate, { DataListConfig } from "../../../templates/DataList";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,31 +12,37 @@ import {
     getMoviesInCategory,
     getMoviesNotInCategory
 } from "../../../services/categoryService.tsx";
-import {Movie} from "../../Movie";
-import {Role} from "../../Role";
-import {getDirectors} from "../../../services/directorService.tsx";
-import {Director} from "../../Director";
+import { Movie } from "../../Movie";
+import { Role } from "../../Role";
+import { getDirectors } from "../../../services/directorService.tsx";
+import { Director } from "../../Director";
+const prefixAdmin: string = import.meta.env.VITE_PREFIX_URL_ADMIN;
 
 const MoviesOfCategory = () => {
     const { t } = useTranslation();
     const { id } = useParams();
     const navigate = useNavigate();
     const [directories, setDirectories] = useState<Director[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isMainLoading, setIsMainLoading] = useState<boolean>(false); // Loading for main page
+    const [isModalLoading, setIsModalLoading] = useState<boolean>(false); // Loading for modal
     const [filters, setFilters] = useState<Record<string, string>>({});
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
     const [data, setData] = useState<Movie[]>([]);
     const [dataNotIn, setDataNotIn] = useState<Movie[]>([]);
     const [totalItems, setTotalItems] = useState<number>(0);
+    const [totalItemsNotIn, setTotalItemsNotIn] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
+    const [modalCurrentPage, setModalCurrentPage] = useState<number>(1);
+    const [modalPageSize, setModalPageSize] = useState<number>(10);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMovies, setSelectedMovies] = useState<Set<string>>(new Set());
+    const [modalSearch, setModalSearch] = useState<string>("");
 
     const categoryIdNumber = id && !isNaN(Number(id)) ? Number(id) : null;
 
     const fetchMoviesInCategory = async () => {
-        setIsLoading(true);
+        setIsMainLoading(true);
         try {
             const response = await getMoviesInCategory(categoryIdNumber, currentPage, pageSize, filters);
             const result = await response.json();
@@ -48,7 +54,7 @@ const MoviesOfCategory = () => {
             console.error("Error fetching movies in category:", error);
             setData([]);
         } finally {
-            setIsLoading(false);
+            setIsMainLoading(false);
         }
     };
 
@@ -73,7 +79,6 @@ const MoviesOfCategory = () => {
         setPageSize(pageSizeFromUrl);
         setFilters(filtersFromUrl);
         setInitialValues(initialSearchValues);
-        // console.log(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {
@@ -81,7 +86,7 @@ const MoviesOfCategory = () => {
             console.error("Invalid categoryId:", id);
             return;
         }
-        fetchMoviesInCategory()
+        fetchMoviesInCategory();
     }, [categoryIdNumber, currentPage, pageSize, filters]);
 
     useEffect(() => {
@@ -102,8 +107,9 @@ const MoviesOfCategory = () => {
 
         navigate(`?${queryParams.toString()}`);
     };
+
     const fetchDirectories = async (page: number, pageSize: number, filters: Record<string, string>) => {
-        setIsLoading(true);
+        setIsMainLoading(true);
         try {
             const response = await getDirectors(page, pageSize, filters);
             const result = await response.json();
@@ -117,45 +123,45 @@ const MoviesOfCategory = () => {
                 ...item,
                 key: item.id,
             }));
-            // console.log(content)
             setTotalItems(result.data.totalElements);
             setDirectories(directors);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
-            setIsLoading(false);
+            setIsMainLoading(false);
         }
     };
 
     const fetchMoviesNotInCategory = async () => {
-        setIsLoading(true);
+        setIsModalLoading(true);
         try {
-            const response = await getMoviesNotInCategory(categoryIdNumber, currentPage, pageSize);
+            const filters = modalSearch ? { title: modalSearch } : {};
+            const response = await getMoviesNotInCategory(categoryIdNumber, modalCurrentPage, modalPageSize, filters);
             const result = await response.json();
             const content: Movie[] = result.data.content;
-            // console.log(content);
-
-            const movies = content.map((item: any) =>
-                ({ ...item, key: item.id })
-            );
+            const movies = content.map((item: any) => ({ ...item, key: item.id }));
             setDataNotIn(movies);
+            setTotalItemsNotIn(result.data.totalElements || 0);
         } catch (error) {
             console.error("Error fetching movies NOT in category:", error);
             setDataNotIn([]);
         } finally {
-            setIsLoading(false);
+            setIsModalLoading(false);
         }
     };
+
     useEffect(() => {
         if (categoryIdNumber === null) {
             console.error("Invalid categoryId:", id);
             return;
         }
-        fetchMoviesNotInCategory();
-    }, [categoryIdNumber]);
+        if (isModalOpen) {
+            fetchMoviesNotInCategory();
+        }
+    }, [categoryIdNumber, modalCurrentPage, modalPageSize, modalSearch, isModalOpen]);
 
-    const handleSelectMovie = async (movieId: string, checked: boolean) => {
+    const handleSelectMovie = (movieId: string, checked: boolean) => {
         setSelectedMovies((prev) => {
             const newSet = new Set(prev);
             if (checked) {
@@ -167,7 +173,20 @@ const MoviesOfCategory = () => {
         });
     };
 
+    const handleSelectAll = (checked: boolean) => {
+        setSelectedMovies((prev) => {
+            const newSet = new Set(prev);
+            if (checked) {
+                dataNotIn.forEach(movie => newSet.add(movie.id));
+            } else {
+                newSet.clear();
+            }
+            return newSet;
+        });
+    };
+
     const handleOk = async () => {
+        setIsMainLoading(true); // Show loading on main page since this affects it
         try {
             const response = await addMovieInCategory(categoryIdNumber, Array.from(selectedMovies));
             if (!response.ok) {
@@ -176,23 +195,33 @@ const MoviesOfCategory = () => {
             message.success(t('admin.message.updateSuccess'));
             setIsModalOpen(false);
             setSelectedMovies(new Set());
-            fetchMoviesInCategory();
-            fetchMoviesNotInCategory();
+            setModalSearch("");
+            await fetchMoviesInCategory();
+            await fetchMoviesNotInCategory();
         } catch (error) {
             message.error(t('admin.message.updateError'));
             console.error(error);
+        } finally {
+            setIsMainLoading(false);
         }
     };
 
     const columns = [
         {
-            title: "Tên Phim",
+            title: t('admin.movie.titleColumn'),
             dataIndex: "title",
             key: "title",
             align: "center",
         },
         {
-            title: "Chọn",
+            title: () => (
+                <Checkbox
+                    onChange={(e) => handleSelectAll(e.target.checked)}
+                    checked={dataNotIn.length > 0 && dataNotIn.every(movie => selectedMovies.has(movie.id))}
+                >
+                    {t('admin.form.selectAll')}
+                </Checkbox>
+            ),
             key: "action",
             align: "center",
             render: (record: { id: string }) => (
@@ -204,18 +233,27 @@ const MoviesOfCategory = () => {
         },
     ];
 
-    const handleCancel = () => setIsModalOpen(false);
+    const handleCancel = () => {
+        setIsModalOpen(false);
+        setModalSearch("");
+        setSelectedMovies(new Set());
+    };
 
-    const onPageChange = (page: number, pageSize?: number) => {
+    const onMainPageChange = (page: number, newPageSize?: number) => {
         setCurrentPage(page);
-        setPageSize(pageSize || 10);
-        navigate(`?page=${page}&pageSize=${pageSize || 10}`);
+        setPageSize(newPageSize || 10);
+        navigate(`?page=${page}&pageSize=${newPageSize || 10}`);
+    };
+
+    const onModalPageChange = (page: number, newPageSize?: number) => {
+        setModalCurrentPage(page);
+        setModalPageSize(newPageSize || 10);
     };
 
     const handleCreateNewMovie = () => setIsModalOpen(true);
 
     const handleDeleteSelected = async (ids: React.Key[]) => {
-        setIsLoading(true);
+        setIsMainLoading(true);
         try {
             const response = await deleteMovieOfCategory(categoryIdNumber, ids as string[]);
             if (response.ok) {
@@ -225,12 +263,11 @@ const MoviesOfCategory = () => {
                 const result = await response.json();
                 message.error(result.message || t('admin.message.deleteError'));
             }
-            fetchMoviesNotInCategory();
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            await fetchMoviesNotInCategory();
         } catch (error) {
             message.error(t('admin.message.deleteError'));
         } finally {
-            setIsLoading(false);
+            setIsMainLoading(false);
         }
     };
 
@@ -250,7 +287,7 @@ const MoviesOfCategory = () => {
         {
             type: 'select',
             label: t('admin.movie.director'),
-            name: 'director',
+            name: 'directorId',
             placeholder: t('admin.movie.director'),
             options: directories.map(director => ({
                 label: director.fullName,
@@ -284,6 +321,10 @@ const MoviesOfCategory = () => {
                 dataIndex: "title",
                 key: "title",
                 align: "center",
+                render: (movieName, record) => {
+                    const linkTo = `${prefixAdmin}/movies/update/${record.id}`;
+                    return <Link to={linkTo}>{movieName}</Link>;
+                }
             },
             {
                 title: t("admin.movie.thumbnail"),
@@ -318,13 +359,11 @@ const MoviesOfCategory = () => {
                 key: 'membershipType',
                 align: 'center',
                 sorter: (a: Movie, b: Movie) => a.membershipType - b.membershipType,
-                render: (membershipType) => {
-                    return (
-                        <Tag color={membershipType === 1 ? 'green' : 'orange'}>
-                            {membershipType === 1 ? 'VIP' : 'Normal'}
-                        </Tag>
-                    );
-                },
+                render: (membershipType) => (
+                    <Tag color={membershipType === 1 ? 'green' : 'orange'}>
+                        {membershipType === 1 ? 'VIP' : 'Normal'}
+                    </Tag>
+                ),
             },
         ],
         data,
@@ -335,7 +374,7 @@ const MoviesOfCategory = () => {
             currentPage,
             totalItems,
             pageSize,
-            onPaginationChange: onPageChange,
+            onPaginationChange: onMainPageChange,
         },
     };
 
@@ -350,7 +389,7 @@ const MoviesOfCategory = () => {
             <SearchFormTemplate fields={searchFields}
                                 onSearch={handleSearch}
                                 initialValues={initialValues} />
-            {isLoading ? (
+            {isMainLoading ? (
                 <div style={{
                     display: "flex",
                     justifyContent: "center",
@@ -361,19 +400,26 @@ const MoviesOfCategory = () => {
             ) : (
                 <DataListTemplate config={dataListConfig} />
             )}
-            <Modal title="Danh Sách Phim" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            <Modal
+                title={t('admin.movie.title')}
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                width={600}
+            >
                 <Table
                     columns={columns}
                     dataSource={dataNotIn}
                     pagination={{
-                        current: currentPage,
-                        pageSize,
-                        total: totalItems,
+                        current: modalCurrentPage,
+                        pageSize: modalPageSize,
+                        total: totalItemsNotIn,
                         showSizeChanger: true,
                         pageSizeOptions: ['5', '10', '15', '20'],
-                        onChange: onPageChange,
+                        onChange: onModalPageChange,
                     }}
-                    rowKey="id" />
+                    rowKey="id"
+                />
             </Modal>
         </OutletTemplate>
     );

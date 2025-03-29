@@ -64,7 +64,7 @@ const CreatePermission: React.FC = () => {
                     name="description"
                     rules={[{ required: true, message: t('admin.message.requiredMessage') }]} // Sử dụng thông báo yêu cầu chung từ admin.message
                 >
-                    <Input.TextArea />
+                    <Input.TextArea autoSize={{ minRows: 3, maxRows: 100 }} />
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" loading={loading}>

@@ -72,7 +72,7 @@ const BannerPage: React.FC = () => {
                 setData([]);
                 return;
             }
-            console.log(result)
+            // console.log(result)
 
             const content: Banner[] = result.data.content;
             const banners = content.map((item: Banner) => ({

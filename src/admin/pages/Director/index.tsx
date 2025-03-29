@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {message, Spin, Switch, Image} from 'antd';
+import {message, Spin, Switch, Image, Button} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
@@ -31,6 +31,7 @@ const DirectorPage: React.FC = () => {
     const [pageSize, setPageSize] = useState<number>(10);
     const [filters, setFilters] = useState<Record<string, string>>({});
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
+    const [expandedRows, setExpandedRows] = useState({});
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -111,6 +112,7 @@ const DirectorPage: React.FC = () => {
             }));
             setTotalItems(result.data.totalElements);
             setData(directors);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.fetchError'));
         } finally {
@@ -139,7 +141,7 @@ const DirectorPage: React.FC = () => {
         setPageSize(pageSizeFromUrl);
         setFilters(filtersFromUrl);
         setInitialValues(initialSearchValues);
-        console.log(initialSearchValues);
+        // console.log(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {
@@ -180,6 +182,7 @@ const DirectorPage: React.FC = () => {
                 const result = await response.json();
                 message.error(result.message || t('admin.message.deleteError'));
             }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.deleteError'));
         } finally {
@@ -213,6 +216,13 @@ const DirectorPage: React.FC = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const toggleExpand = (key: string | number) => {
+        setExpandedRows((prev) => ({
+            ...prev,
+            [key]: !prev[key],
+        }));
     };
 
     const dataListConfig: DataListConfig<Director> = {
@@ -279,10 +289,29 @@ const DirectorPage: React.FC = () => {
                 align: 'center',
             },
             {
-                title: t('admin.director.description'),
-                dataIndex: 'description',
-                key: 'description',
-                align: 'center',
+                title: "Description",
+                dataIndex: "description",
+                key: "description",
+                align: "center",
+                render: (text, record) => {
+                    const expanded = expandedRows[record.id] || false;
+                    const isLong = text.length > 100;
+
+                    return (
+                        <div style={{ maxWidth: 300, wordWrap: "break-word" }}>
+                            {isLong ? (
+                                <>
+                                    {expanded ? text : `${text.substring(0, 100)}... `}
+                                    <Button type="link" onClick={() => toggleExpand(record.id)}>
+                                        {expanded ? t('admin.common.less') : t('admin.common.more') }
+                                    </Button>
+                                </>
+                            ) : (
+                                text
+                            )}
+                        </div>
+                    );
+                },
             },
             {
                 title: t('admin.dataList.status.title'),

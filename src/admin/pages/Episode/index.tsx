@@ -194,22 +194,26 @@ const EpisodePage: React.FC = () => {
             {
                 title: 'No.',
                 key: 'no',
+                align: 'center',
                 render: (_, __, index) => index + 1 + (currentPage - 1) * pageSize,
             },
             {
                 title: t('admin.episode.number'),
                 dataIndex: 'number',
                 key: 'number',
+                align: 'center',
             },
             {
                 title: t('admin.episode.description'),
                 dataIndex: 'description',
                 key: 'description',
+                align: 'center',
             },
             {
                 title: t('admin.episode.thumbnail'),
                 dataIndex: 'thumbnail',
                 key: 'thumbnail',
+                align: 'center',
                 render: (thumbnail: string) => (
                     <img src={thumbnail} alt="thumbnail" style={{ width: '100px', height: 'auto', borderRadius: '4px' }} />
                 ),
@@ -218,6 +222,7 @@ const EpisodePage: React.FC = () => {
                 title: t('admin.episode.video'),
                 dataIndex: 'link',
                 key: 'link',
+                align: 'center',
                 render: (link: string) => (
                     <video controls style={{ width: '150px', height: 'auto' }}>
                         <source src={link} type="video/mp4" />
@@ -228,6 +233,7 @@ const EpisodePage: React.FC = () => {
             {
                 title: t('admin.episode.movie'),
                 key: 'movieName',
+                align: 'center',
                 render: () => (
                     <a href={`${import.meta.env.VITE_PREFIX_URL_ADMIN}/movies/${movieId}`} rel="noopener noreferrer">
                         {movieName}
@@ -238,6 +244,7 @@ const EpisodePage: React.FC = () => {
                 title: t('admin.dataList.status.title'),
                 dataIndex: 'status',
                 key: 'status',
+                align: 'center',
                 render: (status, record) => (
                     <Switch
                         checked={status === 1}

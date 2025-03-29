@@ -122,6 +122,18 @@ const UpdateShowOn: React.FC = () => {
                 <Row gutter={16}>
                     <Col span={12}>
                         <Form.Item
+                            label={t('admin.homeConfig.position')}
+                            name="position"
+                            rules={[{
+                                required: true,
+                                message: t('admin.message.requiredMessage')
+                            }]}
+                        >
+                            <Input type="number" min={1}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
                             label={t('admin.homeConfig.contentType')}
                             name="contentType"
                             rules={[{
@@ -142,20 +154,17 @@ const UpdateShowOn: React.FC = () => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            label={t('admin.homeConfig.position')}
-                            name="position"
-                            rules={[{
-                                required: true,
-                                message: t('admin.message.requiredMessage')
-                            }]}
-                        >
-                            <Input type="number" min={1}/>
-                        </Form.Item>
-                    </Col>
+
                 </Row>
                 <Row gutter={16}>
+                    <Col span={12}>
+                        <Form.Item
+                            label={t('admin.homeConfig.note')}
+                            name="note"
+                        >
+                            <Input.TextArea autoSize={{ minRows: 3, maxRows: 100 }} />
+                        </Form.Item>
+                    </Col>
                     {contentType && (
                         <Col span={12}>
                             <Form.Item
@@ -202,14 +211,7 @@ const UpdateShowOn: React.FC = () => {
                             </Form.Item>
                         </Col>
                     )}
-                    <Col span={12}>
-                        <Form.Item
-                            label={t('admin.homeConfig.note')}
-                            name="note"
-                        >
-                            <Input.TextArea/>
-                        </Form.Item>
-                    </Col>
+
                 </Row>
                 <div className="form-actions">
                     <Button

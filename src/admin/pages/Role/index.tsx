@@ -41,7 +41,7 @@ const RolePage: React.FC = () => {
             }
             const result = await response.json();
             const content: Role[] = result.data.content;
-            console.log(content);
+            // console.log(content);
             const roles = content.map((item: any) => ({ ...item, key: item.id }));
             setTotalItems(result.data.totalElements);
             setData(roles);

@@ -78,7 +78,7 @@ const EditPermission: React.FC = () => {
                         name="description"
                         rules={[{ required: true, message: t('admin.message.requiredMessage') }]} // Thông báo yêu cầu nhập chung
                     >
-                        <Input.TextArea />
+                        <Input.TextArea autoSize={{ minRows: 3, maxRows: 100 }} />
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" loading={loading}>

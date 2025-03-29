@@ -7,10 +7,12 @@ import {getMovieById, updateMovieById} from "../../../services/movieService";
 import './UpdateMovie.scss';
 import {RcFile} from "antd/es/upload";
 import {Country, MovieFormValues} from "../Create";
+import { MembershipPackage} from "../../MembershipPackage";
 import {Movie} from "../index.tsx";
 import dayjs from 'dayjs';
 import {getDirectors} from "../../../services/directorService.tsx";
 import {UploadOutlined} from "@ant-design/icons";
+import {getMembershipPackets} from "../../../services/membershipPackageService.tsx";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 const DEFAULT_IMAGE_URL = 'https://res.cloudinary.com/drsmkfjfo/image/upload/v1743092499/b6924968-f4d3-49f6-9165-8237402ba096_background-default.jpg';
@@ -29,6 +31,7 @@ const UpdateMovie: React.FC = () => {
     const [nation, setNation] = useState([]);
     const [trailer, setTrailer] = useState<RcFile | null>(null);
     const [trailerPreview, setTrailerPreview] = useState<string | null>(null);
+    const [membership, setMembership] = useState<MembershipPackage[]>([]);
 
     useEffect(() => {
         const fetchDirectors = async () => {
@@ -47,6 +50,25 @@ const UpdateMovie: React.FC = () => {
             }
         };
         fetchDirectors();
+    }, []);
+
+    useEffect(() => {
+        const fetchMembership = async () => {
+            try {
+                const response = await getMembershipPackets(1, 999999999);
+                const data = await response.json();
+                if (response.ok) {
+                    setMembership(data.data.content);
+                    // console.log(data.data.content);
+                } else {
+                    message.error('Failed to load membership');
+                }
+            } catch (error) {
+                message.error('Error fetching membership');
+                console.error(error);
+            }
+        };
+        fetchMembership();
     }, []);
 
     useEffect(() => {
@@ -227,7 +249,7 @@ const UpdateMovie: React.FC = () => {
                             name="description"
                             rules={[{ required: true, message: t('admin.movie.validation.description') }]}
                         >
-                            <Input.TextArea />
+                            <Input.TextArea autoSize={{ minRows: 3, maxRows: 100 }} />
                         </Form.Item>
 
                         <Form.Item
@@ -303,11 +325,13 @@ const UpdateMovie: React.FC = () => {
                         >
                             <Select
                                 placeholder={t('admin.movie.membershipTypePlaceholder')}
-                                options={[
-                                    { label: 'VIP', value: 1 },
-                                    { label: 'Normal', value: 0 }
-                                ]}
-                            />
+                            >
+                                {[...new Map(membership.map((m) => [m.membershipType, m])).values()].map((membership) => (
+                                    <Select.Option key={membership.id} value={membership.membershipType}>
+                                        {membership.name}
+                                    </Select.Option>
+                                ))}
+                            </Select>
                         </Form.Item>
 
                         <Form.Item

@@ -1,87 +1,68 @@
-.profile-container {
-  position: relative;
+.update-profile-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 30px;
+  border-radius: 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  //max-width: 600px;
   margin: 40px auto;
-}
 
-.profile-edit {
-  position: absolute;
-  top: 0;
-  right: 0;
+  .profile-form {
+    width: 100%;
+  }
 
+  .profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
 
-  button {
-    color: #1890ff;
-    background-color: transparent;
-    border: none;
-    box-shadow: none;
-    transition: color 0.3s;
-
-    &:hover {
-      color: #0050b3;
+    .avatar-wrapper {
+      margin-right: 20px;
     }
   }
-}
 
-.profile-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-}
+  .profile-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
 
-.profile-fullname {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-}
+    .left-column,
+    .right-column {
+      width: 48%;
+    }
 
-.profile-role {
-  font-size: 1rem;
-  color: #777;
-  margin-top: 5px;
-}
-
-.profile-details {
-  width: 100%;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.profile-info {
-  margin-bottom: 15px;
-}
-
-.profile-info strong {
-  font-weight: bold;
-  color: #333;
-}
-
-.profile-info p {
-  margin: 5px 0;
-  color: #555;
-  font-size: 0.95rem;
-}
-
-@media (max-width: 768px) {
-  .profile-container {
-    padding: 15px;
-    margin: 20px auto;
+    .all-column {
+      width: 100%;
+    }
   }
-  .profile-avatar {
-    width: 100px;
-    height: 100px;
+
+  .ant-form-item {
+    margin-bottom: 20px;
   }
-  .profile-fullname {
-    font-size: 1.25rem;
+
+  .reset-button {
+    margin-right: 10px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #d9d9d9;
+
+    &:hover {
+      background-color: #e6e6e6;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .profile-details {
+      flex-direction: column;
+
+      .left-column,
+      .right-column {
+        width: 100%;
+      }
+    }
   }
 }

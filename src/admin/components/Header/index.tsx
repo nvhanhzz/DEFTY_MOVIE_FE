@@ -9,6 +9,8 @@ import { setCurrentAccount } from '../../redux/actions/accountRedux.tsx';
 import { addAlert } from '../../redux/actions/alert';
 import {useAdminSelector} from "../../hooks/useAdminSelector.tsx";
 import {useNavigate} from "react-router-dom";
+const DEFAULT_VN = 'https://res.cloudinary.com/drsmkfjfo/image/upload/v1743220589/9c522b3b-ac9d-4eec-8715-b4158c250102_VN.jpg';
+const DEFAULT_EN = 'https://res.cloudinary.com/drsmkfjfo/image/upload/v1743220716/d2967e23-67ba-4b33-a366-7fc60a2792f9_English.png';
 
 interface HeaderProps {
     collapsed: boolean;
@@ -67,13 +69,13 @@ const AppHeader: React.FC<HeaderProps> = ({ collapsed, toggleCollapse }) => {
             <div className="header-right">
                 <div className="language-switcher">
                     <img
-                        src="/assets/images/English.png"
+                        src={DEFAULT_EN}
                         alt="English"
                         className="language-flag"
                         onClick={() => handleLanguageChange('en')}
                     />
                     <img
-                        src="/assets/images/VN.jpg"
+                        src={DEFAULT_VN}
                         alt="Vietnamese"
                         className="language-flag"
                         onClick={() => handleLanguageChange('vi')}

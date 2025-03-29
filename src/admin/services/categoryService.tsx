@@ -58,10 +58,10 @@ export const addMovieInCategory = (categoryId: number | null, ids: React.Key[]):
 };
 
 export const getMoviesNotInCategory = async (
-    categoryId: number,
+    categoryId: number | null,
     page?: number,
     size?: number,
-    filters?: Record<string, string | number>
+    filters?: { title: string } | {}
 ): Promise<Response> => {
     const url = `${PREFIX_CATEGORY}/${categoryId}/other-movies`;
     const params = {

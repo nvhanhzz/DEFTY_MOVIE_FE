@@ -5,9 +5,17 @@ import {MembershipPackage} from "../pages/MembershipPackage";
 
 const PREFIX_MEMBERSHIP_PACKAGE = import.meta.env.VITE_PREFIX_MEMBERSHIP_PACKAGE as string;
 
-export const getMembershipPackets = (page?: number, pageSize?: number, searchKey?: string, searchValue?: string): Promise<Response> => {
+export const getMembershipPackets = async (
+    page?: number,
+    size?: number,
+    filters?: Record<string, string | number>
+): Promise<Response> => {
     const url = `${PREFIX_MEMBERSHIP_PACKAGE}`;
-    const params = { page, pageSize, [searchKey || '']: searchValue };
+    const params = {
+        page,
+        size,
+        ...filters,
+    };
     return handleRequest(getWithParams(url, params));
 };
 

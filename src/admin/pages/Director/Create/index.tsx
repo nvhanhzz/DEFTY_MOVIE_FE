@@ -163,7 +163,7 @@ const CreateDirector: React.FC = () => {
                             name="description"
                             rules={[{ required: true, message: t('admin.director.create.validation.description') }]}
                         >
-                            <Input.TextArea />
+                            <Input.TextArea autoSize={{ minRows: 3, maxRows: 100 }} />
                         </Form.Item>
                     </Col>
                     <Col span={8} className="avatar-col">

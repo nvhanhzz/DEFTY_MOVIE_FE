@@ -99,7 +99,6 @@ const HomeConfigPage: React.FC = () => {
             }));
             setTotalItems(result.data.totalElements);
             setData(showOns);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             console.log(error);
             message.error(t('admin.message.fetchError'));

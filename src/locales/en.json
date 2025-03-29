@@ -4,7 +4,9 @@
             "content": "Content",
             "configurations": "Configurations",
             "settings": "Settings",
-            "system": "System"
+            "system": "System",
+            "more": "More",
+            "less": "Less"
         },
         "message": {
             "deleteConfirm": "Are you sure you want to delete this item?",
@@ -32,6 +34,7 @@
             "delete": "Delete",
             "search": "Search",
             "submit": "Submit",
+            "selectAll": "Select All",
             "save": "Save",
             "cancel": "Cancel",
             "confirm": "Confirm",
@@ -193,6 +196,21 @@
             "title": "Membership Packets",
             "nameColumn": "Membership Packet",
             "descriptionColumn": "Description",
+            "chooseMembershipPacket": "-- Choose Membership Packet --",
+            "month": "Month",
+            "price": "Price",
+            "chooseDuration": "-- Choose Duration --",
+            "select": {
+                "title": "Select Membership Packet",
+                "membership-packetName": "Membership Packet",
+                "price": "Price",
+                "discount": "Discount",
+                "description": "Description",
+                "duration": "Duration",
+                "basePrice": "Base Price",
+                "selectMembershipPacketButton": "Select Membership Packet",
+                "selectDuration": "Select duration"
+            },
             "create": {
                 "title": "Create Membership Packet",
                 "membership-packetName": "Membership Packet",
@@ -200,7 +218,9 @@
                 "discount": "Discount",
                 "description": "Description",
                 "duration": "Duration",
-                "createMembershipPacketButton": "Create Membership Packet"
+                "basePrice": "Base Price",
+                "createMembershipPacketButton": "Create Membership Packet",
+                "selectDuration": "Select duration"
             },
             "update": {
                 "title": "Update Membership Packet",
