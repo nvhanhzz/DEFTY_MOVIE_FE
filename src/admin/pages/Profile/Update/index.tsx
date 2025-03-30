@@ -1,44 +1,28 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useAdminSelector } from "../../../hooks/useAdminSelector.tsx";
 import "./UpdateProfile.scss";
-import {Button, Input, Form, DatePicker, message, Select} from "antd";
+import { Button, DatePicker, Form, Input, message, Select } from "antd";
 import AvtEditor from "../../../components/AvtEditor";
-import {useTranslation} from "react-i18next";
-import {AccountFormValues} from "../../Account/Create";
+import VietnamAddressSelector from "../../../components/VietnamAddressSelector";
+import { useTranslation } from "react-i18next";
+import { AccountFormValues } from "../../Account/Create";
 import dayjs from "dayjs";
-import {getRoles} from "../../../services/roleSevice.tsx";
-import {Role} from "../../Role";
-import {updateProfile} from "../../../services/accountService.tsx";
+import { updateProfile } from "../../../services/accountService.tsx";
 
 const UpdateProfile: React.FC = () => {
     const { t } = useTranslation();
     const [file, setFile] = useState<File | null>(null);
-    const [roles, setRoles] = useState([]);
+    const [initialFile] = useState<File | null>(null);
+    const [isEditable, setIsEditable] = useState(false);
     const currentAccount = useAdminSelector((state) => state.currentAccount.account);
     const [form] = Form.useForm();
-
-    useEffect(() => {
-        const fetchRoles = async () => {
-            try {
-                const response = await getRoles(1, 999999999);
-                const data = await response.json();
-                if (response.ok) {
-                    setRoles(data.data.content);
-                } else {
-                    message.error('Failed to load roles');
-                }
-            } catch (error) {
-                message.error('Error fetching roles');
-                console.error(error);
-            }
-        };
-
-        fetchRoles();
-    }, []);
+    const [address, setAddress] = useState<string>("");
+    const [initialAddress] = useState<string>(currentAccount?.address || "");
 
     const handleResetForm = () => {
         form.resetFields();
-        setFile(null);
+        setFile(initialFile);
+        setAddress(initialAddress);
     };
 
     const handleSubmit = async (values: AccountFormValues) => {
@@ -48,17 +32,49 @@ const UpdateProfile: React.FC = () => {
         formData.append("email", values.email);
         formData.append("phone", values.phone);
         formData.append("gender", values.gender);
-        formData.append("address", values.address);
+        formData.append("dateOfBirth", values.dateOfBirth ? dayjs(values.dateOfBirth).format("YYYY-MM-DD") : "");
+
+        if (address) {
+            const addressParts = address.split(" - ");
+            const oldAddressParts = currentAccount.address ? currentAccount.address.split(" - ") : [];
+
+            if (addressParts.length === 3 && oldAddressParts.length === 3) {
+                const [newWard, newDistrict, newProvince] = addressParts;
+                const [oldWard, oldDistrict, oldProvince] = oldAddressParts;
+
+                if (newProvince !== oldProvince && newDistrict === oldDistrict) {
+                    message.error("Bạn phải chọn lại huyện khi thay đổi tỉnh!");
+                    return;
+                }
+
+                if (newDistrict !== oldDistrict && newWard === oldWard) {
+                    message.error("Bạn phải chọn lại xã khi thay đổi huyện!");
+                    return;
+                }
+
+                formData.append("address", address);
+            } else {
+                message.error("Địa chỉ không hợp lệ!");
+                return;
+            }
+        } else {
+            formData.append("address", currentAccount.address || "");
+        }
+
         if (file) {
             formData.append("avatar", file);
         }
 
         try {
             const response = await updateProfile(formData);
-            console.log(response);
-
-            console.log("FormData Sent: ", formData);
+            if (!response.ok || response.status !== 200) {
+                message.error(t("admin.message.updateError"));
+                return;
+            }
             message.success("Profile updated successfully!");
+            setIsEditable(false);
+            // Tự động reload trang sau khi cập nhật thành công
+            // window.location.reload();
         } catch (error) {
             message.error("Failed to update profile. Please try again.");
         }
@@ -67,6 +83,27 @@ const UpdateProfile: React.FC = () => {
     const handleAvatarSave = (file: File | null) => {
         setFile(file);
     };
+
+    const toggleEdit = () => {
+        if (isEditable) {
+            handleResetForm();
+        }
+        setIsEditable(!isEditable);
+    };
+
+    useEffect(() => {
+        if (currentAccount) {
+            form.setFieldsValue({
+                fullName: currentAccount.fullName,
+                username: currentAccount.username,
+                email: currentAccount.email,
+                phone: currentAccount.phone,
+                gender: currentAccount.gender,
+                dateOfBirth: currentAccount.dateOfBirth ? dayjs(currentAccount.dateOfBirth) : null,
+            });
+            setAddress(currentAccount.address || "");
+        }
+    }, [currentAccount, form]);
 
     if (!currentAccount) return <div>Loading...</div>;
 
@@ -82,116 +119,93 @@ const UpdateProfile: React.FC = () => {
                     email: currentAccount.email,
                     phone: currentAccount.phone,
                     gender: currentAccount.gender,
-                    address: currentAccount.address,
-                    role: currentAccount.role,
-                    datePicker: currentAccount.dateOfBirth ? dayjs(currentAccount.dateOfBirth) : null,
+                    dateOfBirth: currentAccount.dateOfBirth ? dayjs(currentAccount.dateOfBirth) : null,
                 }}
                 onFinish={handleSubmit}
             >
                 <div className="profile-header">
-                    <Form.Item label={t('admin.account.avatar')} className="avatar-wrapper">
-                        <AvtEditor onSave={handleAvatarSave} initialImage={currentAccount.avatar as string} />
+                    <Form.Item label={t("admin.account.avatar")} className="avatar-wrapper">
+                        <AvtEditor
+                            onSave={handleAvatarSave}
+                            initialImage={currentAccount.avatar as string}
+                            disabled={!isEditable}
+                        />
                     </Form.Item>
                 </div>
 
                 <div className="profile-details">
                     <div className="left-column">
                         <Form.Item
-                            label={t('admin.account.fullName')}
+                            label={t("admin.account.fullName")}
                             name="fullName"
-                            rules={[{ required: true, message: t('admin.account.validation.fullName') }]}
+                            rules={[{ required: true, message: t("admin.account.validation.fullName") }]}
                         >
-                            <Input placeholder="Enter your full name" />
+                            <Input placeholder="Enter your full name" disabled={!isEditable} />
                         </Form.Item>
 
-                        <Form.Item
-                            label={t('admin.account.username')}
-                            name="username"
-                        >
-                            <Input disabled/>
+                        <Form.Item label={t("admin.account.username")} name="username">
+                            <Input disabled />
                         </Form.Item>
 
-                        <Form.Item
-                            label={t('admin.account.password')}
-                            name="password"
-                        >
-                            <Input.Password placeholder="Enter your password" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label={t('admin.account.role.title')}
-                            name="role"
-                        >
-                            <Select placeholder={t('admin.account.role.placeholder')}>
-                                {roles.map((role: Role) => (
-                                    <Select.Option key={role.id} value={role.name}>
-                                        {role.name}
-                                    </Select.Option>
-                                ))}
-                            </Select>
+                        <Form.Item label={t("admin.account.address")}>
+                            <VietnamAddressSelector
+                                onChange={(value) => setAddress(value)}
+                                initialValue={address}
+                                disabled={!isEditable}
+                            />
                         </Form.Item>
                     </div>
 
                     <div className="right-column">
                         <Form.Item
-                            label={t('admin.account.email')}
+                            label={t("admin.account.email")}
                             name="email"
-                            rules={[
-                                { type: "email", message: "Please enter a valid email" },
-                            ]}
+                            rules={[{ type: "email", message: "Please enter a valid email" }]}
                         >
-                            <Input placeholder="Enter your email" />
+                            <Input placeholder="Enter your email" disabled={!isEditable} />
                         </Form.Item>
 
-                        <Form.Item
-                            label={t('admin.account.phone')}
-                            name="phone"
-                        >
-                            <Input placeholder="Enter your phone number" />
+                        <Form.Item label={t("admin.account.phone")} name="phone">
+                            <Input placeholder="Enter your phone number" disabled={!isEditable} />
                         </Form.Item>
 
-                        <Form.Item
-                            label={t('admin.actor.dateOfBirth')}
-                            name="datePicker"
-                        >
-                            <DatePicker
-                                format="YYYY-MM-DD"
-                                onChange={(_date, dateString) => form.setFieldsValue({ dateOfBirth: dateString })}
-                            />
-                        </Form.Item>
+                        <div style={{ display: "flex", gap: "10px" }}>
+                            <Form.Item
+                                label={t("admin.actor.dateOfBirth")}
+                                name="dateOfBirth"
+                                style={{ flex: 1 }}
+                            >
+                                <DatePicker
+                                    format="YYYY-MM-DD"
+                                    disabled={!isEditable}
+                                    style={{ width: "100%" }}
+                                />
+                            </Form.Item>
 
-                        <Form.Item
-                            label={t('admin.account.gender.title')}
-                            name="gender"
-                        >
-                            <Select placeholder={t('admin.actor.gender.placeholder')}>
-                                <Select.Option value="male">{t('admin.account.gender.male')}</Select.Option>
-                                <Select.Option value="female">{t('admin.account.gender.female')}</Select.Option>
-                                <Select.Option value="other">{t('admin.account.gender.other')}</Select.Option>
-                            </Select>
-                        </Form.Item>
-                    </div>
-
-                    <div className="all-column">
-                        <Form.Item
-                            label={t('admin.account.address')}
-                            name="address"
-                        >
-                            <Input.TextArea placeholder="Enter your address" rows={2} />
-                        </Form.Item>
+                            <Form.Item
+                                label={t("admin.account.gender.title")}
+                                name="gender"
+                                style={{ flex: 1 }}
+                            >
+                                <Select placeholder={t("admin.actor.gender.placeholder")} disabled={!isEditable}>
+                                    <Select.Option value="Male">{t("admin.account.gender.male")}</Select.Option>
+                                    <Select.Option value="Female">{t("admin.account.gender.female")}</Select.Option>
+                                    <Select.Option value="Other">{t("admin.account.gender.other")}</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </div>
                     </div>
                 </div>
 
                 <Form.Item style={{ textAlign: "center", marginTop: "20px" }}>
-                    <Button
-                        htmlType="button"
-                        onClick={handleResetForm}
-                        className="reset-button"
-                    >
-                        {t('admin.form.reset')}
+                    <Button htmlType="button" onClick={handleResetForm} className="reset-button" disabled={!isEditable}>
+                        {t("admin.form.reset")}
                     </Button>
-                    <Button type="primary" htmlType="submit">
-                        {t('admin.form.update')}
+                    <Button type="default" onClick={toggleEdit}>
+                        {isEditable ? "Disable" : "Edit"}
+                    </Button>
+                    <Button type="primary" htmlType="submit" disabled={!isEditable} style={{ marginLeft: "10px" }}>
+                        {t("admin.form.update")}
                     </Button>
                 </Form.Item>
             </Form>

@@ -1,5 +1,6 @@
 import React from 'react';
 import './PersonalSettings.scss';
+const DEFAULT_AVATAR =  "https://res.cloudinary.com/drsmkfjfo/image/upload/v1743305606/21659bb0-0bde-4c32-ac2c-0ca8d26ec620_avatarDefault.jpg";
 
 const PersonalSettings: React.FC = () => {
     return (
@@ -11,7 +12,7 @@ const PersonalSettings: React.FC = () => {
                     <div className="infoContainer">
                         <div className="avatar">
                             <img
-                                src="./assets/images/default.jpg"
+                                src= {DEFAULT_AVATAR}
                                 alt="Avatar"
                                 className="avatarImage"
                             />

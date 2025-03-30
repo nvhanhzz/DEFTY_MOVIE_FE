@@ -248,12 +248,12 @@ const DefaultRoutes: RouteType[] = [
     },
     {
         path: 'profile',
-        element: <Profile />
-    },
-    {
-        path: 'profile/update',
         element: <UpdateProfile />
     },
+    // {
+    //     path: 'profile/update',
+    //     element: <UpdateProfile />
+    // },
     // {
     //     path: 'settings',
     //     element: <SettingPage />,

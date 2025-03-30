@@ -221,7 +221,7 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
         >
             <div className="logo" onClick={handleLogoClick}>
                 <img
-                    src="/assets/images/defty.png"
+                    src="https://res.cloudinary.com/drsmkfjfo/image/upload/v1743307674/89c2f178-6765-4d8a-ba07-d630633b0e31_defty.png"
                     alt="Logo"
                     className="logo-img"
                 />

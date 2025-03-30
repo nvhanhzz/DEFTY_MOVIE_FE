@@ -22,7 +22,7 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage, shape = "ci
 
     // Xử lý initialImage khi prop thay đổi
     useEffect(() => {
-        console.log(initialImage, "AvtEditor")
+        // console.log(initialImage, "AvtEditor")
         if (initialImage) {
             if (initialImage.startsWith('null')) {
                 setSrc(null);
@@ -156,8 +156,8 @@ const AvtEditor: React.FC<AvtEditorProps> = ({ onSave, initialImage, shape = "ci
                             border={50}
                             borderRadius={shape === "circle" ? 150 : 0}
                             className={`avt-editor__canvas ${shape === "rectangle" ? "rectangle" : "circle"}`}
-                            width={shape === "rectangle" ? 350 : 200}
-                            height={shape === "rectangle" ? 200 : 200}
+                            width={shape === "rectangle" ? 350 : 300}
+                            height={shape === "rectangle" ? 200 : 300}
                         />
 
                         <Slider

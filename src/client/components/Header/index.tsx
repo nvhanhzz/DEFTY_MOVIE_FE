@@ -47,7 +47,7 @@ const AppHeader: React.FC = () => {
                             <IoMenu/>
                         </div>
                         <Link to="/" className="header__left--logo">
-                            <img src="/assets/images/defty.png" alt="logo" />
+                            <img src="https://res.cloudinary.com/drsmkfjfo/image/upload/v1743307674/89c2f178-6765-4d8a-ba07-d630633b0e31_defty.png" alt="logo" />
                         </Link>
                         <Link to="/" className="header__left--link active">For You</Link>
                         <Dropdown trigger={<div className="header__left--dropdown-trigger">More</div>}>
