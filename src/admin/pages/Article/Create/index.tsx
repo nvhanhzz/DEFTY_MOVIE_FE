@@ -8,6 +8,7 @@ import {RcFile} from 'antd/es/upload'; // Import RcFile
 import './CreateArticle.scss';
 import {UploadOutlined} from "@ant-design/icons";
 
+const THUMBNAIL_DEFAULT = "https://res.cloudinary.com/drsmkfjfo/image/upload/v1743305920/448ee5b5-c66d-40b1-8ecf-bf31bfc162a3_OIP%20%283%29.jpg"
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
 export interface ArticleFormValues {
@@ -100,19 +101,6 @@ const CreateArticle: React.FC = () => {
                     <Input />
                 </Form.Item>
 
-                {/*<Form.Item*/}
-                {/*    label={t('admin.article.content')}*/}
-                {/*    name="content"*/}
-                {/*>*/}
-                {/*    <Editor*/}
-                {/*        initialValue=""*/}
-                {/*        init={tinyMceConfig}*/}
-                {/*        onEditorChange={(content, editor) => {*/}
-                {/*            form.setFieldsValue({ content: content });*/}
-                {/*        }}*/}
-                {/*    />*/}
-                {/*</Form.Item>*/}
-
                 <Form.Item
                     label={t('admin.article.author')}
                     name="author"
@@ -133,8 +121,8 @@ const CreateArticle: React.FC = () => {
                             showUploadList={false}  // Ẩn danh sách file sau khi upload
                         >
                             <img
-                                src={file ? URL.createObjectURL(file as Blob) : 'https://via.placeholder.com/150'}
-                                alt="thubnail"
+                                src={file ? URL.createObjectURL(file as Blob) : THUMBNAIL_DEFAULT}
+                                alt="thumbnail"
                                 className="thumbnail-image"
                             />
                         </Upload>

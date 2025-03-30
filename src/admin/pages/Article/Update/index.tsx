@@ -11,6 +11,7 @@ import { ArticleFormValues } from "../Create";
 import { Article } from "../index.tsx";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
+const THUMBNAIL_DEFAULT = "https://res.cloudinary.com/drsmkfjfo/image/upload/v1743305920/448ee5b5-c66d-40b1-8ecf-bf31bfc162a3_OIP%20%283%29.jpg"
 
 const UpdateArticle: React.FC = () => {
     const [loading, setLoading] = useState(false);
@@ -153,7 +154,7 @@ const UpdateArticle: React.FC = () => {
                         >
                             {/* Hiển thị ảnh thumbnail từ URL hoặc file mới */}
                             <img
-                                src={file ? URL.createObjectURL(file) : thumbnailUrl || 'https://via.placeholder.com/150'}
+                                src={file ? URL.createObjectURL(file) : thumbnailUrl || THUMBNAIL_DEFAULT}
                                 alt="thumbnail"
                                 className="thumbnail-image"
                             />

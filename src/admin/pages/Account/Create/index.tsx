@@ -11,6 +11,7 @@ import {Role} from "../../Role";
 import AvtEditor from "../../../components/AvtEditor";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
+const DEFAULT_AVATAR =  "https://res.cloudinary.com/drsmkfjfo/image/upload/v1743305606/21659bb0-0bde-4c32-ac2c-0ca8d26ec620_avatarDefault.jpg";
 
 export interface AccountFormValues {
     username: string;
@@ -215,7 +216,7 @@ const CreateAccount: React.FC = () => {
                                 onSave={handleAvatarSave}
                                 initialImage={file
                                     ? URL.createObjectURL(file)
-                                    :  '/assets/images/avatarDefault.jpeg'
+                                    :  DEFAULT_AVATAR
                                 }
                             />
                         </Form.Item>

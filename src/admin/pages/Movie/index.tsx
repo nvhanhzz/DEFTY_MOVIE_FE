@@ -244,7 +244,7 @@ const MoviePage: React.FC = () => {
                     <Image
                         style={{ borderRadius: '5px' }}
                         src={thumbnail}
-                        width={120}
+                        width={80}
                     />
                 ),
             },

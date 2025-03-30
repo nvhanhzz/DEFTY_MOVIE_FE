@@ -11,6 +11,7 @@ import AvtEditor from "../../../components/AvtEditor";
 import {standardization} from "../../../helpers/Date.tsx";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
+const DEFAULT_AVATAR =  "https://res.cloudinary.com/drsmkfjfo/image/upload/v1743305606/21659bb0-0bde-4c32-ac2c-0ca8d26ec620_avatarDefault.jpg";
 
 const UpdateActor: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -198,11 +199,11 @@ const UpdateActor: React.FC = () => {
                         </Form.Item>
                     </Col>
 
-                    <Col span={8} style={{display: 'flex', justifyContent: 'center'}}>
+                    <Col span={8} style={{ display: 'flex', justifyContent: 'center' }}>
                         <Form.Item label={t('admin.actor.avatar')} className="avatar-wrapper">
                             <AvtEditor
                                 onSave={handleAvatarSave}
-                                initialImage={avatarUrl as string}
+                                initialImage={avatarUrl || DEFAULT_AVATAR} // Ảnh mặc định
                             />
                         </Form.Item>
                     </Col>

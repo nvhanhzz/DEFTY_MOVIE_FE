@@ -205,7 +205,7 @@ const ArticlesPage: React.FC = () => {
                 key: 'thumbnail',
                 render: (thumbnail: string) => (
                     <Image
-                        width={80}
+                        width={60}
                         style={{
                             objectFit: 'cover',
                             borderRadius: '4px'

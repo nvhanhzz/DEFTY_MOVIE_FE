@@ -7,6 +7,8 @@ import OutletTemplate from "../../../templates/Outlet";
 import {getBannerById, getContentName, updateBannerById} from "../../../services/bannerService.tsx";
 import {BannerFormValues, Content} from "../Create";
 import AvtEditor from "../../../components/AvtEditor";
+const DEFAULT_IMAGE_URL = 'https://res.cloudinary.com/drsmkfjfo/image/upload/v1743092499/b6924968-f4d3-49f6-9165-8237402ba096_background-default.jpg';
+
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -235,7 +237,9 @@ const UpdateBanner: React.FC = () => {
                         <Col span={12}>
                             <Form.Item label={t("admin.banner.thumbnail")} className="thumbnail-wrapper">
                                 <AvtEditor onSave={handleThumbnailSave}
-                                           initialImage={thumbnail || "/assets/images/default-thumbnail.jpg"} shape="rectangle" />
+                                           initialImage={thumbnail || DEFAULT_IMAGE_URL
+                                }
+                                           shape="rectangle" />
                             </Form.Item>
                         </Col>
                     </Row>

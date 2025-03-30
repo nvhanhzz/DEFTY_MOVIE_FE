@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Image, message, Spin, Switch} from 'antd';
+import {Button, Image, message, Spin, Switch} from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import dayjs from 'dayjs'; // Use dayjs instead of moment
@@ -37,6 +37,7 @@ const ActorPage: React.FC = () => {
     const [filters, setFilters] = useState<Record<string, string>>({});
     const navigate = useNavigate();
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
+    const [expandedRows, setExpandedRows] = useState({});
 
     const searchFields = [
         {
@@ -152,6 +153,13 @@ const ActorPage: React.FC = () => {
         fetchData(currentPage, pageSize, filters);
     }, [currentPage, pageSize, filters]);
 
+    const toggleExpand = (key: string | number) => {
+        setExpandedRows((prev) => ({
+            ...prev,
+            [key]: !prev[key],
+        }));
+    };
+
     const handleSearch = (newFilters: Record<string, any>) => {
         const formattedFilters: Record<string, any> = { ...newFilters };
 
@@ -245,8 +253,8 @@ const ActorPage: React.FC = () => {
                 align: 'center',
                 render: (avatar: string) => (
                     <Image
-                        width={80}  // Điều chỉnh kích thước ảnh nếu cần
-                        height={80}
+                        width={60}  // Điều chỉnh kích thước ảnh nếu cần
+                        height={60}
                         style={{
                             objectFit: 'cover',
                             borderRadius: '4px'
@@ -292,6 +300,25 @@ const ActorPage: React.FC = () => {
                 dataIndex: 'description',
                 key: 'description',
                 align: 'center',
+                render: (text, record) => {
+                    const expanded = expandedRows[record.id] || false;
+                    const isLong = text.length > 100;
+
+                    return (
+                        <div style={{ maxWidth: 300, wordWrap: "break-word" }}>
+                            {isLong ? (
+                                <>
+                                    {expanded ? text : `${text.substring(0, 70)}... `}
+                                    <Button type="link" onClick={() => toggleExpand(record.id)}>
+                                        {expanded ? t('admin.common.less') : t('admin.common.more') }
+                                    </Button>
+                                </>
+                            ) : (
+                                text
+                            )}
+                        </div>
+                    );
+                },
             },
             {
                 title: t('admin.dataList.status.title'),

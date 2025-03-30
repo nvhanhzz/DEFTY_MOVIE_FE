@@ -246,8 +246,8 @@ const DirectorPage: React.FC = () => {
                 align: 'center',
                 render: (avatar: string) => (
                     <Image
-                        width={80}  // Điều chỉnh kích thước ảnh nếu cần
-                        height={80}
+                        width={60}  // Điều chỉnh kích thước ảnh nếu cần
+                        height={60}
                         style={{
                             objectFit: 'cover',
                             borderRadius: '4px'
@@ -301,7 +301,7 @@ const DirectorPage: React.FC = () => {
                         <div style={{ maxWidth: 300, wordWrap: "break-word" }}>
                             {isLong ? (
                                 <>
-                                    {expanded ? text : `${text.substring(0, 100)}... `}
+                                    {expanded ? text : `${text.substring(0, 70)}... `}
                                     <Button type="link" onClick={() => toggleExpand(record.id)}>
                                         {expanded ? t('admin.common.less') : t('admin.common.more') }
                                     </Button>

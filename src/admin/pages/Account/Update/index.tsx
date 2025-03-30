@@ -17,6 +17,7 @@ import {useAdminSelector} from "../../../hooks/useAdminSelector.tsx";
 import {AccountRedux, setCurrentAccount} from "../../../redux/actions/accountRedux.tsx";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
+const DEFAULT_AVATAR =  "https://res.cloudinary.com/drsmkfjfo/image/upload/v1743305606/21659bb0-0bde-4c32-ac2c-0ca8d26ec620_avatarDefault.jpg";
 
 const UpdateAccount: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -243,7 +244,7 @@ const UpdateAccount: React.FC = () => {
                         <Form.Item label={t('admin.account.avatar')} className="avatar-wrapper">
                             <AvtEditor
                                 onSave={handleAvatarSave}
-                                initialImage={avatarUrl as string}
+                                initialImage={avatarUrl || DEFAULT_AVATAR}
                             />
                         </Form.Item>
                     </Col>

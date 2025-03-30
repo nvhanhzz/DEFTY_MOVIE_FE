@@ -9,6 +9,7 @@ import CountrySelect from "../../../components/CountrySelect";
 import AvtEditor from "../../../components/AvtEditor";
 import {standardization} from "../../../helpers/Date.tsx";
 
+const DEFAULT_AVATAR =  "https://res.cloudinary.com/drsmkfjfo/image/upload/v1743305606/21659bb0-0bde-4c32-ac2c-0ca8d26ec620_avatarDefault.jpg";
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
 export interface DirectorFromValues {
@@ -28,8 +29,6 @@ const CreateDirector: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const avatarDefault = "/assets/images/default.jpg";
-
 
     const handleCreateDirector = async (values: DirectorFromValues) => {
         console.log(values);
@@ -172,7 +171,7 @@ const CreateDirector: React.FC = () => {
                                 onSave={handleAvatarSave}
                                 initialImage={file
                                     ? URL.createObjectURL(file)
-                                    :  '/assets/images/avatarDefault.jpeg'
+                                    :  DEFAULT_AVATAR
                             }
                             />
                         </Form.Item>

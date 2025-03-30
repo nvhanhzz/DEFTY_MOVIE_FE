@@ -10,6 +10,7 @@ import CountrySelect from "../../../components/CountrySelect";
 import {standardization} from "../../../helpers/Date.tsx";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
+const DEFAULT_AVATAR =  "https://res.cloudinary.com/drsmkfjfo/image/upload/v1743305606/21659bb0-0bde-4c32-ac2c-0ca8d26ec620_avatarDefault.jpg";
 
 export interface ActorFromValues {
     fullName: string;
@@ -165,7 +166,10 @@ const CreateActor: React.FC = () => {
                         <Form.Item label={t('admin.actor.avatar')} className="avatar-wrapper">
                             <AvtEditor
                                 onSave={handleAvatarSave}
-                                initialImage={file ? URL.createObjectURL(file) : undefined}
+                                initialImage={file
+                                    ? URL.createObjectURL(file)
+                                    :  DEFAULT_AVATAR
+                                }
                             />
                         </Form.Item>
                     </Col>
