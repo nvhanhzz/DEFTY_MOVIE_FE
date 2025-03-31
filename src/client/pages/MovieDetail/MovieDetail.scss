@@ -34,13 +34,17 @@
 }
 
 @media (max-width: 992px) {
-  .movie-detail-middle {
-    margin: 0 50px !important;
+  .movie-detail {
+    .movie-detail-middle {
+      margin: 0 50px;
+    }
   }
 }
 
 @media (max-width: 768px) {
-  .movie-detail-middle {
-    margin: 0 24px !important;
+  .movie-detail {
+    .movie-detail-middle {
+      margin: 0 24px;
+    }
   }
 }

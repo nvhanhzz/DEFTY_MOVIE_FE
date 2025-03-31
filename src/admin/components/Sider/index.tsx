@@ -230,7 +230,7 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
             {!collapsed && (
                 <div className="search-bar">
                     <Input.Search
-                        placeholder={"Search ..."}
+                        placeholder={"SearchResult ..."}
                         allowClear
                         onChange={e => setSearchValue(e.target.value)}
                         value={searchValue}
