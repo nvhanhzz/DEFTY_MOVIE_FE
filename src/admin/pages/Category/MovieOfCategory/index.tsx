@@ -332,7 +332,7 @@ const MoviesOfCategory = () => {
                 key: "thumbnail",
                 align: "center",
                 render: (thumbnail: string) => (
-                    <Image style={{ borderRadius: "5px" }} src={thumbnail} width={120} />
+                    <Image style={{ borderRadius: "5px" }} src={thumbnail} width={80} />
                 ),
             },
             {
@@ -361,7 +361,7 @@ const MoviesOfCategory = () => {
                 sorter: (a: Movie, b: Movie) => a.membershipType - b.membershipType,
                 render: (membershipType) => (
                     <Tag color={membershipType === 1 ? 'green' : 'orange'}>
-                        {membershipType === 1 ? 'VIP' : 'Normal'}
+                        {membershipType === 1 ? 'Premium' : 'Normal'}
                     </Tag>
                 ),
             },

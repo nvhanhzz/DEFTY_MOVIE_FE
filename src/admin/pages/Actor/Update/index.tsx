@@ -124,7 +124,7 @@ const UpdateActor: React.FC = () => {
                 className="update-actor-form"
             >
                 <Row gutter={16}>
-                    <Col span={16}>
+                    <Col span={14}>
                         <Form.Item
                             label={t('admin.actor.fullName')}
                             name="fullName"

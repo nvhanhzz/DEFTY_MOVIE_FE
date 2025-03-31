@@ -224,8 +224,8 @@ const UserPage: React.FC = () => {
                 align: 'center',
                 render: (avatar: string) => (
                     <Image
-                        width={80}  // Điều chỉnh kích thước ảnh nếu cần
-                        height={80}
+                        width={60}  // Điều chỉnh kích thước ảnh nếu cần
+                        height={60}
                         style={{
                             objectFit: 'cover',
                             borderRadius: '4px'

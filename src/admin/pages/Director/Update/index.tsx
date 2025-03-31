@@ -130,7 +130,7 @@ const UpdateDirector: React.FC = () => {
                 className="update-director-form"
             >
                 <Row gutter={16}>
-                    <Col span={16}>
+                    <Col span={14}>
                         <Form.Item
                             label={t('admin.director.fullName')}
                             name="fullName"

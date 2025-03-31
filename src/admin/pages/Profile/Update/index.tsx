@@ -54,7 +54,7 @@ const UpdateProfile: React.FC = () => {
 
                 formData.append("address", address);
             } else {
-                message.error("Địa chỉ không hợp lệ!");
+                message.error(t('admin.message.updateError'));
                 return;
             }
         } else {
@@ -73,10 +73,8 @@ const UpdateProfile: React.FC = () => {
             }
             message.success("Profile updated successfully!");
             setIsEditable(false);
-            // Tự động reload trang sau khi cập nhật thành công
-            // window.location.reload();
         } catch (error) {
-            message.error("Failed to update profile. Please try again.");
+            message.error(t('admin.message.updateError'));
         }
     };
 
