@@ -94,7 +94,7 @@ const MovieDetail: React.FC = () => {
             const castsResponse: Cast[] = [];
             if (result.data.directorResponse) {
                 castsResponse.push({
-                    ...result.data.directorResponse,
+                    ...result.data.directorNameResponse,
                     type: 'Director',
                 });
             }

@@ -3,33 +3,13 @@ import "./Carousel.scss";
 import RecommendedBanner from "../RecommendedBanner";
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
-import {message, Spin} from "antd";
-import {getBanners} from "../../../services/bannerService.tsx";
-import {LoadingOutlined} from "@ant-design/icons";
-import {useTranslation} from "react-i18next";
+import {Banner} from "../index.tsx";
 
-export interface Banner {
-    id: number;
-    thumbnail: string;
-    title: string;
-    link: string;
-    contentType: "movie" | "category";
-    position: number;
-    status: number;
-    contentName: string | null;
-    contentSlug: string | null;
-    subBannerResponse: {
-        description: string | null;
-        numberOfChild: number | null;
-        releaseDate: string | null;
-    };
-    bannerItems: [];
+interface CarouselProps {
+    banners: Banner[];
 }
 
-const Carousel: React.FC = () => {
-    const { t } = useTranslation();
-    const [banners, setBanners] = useState<Banner[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+const Carousel: React.FC<CarouselProps> = ({ banners }) => {
     const intervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
     const [direction, setDirection] = useState<"next" | "prev">("next");
     const [indexes, setIndexes] = useState({ prevIndex: -1, currentIndex: 0 });
@@ -51,28 +31,6 @@ const Carousel: React.FC = () => {
     };
 
     useEffect(() => {
-        const fetchBanners = async () => {
-            setIsLoading(true);
-            try {
-                const response = await getBanners();
-                const result = await response.json();
-                if (!response.ok || result.status === 404) return;
-
-                const sortedBanners: Banner[] = result.data.content.sort((a: Banner, b: Banner) => a.position - b.position);
-
-                setBanners(sortedBanners);
-            } catch (e) {
-                console.error(e);
-                message.error(t('client.message.fetchError'));
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchBanners();
-    }, []);
-
-    useEffect(() => {
         if (banners.length <= 1) return;
 
         if (intervalRef.current) clearInterval(intervalRef.current);
@@ -80,14 +38,6 @@ const Carousel: React.FC = () => {
 
         return () => clearInterval(intervalRef.current);
     }, [indexes.currentIndex, banners]);
-
-    if (isLoading) {
-        return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
-                <Spin indicator={<LoadingOutlined spin />} />
-            </div>
-        );
-    }
 
     return (
         <div className="carousel">

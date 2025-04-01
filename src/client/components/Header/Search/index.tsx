@@ -66,13 +66,16 @@ const Search: React.FC = () => {
 
         setIsLoading(true);
         setShowHistory(false)
-        setShowSuggest(true);
         try {
             const response = await searchMovie(key);
             const result = await response.json();
             if (!response.ok || result.status === 404) return;
 
             setMovieTitles(result.data.map((item: { name: string }) => item.name));
+
+            if (result.data.length > 0) {
+                setShowSuggest(true);
+            }
         } catch (e) {
             console.error(e);
             message.error('Error fetching movies');
