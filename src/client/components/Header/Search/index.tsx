@@ -86,7 +86,7 @@ const Search: React.FC = () => {
 
     const handleFocus = () => {
         if (!query.trim()) {
-            setShowHistory(true);
+            setShowHistory(searchHistory.length > 0);
         }
     };
 
