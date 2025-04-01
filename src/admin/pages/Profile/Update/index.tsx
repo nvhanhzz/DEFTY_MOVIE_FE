@@ -35,28 +35,7 @@ const UpdateProfile: React.FC = () => {
         formData.append("dateOfBirth", values.dateOfBirth ? dayjs(values.dateOfBirth).format("YYYY-MM-DD") : "");
 
         if (address) {
-            const addressParts = address.split(" - ");
-            const oldAddressParts = currentAccount.address ? currentAccount.address.split(" - ") : [];
-
-            if (addressParts.length === 3 && oldAddressParts.length === 3) {
-                const [newWard, newDistrict, newProvince] = addressParts;
-                const [oldWard, oldDistrict, oldProvince] = oldAddressParts;
-
-                if (newProvince !== oldProvince && newDistrict === oldDistrict) {
-                    message.error("Bạn phải chọn lại huyện khi thay đổi tỉnh!");
-                    return;
-                }
-
-                if (newDistrict !== oldDistrict && newWard === oldWard) {
-                    message.error("Bạn phải chọn lại xã khi thay đổi huyện!");
-                    return;
-                }
-
-                formData.append("address", address);
-            } else {
-                message.error(t('admin.message.updateError'));
-                return;
-            }
+            formData.append("address", address);
         } else {
             formData.append("address", currentAccount.address || "");
         }
@@ -73,6 +52,7 @@ const UpdateProfile: React.FC = () => {
             }
             message.success("Profile updated successfully!");
             setIsEditable(false);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             message.error(t('admin.message.updateError'));
         }
