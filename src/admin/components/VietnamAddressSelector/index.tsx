@@ -134,14 +134,10 @@ const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
             const districtName = parts[1].trim();
             const provinceName = parts[2].trim();
 
-            console.log("Parsed:", { wardName, districtName, provinceName }); // Debug
-
             // Tìm tỉnh
             const province = provinces.find((p) => p.name === provinceName);
             if (province) {
                 setSelectedProvince(province.code);
-                console.log("Province found:", province); // Debug
-
                 // Tìm huyện
                 fetch(`https://provinces.open-api.vn/api/p/${province.code}?depth=2`)
                     .then((res) => res.json())
@@ -150,9 +146,6 @@ const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
                         if (district) {
                             setDistricts(data.districts);
                             setSelectedDistrict(district.code);
-                            console.log("District found:", district); // Debug
-
-                            // Tìm xã
                             fetch(`https://provinces.open-api.vn/api/d/${district.code}?depth=2`)
                                 .then((res) => res.json())
                                 .then((data) => {
@@ -160,7 +153,6 @@ const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
                                     if (ward) {
                                         setWards(data.wards);
                                         setSelectedWard(ward.code);
-                                        console.log("Ward found:", ward); // Debug
                                     } else {
                                         console.log("Ward not found:", wardName); // Debug
                                     }
