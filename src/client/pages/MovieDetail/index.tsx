@@ -27,11 +27,11 @@ export interface MovieDetailProps {
         slug: string;
     }[];
     director: {
-        fullName: string;
+        name: string;
         slug: string;
     };
     actor: {
-        fullName: string;
+        name: string;
         slug: string;
     }[];
 }
@@ -69,7 +69,7 @@ const MovieDetail: React.FC = () => {
             if (!response.ok || result.status === 404) {
                 return;
             }
-            const eps: Episode[] = result.data.map((ep: Episode) => ({
+            const eps: Episode[] = result.data.content.map((ep: Episode) => ({
                 ...ep,
                 movieSlug: slug as string,
                 movieTitle: movie?.title

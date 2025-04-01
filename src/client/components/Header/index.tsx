@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import './Header.scss';
-import { CiSearch } from "react-icons/ci";
 import { RiHistoryFill } from "react-icons/ri";
 import { MdLanguage } from "react-icons/md";
 import { FiUser } from "react-icons/fi";
@@ -9,6 +8,7 @@ import {Link, useLocation} from "react-router-dom";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { IoMenu } from "react-icons/io5";
 import Dropdown from "../Dropdown";
+import Search from "./Search";
 
 const PREFIX_URL_PROFILE: string = import.meta.env.VITE_PREFIX_URL_PROFILE as string;
 const PREFIX_URL_ALBUM: string = import.meta.env.VITE_PREFIX_URL_ALBUM as string;
@@ -57,10 +57,7 @@ const AppHeader: React.FC = () => {
                         </Dropdown>
                     </div>
                     <div className="header__right">
-                        <div className="header__right--search">
-                            <input type="text" placeholder="search" />
-                            <CiSearch />
-                        </div>
+                        <Search />
                         <div className="header__right--information">
                             <div className="header__right--information--item">
                                 <RiHistoryFill/>

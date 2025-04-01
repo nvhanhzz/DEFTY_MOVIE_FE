@@ -85,7 +85,7 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                             <RiVipCrown2Fill className="vip-button-icon" /> First month only đ23,000
                         </div>
                         {director && (
-                            <p className="movie-cast">Director: <Link to={`/${PREFIX_URL_DIRECTOR}/${director.slug}`} className="movie-cast-content">{director.fullName}</Link></p>
+                            <p className="movie-cast">Director: <Link to={`/${PREFIX_URL_DIRECTOR}/${director.slug}`} className="movie-cast-content">{director.name}</Link></p>
                         )}
                         {actor && (
                             <p className="movie-cast">
@@ -93,8 +93,8 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                                 {
                                     actor.map((item, index) => (
                                         index !== actor.length - 1 ?
-                                            <Link to={`/${PREFIX_URL_ACTOR}/${item.slug}`} className="movie-cast-content" key={index}>{item.fullName}, </Link> :
-                                            <Link to={`/${PREFIX_URL_ACTOR}/${item.slug}`} className="movie-cast-content" key={index}>{item.fullName}</Link>
+                                            <Link to={`/${PREFIX_URL_ACTOR}/${item.slug}`} className="movie-cast-content" key={index}>{item.name}, </Link> :
+                                            <Link to={`/${PREFIX_URL_ACTOR}/${item.slug}`} className="movie-cast-content" key={index}>{item.name}</Link>
                                         )
                                     )
                                 }

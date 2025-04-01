@@ -9,10 +9,12 @@ import Booked from "../pages/Profile/Booked";
 import Subtitles from "../pages/Profile/Subtitles";
 import MovieDetail from "../pages/MovieDetail";
 import WatchMovie from "../pages/WatchMovie";
+import SearchResult from "../pages/SearchResult";
 
 const PREFIX_URL_ALBUM: string = import.meta.env.VITE_PREFIX_URL_ALBUM as string;
 const PREFIX_URL_PLAY: string = import.meta.env.VITE_PREFIX_URL_PLAY as string;
 const PREFIX_URL_PROFILE: string = import.meta.env.VITE_PREFIX_URL_PROFILE as string;
+const PREFIX_URL_SEARCH: string = import.meta.env.VITE_PREFIX_URL_SEARCH as string;
 
 const ClientRoutes = () => [
     {
@@ -23,6 +25,8 @@ const ClientRoutes = () => [
             { path: 'test', element: <Test /> },
             { path: `/${PREFIX_URL_ALBUM}/:slug`, element: <MovieDetail /> },
             { path: `/${PREFIX_URL_PLAY}/:slug`, element: <WatchMovie /> },
+            { path: `/${PREFIX_URL_SEARCH}`, element: <SearchResult /> },
+            { path: `*`, element: <Home /> },
             {
                 path: PREFIX_URL_PROFILE,
                 element: <Profile />,
