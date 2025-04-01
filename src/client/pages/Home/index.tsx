@@ -52,7 +52,6 @@ function Home() {
             if (!response.ok || result.status === 404) return;
 
             const sortedBanners: Banner[] = result.data.content.sort((a: Banner, b: Banner) => a.position - b.position);
-            console.log(banners);
 
             setBanners(sortedBanners);
         } catch (e) {

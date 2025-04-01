@@ -60,12 +60,12 @@ const Search: React.FC = () => {
 
         if (!key.trim()) {
             setShowSuggest(false);
-            setShowHistory(true);
+            setShowHistory(searchHistory.length > 0);
             return;
         }
 
         setIsLoading(true);
-        setShowHistory(false)
+        setShowHistory(false);
         try {
             const response = await searchMovie(key);
             const result = await response.json();
