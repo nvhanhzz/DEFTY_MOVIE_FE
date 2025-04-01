@@ -179,6 +179,7 @@
             "month": "Tháng",
             "price": "Giá",
             "chooseDuration": "-- Chọn thời gian --",
+            "status": "Trạng Thái",
             "select": {
                 "description": "Nhập mô tả",
                 "basePrice": "Base Price",

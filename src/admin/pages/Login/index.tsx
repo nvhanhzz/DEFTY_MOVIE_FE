@@ -18,7 +18,7 @@ const Login: React.FC = () => {
     const onFinish = async (values: { username: string; password: string }): Promise<void> => {
         setLoading(true); // Bắt đầu loading khi đăng nhập
         const response = await postLogin(values);
-        console.log(response);
+        // console.log(response);
 
         const result = await response.json();
         if (!response.ok || result.status !== 200) {

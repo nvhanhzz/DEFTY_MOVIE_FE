@@ -14,6 +14,7 @@ const UpdateProfile: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);
     const [initialFile] = useState<File | null>(null);
     const [isEditable, setIsEditable] = useState(false);
+    const [loading, setLoading] = useState(false);
     const currentAccount = useAdminSelector((state) => state.currentAccount.account);
     const [form] = Form.useForm();
     const [address, setAddress] = useState<string>("");
@@ -26,6 +27,7 @@ const UpdateProfile: React.FC = () => {
     };
 
     const handleSubmit = async (values: AccountFormValues) => {
+        setLoading(true);
         const formData = new FormData();
         formData.append("fullName", values.fullName);
         formData.append("username", values.username);
@@ -182,7 +184,7 @@ const UpdateProfile: React.FC = () => {
                     <Button type="default" onClick={toggleEdit}>
                         {isEditable ? "Disable" : "Edit"}
                     </Button>
-                    <Button type="primary" htmlType="submit" disabled={!isEditable} style={{ marginLeft: "10px" }}>
+                    <Button type="primary" htmlType="submit" loading={loading}  disabled={!isEditable} style={{ marginLeft: "10px" }}>
                         {t("admin.form.update")}
                     </Button>
                 </Form.Item>

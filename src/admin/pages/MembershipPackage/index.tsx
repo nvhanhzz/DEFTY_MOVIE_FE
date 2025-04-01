@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { message, Spin } from 'antd';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import React, {useEffect, useState} from 'react';
+import {message, Spin, Switch} from 'antd';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../templates/Outlet';
+import type {DataListConfig} from '../../templates/DataList';
 import DataListTemplate from '../../templates/DataList';
-import type { DataListConfig } from '../../templates/DataList';
-import { LoadingOutlined } from '@ant-design/icons';
-import {deleteMembershipPacket, getMembershipPackets} from "../../services/membershipPackageService.tsx";
+import {LoadingOutlined} from '@ant-design/icons';
+import {deleteMembershipPacket, getMembershipPackets, switchStatus} from "../../services/membershipPackageService.tsx";
 import SearchFormTemplate from "../../templates/Search";
+import {Role} from "../Role";
 
 export interface MembershipPackage {
     id: string;
@@ -16,6 +17,7 @@ export interface MembershipPackage {
     price: number;
     discount: number;
     membershipType: number;
+    status: number;
 }
 
 const MembershipPacketPage: React.FC = () => {
@@ -135,6 +137,29 @@ const MembershipPacketPage: React.FC = () => {
         }
     };
 
+    const handleSwitchStatus = async (id: string, checked: boolean) => {
+        setIsLoading(true);
+        try {
+            setData(prevData => prevData.map(item =>
+                item.id === id ? { ...item, status: checked ? 1 : 0 } : item
+            ));
+            const response = await switchStatus(id);
+            if (response.status === 200) {
+                message.success(t('admin.message.updateSuccess'));
+            } else {
+                message.error(t('admin.message.updateError'));
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            setData(prevData => prevData.map(item =>
+                item.id === id ? { ...item, status: item.status === 1 ? 0 : 1 } : item
+            ));
+            message.error(t('admin.message.updateError'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const handleSearch = (newFilters: Record<string, any>) => {
         setCurrentPage(1);
         setFilters(newFilters);
@@ -193,6 +218,19 @@ const MembershipPacketPage: React.FC = () => {
                 key: 'description',
                 align: 'center',
                 sorter: (a: MembershipPackage, b: MembershipPackage) => a.description.localeCompare(b.description),
+            },
+            {
+                title: t('admin.membership-packet.status'),
+                dataIndex: 'status',
+                key: 'status',
+                align: 'center',
+                sorter: (a: Role, b: Role) => a.status - b.status,
+                render: (status, record) => (
+                    <Switch
+                        checked={status === 1}
+                        onChange={(checked) => handleSwitchStatus(record.id, checked)}
+                    />
+                ),
             },
         ],
         data: data,

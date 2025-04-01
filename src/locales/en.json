@@ -200,6 +200,7 @@
             "month": "Month",
             "price": "Price",
             "chooseDuration": "-- Choose Duration --",
+            "status": "Status",
             "select": {
                 "title": "Select Membership Packet",
                 "membership-packetName": "Membership Packet",
