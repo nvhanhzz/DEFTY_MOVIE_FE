@@ -43,6 +43,8 @@ const MovieDetail: React.FC = () => {
     const [movie, setMovie] = useState<MovieDetailProps | null>(null);
     const [selectedTab, setSelectedTab] = useState<string>("Episodes");
     const [navContents, setNavContents] = useState<Episode[] | Cast[]>([]);
+    const [episodeOptions, setEpisodeOptions] = useState<string[]>([]);
+    const [selectedOption, setSelectedOption] = useState<number>(0);
 
     const fetchMovieDetail = async () => {
         setIsLoading(true);
@@ -61,26 +63,45 @@ const MovieDetail: React.FC = () => {
         }
     }
 
-    const fetchEpisodes = async () => {
+    const fetchEpisodes = async (page: number) => {
         setIsLoading(true);
         try {
-            const response = await getEpisodesByMovie(slug as string);
+            const maxEpisodesPerGroup = 24;
+
+            const response = await getEpisodesByMovie(slug as string, page, maxEpisodesPerGroup);
             const result = await response.json();
             if (!response.ok || result.status === 404) {
                 return;
             }
+
             const eps: Episode[] = result.data.content.map((ep: Episode) => ({
                 ...ep,
                 movieSlug: slug as string,
                 movieTitle: movie?.title
             }));
             setNavContents(eps);
+
+            const totalEpisodes = result.data.totalElements;
+
+            const episodeOptions = [];
+            for (let i = 0; i < totalEpisodes; i += maxEpisodesPerGroup) {
+                const start = i + 1;
+                const end = Math.min(i + maxEpisodesPerGroup, totalEpisodes);
+                episodeOptions.push(`${start}-${end}`);
+            }
+
+            setEpisodeOptions(episodeOptions);
         } catch (error) {
             console.log(error);
             message.error(t('client.message.fetchError'));
         } finally {
             setIsLoading(false);
         }
+    }
+
+    const handleChooseListEpisodes = async (page: number) => {
+        setSelectedOption(page);
+        fetchEpisodes(page + 1);
     }
 
     const fetchCasts = async () => {
@@ -121,7 +142,7 @@ const MovieDetail: React.FC = () => {
     useEffect(() => {
         switch (selectedTab) {
             case "Episodes":
-                fetchEpisodes();
+                fetchEpisodes(1);
                 break;
             case "Cast":
                 fetchCasts();
@@ -157,7 +178,11 @@ const MovieDetail: React.FC = () => {
                 <hr className="movie-detail-middle-divider" />
                 {
                     selectedTab === "Episodes" && (
-                        <SelectCustom />
+                        <SelectCustom
+                            options={episodeOptions}
+                            selectedIndex={selectedOption}
+                            onSelect={(index: number) => handleChooseListEpisodes(index)}
+                        />
                     )
                 }
             </div>
