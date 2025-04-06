@@ -6,14 +6,17 @@ import "./Search.scss";
 import { message } from "antd";
 import { searchMovie } from "../../../services/movieService.tsx";
 import { deleteCookie, getCookie, setCookie } from '../../../utils/cookie.tsx';
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const PREFIX_URL_SEARCH: string = import.meta.env.VITE_PREFIX_URL_SEARCH as string;
 
 const Search: React.FC = () => {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const searchQuery = queryParams.get('query') || "";
     const [movieTitles, setMovieTitles] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [query, setQuery] = useState<string>("");
+    const [query, setQuery] = useState<string>(searchQuery);
     const [searchHistory, setSearchHistory] = useState<string[]>([]);
     const [showHistory, setShowHistory] = useState<boolean>(false);
     const [showSuggest, setShowSuggest] = useState<boolean>(false);

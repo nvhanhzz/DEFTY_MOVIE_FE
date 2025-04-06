@@ -12,7 +12,7 @@ import {DownOutlined} from "@ant-design/icons";
 import {Link, useNavigate} from "react-router-dom";
 
 const PREFIX_URL_CATEGORY = import.meta.env.VITE_PREFIX_URL_CATEGORY as string;
-const PREFIX_URL_ACTOR = import.meta.env.VITE_PREFIX_URL_ACTOR as string;
+const PREFIX_URL_CAST = import.meta.env.VITE_PREFIX_URL_CAST as string;
 const PREFIX_URL_DIRECTOR = import.meta.env.VITE_PREFIX_URL_DIRECTOR as string;
 const PREFIX_URL_PLAY = import.meta.env.VITE_PREFIX_URL_PLAY as string;
 
@@ -93,8 +93,8 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                                 {
                                     actor.map((item, index) => (
                                         index !== actor.length - 1 ?
-                                            <Link to={`/${PREFIX_URL_ACTOR}/${item.slug}`} className="movie-cast-content" key={index}>{item.name}, </Link> :
-                                            <Link to={`/${PREFIX_URL_ACTOR}/${item.slug}`} className="movie-cast-content" key={index}>{item.name}</Link>
+                                            <Link to={`/${PREFIX_URL_CAST}/${item.slug}`} className="movie-cast-content" key={index}>{item.name}, </Link> :
+                                            <Link to={`/${PREFIX_URL_CAST}/${item.slug}`} className="movie-cast-content" key={index}>{item.name}</Link>
                                         )
                                     )
                                 }

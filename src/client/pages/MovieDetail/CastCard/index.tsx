@@ -4,7 +4,7 @@ import "./CastCard.scss";
 import { FaPlay } from "react-icons/fa";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 
-const PREFIX_URL_ACTOR = import.meta.env.VITE_PREFIX_URL_ACTOR as string;
+const PREFIX_URL_CAST = import.meta.env.VITE_PREFIX_URL_CAST as string;
 const PREFIX_URL_DIRECTOR = import.meta.env.VITE_PREFIX_URL_DIRECTOR as string;
 
 export interface Cast {
@@ -24,7 +24,7 @@ const CastCard: React.FC<Cast> = ({ fullName, avatar, type, slug, movies }) => {
     const handleClickCast = () => {
         switch (type) {
             case 'Actor':
-                navigate(`/${PREFIX_URL_ACTOR}/${slug}`);
+                navigate(`/${PREFIX_URL_CAST}/${slug}`);
                 break;
             case 'Director':
                 navigate(`/${PREFIX_URL_DIRECTOR}/${slug}`);
