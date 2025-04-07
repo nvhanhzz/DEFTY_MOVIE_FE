@@ -1,0 +1,217 @@
+@import "../../../../styles/Variable";
+
+.movie-card {
+  margin-left: 8px;
+  margin-right: 8px;
+  aspect-ratio: 9 / 16;
+  overflow: visible;
+  position: relative;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+
+  .movie-card-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: transparent;
+    will-change: transform;
+
+    .info,
+    .info-hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .info {
+      img {
+        width: 100%;
+        height: 90%;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+
+      .movie-title {
+        margin-top: 10px;
+        color: #fff;
+      }
+    }
+
+    .info-hover {
+      background-color: #111319;
+      opacity: 0;
+      visibility: hidden;
+      color: #fff;
+      border: 0.5px solid #0c0e13;
+      border-radius: 5px;
+      box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+
+      .hover-info {
+        img {
+          width: 100%;
+          height: 150px;
+          object-fit: cover;
+          border-radius: 4px 4px 0 0;
+          margin-bottom: 10px;
+        }
+
+        .movie-card-buttons {
+          position: absolute;
+          right: 10px;
+          top: 110px;
+          display: flex;
+
+          .play-icon, .bookmark-icon {
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            font-size: 13px;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+          }
+
+          .play-icon {
+            margin-right: 10px;
+            color: white;
+            background-color: #04c936;
+
+            &:hover {
+              background-color: #31d65b !important;
+            }
+          }
+
+          .bookmark-icon {
+            background-color: rgb(255, 255, 255);
+            color: rgb(55, 54, 54);
+
+            &:hover {
+              background-color: #c1baba !important;
+            }
+          }
+        }
+
+        .info-container {
+          padding: 0 0 0 10px;
+
+          .movie-title-hover {
+            font-size: 22px;
+            margin: 0;
+            display: inline-block;
+
+            &:hover {
+              color: #00d63b;
+            }
+          }
+
+          .info-details {
+            margin-top: 10px;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            .info-details-break {
+              font-size: 12px;
+              opacity: 0.5;
+            }
+
+            .rating {
+              padding: 0;
+              font-weight: bold;
+              color: #04c936;
+              display: flex;
+              align-items: center;
+            }
+          }
+
+          .movie-card-category {
+            margin: 10px 0;
+
+            .movie-tag {
+              font-size: 12px !important;
+              display: inline-block;
+              margin-right: 4px;
+              padding: 2px 6px;
+              background: rgba(255, 255, 255, 0.08);
+              border-radius: 2px;
+            }
+          }
+
+          .description {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            font-size: 14px;
+            line-height: 20px;
+          }
+
+          .more-info {
+            color: $text_color1_hover;
+            text-decoration: none;
+            font-size: 12px;
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+
+            &:hover {
+              color: #7cff01;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &:hover {
+    z-index: 1001;
+
+    .card-wrapper {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .info {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .info-hover {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.slick-arrow {
+  display: none !important;
+}
+
+@media (max-width: 1600px) {
+  .movie-card {
+    margin-left: 7px;
+    margin-right: 7px;
+  }
+}
+
+@media (max-width: 992px) {
+  .movie-card {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .movie-card {
+    margin-left: 3px;
+    margin-right: 3px;
+  }
+}

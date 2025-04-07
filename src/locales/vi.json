@@ -1,0 +1,538 @@
+{
+    "admin": {
+        "common": {
+            "content": "Nội dung",
+            "system": "Hệ thống",
+            "configurations": "Cấu hình",
+            "more": "Xem thêm",
+            "less": "Xem bớt"
+        },
+        "message": {
+            "deleteConfirm": "Bạn có chắc chắn muốn xóa mục này không?",
+            "deleteSelectedConfirm": "Bạn có chắc chắn muốn xóa các mục đã chọn không?",
+            "createSuccess": "Đã tạo mục thành công!",
+            "createError": "Tạo mục không thành công.",
+            "updateSuccess": "Cập nhật mục thành công!",
+            "updateError": "Cập nhật mục không thành công.",
+            "deleteSuccess": "Đã xóa mục thành công!",
+            "deleteError": "Xóa mục không thành công.",
+            "deleteSelectedSuccess": "Đã xóa các mục đã chọn thành công!",
+            "deleteSelectedError": "Xóa các mục đã chọn không thành công.",
+            "loadingMessage": "Đang tải dữ liệu...",
+            "requiredMessage": "Vui lòng nhập thông tin vào trường này!",
+            "assignPermissionConfirm": "Có",
+            "assignPermissionCancel": "Không",
+            "fetchSuccess": "Lấy dữ liệu thành công!",
+            "fetchError": "Lấy dữ liệu không thành công."
+        },
+        "form": {
+            "reset": "Đặt lại",
+            "clear": "Xóa",
+            "create": "Tạo mới",
+            "update": "Cập nhật",
+            "delete": "Xóa",
+            "search": "Tìm kiếm",
+            "submit": "Gửi",
+            "save": "Lưu",
+            "cancel": "Hủy",
+            "selectAll": "Chọn tất cả",
+            "confirm": "Xác nhận",
+            "selectDate": "Chọn ngày",
+            "startDate": "Ngày bắt đầu",
+            "endDate": "Ngày kết thúc",
+            "selectOption": "Chọn một tùy chọn",
+            "enterValue": "Nhập giá trị",
+            "selectRange": "Chọn khoảng",
+            "selectNationality": "Chọn quốc tịch",
+            "selectCountry": "Chọn quốc gia",
+            "placeholder": {
+                "search": "Nhập từ khóa tìm kiếm",
+                "select": "Vui lòng chọn",
+                "text": "Nhập văn bản tại đây"
+            },
+            "validation": {
+                "requiredField": "Trường này là bắt buộc.",
+                "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ.",
+                "minLength": "Trường này phải có ít nhất {min} ký tự.",
+                "maxLength": "Trường này không được vượt quá {max} ký tự.",
+                "invalidNumber": "Vui lòng nhập một số hợp lệ.",
+                "invalidDate": "Vui lòng nhập một ngày hợp lệ.",
+                "rangeExceeded": "Giá trị vượt ngoài khoảng cho phép."
+            }
+        },
+        "dataList": {
+            "actionColumn": "Hành động",
+            "createNewButton": "Tạo mới",
+            "searchPlaceholder": "Tìm kiếm ...",
+            "deleteSelectedButton": "Xóa các mục đã chọn",
+            "deleteConfirm": "Bạn có chắc chắn muốn xóa mục này không?",
+            "deleteSelectedConfirm": "Xóa",
+            "deleteSelectedCancel": "Hủy",
+            "status": {
+                "title": "Trạng thái",
+                "active": "Hoạt động",
+                "inactive": "Dừng hoạt động",
+                "all": "Tất cả"
+            }
+        },
+        "login": {
+            "title": "Trang quản trị Defty",
+            "buttonName": "Đăng nhập",
+            "usernamePlaceholder": "Tên đăng nhập",
+            "passwordPlaceholder": "Mật khẩu",
+            "usernameRequired": "Vui lòng nhập tên đăng nhập của bạn!",
+            "passwordRequired": "Vui lòng nhập mật khẩu của bạn!",
+            "errorTitle": "Đăng nhập thất bại",
+            "errorMessage": "Tên đăng nhập hoặc mật khẩu không hợp lệ.",
+            "successTitle": "Đăng nhập thành công",
+            "successMessage": "Đăng nhập thành công!"
+        },
+        "logout": {
+            "errorTitle": "Thất bại",
+            "errorMessage": "Đăng xuất không thành công.",
+            "successTitle": "Thành công",
+            "successMessage": "Đăng xuất thành công!"
+        },
+        "dashboard": {
+            "title": "Tổng quan"
+        },
+        "account": {
+            "title": "Tài khoản",
+            "avatar": "Ảnh đại diện",
+            "username": "Tên đăng nhập",
+            "email": "Email",
+            "fullName": "Họ và tên",
+            "phone": "Số điện thoại",
+            "password": "Mật khẩu",
+            "dateOfBirth": "Ngày sinh",
+            "address": "Địa chỉ",
+            "gender": {
+                "title": "Giới tính",
+                "placeholder": "Chọn giới tính",
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            },
+            "role": {
+                "title": "Nhóm quyền",
+                "placeholder": "Chọn nhóm quyền"
+            },
+            "actionColumn": "Hành động",
+            "searchPlaceholder": "Tìm kiếm theo ...",
+            "create": {
+                "title": "Tạo tài khoản quản trị viên"
+            },
+            "update": {
+                "title": "Cập nhật tài khoản"
+            },
+            "validation": {
+                "fullName": "Họ và tên là bắt buộc.",
+                "email": {
+                    "required": "Email là bắt buộc.",
+                    "invalid": "Định dạng email không hợp lệ."
+                },
+                "username": "Tên đăng nhập là bắt buộc.",
+                "phone": "Số điện thoại là bắt buộc.",
+                "password": {
+                    "required": "Mật khẩu là bắt buộc.",
+                    "minLength": "Mật khẩu phải có ít nhất 6 ký tự."
+                },
+                "dateOfBirth": "Ngày sinh là bắt buộc.",
+                "gender": "Giới tính là bắt buộc.",
+                "role": "Vai trò là bắt buộc."
+            }
+        },
+        "role": {
+            "title": "Vai trò",
+            "createNewRoleButton": "Tạo vai trò mới",
+            "deleteSelectedButton": "Xóa các vai trò đã chọn",
+            "roleColumn": "Vai trò",
+            "descriptionColumn": "Mô tả",
+            "actionColumn": "Hành động",
+            "searchPlaceholder": "Tìm kiếm theo tên",
+            "create": {
+                "title": "Tạo vai trò mới",
+                "createRoleButton": "Tạo vai trò",
+                "permissionsLabel": "Gán quyền"
+            },
+            "update": {
+                "title": "Cập nhật vai trò",
+                "updateRoleButton": "Cập nhật vai trò",
+                "assignPermission": "Gán quyền",
+                "confirmUpdateMessage": "Bạn có chắc chắn muốn cập nhật vai trò này không?",
+                "permissions": {
+                    "selectAll": "Chọn tất cả",
+                    "permissionAvailable": "Quyền có sẵn",
+                    "rolePermission": "Quyền của vai trò",
+                    "searchPlaceholder": "Tìm kiếm quyền...",
+                    "assignPermissionCancel": "Hủy",
+                    "assignPermissionConfirm": "Xác Nhận",
+                    "confirmTransferMessage": "Bạn có chắc chắn muốn chuyển quyền này không?"
+                }
+            }
+        },
+        "membership-packet": {
+            "title": "Gói Thành Viên",
+            "nameColumn": "Tên Gói Thành Viên",
+            "descriptionColumn": "Mô Tả",
+            "chooseMembershipPacket": "-- Chọn Gói Thành Viên --",
+            "month": "Tháng",
+            "price": "Giá",
+            "chooseDuration": "-- Chọn thời gian --",
+            "status": "Trạng Thái",
+            "select": {
+                "description": "Nhập mô tả",
+                "basePrice": "Base Price",
+                "selectMembershipPacketButton": "Chọn Gói Thành Viên",
+                "selectDuration": "Chọn thời gian"
+            },
+            "create": {
+                "title": "Tạo Gói Thành Viên",
+                "membership-packetName": "Tên Gói Thành Viên",
+                "price": "Giá",
+                "discount": "Chiết Khấu",
+                "description": "Mô Tả",
+                "basePrice": "Giá Cơ Bản",
+                "duration": "Thời Gian",
+                "createMembershipPacketButton": "Tạo Gói Thành Viên",
+                "selectDuration": "Chọn thời gian"
+            },
+            "update": {
+                "title": "Cập Nhật Gói Thành Viên",
+                "membership-packetName": "Tên Gói Thành Viên",
+                "price": "Giá",
+                "discount": "Chiết Khấu",
+                "description": "Mô Tả",
+                "duration": "Thời Gian",
+                "updateMembershipPacketButton": "Cập Nhật Gói Thành Viên"
+            }
+        },
+
+        "permission": {
+            "title": "Quyền",
+            "createNewPermissionButton": "Tạo quyền mới",
+            "nameColumn": "Tên quyền",
+            "descriptionColumn": "Mô tả",
+            "actionColumn": "Hành động",
+            "searchPlaceholder": "Tìm kiếm theo tên",
+            "create": {
+                "title": "Tạo quyền mới",
+                "permissionName": "Tên quyền",
+                "description": "Mô tả",
+                "createPermissionButton": "Tạo quyền"
+            },
+            "update": {
+                "title": "Cập nhật quyền",
+                "permissionName": "Tên quyền",
+                "description": "Mô tả",
+                "updatePermissionButton": "Cập nhật quyền"
+            }
+        },
+        "setting": {
+            "title": "Cài đặt",
+            "language": "Ngôn ngữ"
+        },
+        "header": {
+            "profile": "Thông tin cá nhân",
+            "logout": "Đăng xuất"
+        },
+        "article": {
+            "title": "Bài viết",
+            "titleColumn": "Tiêu đề",
+            "thumbnail": "Ảnh chính",
+            "author": "Tác giả",
+            "content": "Nội dung",
+            "create": {
+                "title": "Tạo bài viết"
+            },
+            "update": {
+                "title": "Cập nhật bài viết"
+            }
+        },
+        "director": {
+            "title": "Đạo diễn",
+            "fullName": "Họ và tên",
+            "dateOfBirth": "Ngày sinh",
+            "gender": {
+                "title": "Giới tính",
+                "placeholder": "Chọn giới tính",
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            },
+            "weight": "Cân nặng",
+            "height": "Chiều cao",
+            "nationality": "Quốc tịch",
+            "description": "Mô tả",
+            "avatar": "Ảnh đại diện",
+            "create": {
+                "title": "Tạo đạo diễn",
+                "form": {
+                    "reset": "Đặt lại",
+                    "create": "Tạo"
+                },
+                "validation": {
+                    "fullName": "Vui lòng nhập họ và tên!",
+                    "dateOfBirth": "Vui lòng chọn ngày sinh!",
+                    "gender": "Vui lòng chọn giới tính!",
+                    "weight": "Vui lòng nhập cân nặng!",
+                    "height": "Vui lòng nhập chiều cao!",
+                    "nationality": "Vui lòng nhập quốc tịch!",
+                    "description": "Vui lòng nhập mô tả!"
+                },
+                "message": {
+                    "createError": "Đã xảy ra lỗi khi tạo đạo diễn. Vui lòng thử lại.",
+                    "createSuccess": "Tạo đạo diễn thành công.",
+                    "fetchError": "Lỗi khi lấy dữ liệu. Vui lòng thử lại sau."
+                },
+                "upload": "Tải lên ảnh đại diện"
+            },
+            "update": {
+                "title": "Cập nhật đạo diễn"
+            }
+        },
+        "movie": {
+            "title": "Phim",
+            "episode": "Tập phim",
+            "createNewPermissionButton": "Tạo phim mới",
+            "titleColumn": "Tên phim",
+            "descriptionColumn": "Mô tả",
+            "detail": "Chi tiết",
+            "actionColumn": "Hành động",
+            "description": "Mô tả",
+            "trailer": "Trailer",
+            "nation": "Quốc gia",
+            "director": "Đạo diễn",
+            "status": "Trạng thái",
+            "releaseDate": "Ngày phát hành",
+            "ranking": "Xếp hạng",
+            "membershipType": "Loại thành viên",
+            "thumbnail": "Ảnh phim",
+            "searchPlaceholder": "Tìm kiếm theo tên",
+            "directorPlaceholder": "Chọn đạo diễn",
+            "membershipTypePlaceholder": "Chọn loại thành viên",
+            "addNewOption": "Thêm mới",
+            "addNewMembershipType": "Thêm loại thành viên mới",
+            "newMembershipType": "Loại thành viên mới",
+            "coverImage": "Ảnh bìa",
+            "newMembershipTypePlaceholder": "Nhập loại thành viên mới",
+            "create": {
+                "title": "Tạo phim mới",
+                "titleMovie": "Tiêu đề phim",
+                "coverImage": "Hình bìa"
+            },
+            "placeholder":{
+                "nation": "Chọn quốc gia",
+                "title" : "Nhập tên phim",
+                "trailer": "Nhập trailer",
+                "description": "Nhập mô tả",
+                "ranking": "Nhập xếp hạng"
+            },
+            "update": {
+                "title": "Cập nhật phim",
+                "permissionName": "Tên phim",
+                "description": "Mô tả",
+                "updatePermissionButton": "Cập nhật phim"
+            },
+            "validation": {
+                "titleMovie": "Tiêu đề phim là bắt buộc.",
+                "description": "Mô tả phim là bắt buộc.",
+                "trailer": "Trailer là bắt buộc.",
+                "nation": "Quốc gia là bắt buộc.",
+                "director": "Đạo diễn là bắt buộc.",
+                "releaseDate": {
+                    "required": "Ngày phát hành là bắt buộc.",
+                    "invalid": "Định dạng ngày phát hành không hợp lệ."
+                },
+                "raking": "Xếp hạng là bắt buộc.",
+                "membershipType": "Loại thành viên là bắt buộc.",
+                "thumbnail": "Hình thu nhỏ là bắt buộc.",
+                "coverImage": "Hình bìa là bắt buộc."
+            }
+        },"episode": {
+            "title": "Tập phim",
+            "number": "Số tập",
+            "description": "Mô tả",
+            "thumbnail": "Hình thu nhỏ",
+            "video": "Video",
+            "movie": "Phim",
+            "create": {
+                "title": "Tạo tập phim",
+                "uploadThumbnail": "Tải lên hình thu nhỏ",
+                "uploadVideo": "Tải lên video",
+                "form": {
+                    "reset": "Làm lại",
+                    "create": "Tạo mới"
+                },
+                "validation": {
+                    "number": "Vui lòng nhập số tập!",
+                    "description": "Vui lòng nhập mô tả!",
+                    "thumbnail": "Vui lòng tải lên hình thu nhỏ!",
+                    "link": "Vui lòng tải lên video!",
+                    "movieId": "Vui lòng chọn một bộ phim!"
+                },
+                "message": {
+                    "createError": "Đã xảy ra lỗi khi tạo tập phim. Vui lòng thử lại.",
+                    "createSuccess": "Tập phim được tạo thành công.",
+                    "fetchError": "Lỗi khi tải dữ liệu. Vui lòng thử lại sau."
+                },
+                "upload": "Tải lên hình thu nhỏ"
+            },
+            "update": {
+                "title": "Cập nhật tập phim",
+                "form": {
+                    "reset": "Làm lại",
+                    "update": "Cập nhật"
+                },
+                "validation": {
+                    "number": "Vui lòng nhập số tập!",
+                    "description": "Vui lòng nhập mô tả!",
+                    "thumbnail": "Vui lòng tải lên hình thu nhỏ!",
+                    "link": "Vui lòng tải lên video!",
+                    "movieId": "Vui lòng chọn một bộ phim!"
+                },
+                "message": {
+                    "updateError": "Đã xảy ra lỗi khi cập nhật tập phim. Vui lòng thử lại.",
+                    "updateSuccess": "Tập phim được cập nhật thành công."
+                },
+                "upload": "Tải lên hình thu nhỏ"
+            },
+            "delete": {
+                "title": "Xóa tập phim",
+                "confirm": "Bạn có chắc chắn muốn xóa tập phim này không?",
+                "success": "Tập phim đã được xóa thành công.",
+                "error": "Không thể xóa tập phim."
+            }
+        },
+        "category": {
+            "title": "Danh mục",
+            "name": "Tên",
+            "description": "Mô tả",
+            "numberOfMovies": "Số lượng phim",
+            "detailMovies":"Phim",
+            "moviesOfCategory": "Phim của danh mục",
+            "create": {
+                "title": "Tạo mới"
+            },
+            "update": {
+                "title": "Cập nhật"
+            }
+        },
+        "banner": {
+            "title": "Biểu ngữ",
+            "name": "Tên",
+            "description": "Mô tả",
+            "thumbnail": "Hình thu nhỏ",
+            "link": "Liên kết",
+            "position": "Vị trí",
+            "status": "Trạng thái",
+            "key": "Khóa",
+            "contentName": "Content Name",
+            "contentType": "Content Type",
+            "create": {
+                "title": "Tạo mới"
+            },
+            "update": {
+                "title": "Cập nhật"
+            }
+        },
+
+        "actor": {
+            "title": "Diễn viên",
+            "fullName": "Họ và tên",
+            "gender": {
+                "title": "Giới tính",
+                "placeholder": "Chọn giới tính",
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            },
+            "avatar": "Ảnh",
+            "dateOfBirth": "Ngày sinh",
+            "weight": "Cân nặng",
+            "height": "Chiều cao",
+            "nationality": "Quốc tịch",
+            "description": "Mô tả",
+            "create": {
+                "title": "Tạo mới",
+                "form": {
+                    "reset": "Đặt lại",
+                    "create": "Tạo"
+                },
+                "validation": {
+                    "fullName": "Vui lòng nhập họ và tên!",
+                    "dateOfBirth": "Vui lòng chọn ngày sinh!",
+                    "gender": "Vui lòng chọn giới tính!",
+                    "weight": "Vui lòng nhập cân nặng!",
+                    "height": "Vui lòng nhập chiều cao!",
+                    "nationality": "Vui lòng nhập quốc tịch!",
+                    "description": "Vui lòng nhập mô tả!"
+                },
+                "message": {
+                    "createError": "Đã xảy ra lỗi khi tạo diễn viên. Vui lòng thử lại.",
+                    "createSuccess": "Tạo diễn viên thành công.",
+                    "fetchError": "Lỗi khi lấy dữ liệu. Vui lòng thử lại sau."
+                },
+                "upload": "Tải lên ảnh đại diện"
+            },
+            "update": {
+                "title": "Cập nhật"
+            }
+        },
+        "user": {
+            "title": "Người dùng",
+            "fullName": "Họ và tên",
+            "gender": {
+                "title": "Giới tính",
+                "placeholder": "Chọn giới tính",
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            },
+            "avatar": "Ảnh đại diện",
+            "dateOfBirth": "Ngày sinh",
+            "nationality": "Quốc tịch",
+            "username": "Tên đăng nhập",
+            "phone": "Số điện thoại",
+            "email": "Email",
+            "address": "Địa chỉ",
+            "detail": {
+                "title": "Chi tiết người dùng",
+                "notFound": "không tìm thấy người dùng."
+            }
+        },
+        "homeConfig": {
+            "title": "Thiết lập trang chủ",
+            "contentType": "Kiểu nội dung",
+            "contentName": "Tên nội dung",
+            "position": "Vị trí",
+            "note": "Ghi chú",
+            "create": {
+                "title": "Tạo mới hiển thị"
+            },
+            "update": {
+                "title": "Cập nhật hiển thị"
+            }
+        }
+    },
+    "client": {
+        "message": {
+            "deleteConfirm": "Bạn có chắc chắn muốn xóa mục này không?",
+            "deleteSelectedConfirm": "Bạn có chắc chắn muốn xóa các mục đã chọn không?",
+            "createSuccess": "Đã tạo mục thành công!",
+            "createError": "Tạo mục không thành công.",
+            "updateSuccess": "Cập nhật mục thành công!",
+            "updateError": "Cập nhật mục không thành công.",
+            "deleteSuccess": "Đã xóa mục thành công!",
+            "deleteError": "Xóa mục không thành công.",
+            "deleteSelectedSuccess": "Đã xóa các mục đã chọn thành công!",
+            "deleteSelectedError": "Xóa các mục đã chọn không thành công.",
+            "loadingMessage": "Đang tải dữ liệu...",
+            "requiredMessage": "Vui lòng nhập thông tin vào trường này!",
+            "assignPermissionConfirm": "Có",
+            "assignPermissionCancel": "Không",
+            "fetchSuccess": "Lấy dữ liệu thành công!",
+            "fetchError": "Lấy dữ liệu không thành công."
+        }
+    }
+}

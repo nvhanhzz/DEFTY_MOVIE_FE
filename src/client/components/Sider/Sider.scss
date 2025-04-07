@@ -1,0 +1,23 @@
+@import '../../../styles/Variable.scss';
+
+.app-sider {
+    min-height: 100vh;
+    background-color: $main_dark_color;
+
+    .logo {
+        height: 64px;
+        background: $main_dark_color;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .ant-menu {
+        background-color: transparent;
+
+        .ant-menu-item-selected {
+            background-color: $main_dark_color_hover;
+            margin: 0;
+            width: 100%;
+            border-radius: 0;
+        }
+    }
+}

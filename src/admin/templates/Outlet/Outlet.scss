@@ -1,0 +1,37 @@
+@import '../../../styles/Variable.scss';
+
+.breadcrumb-container {
+    margin-top: 30px !important;
+
+    .ant-btn-icon-only {
+        color: #1e2134 !important;
+        margin-right: 0 !important;
+    }
+}
+
+.ant-breadcrumb {
+    font-size: 14px;
+
+    .ant-breadcrumb-link a {
+        color: #1e2134;
+        font-weight: 500;
+
+        &:hover {
+            color: #686972;
+        }
+    }
+
+    .ant-breadcrumb-separator {
+        color: #1e2134;
+        font-weight: 500;
+    }
+}
+
+.outlet {
+    margin-top: 20px;
+    background-color: $main_light_color;
+    padding: 10px;
+    border-radius: 1px;
+    //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}

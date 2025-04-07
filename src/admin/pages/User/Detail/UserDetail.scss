@@ -1,0 +1,44 @@
+.user-detail {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); // Two columns
+  gap: 2px;
+
+  &__item {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: left;
+
+    &-label {
+      margin-right: 5px;
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    &--avatar {
+      grid-column: span 2; // Avatar spans across both columns
+      text-align: center;
+    }
+  }
+
+  &__avatar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  &__avatar {
+    border-radius: 50%; // Circular avatar
+    object-fit: cover;
+    border: 2px solid #ddd; // Add a border
+    cursor: pointer; // Add pointer for preview
+  }
+}
+
+.ant-image-mask {
+  background: none !important; // Loại bỏ overlay đen
+}
+
+.ant-image:hover .ant-image-mask {
+  opacity: 0 !important; // Đảm bảo không hiện mask khi hover
+}
