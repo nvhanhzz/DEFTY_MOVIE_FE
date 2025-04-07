@@ -118,7 +118,7 @@ const CreateAccount: React.FC = () => {
                 className="create-account-form"
             >
                 <Row gutter={10}>
-                    <Col span={16}>
+                    <Col span={14}>
                         <Form.Item
                             label={t('admin.account.fullName')}
                             name="fullName"
