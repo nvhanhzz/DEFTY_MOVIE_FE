@@ -39,7 +39,9 @@ export interface MovieDetailProps {
 const MovieDetail: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isMovieDetailLoading, setIsMovieDetailLoading] = useState<boolean>(false);
+    const [isEpisodesLoading, setIsEpisodesLoading] = useState<boolean>(false);
+    const [isCastsLoading, setIsCastsLoading] = useState<boolean>(false);
     const [movie, setMovie] = useState<MovieDetailProps | null>(null);
     const [selectedTab, setSelectedTab] = useState<string>("Episodes");
     const [navContents, setNavContents] = useState<Episode[] | Cast[]>([]);
@@ -47,7 +49,7 @@ const MovieDetail: React.FC = () => {
     const [selectedOption, setSelectedOption] = useState<number>(0);
 
     const fetchMovieDetail = async () => {
-        setIsLoading(true);
+        setIsMovieDetailLoading(true);
         try {
             const response = await getMovieBySlug(slug as string);
             const result = await response.json();
@@ -59,12 +61,12 @@ const MovieDetail: React.FC = () => {
             console.log(error);
             message.error(t('client.message.fetchError'));
         } finally {
-            setIsLoading(false);
+            setIsMovieDetailLoading(false);
         }
     }
 
     const fetchEpisodes = async (page: number) => {
-        setIsLoading(true);
+        setIsEpisodesLoading(true);
         try {
             const maxEpisodesPerGroup = 24;
 
@@ -95,7 +97,7 @@ const MovieDetail: React.FC = () => {
             console.log(error);
             message.error(t('client.message.fetchError'));
         } finally {
-            setIsLoading(false);
+            setIsEpisodesLoading(false);
         }
     }
 
@@ -105,7 +107,7 @@ const MovieDetail: React.FC = () => {
     }
 
     const fetchCasts = async () => {
-        setIsLoading(true);
+        setIsCastsLoading(true);
         try {
             const response = await getCastsByMovie(slug as string);
             const result = await response.json();
@@ -131,7 +133,7 @@ const MovieDetail: React.FC = () => {
             console.log(error);
             message.error(t('client.message.fetchError'));
         } finally {
-            setIsLoading(false);
+            setIsCastsLoading(false);
       }
     }
 
@@ -152,17 +154,17 @@ const MovieDetail: React.FC = () => {
         }
     }, [selectedTab]);
 
-    if (isLoading) {
-        return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
-                <Spin indicator={<LoadingOutlined spin />} />
-            </div>
-        );
-    }
-
     return (
         <div className="movie-detail">
-            <MovieInformation {...movie as MovieDetailProps} />
+            {
+                isMovieDetailLoading ? (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
+                        <Spin indicator={<LoadingOutlined spin />} />
+                    </div>
+                ) : (
+                    <MovieInformation {...movie as MovieDetailProps} />
+                )
+            }
             <div className="movie-detail-middle">
                 <div className="movie-detail-middle-navs">
                     {["Episodes", "Cast", "Collections", "Recommended"].map((tab) => (
@@ -186,8 +188,24 @@ const MovieDetail: React.FC = () => {
                     )
                 }
             </div>
-            {selectedTab === "Episodes" && <ListEpisode episodes={navContents as Episode[]} />}
-            {selectedTab === "Cast" && <ListCast casts={navContents as Cast[]} />}
+            {selectedTab === "Episodes" && (
+                isEpisodesLoading ? (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
+                        <Spin indicator={<LoadingOutlined spin />} />
+                    </div>
+                ) : (
+                    <ListEpisode episodes={navContents as Episode[]} />
+                )
+            )}
+            {selectedTab === "Cast" && (
+                isCastsLoading ? (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
+                        <Spin indicator={<LoadingOutlined spin />} />
+                    </div>
+                ) : (
+                    <ListCast casts={navContents as Cast[]} />
+                )
+            )}
         </div>
     );
 }

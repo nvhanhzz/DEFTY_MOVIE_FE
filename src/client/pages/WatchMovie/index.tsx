@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./WatchMovie.scss";
 import MovieInformation from "./MovieInformation";
 import PlayVideo from "./PlayVideo";
@@ -7,6 +7,26 @@ import Recommended from "./Recommended";
 import Comments from "./Comments";
 
 const WatchMovie: React.FC = () => {
+    const [showEpisodesBottom, setShowEpisodesBottom] = useState<boolean>(false);
+
+    const updateVisibleListEpisode = () => {
+        const width = window.innerWidth;
+        if(width < 1024) {
+            setShowEpisodesBottom(true)
+        } else {
+            setShowEpisodesBottom(false)
+        }
+    };
+
+    useEffect(() => {
+        updateVisibleListEpisode();
+        window.addEventListener('resize', updateVisibleListEpisode);
+
+        return () => {
+            window.removeEventListener('resize', updateVisibleListEpisode);
+        };
+    }, []);
+
     return (
         <div className="watch-movie-wrapper">
             <div className="watch-movie-container">
@@ -15,9 +35,11 @@ const WatchMovie: React.FC = () => {
                         <PlayVideo />
                     </div>
 
-                    <div className="watch-movie-main-block__related_play">
-                        <Related />
-                    </div>
+                    {!showEpisodesBottom && (
+                        <div className="watch-movie-main-block__related_play">
+                            <Related />
+                        </div>
+                    )}
                 </div>
 
                 <div className="watch-movie-bottom-block">
@@ -25,6 +47,12 @@ const WatchMovie: React.FC = () => {
                         <div className="watch-movie-information-container__left">
                             <MovieInformation />
                         </div>
+
+                        {showEpisodesBottom && (
+                            <div className="watch-movie-information-container__middle">
+                                <Related />
+                            </div>
+                        )}
 
                         <div className="watch-movie-information-container__right">
                             Right information (Ex: drama, movies ...)
