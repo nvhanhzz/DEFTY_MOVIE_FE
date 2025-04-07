@@ -10,6 +10,8 @@ import { MovieDetailProps } from "../index.tsx";
 import dayjs from "dayjs";
 import {DownOutlined} from "@ant-design/icons";
 import {Link, useNavigate} from "react-router-dom";
+import { VscMute } from "react-icons/vsc";
+import { VscUnmute } from "react-icons/vsc";
 
 const PREFIX_URL_CATEGORY = import.meta.env.VITE_PREFIX_URL_CATEGORY as string;
 const PREFIX_URL_CAST = import.meta.env.VITE_PREFIX_URL_CAST as string;
@@ -30,11 +32,13 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                                                 slug
                                             }) => {
     const navigate = useNavigate();
-    console.log(trailer);
-
+    const [muted, setMuted] = useState(true)
+    const [trailerEnded, setTrailerEnded] = useState(false);
+    const videoRef = useRef<HTMLVideoElement>(null);
     const [descriptionExpanded, setDescriptionExpanded] = useState(false);
     const [descriptionClamped, setDescriptionClamped] = useState(false);
     const descriptionRef = useRef<HTMLParagraphElement>(null);
+
     useEffect(() => {
         if (descriptionRef.current) {
             const lineHeight = parseInt(window.getComputedStyle(descriptionRef.current).lineHeight, 10);
@@ -124,7 +128,28 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
 
                 <div className="movie-information-thumbnail">
                     <div className="movie-information-thumbnail-inner">
-                        <img src={coverImage} alt="cover-image" />
+                        {!trailerEnded && trailer ? (
+                            <>
+                                <video
+                                    ref={videoRef}
+                                    src={trailer}
+                                    autoPlay
+                                    muted={muted}
+                                    playsInline
+                                    className="movie-trailer-video"
+                                    onEnded={() => setTrailerEnded(true)}
+                                    controls={false}
+                                />
+                                <button
+                                    className="mute-button"
+                                    onClick={() => setMuted(prev => !prev)}
+                                >
+                                    {muted ? <VscMute/> : <VscUnmute/>}
+                                </button>
+                            </>
+                        ) : (
+                            <img src={coverImage} alt="cover-image" />
+                        )}
                         <div className="top-layer"></div>
                         <div className="left-layer"></div>
                         <div className="bottom-layer"></div>
