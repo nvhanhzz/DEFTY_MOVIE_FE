@@ -24,6 +24,7 @@ const CategoryPage: React.FC = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
+    const [showFilter, setShowFilter] = useState(false);
     const [filters, setFilters] = useState<Record<string, string>>({});
     const navigate = useNavigate();
     const location = useLocation();
@@ -248,6 +249,7 @@ const CategoryPage: React.FC = () => {
             pageSize,
             onPaginationChange: onPageChange,
         },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
@@ -257,7 +259,9 @@ const CategoryPage: React.FC = () => {
                 { path: ``, name: t('admin.category.title') },
             ]}
         >
-            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

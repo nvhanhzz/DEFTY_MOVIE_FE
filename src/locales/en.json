@@ -95,7 +95,16 @@
             "successMessage": "Logged out successfully!"
         },
         "dashboard": {
-            "title": "Dashboard"
+            "title": "Dashboard",
+            "totalUsers": "Total Users",
+            "totalMovies": "Total Movies",
+            "totalDirectors": "Total Directors",
+            "totalActors": "Total Actors",
+            "totalEpisodes": "Total Episodes",
+            "totalCategories": "Total Categories",
+            "totalMembershipPackets": "Total Membership Packets",
+            "totalArticles": "Total Articles",
+            "totalBanners": "Total Banners"
         },
         "account": {
             "title": "Accounts",

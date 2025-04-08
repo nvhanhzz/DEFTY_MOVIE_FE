@@ -5,9 +5,17 @@ import handleRequest from "../utils/handleRequest.tsx";
 
 const PREFIX_ROLE = import.meta.env.VITE_PREFIX_ROLE as string;
 
-export const getRoles = (page?: number, pageSize?: number, searchKey?: string, searchValue?: string): Promise<Response> => {
+export const getRoles = async (
+    page?: number,
+    size?: number,
+    filters?: Record<string, string | number>
+): Promise<Response> => {
     const url = `${PREFIX_ROLE}`;
-    const params = { page, pageSize, [searchKey || '']: searchValue };
+    const params = {
+        page,
+        size,
+        ...filters,
+    };
     return handleRequest(getWithParams(url, params));
 };
 

@@ -13,7 +13,7 @@ import {
     TagsOutlined,
     TeamOutlined,
     UserOutlined,
-    HomeOutlined,
+    ClusterOutlined,
     AppstoreAddOutlined,
     ControlOutlined,
     ProductOutlined
@@ -81,7 +81,7 @@ const menuItems: MenuItem[] = [
         linkTo: '',
         subMenu: [
             {
-                icon: <HomeOutlined />,
+                icon: <ClusterOutlined />,
                 label: 'admin.homeConfig.title',
                 linkTo: 'home-config',
             },
@@ -134,9 +134,9 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
     const [selectedKey, setSelectedKey] = useState<string>('1');
     const [filteredItems, setFilteredItems] = useState<any[]>([]);
     const [searchValue, setSearchValue] = useState<string>('');
+    const [openKeys, setOpenKeys] = useState<string[]>([]); // trạng thái để theo dõi các submenu đã mở
 
     useEffect(() => {
-        // Initialize filtered items
         setFilteredItems(generateMenuItems(menuItems));
     }, []);
 
@@ -165,20 +165,40 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
     }, [searchValue, t]);
 
     useEffect(() => {
-        const matchingItem = menuItems.find(item => item.linkTo === location.pathname.split('/')[2]);
-        if (matchingItem) {
-            setSelectedKey(menuItems.indexOf(matchingItem).toString());
+        const currentPath = location.pathname.replace(`${PREFIX_URL_ADMIN}/`, '');
+
+        let foundKey = '';
+
+        menuItems.forEach((item, index) => {
+            if (item.linkTo === currentPath) {
+                foundKey = index.toString();
+            }
+            if (item.subMenu) {
+                item.subMenu.forEach((subItem, subIndex) => {
+                    if (subItem.linkTo === currentPath) {
+                        foundKey = `${index}-${subIndex}`;
+                    }
+                });
+            }
+        });
+
+        if (foundKey !== '') {
+            setSelectedKey(foundKey);
+            // Tự động mở submenu khi chọn một mục con
+            setOpenKeys([foundKey.split('-')[0]]);
         }
     }, [location.pathname]);
 
     const handleItemClick = (path: string, key: string) => {
         navigate(`${PREFIX_URL_ADMIN}/${path}`);
         setSelectedKey(key);
+        setOpenKeys([key.split('-')[0]]); // Mở submenu tương ứng
     };
 
     const handleLogoClick = () => {
         navigate(`${PREFIX_URL_ADMIN}`);
         setSelectedKey('1');
+        setOpenKeys([]);
     };
 
     const generateMenuItems = (menus: MenuItem[]) =>
@@ -242,6 +262,8 @@ const AppSider: React.FC<SiderProps> = ({ collapsed }) => {
                 theme="dark"
                 mode="inline"
                 selectedKeys={[selectedKey]}
+                openKeys={openKeys}  // Thêm openKeys vào đây
+                onOpenChange={(keys) => setOpenKeys(keys as string[])}  // Thay đổi khi mở submenu
                 items={filteredItems}
             />
         </Sider>
