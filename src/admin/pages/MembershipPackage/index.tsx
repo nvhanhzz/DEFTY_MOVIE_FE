@@ -29,6 +29,7 @@ const MembershipPacketPage: React.FC = () => {
     const [filters, setFilters] = useState<Record<string, string>>({});
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
     const navigate = useNavigate();
+    const [showFilter, setShowFilter] = useState(false);
     const location = useLocation();
     const { t } = useTranslation();
 
@@ -237,13 +238,14 @@ const MembershipPacketPage: React.FC = () => {
         rowKey: 'id',
         onCreateNew: handleCreateNewMembershipPacket,
         onUpdate: handleUpdate,
-        onDeleteSelected: handleDeleteSelected, // Sử dụng onDeleteSelected thay vì onDelete
+        onDeleteSelected: handleDeleteSelected,
         pagination: {
             currentPage,
             totalItems,
             pageSize,
             onPaginationChange: onPageChange,
-        }
+        },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
@@ -253,7 +255,9 @@ const MembershipPacketPage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/membership-packets`, name: t('admin.membership-packet.title') }
             ]}
         >
-            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

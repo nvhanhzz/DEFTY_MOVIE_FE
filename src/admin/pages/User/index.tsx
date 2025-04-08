@@ -35,6 +35,7 @@ const UserPage: React.FC = () => {
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
     const navigate = useNavigate();
     const location = useLocation();
+    const [showFilter, setShowFilter] = useState(false);
     const [isUserDetailVisible, setIsUserDetailVisible] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
@@ -294,16 +295,19 @@ const UserPage: React.FC = () => {
             pageSize,
             onPaginationChange: onPageChange,
         },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
         <OutletTemplate
             breadcrumbItems={[
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}`, name: t('admin.dashboard.title') },
-                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.user.title') },
+                { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/users`, name: t('admin.user.title') },
             ]}
         >
-            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

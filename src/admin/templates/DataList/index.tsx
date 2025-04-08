@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Input, Row, Col, Space, Popconfirm, Pagination } from 'antd';
-import { SearchOutlined, PlusOutlined, DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { SearchOutlined, PlusOutlined, FilterOutlined, DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import type { TableColumnsType } from 'antd';
 import type { ColumnType, FilterValue, SorterResult, TableCurrentDataSource, TablePaginationConfig } from 'antd/es/table/interface';
 import { useTranslation } from 'react-i18next';
@@ -24,10 +24,12 @@ export interface DataListConfig<T> {
         pageSize: number;
         onPaginationChange?: (page: number, pageSize: number, keyword?: string) => void;
     };
+    onToggleFilter: () => void;
 }
 
 const DataListTemplate = <T extends { id: string }>( { config }: { config: DataListConfig<T> }): JSX.Element => {
     const [selectedIds, setSelectedIds] = useState<React.Key[]>([]);
+    const [showFilter, setShowFilter] = useState(false);
     const [searchKeyword, setSearchKeyword] = useState<string>(config.search?.keyword || '');
     const { t } = useTranslation();
 
@@ -39,6 +41,13 @@ const DataListTemplate = <T extends { id: string }>( { config }: { config: DataL
         _extra: TableCurrentDataSource<T>
     ) => {
         // Nếu cần, có thể xử lý thêm logic phân trang hoặc sắp xếp tại đây
+    };
+
+    const toggleFilters = () => {
+        setShowFilter(prev => !prev);
+        if (config.onToggleFilter) {
+            config.onToggleFilter(); // Gọi từ props nếu có
+        }
     };
 
     // Xử lý sự kiện tìm kiếm khi nhấn Enter
@@ -78,25 +87,30 @@ const DataListTemplate = <T extends { id: string }>( { config }: { config: DataL
         <>
             <Row justify="space-between" className="data-list__header">
                 <Col>
-                    {config.onCreateNew && (
-                        <Button className="data-list__create-button" type="primary" icon={<PlusOutlined />} onClick={config.onCreateNew}>
-                            {t('admin.dataList.createNewButton')}
-                        </Button>
-                    )}
+                    <Space>
+                        {config.onCreateNew && (
+                            <Button className="data-list__create-button" type="primary" icon={<PlusOutlined />} onClick={config.onCreateNew}>
+                                {t('admin.dataList.createNewButton')}
+                            </Button>
+                        )}
+                        <Button icon={<FilterOutlined />} onClick={toggleFilters} />
+                    </Space>
                 </Col>
                 <Col>
                     {config.search && (
-                        <Input
+                        <Button
                             className="data-list__search-input"
-                            placeholder={t('admin.dataList.searchPlaceholder')}
-                            value={searchKeyword}
-                            onPressEnter={handleSearchEnter}
-                            onChange={(e) => setSearchKeyword(e.target.value)}
                             prefix={<SearchOutlined />}
                         />
                     )}
                 </Col>
             </Row>
+
+            {showFilter && (
+                <Row className="data-list__filters" gutter={[16, 16]} style={{ marginTop: 16 }}>
+
+                </Row>
+            )}
 
             <Table<T>
                 className="data-list__table"

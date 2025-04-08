@@ -32,6 +32,7 @@ const ActorPage: React.FC = () => {
     const [data, setData] = useState<Actor[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [totalItems, setTotalItems] = useState<number>(0);
+    const [showFilter, setShowFilter] = useState(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [filters, setFilters] = useState<Record<string, string>>({});
@@ -344,6 +345,7 @@ const ActorPage: React.FC = () => {
             pageSize,
             onPaginationChange: onPageChange,
         },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
@@ -353,7 +355,9 @@ const ActorPage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.actor.title') },
             ]}
         >
-            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

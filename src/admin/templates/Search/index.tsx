@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Form, DatePicker, Select, Input, Button } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, ClearOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import "./Search.scss";
 import dayjs from "dayjs";
@@ -148,16 +148,15 @@ const SearchFormTemplate: React.FC<SearchFormConfig> = ({ onSearch, fields, init
                 <Button
                     type="default"
                     style={{ marginRight: '8px' }}
+                    icon={<ClearOutlined />}
                     onClick={onClear} // Xóa sạch params và reset form
                 >
-                    {t('admin.form.clear')}
                 </Button>
                 <Button
                     type="primary"
                     icon={<SearchOutlined />}
                     htmlType="submit" // Trực tiếp submit form
                 >
-                    {t('admin.form.search')}
                 </Button>
             </Form.Item>
         </Form>

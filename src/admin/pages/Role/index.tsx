@@ -8,6 +8,7 @@ import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { Permission } from '../Permission';
 import { LoadingOutlined } from '@ant-design/icons';
+import SearchFormTemplate from "../../templates/Search";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -26,15 +27,26 @@ const RolePage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [searchKeyword, setSearchKeyword] = useState<string>('');
+    const [filters, setFilters] = useState<Record<string, string>>({});
+    const [initialValues, setInitialValues] = useState<Record<string, any>>({});
+    const [showFilter, setShowFilter] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
 
-    // Hàm fetch dữ liệu với API
-    const fetchData = async (page: number, pageSize: number, keyword: string) => {
+    const searchFields = [
+        {
+            type: 'input',
+            label: t('admin.role.roleColumn'),
+            name: 'name',
+            placeholder: t('admin.role.roleColumn'),
+        }
+    ];
+
+    const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
         setIsLoading(true);
         try {
-            const response = await getRoles(page, pageSize, 'name', keyword); // Gọi API với từ khóa
+            const response = await getRoles(page, pageSize, filters); // Gọi API với từ khóa
             if (!response.ok) {
                 message.error(t('admin.message.fetchError'));
                 return;
@@ -53,19 +65,32 @@ const RolePage: React.FC = () => {
         }
     };
 
-    // Xử lý URLSearchParams để theo dõi các tham số page, pageSize và keyword
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
         const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
-        const keywordFromUrl = searchParams.get('keyword') || ''; // Lấy từ khóa tìm kiếm từ URL
+        const filtersFromUrl: Record<string, string> = {};
+        const initialSearchValues: Record<string, any> = {};
+
+        searchParams.forEach((value, key) => {
+            if (key !== 'page' && key !== 'size') {
+                filtersFromUrl[key] = value;
+                const field = searchFields.find((f) => f.name === key);
+                if (field) {
+                    initialSearchValues[key] = value;
+                }
+            }
+        });
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
-        setSearchKeyword(keywordFromUrl);
-
-        fetchData(pageFromUrl, pageSizeFromUrl, keywordFromUrl); // Gọi dữ liệu mỗi khi URL thay đổi
+        setFilters(filtersFromUrl);
+        setInitialValues(initialSearchValues);
     }, [location.search]);
+
+    useEffect(() => {
+        fetchData(currentPage, pageSize, filters);
+    }, [currentPage, pageSize, filters]);
 
     // Hàm xử lý xóa các mục
     const handleDeleteSelected = async (ids: React.Key[]) => {
@@ -111,13 +136,19 @@ const RolePage: React.FC = () => {
         }
     };
 
-
-
-    // Hàm xử lý tìm kiếm
-    const handleSearch = (keyword: string) => {
-        setSearchKeyword(keyword);
+    const handleSearch = (newFilters: Record<string, any>) => {
         setCurrentPage(1);
-        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`); // Cập nhật URL với từ khóa tìm kiếm
+        setFilters(newFilters);
+
+        const queryParams = new URLSearchParams();
+        queryParams.append('page', '1');
+        queryParams.append('size', pageSize.toString());
+
+        Object.entries(newFilters).forEach(([key, value]) => {
+            if (value) queryParams.append(key, value.toString());
+        });
+
+        navigate(`?${queryParams.toString()}`);
     };
 
     // Hàm thay đổi trang
@@ -170,16 +201,13 @@ const RolePage: React.FC = () => {
         onCreateNew: () => navigate('create'),
         onUpdate: (id: string) => navigate(`update/${id}`),
         onDeleteSelected: handleDeleteSelected,
-        search: {
-            keyword: searchKeyword,
-            onSearch: handleSearch,
-        },
         pagination: {
-            currentPage: currentPage,
-            totalItems: totalItems,
-            pageSize: pageSize,
+            currentPage,
+            totalItems,
+            pageSize,
             onPaginationChange: onPageChange,
-        }
+        },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
@@ -189,6 +217,9 @@ const RolePage: React.FC = () => {
                 { path: `${PREFIX_URL_ADMIN}/roles`, name: t('admin.role.title') },
             ]}
         >
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

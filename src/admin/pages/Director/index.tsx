@@ -32,6 +32,7 @@ const DirectorPage: React.FC = () => {
     const [filters, setFilters] = useState<Record<string, string>>({});
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
     const [expandedRows, setExpandedRows] = useState({});
+    const [showFilter, setShowFilter] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -337,6 +338,7 @@ const DirectorPage: React.FC = () => {
             pageSize,
             onPaginationChange: onPageChange,
         },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
@@ -346,7 +348,9 @@ const DirectorPage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.director.title') },
             ]}
         >
-            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />
