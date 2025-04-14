@@ -6,14 +6,17 @@ import "./Search.scss";
 import { message } from "antd";
 import { searchMovie } from "../../../services/movieService.tsx";
 import { deleteCookie, getCookie, setCookie } from '../../../utils/cookie.tsx';
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const PREFIX_URL_SEARCH: string = import.meta.env.VITE_PREFIX_URL_SEARCH as string;
 
 const Search: React.FC = () => {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const searchQuery = queryParams.get('query') || "";
     const [movieTitles, setMovieTitles] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [query, setQuery] = useState<string>("");
+    const [query, setQuery] = useState<string>(searchQuery);
     const [searchHistory, setSearchHistory] = useState<string[]>([]);
     const [showHistory, setShowHistory] = useState<boolean>(false);
     const [showSuggest, setShowSuggest] = useState<boolean>(false);
@@ -60,19 +63,22 @@ const Search: React.FC = () => {
 
         if (!key.trim()) {
             setShowSuggest(false);
-            setShowHistory(true);
+            setShowHistory(searchHistory.length > 0);
             return;
         }
 
         setIsLoading(true);
-        setShowHistory(false)
-        setShowSuggest(true);
+        setShowHistory(false);
         try {
             const response = await searchMovie(key);
             const result = await response.json();
             if (!response.ok || result.status === 404) return;
 
             setMovieTitles(result.data.map((item: { name: string }) => item.name));
+
+            if (result.data.length > 0) {
+                setShowSuggest(true);
+            }
         } catch (e) {
             console.error(e);
             message.error('Error fetching movies');
@@ -83,7 +89,7 @@ const Search: React.FC = () => {
 
     const handleFocus = () => {
         if (!query.trim()) {
-            setShowHistory(true);
+            setShowHistory(searchHistory.length > 0);
         }
     };
 

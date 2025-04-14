@@ -32,3 +32,11 @@ export const searchMovie = async (title: string): Promise<Response> => {
     };
     return handleRequest(getWithParams(url, params));
 }
+
+export const getSearchMovieResult = async (title: string): Promise<Response> => {
+    const url = `${PREFIX_CLIENT_ACCESSIBLE + "/" + PREFIX_CLIENT_MOVIE + "/" + PREFIX_CLIENT_MOVIE_SEARCH + "/result"}`;
+    const params = {
+        title
+    };
+    return handleRequest(getWithParams(url, params));
+}

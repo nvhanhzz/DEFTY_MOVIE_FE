@@ -2,28 +2,21 @@ import React, { useState } from "react";
 import { DownOutlined } from "@ant-design/icons";
 import "./SelectCustom.scss";
 
-const options = [
-    "...",
-    "...",
-    "...",
-    "...",
-    "...",
-];
+interface SelectCustomProps {
+    options: string[];
+    selectedIndex: number;
+    onSelect: (index: number) => void;
+}
 
-const SelectCustom: React.FC = () => {
+const SelectCustom: React.FC<SelectCustomProps> = ({ options, selectedIndex, onSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selected, setSelected] = useState(options[0]);
 
     const toggleDropdown = () => setIsOpen(!isOpen);
-    const handleSelect = (option: string) => {
-        setSelected(option);
-        setIsOpen(false);
-    };
 
     return (
         <div className="custom-select">
             <div className="select-header" onClick={toggleDropdown}>
-                <span>{`Episodes ${selected}`}</span>
+                <span>{`Episodes ${options[selectedIndex]}`}</span>
                 <DownOutlined className={`icon ${isOpen ? "open" : ""}`} />
             </div>
             {isOpen && (
@@ -31,8 +24,11 @@ const SelectCustom: React.FC = () => {
                     {options.map((option, index) => (
                         <li
                             key={index}
-                            className={selected === option ? "selected" : ""}
-                            onClick={() => handleSelect(option)}
+                            className={index === selectedIndex ? "selected" : ""}
+                            onClick={() => {
+                                onSelect(index);
+                                setIsOpen(false);
+                            }}
                         >
                             {option}
                         </li>

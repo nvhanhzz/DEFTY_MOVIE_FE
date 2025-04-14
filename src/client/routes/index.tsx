@@ -24,7 +24,7 @@ const ClientRoutes = () => [
             { path: '', element: <Home /> },
             { path: 'test', element: <Test /> },
             { path: `/${PREFIX_URL_ALBUM}/:slug`, element: <MovieDetail /> },
-            { path: `/${PREFIX_URL_PLAY}/:slug`, element: <WatchMovie /> },
+            { path: `/${PREFIX_URL_PLAY}/:movieSlug/:episodeSlug`, element: <WatchMovie /> },
             { path: `/${PREFIX_URL_SEARCH}`, element: <SearchResult /> },
             { path: `*`, element: <Home /> },
             {

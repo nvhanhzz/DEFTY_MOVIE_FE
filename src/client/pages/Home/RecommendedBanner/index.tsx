@@ -3,7 +3,7 @@ import { MdOutlineStar } from "react-icons/md";
 import { FaPlay } from "react-icons/fa";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 import "./RecommendedBanner.scss";
-import {Banner} from "../Carousel";
+import {Banner} from "../../Home";
 import dayjs from "dayjs";
 import {Link, useNavigate} from "react-router-dom";
 
