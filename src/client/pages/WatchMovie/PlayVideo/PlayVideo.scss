@@ -1,0 +1,20 @@
+.play-video-wrapper {
+  background-color: #121212;
+  color: #fff;
+  max-width: 100%;
+  margin-bottom: 30px;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+
+  .video-js {
+    height: 100% !important;
+
+    .vjs-tech {
+      width: 100% !important;
+    }
+
+    video {
+      height: 100%;
+    }
+  }
+}
