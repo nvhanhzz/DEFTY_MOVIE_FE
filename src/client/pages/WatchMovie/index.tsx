@@ -78,7 +78,7 @@ const WatchMovie: React.FC = () => {
                 if (!response.ok || result.status === 404) {
                     return;
                 }
-                setMovieInfo(result);
+                setMovieInfo(result.data);
             } catch (error) {
                 console.log(error);
                 message.error(t('client.message.fetchError'));
@@ -153,7 +153,11 @@ const WatchMovie: React.FC = () => {
                 <div className="watch-movie-bottom-block">
                     <div className="watch-movie-information-container">
                         <div className="watch-movie-information-container__left">
-                            <MovieInformation />
+                            {movieInfo ? (
+                                <MovieInformation movieInfo={movieInfo} />
+                            ) : (
+                                <div>Loading Movie Information...</div>
+                            )}
                         </div>
 
                         {showEpisodesBottom && (

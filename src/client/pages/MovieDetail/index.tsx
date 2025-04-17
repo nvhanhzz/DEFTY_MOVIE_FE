@@ -29,10 +29,12 @@ export interface MovieDetailProps {
     director: {
         name: string;
         slug: string;
+        thumbnail: string;
     };
     actor: {
         name: string;
         slug: string;
+        avatar: string;
     }[];
 }
 

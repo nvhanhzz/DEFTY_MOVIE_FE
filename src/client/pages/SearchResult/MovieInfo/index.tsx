@@ -36,6 +36,8 @@ const MovieInfo: React.FC<MovieProps> = ({ movie, keySearch }) => {
         titleBeforeMatch = movie.title.slice(0, lastIndex);
         matchedPart = movie.title.slice(lastIndex, lastIndex + matchLength);
         titleAfterMatch = movie.title.slice(lastIndex + matchLength);
+    } else {
+        titleAfterMatch = movie.title;
     }
 
     const updateVisibleEpisodes = () => {

@@ -57,6 +57,7 @@ const ShowOn: React.FC<ShowOnInterface> = ({ contentName, contentItems }) => {
         slidesToShow: slidesToShow,
         slidesToScroll: slidesToShow,
         initialSlide: 0,
+        centerMode: false,
         beforeChange: (_current: number, next: number) => {
             if (next === 0) {
                 setIsAtStart(true); // Khi slider chuyển đến slide đầu tiên
@@ -97,7 +98,7 @@ const ShowOn: React.FC<ShowOnInterface> = ({ contentName, contentItems }) => {
                     }
                 </Slider>
 
-                {!isAtEnd && (
+                {!isAtEnd && contentItems.length > slidesToShow && (
                     <div className="custom-slick-next" onClick={next}>
                         <GrNext />
                     </div>
