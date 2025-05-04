@@ -8,6 +8,8 @@ import { LoadingOutlined } from "@ant-design/icons";
 import './Related.scss';
 import {MovieDetailProps} from "../../MovieDetail";
 import {Link} from "react-router-dom"; // Import the SCSS file
+import { CgMenuGridO } from "react-icons/cg";
+import { FcMenu } from "react-icons/fc";
 
 const PREFIX_URL_ALBUM: string = import.meta.env.VITE_PREFIX_URL_ALBUM as string;
 const PREFIX_URL_PLAY: string = import.meta.env.VITE_PREFIX_URL_PLAY as string;
@@ -23,6 +25,7 @@ const Related: React.FC<RelatedProps> = ({ movie, episode }) => {
     const [isListEpisodeLoading, setIsListEpisodeLoading] = useState<boolean>(false);
     const [episodes, setEpisodes] = useState<Episode[]>([]);
     const [selectedOption, setSelectedOption] = useState<number>(0);
+    const [episodesTypeShow, setEpisodesTypeShow] = useState<'number' | 'detail'>('number');
 
     const handleChooseListEpisodes = async (page: number) => {
         setSelectedOption(page);
@@ -76,20 +79,40 @@ const Related: React.FC<RelatedProps> = ({ movie, episode }) => {
                     selectedIndex={selectedOption}
                     onSelect={(index: number) => handleChooseListEpisodes(index)}
                 />
+                <div className="select-container__switch" onClick={() => setEpisodesTypeShow(episodesTypeShow === 'number' ? 'detail' : 'number')}>
+                    {
+                        episodesTypeShow === 'number' ? <FcMenu className="icon icon-list" /> : <CgMenuGridO className="icon icon-grid" />
+                    }
+                </div>
             </div>
-            <div className="episode-list-container">
-                {isListEpisodeLoading ? (
-                    <div className="loading-container">
-                        <Spin indicator={<LoadingOutlined spin />} />
+
+            {isListEpisodeLoading ? (
+                <div className="loading-container">
+                    <Spin indicator={<LoadingOutlined spin />} />
+                </div>
+            ) : (
+                episodesTypeShow === 'number' ?
+                    <div className="episode-list-container">
+                        {episodes.map((ep: Episode) => (
+                            <Link to={`/${PREFIX_URL_PLAY}/${ep.slug}`}
+                                  className={`episode-item ${ep.number === episode.number ? "current-item" : ""}`}
+                                  key={ep.id}>
+                                {ep.number}
+                            </Link>
+                        ))}
                     </div>
-                ) : (
-                    episodes.map((ep: Episode) => (
-                        <Link to={`/${PREFIX_URL_PLAY}/${ep.slug}`} className={`episode-item ${ep.number === episode.number ? "current-item" : ""}`} key={ep.id}>
-                            {ep.number}
-                        </Link>
-                    ))
-                )}
-            </div>
+                 :
+                    <div className="episode__detail-list-container">
+                        {episodes.map((ep: Episode) => (
+                            <Link to={`/${PREFIX_URL_PLAY}/${ep.slug}`}
+                                  className={`episode-item__detail ${ep.number === episode.number ? "current-item__detail" : ""}`}
+                                  key={ep.id}>
+                                <img src={ep.thumbnail} alt={ep.description as string}/>
+                                <span>{movie.title} Episode {ep.number}</span>
+                            </Link>
+                        ))}
+                    </div>
+            )}
         </div>
     );
 };

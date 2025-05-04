@@ -29,10 +29,10 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                                                  director,
                                                  category,
                                                  actor,
-                                                slug
-                                            }) => {
+                                                firstEpisodeSlug
+                                                  }) => {
     const navigate = useNavigate();
-    const [muted, setMuted] = useState(true)
+    const [muted, setMuted] = useState(true);
     const [trailerEnded, setTrailerEnded] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
     const [descriptionExpanded, setDescriptionExpanded] = useState(false);
@@ -119,7 +119,7 @@ const MovieInformation: React.FC<MovieDetailProps> = ({
                         )}
                     </div>
                     <div className="movie-information-buttons">
-                        <div className="button play-button" onClick={() => {navigate(`/${PREFIX_URL_PLAY}/${slug}`)}}><FaPlay /> Play</div>
+                        <div className="button play-button" onClick={() => {navigate(`/${PREFIX_URL_PLAY}/${firstEpisodeSlug}`)}}><FaPlay /> Play</div>
                         <div className="button other-button"><MdOutlineIosShare /><span>Share</span></div>
                         <div className="button other-button"><IoDownloadOutline /><span>APP</span></div>
                         <div className="button other-button"><MdOutlineBookmarkAdd /><span>Watch Later</span></div>
