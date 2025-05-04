@@ -473,3 +473,112 @@
     }
   }
 }
+
+.auth-checked {
+  position: relative; // Needed for popup positioning
+  display: inline-block;
+  cursor: pointer; // Indicate interactivity
+
+  // Element: avatar
+  &__avatar {
+    width: 40px; // Default size
+    height: 40px; // Ensure aspect ratio
+    border-radius: 50%; // Circular avatar
+    object-fit: cover; // Prevent image distortion
+    display: block; // Remove extra space below image
+    border: 2px solid transparent; // Placeholder for potential hover effect
+    transition: border-color 0.2s ease;
+  }
+
+  // Hover state for the container
+  &:hover &__avatar { // Target avatar when hovering container
+    border-color: #00c853; // Example hover border
+  }
+
+  // Element: popup (for logged-in user)
+  &__popup {
+    position: absolute;
+    top: calc(100% + 12px); // Position below avatar + gap
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #282828; // Dark background
+    color: #ccc; // Light gray text
+    padding: 10px; // Reduced padding slightly
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    width: max-content; // Auto width
+    min-width: 150px; // Reduced min-width slightly
+    z-index: 10;
+    text-align: left; // Align text left
+    white-space: nowrap;
+    display: flex; // Use flex for layout
+    flex-direction: column; // Stack items vertically
+    gap: 8px; // Reduced space between buttons
+  }
+
+  // Element: popup-text (REMOVED)
+
+  // Element: popup-button (Common styles for buttons in this popup)
+  &__popup-button {
+    color: white;
+    border: none;
+    padding: 7px 14px; // Adjusted padding
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 13px;
+    transition: background-color 0.2s ease;
+    display: flex; // Align icon and text
+    align-items: center;
+    justify-content: center; // Center content
+    width: 100%; // Full width
+    box-sizing: border-box; // Include padding in width
+
+    // Modifier: --view button
+    &--view {
+      background-color: #0abc54; // Blue background for view
+      &:hover {
+        background-color: #09ae4d; // Darker blue on hover
+      }
+    }
+
+    // Modifier: --logout button
+    &--logout {
+      background-color: #cc2233; // Red background for logout
+      &:hover {
+        background-color: #ac1120; // Darker red on hover
+      }
+    }
+  }
+
+  // Element: popup-arrow
+  &__popup-arrow {
+    position: absolute;
+    top: -8px; // Position above the popup
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #282828; // Arrow color matches popup background
+  }
+
+
+  // Responsive adjustments (example)
+  @media (max-width: 992px) {
+    &__avatar {
+      width: 32px; // Smaller avatar on smaller screens
+      height: 32px;
+    }
+    &__popup {
+      min-width: 130px; // Adjust popup width if needed
+      padding: 8px;
+      gap: 6px;
+    }
+    &__popup-button {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+  }
+}

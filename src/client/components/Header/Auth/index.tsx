@@ -1,9 +1,25 @@
-import React, { useState, useRef, MouseEvent, ChangeEvent, FormEvent } from "react"; // Added ChangeEvent, FormEvent
-import { FiUser, FiX, FiLock, FiSmartphone, FiMail, FiPhone, FiCalendar, FiMapPin, FiArrowLeft, FiEye, FiEyeOff, FiLoader } from "react-icons/fi"; // Added more icons
+import React, {useState, useRef, MouseEvent, ChangeEvent, FormEvent, useEffect} from "react"; // Added ChangeEvent, FormEvent
+import {
+    FiUser,
+    FiX,
+    FiLock,
+    FiSmartphone,
+    FiMail,
+    FiPhone,
+    FiCalendar,
+    FiMapPin,
+    FiArrowLeft,
+    FiEye,
+    FiEyeOff,
+    FiLoader,
+    FiLogOut
+} from "react-icons/fi"; // Added more icons
 import { FaGoogle, FaFacebook, FaRegUserCircle, FaTransgender } from "react-icons/fa"; // Added more icons
 import './Auth.scss';
-import {postLogin, postRegister} from "../../../services/auth.tsx";
+import {getCurrentAccount, postLogin, postLogout, postRegister} from "../../../services/auth.tsx";
 import {message} from "antd"; // Import file SCSS
+import useUserStore, { User } from "../../../store/UserStore.tsx";
+import {useNavigate} from "react-router-dom";
 
 // --- Type Definitions ---
 type ModalView = 'main' | 'passwordLogin' | 'signup'; // Possible views inside the modal
@@ -54,6 +70,7 @@ const PasswordLoginView: React.FC<PasswordLoginViewProps> = ({ onSwitchView, onC
     // Use the defined LoginFormData type
     const [formData, setFormData] = useState<LoginFormData>({ username: '', password: '' });
     const [isLoading, setIsLoading] = useState(false); // Loading state
+    const setUser = useUserStore(state => state.setUser);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if(isLoading) return;
@@ -63,6 +80,18 @@ const PasswordLoginView: React.FC<PasswordLoginViewProps> = ({ onSwitchView, onC
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (isLoading) return;
+
+        const checkAuth = async () => {
+            const response = await getCurrentAccount();
+            const result = await response.json();
+
+            if (!response.ok || !(result.status === 200)) {
+                (message.error || message.success)("Check account fail!", 5);
+                return;
+            }
+
+            setUser(result.data);
+        }
 
         const loginUser = async () => {
             setIsLoading(true); // Start loading indicator
@@ -76,8 +105,11 @@ const PasswordLoginView: React.FC<PasswordLoginViewProps> = ({ onSwitchView, onC
                     return;
                 }
 
+                await checkAuth();
+
                 // Success case
                 message.success("Login success!", 5);
+
                 onClose(); // Close modal on successful signup
 
             } catch (error) {
@@ -396,74 +428,180 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
 // --- Main Auth Component (Manages Hover and Modal Open State) ---
 const Auth: React.FC = () => {
-    const [isHovering, setIsHovering] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state specifically for logout
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isAuthHovering, setIsAuthHovering] = useState<boolean>(false);
+    const [isPopupHovering, setIsPopupHovering] = useState<boolean>(false);
     const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const popupTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const navigate = useNavigate();
 
-    const handleMouseEnter = () => {
-        if (hoverTimeoutRef.current) {
-            clearTimeout(hoverTimeoutRef.current);
-            hoverTimeoutRef.current = null;
-        }
-        setIsHovering(true);
+    const user = useUserStore(state => state.user);
+    const setUserStore = useUserStore(state => state.setUser);
+    const clearUserStore = useUserStore(state => state.clearUser);
+
+    const spinnerStyle: React.CSSProperties = { animation: 'spin 1s linear infinite', display: 'inline-block' };
+    const keyframesStyle = `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
+
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            // ... (checkAuth logic remains the same)
+            try {
+                const response = await getCurrentAccount();
+                if (!response.body) {
+                    console.warn("Check Auth: Empty response body");
+                    clearUserStore(); // Ensure state is cleared if response is bad
+                    return;
+                }
+                const result = await response.json();
+
+                if (response.ok && result.status === 200 && result.data) {
+                    setUserStore(result.data as User);
+                } else {
+                    clearUserStore();
+                    // console.log("Check Auth failed or user not logged in:", result?.message || response.statusText);
+                }
+            } catch (error) {
+                console.error("Error checking auth on mount:", error);
+                clearUserStore();
+            }
+        };
+        checkAuth();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleAuthMouseEnter = () => {
+        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+        if (popupTimeoutRef.current) clearTimeout(popupTimeoutRef.current);
+        setIsAuthHovering(true);
     };
 
-    const handleMouseLeave = () => {
+    const handleAuthMouseLeave = () => {
         hoverTimeoutRef.current = setTimeout(() => {
-            setIsHovering(false);
+            if (!isPopupHovering) setIsAuthHovering(false);
         }, 150);
     };
 
-    // Opens the modal (always starts at 'main' view)
+    const handlePopupMouseEnter = () => {
+        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+        if (popupTimeoutRef.current) clearTimeout(popupTimeoutRef.current);
+        setIsPopupHovering(true);
+    };
+
+    const handlePopupMouseLeave = () => {
+        popupTimeoutRef.current = setTimeout(() => {
+            setIsPopupHovering(false);
+            setIsAuthHovering(false);
+        }, 150);
+    };
+
     const handleOpenModal = () => {
-        setIsHovering(false);
-        if (hoverTimeoutRef.current) {
-            clearTimeout(hoverTimeoutRef.current);
-            hoverTimeoutRef.current = null;
-        }
+        setIsAuthHovering(false);
+        setIsPopupHovering(false);
+        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+        if (popupTimeoutRef.current) clearTimeout(popupTimeoutRef.current);
         setIsModalOpen(true);
     };
 
-    // Closes the modal
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
 
-    const handlePopupMouseEnter = () => {
-        if (hoverTimeoutRef.current) {
-            clearTimeout(hoverTimeoutRef.current);
-            hoverTimeoutRef.current = null;
+    const handleLogout = () => {
+        // Don't hide popup immediately, wait for API call
+        const logoutUser = async () => {
+            setIsLoading(true); // Start loading indicator for logout button
+            try {
+                const response = await postLogout();
+                if (!response.body) throw new Error("Empty logout response");
+                const result = await response.json();
+
+                if (!response.ok || !(result.status === 200)) {
+                    (message.error || message.success)("Logout fail!", 5);
+                    // Keep popup open on failure
+                    return;
+                }
+                // Success case: Clear store, hide popups, show message
+                clearUserStore();
+                setIsAuthHovering(false);
+                setIsPopupHovering(false);
+                if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+                if (popupTimeoutRef.current) clearTimeout(popupTimeoutRef.current);
+                message.success("Logged out successfully!", 5);
+
+            } catch (error) {
+                console.error("Logout Error:", error);
+                (message.error || message.success)(error instanceof Error ? error.message : "An unexpected error occurred.", 5);
+                // Keep popup open on error
+            } finally {
+                setIsLoading(false); // Stop loading indicator
+            }
         }
+        logoutUser();
     };
 
-    const handlePopupMouseLeave = () => {
-        hoverTimeoutRef.current = setTimeout(() => {
-            setIsHovering(false);
-        }, 150);
+    const handleViewInfo = () => {
+        setIsAuthHovering(false);
+        setIsPopupHovering(false);
+        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+        if (popupTimeoutRef.current) clearTimeout(popupTimeoutRef.current);
+        navigate('/profile'); // Navigate to profile page
     };
+
+    if (!user) {
+        return (
+            <div className="auth" onMouseEnter={handleAuthMouseEnter} onMouseLeave={handleAuthMouseLeave}>
+                <div className="auth__trigger" onClick={handleOpenModal}>
+                    <FiUser className="auth__icon" />
+                    <span className="auth__text">Me</span>
+                </div>
+                {(isAuthHovering || isPopupHovering) && (
+                    <div onMouseEnter={handlePopupMouseEnter} onMouseLeave={handlePopupMouseLeave}>
+                        <HoverPopup onLoginClick={handleOpenModal}/>
+                    </div>
+                )}
+                <LoginModal isOpen={isModalOpen} onClose={handleCloseModal} />
+            </div>
+        );
+    }
 
     return (
-        <div
-            className="auth"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-        >
-            <div className="auth__trigger" onClick={handleOpenModal}>
-                <FiUser className="auth__icon" />
-                <span className="auth__text">Me</span>
-            </div>
-
-            {isHovering && (
-                <div
-                    onMouseEnter={handlePopupMouseEnter}
-                    onMouseLeave={handlePopupMouseLeave}
-                >
-                    <HoverPopup onLoginClick={handleOpenModal}/>
+        <div className="auth-checked" onMouseEnter={handleAuthMouseEnter} onMouseLeave={handleAuthMouseLeave}>
+            {/* Inject keyframes for spinner */}
+            <style>{keyframesStyle}</style>
+            <img
+                src={user.avatar || `${user.gender?.toLowerCase() === 'female' ? 'https://i.pinimg.com/736x/1b/14/f5/1b14f5d219943c538a3390d422b58219.jpg' : 'https://i.pinimg.com/736x/d1/8c/29/d18c29bc0636c509280a896b3dd2bccc.jpg'}`}
+                alt="Avatar"
+                className="auth-checked__avatar"
+                onClick={handleViewInfo} // Make avatar clickable to view profile
+                onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = 'https://i.pinimg.com/736x/d1/8c/29/d18c29bc0636c509280a896b3dd2bccc.jpg';
+                }}
+            />
+            {(isAuthHovering || isPopupHovering) && (
+                <div className="auth-checked__popup" onMouseEnter={handlePopupMouseEnter} onMouseLeave={handlePopupMouseLeave}>
+                    {/* View Button - Now navigates */}
+                    <button className="auth-checked__popup-button auth-checked__popup-button--view" onClick={handleViewInfo} disabled={isLoading}>
+                        <FiEye size={14} style={{ marginRight: '5px', verticalAlign: 'middle' }} />
+                        View
+                    </button>
+                    {/* Logout Button - Shows loading state */}
+                    <button className="auth-checked__popup-button auth-checked__popup-button--logout" onClick={handleLogout} disabled={isLoading}>
+                        {isLoading ? (
+                            <FiLoader style={spinnerStyle} size={14} />
+                        ) : (
+                            <>
+                                <FiLogOut size={14} style={{ marginRight: '5px', verticalAlign: 'middle' }} />
+                                Logout
+                            </>
+                        )}
+                    </button>
+                    <div className="auth-checked__popup-arrow"></div>
                 </div>
             )}
-
-            {/* Pass only isOpen and onClose to LoginModal */}
-            <LoginModal isOpen={isModalOpen} onClose={handleCloseModal} />
         </div>
     );
 };

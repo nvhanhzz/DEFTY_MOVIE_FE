@@ -4,6 +4,7 @@ import Footer from "../../components/Footer";
 import "./ClientLayoutDefault.scss";
 
 function ClientLayoutDefault() {
+
     return (
         <div className="defty-movie">
             <Header />
