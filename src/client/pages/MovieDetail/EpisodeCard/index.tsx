@@ -12,16 +12,17 @@ export interface Episode {
     movieId: number,
     status: number,
     movieTitle: string,
-    movieSlug: string
+    movieSlug: string,
+    slug: string
 }
 
 const PREFIX_URL_PLAY: string = import.meta.env.VITE_PREFIX_URL_PLAY as string;
 
-const EpisodeCard: React.FC<Episode> = ({thumbnail, number, movieTitle, movieSlug}) => {
+const EpisodeCard: React.FC<Episode> = ({thumbnail, number, movieTitle, slug}) => {
     const navigate = useNavigate();
 
     return (
-        <div className="episode-card" onClick={() => navigate(`/${PREFIX_URL_PLAY}/${movieSlug}/${number}`)}>
+        <div className="episode-card" onClick={() => navigate(`/${PREFIX_URL_PLAY}/${slug}`)}>
             <img src={thumbnail} alt="thumbnail"/>
             <span className="episode-number">{movieTitle} Episode {number}</span>
             <div className="play-icon">

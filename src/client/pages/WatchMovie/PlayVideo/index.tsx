@@ -43,14 +43,53 @@ const PlayVideo: React.FC<PlayVideoProps> = ({ episode }) => {
                     },
                 ],
             });
-        }
 
-        return () => {
-            if (playerRef.current) {
-                playerRef.current.dispose();
-                playerRef.current = undefined;
-            }
-        };
+            // Thêm event listener cho việc tua video khi nhấn phím mũi tên trái/phải
+            const handleKeyDown = (event: KeyboardEvent) => {
+                if (event.key === "ArrowLeft") {
+                    // Tua lùi 5 giây
+                    if (playerRef.current) {
+                        playerRef.current.currentTime(playerRef.current.currentTime() - 5);
+                    }
+                } else if (event.key === "ArrowRight") {
+                    // Tua tới 5 giây
+                    if (playerRef.current) {
+                        playerRef.current.currentTime(playerRef.current.currentTime() + 5);
+                    }
+                } else if (event.key === " ") {
+                    // Phím Space - Dừng hoặc chơi video
+                    if (playerRef.current) {
+                        if (playerRef.current.paused()) {
+                            playerRef.current.play();
+                        } else {
+                            playerRef.current.pause();
+                        }
+                    }
+                } else if (event.key === "f" || event.key === "F") {
+                    // Phím F - Phóng to hoặc thu nhỏ chế độ fullscreen
+                    if (playerRef.current) {
+                        if (!playerRef.current.isFullscreen()) {
+                            playerRef.current.requestFullscreen();
+                        } else {
+                            playerRef.current.exitFullscreen();
+                        }
+                    }
+                }
+            };
+
+            // Lắng nghe sự kiện phím
+            document.addEventListener("keydown", handleKeyDown);
+
+            // Cleanup event listener khi component bị unmount
+            return () => {
+                document.removeEventListener("keydown", handleKeyDown);
+
+                if (playerRef.current) {
+                    playerRef.current.dispose();
+                    playerRef.current = undefined;
+                }
+            };
+        }
     }, [episode]);
 
     return (
