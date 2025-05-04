@@ -1,10 +1,23 @@
 import React, { useState, useRef, MouseEvent, ChangeEvent, FormEvent } from "react"; // Added ChangeEvent, FormEvent
-import { FiUser, FiX, FiLock, FiSmartphone, FiMail, FiPhone, FiCalendar, FiMapPin, FiArrowLeft, FiEye, FiEyeOff } from "react-icons/fi"; // Added more icons
+import { FiUser, FiX, FiLock, FiSmartphone, FiMail, FiPhone, FiCalendar, FiMapPin, FiArrowLeft, FiEye, FiEyeOff, FiLoader } from "react-icons/fi"; // Added more icons
 import { FaGoogle, FaFacebook, FaRegUserCircle, FaTransgender } from "react-icons/fa"; // Added more icons
-import './Auth.scss'; // Import file SCSS
+import './Auth.scss';
+import {postRegister} from "../../../services/auth.tsx";
+import {message} from "antd"; // Import file SCSS
 
 // --- Type Definitions ---
 type ModalView = 'main' | 'passwordLogin' | 'signup'; // Possible views inside the modal
+
+export type SignUpFormData = {
+    username: string;
+    email: string;
+    fullName: string;
+    phone: string;
+    gender: string;
+    address: string;
+    dateOfBirth: string;
+    password: string;
+}
 
 interface HoverPopupProps {
     onLoginClick: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -104,8 +117,9 @@ interface SignUpViewProps {
     onClose: () => void;
 }
 const SignUpView: React.FC<SignUpViewProps> = ({ onSwitchView, onClose }) => {
+    const [isLoading, setIsLoading] = useState<boolean>(false); // State for loading indicator
     const [showPassword, setShowPassword] = useState(false);
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<SignUpFormData>({
         username: "",
         email: "",
         fullName: "",
@@ -117,64 +131,101 @@ const SignUpView: React.FC<SignUpViewProps> = ({ onSwitchView, onClose }) => {
     });
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        // Prevent changes while loading
+        if (isLoading) return;
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    // --- Keeping your handleSubmit logic exactly as provided ---
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Sign Up Submitted:", formData);
-        // Add actual sign up logic here
-        onClose(); // Close modal on successful signup (example)
+        // Prevent multiple submissions if already loading
+        if (isLoading) return;
+
+        const registerUser = async () => {
+            setIsLoading(true); // Start loading indicator
+            try {
+                const response = await postRegister(formData); // Call your API function
+                const result = await response.json(); // Parse the result
+
+                // Your check based on backend requirements
+                if (!response.ok || !(result.status === 201)) {
+                    // Use error type notification if available
+                    (message.error || message.success)("Register fail!", 5);
+                    // Do not close modal on failure
+                    return;
+                }
+
+                // Success case
+                message.success("Register success!", 5);
+                onClose(); // Close modal on successful signup
+
+            } catch (error) {
+                (message.error || message.success)(error instanceof Error ? error.message : "An unexpected error occurred.", 5);
+            } finally {
+                setIsLoading(false); // Stop loading indicator regardless of outcome
+            }
+        }
+
+        registerUser();
+        // Remove onClose() from here - it's handled within registerUser now
     };
+    // --- End of your handleSubmit logic ---
+
+
+    // Inline style for spinner animation
+    const spinnerStyle: React.CSSProperties = {
+        animation: 'spin 1s linear infinite',
+        display: 'inline-block' // Needed for animation to work correctly
+    };
+    // Define keyframes using a style tag (less ideal, but fulfills inline request)
+    const keyframesStyle = `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
 
     return (
         <div className="auth__modal-view auth__modal-view--signup">
-            <button className="auth__modal-back" onClick={() => onSwitchView('main')}>
+            {/* Add keyframes style tag */}
+            <style>{keyframesStyle}</style>
+            {/* Disable back button when loading */}
+            <button className="auth__modal-back" onClick={() => onSwitchView('main')} disabled={isLoading}>
                 <FiArrowLeft size={20} />
             </button>
             <h2 className="auth__modal-title">Sign Up</h2>
-            <form onSubmit={handleSubmit} className="auth__form">
-                {/* Username */}
+            {/* Add loading class to form for potential extra styling (e.g., opacity) */}
+            <form onSubmit={handleSubmit} className={`auth__form ${isLoading ? 'auth__form--loading' : ''}`}>
+                {/* Disable all form elements when loading */}
                 <div className="auth__form-group">
                     <FaRegUserCircle className="auth__input-icon" />
-                    <input type="text" name="username" placeholder="Username" className="auth__input" value={formData.username} onChange={handleChange} required />
+                    <input type="text" name="username" placeholder="Username" className="auth__input" value={formData.username} onChange={handleChange} required disabled={isLoading} />
                 </div>
-                {/* Email */}
                 <div className="auth__form-group">
                     <FiMail className="auth__input-icon" />
-                    <input type="email" name="email" placeholder="Email" className="auth__input" value={formData.email} onChange={handleChange} required />
+                    <input type="email" name="email" placeholder="Email" className="auth__input" value={formData.email} onChange={handleChange} required disabled={isLoading} />
                 </div>
-                {/* Full Name */}
                 <div className="auth__form-group">
                     <FiUser className="auth__input-icon" />
-                    <input type="text" name="fullName" placeholder="Full Name" className="auth__input" value={formData.fullName} onChange={handleChange} />
+                    <input type="text" name="fullName" placeholder="Full Name" className="auth__input" value={formData.fullName} onChange={handleChange} disabled={isLoading} />
                 </div>
-                {/* Phone */}
                 <div className="auth__form-group">
                     <FiPhone className="auth__input-icon" />
-                    <input type="tel" name="phone" placeholder="Phone Number" className="auth__input" value={formData.phone} onChange={handleChange} />
+                    <input type="tel" name="phone" placeholder="Phone Number" className="auth__input" value={formData.phone} onChange={handleChange} disabled={isLoading} />
                 </div>
-                {/* Gender */}
                 <div className="auth__form-group">
                     <FaTransgender className="auth__input-icon" />
-                    <select name="gender" className="auth__input auth__input--select" value={formData.gender} onChange={handleChange}>
+                    <select name="gender" className="auth__input auth__input--select" value={formData.gender} onChange={handleChange} disabled={isLoading}>
                         <option value="" disabled>Select Gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                         <option value="other">Other</option>
                     </select>
                 </div>
-                {/* Address */}
                 <div className="auth__form-group">
                     <FiMapPin className="auth__input-icon" />
-                    <input type="text" name="address" placeholder="Address" className="auth__input" value={formData.address} onChange={handleChange} />
+                    <input type="text" name="address" placeholder="Address" className="auth__input" value={formData.address} onChange={handleChange} disabled={isLoading} />
                 </div>
-                {/* Date of Birth */}
                 <div className="auth__form-group">
                     <FiCalendar className="auth__input-icon" />
-                    <input type="date" name="dateOfBirth" placeholder="Date of Birth" className="auth__input" value={formData.dateOfBirth} onChange={handleChange} required />
+                    <input type="date" name="dateOfBirth" placeholder="Date of Birth" className="auth__input" value={formData.dateOfBirth} onChange={handleChange} required disabled={isLoading} />
                 </div>
-                {/* Password */}
                 <div className="auth__form-group">
                     <FiLock className="auth__input-icon" />
                     <input
@@ -185,21 +236,29 @@ const SignUpView: React.FC<SignUpViewProps> = ({ onSwitchView, onClose }) => {
                         value={formData.password}
                         onChange={handleChange}
                         required
+                        disabled={isLoading}
                     />
+                    {/* Disable password toggle button */}
                     <button
                         type="button"
                         className="auth__input-icon auth__input-icon--toggle"
                         onClick={() => setShowPassword(!showPassword)}
+                        disabled={isLoading}
                     >
                         {showPassword ? <FiEyeOff /> : <FiEye />}
                     </button>
                 </div>
 
-                <button type="submit" className="auth__button auth__button--primary">Sign Up</button>
+                {/* Disable submit button and show spinner */}
+                <button type="submit" className="auth__button auth__button--primary" disabled={isLoading}>
+                    {/* Conditionally render spinner or text */}
+                    {isLoading ? <FiLoader style={spinnerStyle} size={18}/> : 'Sign Up'}
+                </button>
             </form>
+            {/* Disable footer link */}
             <div className="auth__modal-footer-links">
                 <span>Already have an account?</span>
-                <button className="auth__link" onClick={() => onSwitchView('passwordLogin')}>Log In</button>
+                <button className="auth__link" onClick={() => onSwitchView('passwordLogin')} disabled={isLoading}>Log In</button>
             </div>
         </div>
     );
