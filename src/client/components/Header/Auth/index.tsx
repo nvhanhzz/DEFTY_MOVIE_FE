@@ -2,7 +2,7 @@ import React, { useState, useRef, MouseEvent, ChangeEvent, FormEvent } from "rea
 import { FiUser, FiX, FiLock, FiSmartphone, FiMail, FiPhone, FiCalendar, FiMapPin, FiArrowLeft, FiEye, FiEyeOff, FiLoader } from "react-icons/fi"; // Added more icons
 import { FaGoogle, FaFacebook, FaRegUserCircle, FaTransgender } from "react-icons/fa"; // Added more icons
 import './Auth.scss';
-import {postRegister} from "../../../services/auth.tsx";
+import {postLogin, postRegister} from "../../../services/auth.tsx";
 import {message} from "antd"; // Import file SCSS
 
 // --- Type Definitions ---
@@ -16,6 +16,11 @@ export type SignUpFormData = {
     gender: string;
     address: string;
     dateOfBirth: string;
+    password: string;
+}
+
+export type LoginFormData = {
+    username: string;
     password: string;
 }
 
@@ -46,36 +51,74 @@ interface PasswordLoginViewProps {
 }
 const PasswordLoginView: React.FC<PasswordLoginViewProps> = ({ onSwitchView, onClose }) => {
     const [showPassword, setShowPassword] = useState(false);
-    const [formData, setFormData] = useState({ username: '', password: '' });
+    // Use the defined LoginFormData type
+    const [formData, setFormData] = useState<LoginFormData>({ username: '', password: '' });
+    const [isLoading, setIsLoading] = useState(false); // Loading state
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if(isLoading) return;
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Password Login Submitted:", formData);
-        // Add actual login logic here
-        onClose(); // Close modal on successful login (example)
+        if (isLoading) return;
+
+        const loginUser = async () => {
+            setIsLoading(true); // Start loading indicator
+            try {
+                const response = await postLogin(formData); // Call your API function
+                const result = await response.json(); // Parse the result
+
+                // Your check based on backend requirements
+                if (!response.ok || !(result.status === 200)) {
+                    (message.error || message.success)("Login fail!", 5);
+                    return;
+                }
+
+                // Success case
+                message.success("Login success!", 5);
+                onClose(); // Close modal on successful signup
+
+            } catch (error) {
+                (message.error || message.success)(error instanceof Error ? error.message : "An unexpected error occurred.", 5);
+            } finally {
+                setIsLoading(false); // Stop loading indicator regardless of outcome
+            }
+        }
+
+        loginUser();
     };
+
+    // Inline style for spinner animation
+    const spinnerStyle: React.CSSProperties = {
+        animation: 'spin 1s linear infinite',
+        display: 'inline-block' // Ensure spinner displays correctly
+    };
+    const keyframesStyle = `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
 
     return (
         <div className="auth__modal-view auth__modal-view--password">
-            <button className="auth__modal-back" onClick={() => onSwitchView('main')}>
+            {/* Add keyframes style tag */}
+            <style>{keyframesStyle}</style>
+            {/* Disable back button */}
+            <button className="auth__modal-back" onClick={() => onSwitchView('main')} disabled={isLoading}>
                 <FiArrowLeft size={20} />
             </button>
             <h2 className="auth__modal-title">Log in with Password</h2>
-            <form onSubmit={handleSubmit} className="auth__form">
+            {/* Add loading class to form */}
+            <form onSubmit={handleSubmit} className={`auth__form ${isLoading ? 'auth__form--loading' : ''}`}>
                 <div className="auth__form-group">
                     <FiUser className="auth__input-icon" />
                     <input
                         type="text"
                         name="username"
-                        placeholder="Username"
+                        placeholder="Username or Email" // Keep placeholder generic
                         className="auth__input"
                         value={formData.username}
                         onChange={handleChange}
                         required
+                        disabled={isLoading} // Disable when loading
                     />
                 </div>
                 <div className="auth__form-group">
@@ -88,24 +131,32 @@ const PasswordLoginView: React.FC<PasswordLoginViewProps> = ({ onSwitchView, onC
                         value={formData.password}
                         onChange={handleChange}
                         required
+                        disabled={isLoading} // Disable when loading
                     />
+                    {/* Disable password toggle */}
                     <button
                         type="button"
                         className="auth__input-icon auth__input-icon--toggle"
                         onClick={() => setShowPassword(!showPassword)}
+                        disabled={isLoading}
                     >
                         {showPassword ? <FiEyeOff /> : <FiEye />}
                     </button>
                 </div>
-                <button type="submit" className="auth__button auth__button--primary">Login</button>
+                {/* Disable button and show loader */}
+                <button type="submit" className="auth__button auth__button--primary" disabled={isLoading}>
+                    {isLoading ? <FiLoader style={spinnerStyle} size={18}/> : 'Login'}
+                </button>
             </form>
-            <button className="auth__button auth__button--link" onClick={() => console.log('Forgot password clicked')}>
+            {/* Disable link button */}
+            <button className="auth__button auth__button--link" onClick={() => console.log('Forgot password clicked')} disabled={isLoading}>
                 Forgot password?
             </button>
+            {/* Disable footer links */}
             <div className="auth__modal-footer-links">
-                <button className="auth__link" onClick={() => onSwitchView('signup')}>Sign Up</button>
+                <button className="auth__link" onClick={() => onSwitchView('signup')} disabled={isLoading}>Sign Up</button>
                 <span className="auth__link-separator">|</span>
-                <button className="auth__link" onClick={() => onSwitchView('main')}>Log in with other account</button>
+                <button className="auth__link" onClick={() => onSwitchView('main')} disabled={isLoading}>Log in with other account</button>
             </div>
         </div>
     );

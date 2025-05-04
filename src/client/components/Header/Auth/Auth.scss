@@ -16,7 +16,9 @@
     transition: background-color 0.2s ease; // Smooth background transition
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.1); // Slight highlight on hover
+      .auth__icon, .auth__text {
+        color: #0ad13d;
+      }
     }
   }
 
