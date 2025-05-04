@@ -2,15 +2,14 @@ import React, {useEffect, useState} from 'react';
 import './Header.scss';
 import { RiHistoryFill } from "react-icons/ri";
 import { MdLanguage } from "react-icons/md";
-import { FiUser } from "react-icons/fi";
 import { FcVip } from "react-icons/fc";
 import {Link, useLocation} from "react-router-dom";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { IoMenu } from "react-icons/io5";
 import Dropdown from "../Dropdown";
 import Search from "./Search";
+import Auth from "./Auth";
 
-const PREFIX_URL_PROFILE: string = import.meta.env.VITE_PREFIX_URL_PROFILE as string;
 const PREFIX_URL_ALBUM: string = import.meta.env.VITE_PREFIX_URL_ALBUM as string;
 
 const AppHeader: React.FC = () => {
@@ -68,10 +67,7 @@ const AppHeader: React.FC = () => {
                                 <span>Language</span>
                             </div>
                             <div className="header__right--information--item">
-                                <Link to={PREFIX_URL_PROFILE} className="profile-link">
-                                    <FiUser className="profile-icon"/>
-                                    <span className="profile-text">Me</span>
-                                </Link>
+                                <Auth/>
                             </div>
                         </div>
                         <div className="header__right--app">
