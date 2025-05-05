@@ -76,35 +76,41 @@ const ShowOn: React.FC<ShowOnInterface> = ({ contentName, contentItems }) => {
     };
 
     return (
-        <div className="show-on">
-            <h2 className="show-on__title">{contentName}</h2>
+        <>
+            {
+                contentItems.length > 0 && (
+                    <div className="show-on">
+                        <h2 className="show-on__title">{contentName}</h2>
 
-            <div className="show-on__content">
-                {!isAtStart && (
-                    <div className="custom-slick-prev" onClick={previous}>
-                        <GrPrevious />
-                    </div>
-                )}
-
-                <Slider ref={sliderRef} {...settings}>
-                    {
-                        contentItems.map((item: MovieShowOn, index) => {
-                            return (
-                                <div className="test" key={index}>
-                                    <MovieCard {...item} />
+                        <div className="show-on__content">
+                            {!isAtStart && (
+                                <div className="custom-slick-prev" onClick={previous}>
+                                    <GrPrevious />
                                 </div>
-                            );
-                        })
-                    }
-                </Slider>
+                            )}
 
-                {!isAtEnd && contentItems.length > slidesToShow && (
-                    <div className="custom-slick-next" onClick={next}>
-                        <GrNext />
+                            <Slider ref={sliderRef} {...settings}>
+                                {
+                                    contentItems.map((item: MovieShowOn, index) => {
+                                        return (
+                                            <div className="test" key={index}>
+                                                <MovieCard {...item} />
+                                            </div>
+                                        );
+                                    })
+                                }
+                            </Slider>
+
+                            {!isAtEnd && contentItems.length > slidesToShow && (
+                                <div className="custom-slick-next" onClick={next}>
+                                    <GrNext />
+                                </div>
+                            )}
+                        </div>
                     </div>
-                )}
-            </div>
-        </div>
+                )
+            }
+        </>
     );
 };
 
