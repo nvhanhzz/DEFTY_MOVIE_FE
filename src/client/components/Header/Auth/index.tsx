@@ -571,7 +571,7 @@ const Auth: React.FC = () => {
             {/* Inject keyframes for spinner */}
             <style>{keyframesStyle}</style>
             <img
-                src={user.avatar || `${user.gender?.toLowerCase() === 'female' ? 'https://i.pinimg.com/736x/1b/14/f5/1b14f5d219943c538a3390d422b58219.jpg' : 'https://i.pinimg.com/736x/d1/8c/29/d18c29bc0636c509280a896b3dd2bccc.jpg'}`}
+                src={user.avatar || `${user.gender?.toLowerCase() === 'female' ? '/assets/images/female_avt_default.jpg' : '/assets/images/male_avt_default.jpg'}`}
                 alt="Avatar"
                 className="auth-checked__avatar"
                 onClick={handleViewInfo} // Make avatar clickable to view profile
