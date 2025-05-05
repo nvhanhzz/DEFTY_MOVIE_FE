@@ -1,0 +1,584 @@
+// Block: auth
+// Main component container
+.auth {
+  position: relative; // Needed for absolute positioning of children
+  display: inline-block; // Display as an inline-level block container
+
+  // Element: trigger
+  // Clickable/hoverable area (icon + text)
+  &__trigger {
+    display: flex; // Use flexbox for layout
+    flex-direction: column; // Stack icon and text vertically
+    align-items: center; // Center items horizontally
+    cursor: pointer; // Hand cursor on hover
+    padding: 8px; // Padding around the trigger
+    border-radius: 4px; // Slightly rounded corners
+    transition: background-color 0.2s ease; // Smooth background transition
+
+    &:hover {
+      .auth__icon, .auth__text {
+        color: #0ad13d;
+      }
+    }
+  }
+
+  // Element: icon
+  // User icon within the trigger
+  &__icon {
+    margin-bottom: 4px; // Space below the icon, above the text
+    font-size: 20px; // Icon size
+    color: #e0e0e0; // Icon color
+  }
+
+  // Element: text
+  // "Me" text within the trigger
+  &__text {
+    font-size: 12px; // Slightly smaller text size for vertical layout
+    color: #e0e0e0; // Text color
+    font-weight: 500; // Medium font weight
+    line-height: 1; // Adjust line height for tight spacing
+  }
+
+  // Element: hover-popup
+  // Small popup appearing on hover
+  &__hover-popup {
+    position: absolute; // Position relative to 'auth'
+    top: calc(100% + 10px); // Position below the trigger + 10px gap
+    left: 50%; // Start at the horizontal center of the trigger
+    transform: translateX(-50%); // Shift left by 50% of own width to center
+    background-color: #282828; // Dark background
+    color: #fff; // White text
+    padding: 15px 20px; // Internal padding
+    border-radius: 8px; // Rounded corners
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); // Drop shadow
+    width: max-content; // Width based on content
+    min-width: 250px; // Minimum width
+    z-index: 10; // Ensure it's above other elements
+    text-align: center; // Center text inside
+    white-space: nowrap; // Prevent text wrapping
+
+    // Child Element: text inside hover popup
+    &-text {
+      margin: 0 0 15px 0; // Bottom margin
+      font-size: 14px;
+      color: #ccc; // Light gray text
+    }
+
+    // Child Element: button inside hover popup
+    &-button {
+      background-color: #00c853; // Green background
+      color: white;
+      border: none;
+      padding: 8px 25px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #00a746; // Darker green on hover
+      }
+    }
+
+    // Child Element: arrow for the hover popup
+    &-arrow {
+      position: absolute; // Position relative to hover-popup
+      top: -8px; // Position at the top edge, slightly overlapping
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      // Creates triangle pointing upwards
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 8px solid #282828; // Bottom border creates the arrow shape
+    }
+  }
+
+  // Element: modal-overlay
+  // Full-screen overlay for the modal
+  &__modal-overlay {
+    position: fixed; // Fixed position to cover viewport
+    top: 0;
+    left: 0;
+    right: 0; // Ensures it stretches full width with top/left/bottom
+    bottom: 0; // Ensures it stretches full height with top/left/right
+    width: 100vw; // Explicitly set width to viewport width
+    height: 100vh; // Explicitly set height to viewport height
+    background-color: rgba(0, 0, 0, 0.6); // Semi-transparent black background
+    display: flex; // Use flexbox for centering
+    justify-content: center; // Center horizontally
+    align-items: center; // Center vertically
+    z-index: 1000; // High z-index to be on top
+    padding: 20px; // Padding to prevent content touching edges
+    box-sizing: border-box; // Include padding in width/height calculation
+  }
+
+  // Element: modal-content
+  // The actual modal window
+  &__modal-content {
+    background-color: white; // White background
+    padding: 30px 35px; // Generous internal padding
+    border-radius: 12px; // More rounded corners
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); // Pronounced shadow
+    position: relative; // Needed for absolute positioning of close button
+    width: 100%; // Full width within padding constraints
+    max-width: 420px; // Max width of the modal
+    text-align: center; // Center text elements
+    max-height: 90vh; // Limit height to 90% of viewport height
+    overflow-y: auto; // Add vertical scroll if content exceeds max-height
+    // Hide scrollbar visually but allow scrolling
+    -ms-overflow-style: none;  // IE and Edge
+    scrollbar-width: none;  // Firefox
+    &::-webkit-scrollbar { // Chrome, Safari, Opera
+      display: none;
+    }
+  }
+
+  // Element: modal-close
+  // Close ('X') button for the modal
+  &__modal-close {
+    position: absolute; // Position relative to modal-content
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888; // Gray color
+    font-size: 24px; // Large icon size
+    padding: 5px; // Increase clickable area
+    line-height: 1; // Consistent line height
+    z-index: 1002; // Ensure it's above back button
+
+    &:hover {
+      color: #333; // Darker on hover
+    }
+  }
+
+  // Element: modal-back
+  // Back ('<') button for sub-views
+  &__modal-back {
+    position: absolute; // Position relative to modal-content
+    top: 15px; // Align with close button
+    left: 15px; // Position on the left
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888; // Gray color
+    font-size: 24px; // Large icon size
+    padding: 5px; // Increase clickable area
+    line-height: 1; // Consistent line height
+    z-index: 1001; // Below close button if overlapping
+
+    &:hover {
+      color: #333; // Darker on hover
+    }
+  }
+
+
+  // Element: modal-view
+  // Container for each view within the modal
+  &__modal-view {
+    width: 100%; // Take full width of content area
+
+    // Modifier: main view
+    &--main {
+      // Specific styles for main view if needed
+    }
+    // Modifier: password view
+    &--password {
+      padding-top: 20px; // Add padding to avoid overlap with back/close buttons
+    }
+    // Modifier: signup view
+    &--signup {
+      padding-top: 20px; // Add padding to avoid overlap with back/close buttons
+    }
+  }
+
+
+  // Element: modal-title
+  // Title inside the modal
+  &__modal-title {
+    margin-top: 0;
+    margin-bottom: 20px; // Increased margin
+    font-size: 22px; // Slightly smaller title for sub-views potentially
+    color: #333; // Dark text
+    padding: 0 30px; // Add padding to prevent text hitting back/close buttons
+  }
+
+  // Element: modal-description
+  // Description text inside the modal (mostly for main view)
+  &__modal-description {
+    margin-bottom: 25px;
+    font-size: 14px;
+    color: #666; // Medium gray text
+    line-height: 1.5; // Increased line spacing
+  }
+
+  // Element: login-options
+  // Container for login buttons (main view)
+  &__login-options {
+    margin-bottom: 15px; // Space below the button group
+  }
+
+  // Element: login-option
+  // Individual login buttons (main view)
+  &__login-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 12px; // Space between buttons
+    border: 1px solid #e0e0e0; // Light gray border
+    background-color: #f9f9f9; // Very light gray background
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    text-align: center;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    color: #444; // Dark gray text
+
+    &:hover {
+      background-color: #f0f0f0; // Slightly darker background on hover
+      border-color: #ccc; // Darker border on hover
+    }
+
+    &:last-child {
+      margin-bottom: 0; // Remove margin from the last button
+    }
+  }
+
+  // Element: login-icon
+  // Icons within login buttons
+  &__login-icon {
+    margin-right: 12px; // Space to the right of the icon
+    font-size: 18px;
+    color: #555; // Default icon color
+
+    // Modifier: google icon
+    &--google {
+      color: #DB4437; // Google red
+    }
+
+    // Modifier: facebook icon
+    &--facebook {
+      color: #4267B2; // Facebook blue
+    }
+  }
+
+  // --- Form Styles (for Password Login & Sign Up) ---
+
+  // Element: form
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; // Space between form groups
+    margin-bottom: 20px;
+    text-align: left; // Align labels/inputs left
+  }
+
+  // Element: form-group
+  // Container for label + input + icon
+  &__form-group {
+    position: relative; // For positioning the icon
+    width: 100%;
+  }
+
+  // Element: input
+  // General input styling
+  &__input {
+    width: 100%;
+    padding: 10px 15px 10px 40px; // Left padding for icon
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box; // Ensure padding doesn't add to width
+
+    &:focus {
+      outline: none;
+      border-color: #007bff; // Highlight focus
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+    }
+
+    // Style placeholder text
+    &::placeholder {
+      color: #999;
+    }
+
+    // Modifier for select dropdowns
+    &--select {
+      padding-left: 40px; // Ensure icon space for select too
+      appearance: none; // Remove default arrow
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E"); // Custom arrow
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px;
+      cursor: pointer;
+    }
+    // Specific styles for date input placeholder text (complex)
+    &[type="date"] {
+      color: #333; // Default text color
+      &:invalid {
+        color: #999; // Placeholder color when empty/invalid
+      }
+      // Hide default calendar icon in Chrome/Edge
+      &::-webkit-calendar-picker-indicator {
+        // Make the default indicator clickable but invisible
+        opacity: 0;
+        position: absolute;
+        right: 0px; // Adjust position to cover the input area
+        width: 100%; // Cover the whole input
+        height: 100%;
+        cursor: pointer;
+        z-index: 1; // Ensure it's above the input text but below icon
+      }
+    }
+  }
+
+  // Element: input-icon
+  // Icon inside the input field
+  &__input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888; // Icon color
+    font-size: 16px;
+    pointer-events: none; // Don't interfere with input clicks
+    z-index: 0; // Below date picker overlay
+
+    // Modifier: toggle (for password visibility)
+    &--toggle {
+      left: auto; // Reset left positioning
+      right: 10px; // Position on the right
+      pointer-events: auto; // Make it clickable
+      cursor: pointer;
+      color: #555;
+      background: none;
+      border: none;
+      padding: 0;
+      display: flex; // Ensure icon is centered if needed
+      align-items: center;
+      z-index: 2; // Above date picker overlay
+    }
+  }
+
+
+  // Element: button (General button styles within modal forms)
+  &__button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    border: 1px solid transparent;
+    width: 100%; // Make buttons full-width by default in forms
+    margin-top: 5px; // Add some top margin
+    box-sizing: border-box; // Include padding/border in width
+
+    // Modifier: primary button (Login, Sign Up)
+    &--primary {
+      background-color: #00c853; // Green
+      color: white;
+      font-weight: bold;
+      border-color: #00c853;
+
+      &:hover {
+        background-color: #00a746;
+        border-color: #00a746;
+      }
+    }
+
+    // Modifier: link-style button (Forgot password)
+    &--link {
+      background: none;
+      border: none;
+      color: #007bff; // Blue link color
+      padding: 5px 0; // Minimal padding
+      text-align: center;
+      font-size: 14px;
+      width: auto; // Don't force full width
+      margin-top: 10px; // More space above link buttons
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+
+  // Element: signup-link (Container in main view)
+  &__signup-link {
+    margin-top: 25px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #555;
+  }
+
+  // Element: link (Clickable text links)
+  &__link {
+    color: #007bff; // Blue link color
+    text-decoration: none; // No underline by default
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    background: none; // Reset button styles
+    border: none;
+    padding: 0;
+    margin: 0 5px; // Add spacing around links
+
+    &:hover {
+      text-decoration: underline; // Underline on hover
+    }
+  }
+
+  // Element: modal-footer-links (Container for links at the bottom)
+  &__modal-footer-links {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee; // Separator line
+    font-size: 14px;
+    color: #555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; // Allow wrapping on small screens
+    gap: 5px 10px; // Row and column gap
+  }
+
+  // Element: link-separator (e.g., '|')
+  &__link-separator {
+    color: #ccc;
+    margin: 0 5px;
+  }
+
+
+  // Element: terms-text (Terms text in main view)
+  &__terms-text {
+    margin-top: 20px; // Space above terms
+    font-size: 11px; // Small text size
+    color: #999; // Light gray text
+    line-height: 1.4;
+
+    a {
+      color: #777; // Medium gray link color
+      text-decoration: underline;
+      &:hover {
+        color: #555; // Darker link color on hover
+      }
+    }
+  }
+}
+
+.auth-checked {
+  position: relative; // Needed for popup positioning
+  display: inline-block;
+  cursor: pointer; // Indicate interactivity
+
+  // Element: avatar
+  &__avatar {
+    width: 40px; // Default size
+    height: 40px; // Ensure aspect ratio
+    border-radius: 50%; // Circular avatar
+    object-fit: cover; // Prevent image distortion
+    display: block; // Remove extra space below image
+    border: 2px solid transparent; // Placeholder for potential hover effect
+    transition: border-color 0.2s ease;
+  }
+
+  // Hover state for the container
+  &:hover &__avatar { // Target avatar when hovering container
+    border-color: #00c853; // Example hover border
+  }
+
+  // Element: popup (for logged-in user)
+  &__popup {
+    position: absolute;
+    top: calc(100% + 12px); // Position below avatar + gap
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #282828; // Dark background
+    color: #ccc; // Light gray text
+    padding: 10px; // Reduced padding slightly
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    width: max-content; // Auto width
+    min-width: 150px; // Reduced min-width slightly
+    z-index: 10;
+    text-align: left; // Align text left
+    white-space: nowrap;
+    display: flex; // Use flex for layout
+    flex-direction: column; // Stack items vertically
+    gap: 8px; // Reduced space between buttons
+  }
+
+  // Element: popup-text (REMOVED)
+
+  // Element: popup-button (Common styles for buttons in this popup)
+  &__popup-button {
+    color: white;
+    border: none;
+    padding: 7px 14px; // Adjusted padding
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 13px;
+    transition: background-color 0.2s ease;
+    display: flex; // Align icon and text
+    align-items: center;
+    justify-content: center; // Center content
+    width: 100%; // Full width
+    box-sizing: border-box; // Include padding in width
+
+    // Modifier: --view button
+    &--view {
+      background-color: #0abc54; // Blue background for view
+      &:hover {
+        background-color: #09ae4d; // Darker blue on hover
+      }
+    }
+
+    // Modifier: --logout button
+    &--logout {
+      background-color: #cc2233; // Red background for logout
+      &:hover {
+        background-color: #ac1120; // Darker red on hover
+      }
+    }
+  }
+
+  // Element: popup-arrow
+  &__popup-arrow {
+    position: absolute;
+    top: -8px; // Position above the popup
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #282828; // Arrow color matches popup background
+  }
+
+
+  // Responsive adjustments (example)
+  @media (max-width: 992px) {
+    &__avatar {
+      width: 32px; // Smaller avatar on smaller screens
+      height: 32px;
+    }
+    &__popup {
+      min-width: 130px; // Adjust popup width if needed
+      padding: 8px;
+      gap: 6px;
+    }
+    &__popup-button {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+  }
+}

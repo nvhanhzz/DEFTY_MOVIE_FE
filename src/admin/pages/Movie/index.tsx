@@ -31,6 +31,7 @@ const MoviePage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [filters, setFilters] = useState<Record<string, string>>({});
+    const [showFilter, setShowFilter] = useState(false);
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
 
     const navigate = useNavigate();
@@ -45,10 +46,9 @@ const MoviePage: React.FC = () => {
             placeholder: t('admin.movie.title'),
         },
         {
-            type: 'input',
-            label: t('admin.movie.nation'),
-            name: 'nation',
-            placeholder: t('admin.movie.nation'),
+            type: 'nationality',
+            label: t('admin.user.nationality'),
+            name: 'nationality',
         },
         {
             type: 'input',
@@ -330,7 +330,8 @@ const MoviePage: React.FC = () => {
             totalItems,
             pageSize,
             onPaginationChange: onPageChange,
-        }
+        },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
@@ -340,7 +341,9 @@ const MoviePage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/movies`, name: t('admin.movie.title') }
             ]}
         >
-            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

@@ -3,7 +3,8 @@ import React from 'react';
 const History: React.FC = () => {
     return (
         <>
-            <h1 className="title">Lịch sử xem</h1>
+            {/* Title translated */}
+            <h1 className="title">Watch History</h1>
         </>
     );
 }

@@ -29,6 +29,7 @@ const EpisodePage: React.FC = () => {
     const { id: movieId } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
+    const [showFilter, setShowFilter] = useState(false);
     const [filters, setFilters] = useState<Record<string, string>>({});
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
 
@@ -264,6 +265,7 @@ const EpisodePage: React.FC = () => {
             pageSize,
             onPaginationChange: onPageChange,
         },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
@@ -274,7 +276,9 @@ const EpisodePage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/movies/${movieId}/episode`, name: t('admin.episode.title') },
             ]}
         >
-            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

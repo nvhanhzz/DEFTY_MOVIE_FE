@@ -22,6 +22,7 @@ export interface MovieDetailProps {
     coverImage: string;
     trailer: string;
     slug: string;
+    firstEpisodeSlug: string;
     category: {
         name: string;
         slug: string;
@@ -29,10 +30,12 @@ export interface MovieDetailProps {
     director: {
         name: string;
         slug: string;
+        thumbnail: string;
     };
     actor: {
         name: string;
         slug: string;
+        avatar: string;
     }[];
 }
 

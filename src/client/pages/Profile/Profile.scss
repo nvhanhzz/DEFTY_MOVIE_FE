@@ -1,24 +1,141 @@
+// --- Base Styles (Giữ nguyên hoặc chỉnh sửa) ---
 body {
     background-color: #141414;
     color: #fff;
+    margin: 0;
+    position: relative; // Cần thiết nếu muốn dùng overflow: hidden hiệu quả
 }
 
 .container {
     display: flex;
     flex-direction: row;
+    min-height: calc(100vh - 72px); // Giả sử header cao 72px
+    position: relative; // Để overlay có thể định vị đúng
+    overflow-x: hidden; // Ngăn scroll ngang khi sidebar trượt ra/vào
 }
+
+// --- Sidebar Styles ---
+.sidebar {
+    margin-top: 72px;
+    width: 250px; // Chiều rộng mặc định desktop
+    background-color: #1f1f1f; // Màu nền ví dụ
+    padding-top: 20px; // Khoảng cách ví dụ
+    height: calc(100vh - 72px); // Chiều cao trừ header
+    position: sticky; // Dính lại khi cuộn trên desktop
+    top: 72px; // Dính dưới header desktop
+    flex-shrink: 0; // Không co lại
+    z-index: 998; // Dưới overlay và nút toggle
+    // Thêm transition cho các thuộc tính sẽ thay đổi
+    transition: width 0.3s ease, left 0.3s ease-in-out, transform 0.3s ease-in-out;
+
+    &.is-open {
+        // Class này chỉ có tác dụng trên mobile (xem media query)
+    }
+}
+
+// --- Main Content Styles ---
 .main-content {
+    margin-top: 72px;
     flex: 1;
     background-color: #111319;
-    margin-top: 72px;
+    padding: 25px;
+    box-sizing: border-box;
+    // Thêm transition nếu muốn có hiệu ứng đẩy nội dung (push)
+    // transition: margin-left 0.3s ease-in-out, transform 0.3s ease-in-out;
+
+    .title {
+        font-size: 1.8em;
+        margin-bottom: 25px;
+        text-align: left;
+        color: #FFFFFF;
+        padding-left: 0;
+    }
 }
 
-.main-content .title {
-    font-size: 1.8em;
-    padding: 15px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #FFFFFF;
+// --- Nút Toggle Sidebar ---
+.sidebar-toggle-button {
+    display: none; // Mặc định ẩn
+    position: fixed; // Cố định trên màn hình
+    top: 15px; // Vị trí cách top (điều chỉnh theo header)
+    left: 15px; // Vị trí cách left
+    z-index: 1100; // Nổi trên tất cả
+    background: rgba(51, 51, 51, 0.8); // Nền mờ
+    color: #fff;
+    border: none;
+    padding: 8px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 20px; // Kích thước icon
+    line-height: 1; // Đảm bảo icon căn giữa nút
+    backdrop-filter: blur(2px); // Hiệu ứng blur nền (tuỳ chọn)
+
+    // Hiệu ứng khi nút được nhấn (khi sidebar mở)
+    // &.is-open { /* Có thể thêm style khác nếu muốn */ }
+}
+
+// --- Lớp phủ Overlay ---
+.sidebar-overlay {
+    display: none; // Mặc định ẩn
+    position: fixed; // Phủ toàn màn hình
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); // Màu đen mờ
+    z-index: 999; // Nằm dưới sidebar nhưng trên main content
 }
 
 
+// --- Responsive Adjustments ---
+
+// Medium Screens (optional)
+@media (max-width: 992px) {
+    .sidebar {
+        width: 200px; // Thu nhỏ sidebar
+    }
+    // ... (điều chỉnh padding, font-size cho .main-content nếu cần) ...
+}
+
+// Small Screens (implement toggle)
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed; // Chuyển sang fixed để làm overlay
+        left: -280px; // Bắt đầu ẩn hoàn toàn bên trái (dùng width mobile)
+        top: 0; // Từ đỉnh viewport
+        height: 100vh; // Cao hết viewport
+        width: 280px; // Chiều rộng của sidebar khi mở trên mobile
+        margin-top: 60px; // Khoảng cách cho header mobile (giả sử 60px)
+        box-shadow: 2px 0 8px rgba(0,0,0,0.3); // Đổ bóng tạo hiệu ứng lớp
+        z-index: 1000; // Đảm bảo nổi trên overlay
+        // transition đã có ở trên
+
+        &.is-open {
+            left: 0; // Trượt vào màn hình khi có class is-open
+        }
+    }
+
+    .sidebar-toggle-button {
+        display: flex; // Hiển thị nút toggle
+        align-items: center;
+        justify-content: center;
+    }
+
+    // Hiển thị overlay khi sidebar mở (do React render có điều kiện)
+    .sidebar-overlay {
+        display: block;
+    }
+
+    .main-content {
+        // Nội dung chính không cần di chuyển với kiểu overlay này
+        // Nếu muốn hiệu ứng "push", bạn sẽ thêm:
+        // &.sidebar-is-open { margin-left: 280px; }
+        margin-left: 60px;
+        margin-top: 0;
+        min-height: calc(100vh - 60px); // Chiều cao trừ header mobile (giả sử 60px)
+    }
+
+    .main-content .title {
+        font-size: 1.4em;
+        margin-bottom: 20px;
+    }
+}

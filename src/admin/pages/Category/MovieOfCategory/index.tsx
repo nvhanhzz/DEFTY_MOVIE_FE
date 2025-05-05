@@ -22,6 +22,7 @@ const MoviesOfCategory = () => {
     const { t } = useTranslation();
     const { id } = useParams();
     const navigate = useNavigate();
+    const [showFilter, setShowFilter] = useState(false);
     const [directories, setDirectories] = useState<Director[]>([]);
     const [isMainLoading, setIsMainLoading] = useState<boolean>(false); // Loading for main page
     const [isModalLoading, setIsModalLoading] = useState<boolean>(false); // Loading for modal
@@ -49,7 +50,7 @@ const MoviesOfCategory = () => {
             const content: Role[] = result.data.content;
             const movies = content.map((item: any) => ({ ...item, key: item.id }));
             setData(movies);
-            setTotalItems(result.total || 0);
+            setTotalItems(result.data.totalElements || 0);
         } catch (error) {
             console.error("Error fetching movies in category:", error);
             setData([]);
@@ -279,10 +280,9 @@ const MoviesOfCategory = () => {
             placeholder: t('admin.movie.title'),
         },
         {
-            type: 'input',
-            label: t('admin.movie.nation'),
-            name: 'nation',
-            placeholder: t('admin.movie.nation'),
+            type: 'nationality',
+            label: t('admin.user.nationality'),
+            name: 'nationality',
         },
         {
             type: 'select',
@@ -376,6 +376,7 @@ const MoviesOfCategory = () => {
             pageSize,
             onPaginationChange: onMainPageChange,
         },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
@@ -386,9 +387,9 @@ const MoviesOfCategory = () => {
                 { path: ``, name: t("admin.category.moviesOfCategory") },
             ]}
         >
-            <SearchFormTemplate fields={searchFields}
-                                onSearch={handleSearch}
-                                initialValues={initialValues} />
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isMainLoading ? (
                 <div style={{
                     display: "flex",

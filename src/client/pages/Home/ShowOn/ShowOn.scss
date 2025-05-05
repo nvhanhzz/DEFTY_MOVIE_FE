@@ -1,47 +1,110 @@
 .show-on {
+  // Giữ nguyên padding gốc, nhưng thêm overflow để chứa các phần tử con định vị tuyệt đối nếu cần
   padding: 10px 64px;
   background-color: #111319;
+  overflow: hidden; // Có thể cần thiết nếu muốn giới hạn vị trí của nút bấm
 
   &__title {
     color: #fff;
     margin-top: 0;
     padding-top: 30px;
-    z-index: 99999;
+    z-index: 20; // Đảm bảo tiêu đề nổi lên trên nếu cần
     position: relative;
   }
 
   &__content {
-    position: relative;
+    position: relative; // Cần thiết cho việc định vị tuyệt đối các nút bấm
 
+    // === PHẦN THÊM VÀO HOẶC SỬA ĐỔI ===
+
+    // Áp dụng style cho chính slider (sử dụng className từ settings)
+    .section-outstanding__slider {
+      // Quan trọng: Ngăn chặn việc tự động căn giữa bằng margin
+      margin-left: 0 !important;  // Ép căn lề trái
+      margin-right: 0 !important; // Đảm bảo không có margin auto bên phải
+      width: 100%; // Cho slider chiếm toàn bộ chiều rộng của container cha (.show-on__content)
+      // Vì các nút bấm được định vị tuyệt đối ra ngoài lề
+
+      .slick-list {
+        // Đảm bảo không có padding/margin mặc định nào của slick-list gây lệch
+        // margin: 0; // Thường slick-list có margin âm để tạo hiệu ứng "nhìn thấy" slide kế tiếp, xóa nếu không muốn
+        // padding: 0 !important; // Chỉ dùng nếu thực sự cần ghi đè padding
+      }
+
+      .slick-track {
+        // Đảm bảo track bắt đầu từ bên trái
+        margin-left: 0;
+        margin-right: 0;
+        display: flex; // Mặc định của slick, nhưng đảm bảo nó là flex
+      }
+
+      // Áp dụng cho div.test bao ngoài mỗi MovieCard
+      .test {
+        padding: 0 5px; // Tạo khoảng cách ngang giữa các slide bằng padding
+        box-sizing: border-box; // Đảm bảo padding không làm tăng kích thước slide
+        // Hoặc bạn có thể dùng margin nếu muốn:
+        // margin: 0 5px;
+      }
+    }
+
+    // === KẾT THÚC PHẦN THÊM/SỬA ===
+
+
+    // Giữ nguyên style cho các nút bấm
     .custom-slick-prev,
     .custom-slick-next {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      z-index: 10;
+      z-index: 10; // Đảm bảo nút nổi trên slider
       color: white;
       font-size: 26px;
       cursor: pointer;
+      // Optional: Thêm nền và bo tròn cho dễ nhìn hơn
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 50%;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       &:hover {
         color: #0bf149;
+        background-color: rgba(0, 0, 0, 0.5); // Đậm hơn khi hover
       }
     }
 
     .custom-slick-prev {
+      // Điều chỉnh vị trí nếu cần, đảm bảo nó nằm ngoài vùng padding của .show-on
       left: -40px;
     }
 
     .custom-slick-next {
+      // Điều chỉnh vị trí nếu cần
       right: -40px;
     }
   }
 }
 
+// Media Queries (Giữ nguyên hoặc điều chỉnh vị trí nút nếu cần)
+
 @media (max-width: 992px) {
   .show-on {
     padding-left: 50px;
     padding-right: 50px;
+
+    &__content {
+      .custom-slick-prev {
+        left: -30px; // Ví dụ: điều chỉnh lại vị trí nút
+      }
+      .custom-slick-next {
+        right: -30px; // Ví dụ: điều chỉnh lại vị trí nút
+      }
+      // Điều chỉnh khoảng cách slide nếu cần
+      .section-outstanding__slider .test {
+        padding: 0 4px;
+      }
+    }
   }
 }
 
@@ -50,14 +113,20 @@
     padding: 0 24px;
 
     &__content {
-      .custom-slick-prev {
-        font-size: 20px;
-        left: -25px;
-      }
-
+      .custom-slick-prev,
       .custom-slick-next {
-        font-size: 20px;
-        right: -20px;
+        font-size: 20px; // Giữ nguyên
+        padding: 3px; // Điều chỉnh padding nút nếu cần
+      }
+      .custom-slick-prev {
+        left: -20px; // Điều chỉnh lại vị trí nút (gốc là -25px)
+      }
+      .custom-slick-next {
+        right: -20px; // Giữ nguyên
+      }
+      // Điều chỉnh khoảng cách slide nếu cần
+      .section-outstanding__slider .test {
+        padding: 0 3px;
       }
     }
   }

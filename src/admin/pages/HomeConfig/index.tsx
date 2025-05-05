@@ -29,6 +29,7 @@ const HomeConfigPage: React.FC = () => {
     const [pageSize, setPageSize] = useState<number>(10);
     const [filters, setFilters] = useState<Record<string, string>>({});
     const navigate = useNavigate();
+    const [showFilter, setShowFilter] = useState(false);
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
 
     const searchFields = [
@@ -280,6 +281,7 @@ const HomeConfigPage: React.FC = () => {
             pageSize,
             onPaginationChange: onPageChange,
         },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
@@ -289,7 +291,9 @@ const HomeConfigPage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/directors`, name: t('admin.homeConfig.title') },
             ]}
         >
-            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

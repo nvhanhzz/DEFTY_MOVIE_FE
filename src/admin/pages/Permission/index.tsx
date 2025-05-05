@@ -7,6 +7,7 @@ import OutletTemplate from '../../templates/Outlet';
 import DataListTemplate from '../../templates/DataList';
 import type { DataListConfig } from '../../templates/DataList';
 import { LoadingOutlined } from '@ant-design/icons';
+import SearchFormTemplate from "../../templates/Search";
 
 export interface Permission {
     id: string;
@@ -20,15 +21,28 @@ const PermissionsPage: React.FC = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
+    const [showFilter, setShowFilter] = useState(false);
+    const [filters, setFilters] = useState<Record<string, string>>({});
+    const [initialValues, setInitialValues] = useState<Record<string, any>>({});
     const [searchKeyword, setSearchKeyword] = useState<string>(''); // State cho từ khóa tìm kiếm
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
 
-    const fetchData = async (page: number, pageSize: number) => {
+
+    const searchFields = [
+        {
+            type: 'input',
+            label: t('admin.permission.nameColumn'),
+            name: 'name',
+            placeholder: t('admin.permission.nameColumn'),
+        }
+    ];
+
+    const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
         setIsLoading(true);
         try {
-            const response = await getPermissions(page, pageSize); // Gọi API với từ khóa
+            const response = await getPermissions(page, pageSize, filters); // Gọi API với từ khóa
             const result = await response.json();
             const content: Permission[] = result.data.content;
             const permissions = content.map((item: any) => ({
@@ -49,16 +63,29 @@ const PermissionsPage: React.FC = () => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
         const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
-        const keywordFromUrl = searchParams.get('keyword') || ''; // Lấy từ khóa tìm kiếm từ URL
+        const filtersFromUrl: Record<string, string> = {};
+        const initialSearchValues: Record<string, any> = {};
+
+        searchParams.forEach((value, key) => {
+            if (key !== 'page' && key !== 'size') {
+                filtersFromUrl[key] = value;
+                const field = searchFields.find((f) => f.name === key);
+                if (field) {
+                    initialSearchValues[key] = value;
+                }
+            }
+        });
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
-        setSearchKeyword(keywordFromUrl); // Cập nhật từ khóa tìm kiếm
+        setFilters(filtersFromUrl);
+        setInitialValues(initialSearchValues);
     }, [location.search]);
 
     useEffect(() => {
-        fetchData(currentPage, pageSize); // Gọi fetchData với từ khóa tìm kiếm
-    }, [currentPage, pageSize, searchKeyword]);
+        fetchData(currentPage, pageSize, filters);
+    }, [currentPage, pageSize, filters]);
+
 
     const handleUpdate = (id: string) => {
         navigate(`update/${id}`);
@@ -95,11 +122,19 @@ const PermissionsPage: React.FC = () => {
         navigate(`?page=${page}&pageSize=${pageSize || 10}&keyword=${searchKeyword}`); // Cập nhật URL với từ khóa tìm kiếm
     };
 
-    // Hàm xử lý tìm kiếm
-    const handleSearch = (keyword: string) => {
-        setSearchKeyword(keyword);
-        setCurrentPage(1); // Reset lại trang về 1 khi tìm kiếm
-        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`); // Cập nhật URL khi tìm kiếm
+    const handleSearch = (newFilters: Record<string, any>) => {
+        setCurrentPage(1);
+        setFilters(newFilters);
+
+        const queryParams = new URLSearchParams();
+        queryParams.append('page', '1');
+        queryParams.append('size', pageSize.toString());
+
+        Object.entries(newFilters).forEach(([key, value]) => {
+            if (value) queryParams.append(key, value.toString());
+        });
+
+        navigate(`?${queryParams.toString()}`);
     };
 
     const dataListConfig: DataListConfig<Permission> = {
@@ -130,17 +165,14 @@ const PermissionsPage: React.FC = () => {
         rowKey: 'id',
         onCreateNew: handleCreateNewPermission,
         onUpdate: handleUpdate,
-        onDeleteSelected: handleDeleteSelected, // Sử dụng onDeleteSelected thay vì onDelete
-        search: {
-            keyword: searchKeyword, // Truyền từ khóa tìm kiếm vào cấu hình
-            onSearch: handleSearch, // Hàm tìm kiếm
-        },
+        onDeleteSelected: handleDeleteSelected,
         pagination: {
-            currentPage: currentPage,
-            totalItems: totalItems,
-            pageSize: pageSize,
+            currentPage,
+            totalItems,
+            pageSize,
             onPaginationChange: onPageChange,
-        }
+        },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
@@ -150,6 +182,9 @@ const PermissionsPage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/permissions`, name: t('admin.permission.title') }
             ]}
         >
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

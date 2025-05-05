@@ -27,6 +27,7 @@ const ArticlesPage: React.FC = () => {
     const [filters, setFilters] = useState<Record<string, string>>({});
     const navigate = useNavigate();
     const location = useLocation();
+    const [showFilter, setShowFilter] = useState(false);
     const { t } = useTranslation();
     const [initialValues, setInitialValues] = useState<Record<string, any>>({});
 
@@ -245,6 +246,7 @@ const ArticlesPage: React.FC = () => {
             pageSize: pageSize,
             onPaginationChange: onPageChange,
         },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
@@ -254,7 +256,9 @@ const ArticlesPage: React.FC = () => {
                 { path: `${import.meta.env.VITE_PREFIX_URL_ADMIN}/articles`, name: t('admin.article.title') },
             ]}
         >
-            <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />

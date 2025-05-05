@@ -36,7 +36,6 @@ import CreateActor from "../pages/Actor/Create";
 import UpdateActor from "../pages/Actor/Update";
 import Test from "../pages/Test";
 import UserPage from "../pages/User";
-import Profile from "../pages/Profile";
 import UpdateProfile from "../pages/Profile/Update";
 import Banner from "../pages/Banner";
 import CreateBanner from "../pages/Banner/Create";
@@ -250,14 +249,6 @@ const DefaultRoutes: RouteType[] = [
         path: 'profile',
         element: <UpdateProfile />
     },
-    // {
-    //     path: 'profile/update',
-    //     element: <UpdateProfile />
-    // },
-    // {
-    //     path: 'settings',
-    //     element: <SettingPage />,
-    // },
     {
         path: '',
         element: <DashboardPage />,

@@ -3,7 +3,8 @@ import React from 'react';
 const Favorites: React.FC = () => {
     return (
         <>
-            <h1 className="title">Sưu tập của tôi</h1>
+            {/* Title translated */}
+            <h1 className="title">My Favorites</h1>
         </>
     );
 }

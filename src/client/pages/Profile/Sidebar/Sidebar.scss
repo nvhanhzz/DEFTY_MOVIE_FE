@@ -1,19 +1,34 @@
+// --- SCSS Variables (Keep yours) ---
 $menu-color: #a3a4a7;
 $menu-hover-color: #00ff6a;
 $menu-bg-hover: rgba(255, 255, 255, 0.1);
 $menu-active-color: #ffffff; // Màu chữ khi mục được chọn
 $menu-active-bg: rgba(0, 255, 106, 0.2); // Nền khi mục được chọn
+$sidebar-width-desktop: 230px;
+$sidebar-width-mobile-collapsed: 80px; // Width when collapsed on mobile
+$sidebar-width-mobile-expanded: 250px; // Width when expanded on mobile
+$header-height-desktop: 72px; // Adjust if needed
+$header-height-mobile: 60px; // Adjust if needed
 
+// --- Base Sidebar Styles ---
 .sidebar {
-  margin-top: 72px;
-  width: 230px;
+  // Remove margin-top: 72px; Use sticky positioning instead
+  width: $sidebar-width-desktop;
   background-color: #1a1c22;
-  padding: 20px;
+  padding: 20px 10px; // Adjust padding
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 10;
+  z-index: 1000; // Ensure it's above overlay
+  flex-shrink: 0; // Prevent shrinking
+  transition: width 0.3s ease-in-out, left 0.3s ease-in-out; // Add width transition
+
+  // Sticky positioning for desktop
+  position: sticky;
+  top: $header-height-desktop;
+  height: calc(100vh - #{$header-height-desktop});
+  align-self: flex-start; // Important for sticky
 
   .box-vip {
     font-size: 16px;
@@ -22,10 +37,12 @@ $menu-active-bg: rgba(0, 255, 106, 0.2); // Nền khi mục được chọn
     border: 1px solid #f2bf83;
     background-color: #f2bf83;
     border-radius: 3px;
-    padding: 10px 25px;
+    padding: 10px 0; // Adjust padding
     text-align: center;
     font-weight: 700;
-    width: 90%;
+    width: 90%; // Relative width
+    cursor: pointer;
+    transition: background-color 0.3s, opacity 0.3s, height 0.3s, padding 0.3s, margin 0.3s; // Add transitions
 
     &:hover {
       background-color: #e5b478;
@@ -36,88 +53,405 @@ $menu-active-bg: rgba(0, 255, 106, 0.2); // Nền khi mục được chọn
     list-style: none;
     padding: 0;
     width: 100%;
-    margin-left: 20px;
+    // Remove margin-left: 20px; Control alignment via flex/padding
+    margin: 0;
 
     .menu-item {
       position: relative;
       display: flex;
       align-items: center;
       font-size: 16px;
-      margin: 15px 0;
+      margin: 5px 0; // Reduce margin slightly
       color: $menu-color;
-      transition: color 0.3s, background-color 0.3s;
+      transition: color 0.3s, background-color 0.3s, padding 0.3s;
       border-radius: 5px;
+      padding: 10px; // Consistent padding
+      overflow: hidden; // Hide text overflow during transition
+      cursor: pointer;
 
       .menu-icon {
-        font-size: 18px;
-        margin-right: 10px;
+        font-size: 20px; // Slightly larger icon
+        margin-right: 15px; // Space between icon and text
         color: $menu-color;
-        transition: color 0.3s;
-
-        &:hover {
-          color: $menu-hover-color;
-        }
+        transition: color 0.3s, margin 0.3s;
+        flex-shrink: 0; // Prevent icon from shrinking
       }
 
-      a {
+      // Target the Link text
+      .menu-link-text {
         color: $menu-color;
         text-decoration: none;
-        width: 100%;
-        padding: 15px 0;
-        transition: color 0.3s, padding-left 0.3s;
-
-        &:hover {
-          color: $menu-hover-color;
-          padding-left: 10px;
-        }
+        white-space: nowrap; // Prevent text wrapping
+        transition: color 0.3s, opacity 0.3s ease-in-out;
+        opacity: 1; // Visible by default
       }
 
       &:hover {
         color: $menu-hover-color;
         background-color: $menu-bg-hover;
-        padding-left: 10px;
 
         .menu-icon {
+          color: $menu-hover-color;
+        }
+        .menu-link-text {
           color: $menu-hover-color;
         }
       }
 
       &.active {
         background-color: $menu-active-bg;
-        color: $menu-hover-color;
-        padding-left: 10px;
+        color: $menu-hover-color; // Use hover color for consistency or active color
 
         .menu-icon {
           color: $menu-active-color;
         }
 
-        a {
+        .menu-link-text {
           color: $menu-active-color;
           font-weight: 700;
         }
       }
 
-      &:first-child:after {
+      // Separator lines (adjust positioning if needed)
+      &:first-child::after, &:last-child::before {
         content: "";
         position: absolute;
-        bottom: -7px;
-        left: 0;
-        width: 100%;
+        left: 10px; // Indent separator
+        right: 10px; // Indent separator
+        width: auto; // Let left/right define width
         height: 1px;
         background-color: #535151;
         opacity: 0.5;
       }
+      &:first-child::after { bottom: -3px; } // Adjust position
+      &:last-child::before { top: -3px; } // Adjust position
+    }
+  }
+}
 
-      &:last-child:before {
-        content: "";
-        position: absolute;
-        top: -7px;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background-color: #535151;
-        opacity: 0.5;
+// --- Mobile Styles ---
+@media (max-width: 768px) {
+  .sidebar {
+    // --- Default Collapsed State on Mobile ---
+    position: fixed; // Fixed position for overlay effect
+    top: 0;
+    left: 0; // Always visible from the left edge
+    width: $sidebar-width-mobile-collapsed; // Narrow width
+    height: 100vh; // Full viewport height
+    padding: 10px 5px; // Reduced padding
+    align-items: center; // Center icons vertically
+    padding-top: $header-height-mobile + 10px; // Space below mobile header
+    box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+
+    .box-vip {
+      // Hide VIP box when collapsed
+      opacity: 0;
+      height: 0;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      border: none;
+    }
+
+    .menu {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center; // Center menu items
+
+      .menu-item {
+        width: 80%; // Make items take most of the collapsed width
+        padding: 12px 0; // Vertical padding, no horizontal
+        justify-content: center; // Center icon within the item
+        margin: 8px 0;
+
+        .menu-icon {
+          margin-right: 0; // No margin needed when text is hidden
+          font-size: 22px; // Make icons slightly larger
+        }
+
+        .menu-link-text {
+          // Hide the text
+          opacity: 0;
+          width: 0;
+          overflow: hidden;
+          position: absolute; // Take out of flow
+        }
+
+        // Hide separators in collapsed mode
+        &:first-child::after, &:last-child::before {
+          display: none;
+        }
       }
     }
+
+    // --- Expanded State on Mobile (.is-open) ---
+    &.is-open {
+      width: $sidebar-width-mobile-expanded; // Expand width
+      align-items: center; // Keep items centered initially, text will align left
+
+      .box-vip {
+        // Show VIP box when expanded
+        opacity: 1;
+        height: auto; // Adjust as needed or remove
+        padding: 10px 0;
+        margin-bottom: 20px; // Restore margin
+        border: 1px solid #f2bf83; // Restore border
+      }
+
+      .menu {
+        align-items: stretch; // Let items stretch to full width
+
+        .menu-item {
+          width: auto; // Reset width
+          padding: 10px; // Restore padding
+          justify-content: flex-start; // Align icon/text to start
+
+          .menu-icon {
+            margin-right: 15px; // Restore margin
+            font-size: 20px; // Restore icon size
+          }
+
+          .menu-link-text {
+            // Show the text
+            opacity: 1;
+            width: auto;
+            position: static; // Back in normal flow
+          }
+
+          // Show separators again if needed
+          &:first-child::after, &:last-child::before {
+            display: block; // Or adjust styles as needed
+          }
+        }
+      }
+    }
+  }
+
+  // Ensure main content doesn't overlap the collapsed sidebar
+  .main-content {
+    margin-left: $sidebar-width-mobile-collapsed;
+    width: calc(100% - #{$sidebar-width-mobile-collapsed}); // Adjust width
+    transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out; // Add transition
+  }
+
+  // Optional: Push main content when sidebar expands (if not using overlay)
+  // If you ARE using the overlay from previous steps, you might not need this push effect
+  /*
+  .main-content.pushed-by-sidebar { // Add this class to main-content via JS when sidebar opens
+      margin-left: $sidebar-width-mobile-expanded;
+      width: calc(100% - #{$sidebar-width-mobile-expanded});
+  }
+  */
+
+  // Adjust toggle button position if needed
+  .sidebar-toggle-button {
+    // Example: move it slightly right if needed
+    // left: $sidebar-width-mobile-collapsed + 10px;
+  }
+}
+
+// --- Desktop Styles (Reset Mobile Changes) ---
+@media (min-width: 769px) {
+  .sidebar {
+    // Ensure desktop styles are applied
+    position: sticky; // Back to sticky
+    left: auto; // Reset position
+    width: $sidebar-width-desktop; // Restore desktop width
+    height: calc(100vh - #{$header-height-desktop});
+    top: $header-height-desktop;
+    padding: 20px 10px; // Restore padding
+    align-items: center; // Restore alignment
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1); // Restore shadow if changed
+
+    .box-vip {
+      opacity: 1;
+      height: auto;
+      padding: 10px 0;
+      margin-bottom: 20px;
+      border: 1px solid #f2bf83;
+    }
+
+    .menu {
+      align-items: stretch;
+      width: 100%;
+
+      .menu-item {
+        width: auto;
+        padding: 10px;
+        justify-content: flex-start;
+
+        .menu-icon {
+          margin-right: 15px;
+          font-size: 20px;
+        }
+
+        .menu-link-text {
+          opacity: 1;
+          width: auto;
+          position: static;
+        }
+
+        &:first-child::after, &:last-child::before {
+          display: block; // Ensure separators are visible
+        }
+      }
+    }
+
+    // Ensure .is-open has no effect on desktop width/style
+    &.is-open {
+      width: $sidebar-width-desktop; // Force desktop width
+      // Reset any other mobile-specific .is-open styles if necessary
+    }
+  }
+
+  // Reset main content margin/width for desktop
+  .main-content {
+    margin-left: 0; // No margin needed as sidebar is part of flex flow
+    width: auto; // Let flexbox handle width (flex: 1)
+    // Remove any transition if applied only for mobile push
+    // transition: none;
+  }
+}
+
+// --- Biến SCSS (Giả định đã được định nghĩa ở nơi khác) ---
+$sidebar-width-mobile-collapsed: 80px;
+$header-height-mobile: 60px; // Hoặc giá trị thực tế của bạn
+$tooltip-bg: #333;
+$tooltip-color: #fff;
+$menu-color: #a3a4a7; // Cần thiết cho màu chữ tooltip mặc định nếu kế thừa
+
+// --- Chỉ bao gồm các kiểu Mobile cần thiết cho hiệu ứng hover ---
+@media (max-width: 768px) {
+  .sidebar {
+    // Chỉ các thuộc tính cần thiết để định vị và cho phép overflow
+    // Giả sử các thuộc tính khác như position: fixed, width, v.v. đã được đặt
+    // overflow: hidden; // Đảm bảo thuộc tính này KHÔNG được đặt ở đây hoặc trên .sidebar
+
+    .menu {
+      // Không cần thay đổi .menu cho hiệu ứng hover này
+
+      .menu-item {
+        // Cần position: relative để định vị tooltip con
+        position: relative;
+        // Cho phép nội dung con (tooltip) hiển thị bên ngoài phần tử cha
+        overflow: visible;
+        // Các kiểu khác (width, padding, justify-content, margin) cho trạng thái thu gọn
+        width: 80%; // Hoặc giá trị phù hợp
+        padding: 12px 0;
+        justify-content: center;
+        margin: 8px 0;
+
+        .menu-icon {
+          // Kiểu dáng icon cơ bản khi thu gọn
+          margin-right: 0;
+          font-size: 22px;
+          z-index: 2; // Đảm bảo icon ở trên tooltip nếu cần
+          position: relative;
+        }
+
+        .menu-link-text {
+          // --- Kiểu dáng Tooltip Mặc định (Ẩn) ---
+          // Ẩn đi và không chiếm không gian
+          opacity: 0;
+          visibility: hidden; // Ẩn hoàn toàn khỏi DOM ảo và sự kiện
+          width: 0; // Không chiếm chiều rộng
+          overflow: hidden; // Ẩn nội dung tràn ra
+          position: absolute; // Định vị tuyệt đối so với .menu-item
+          pointer-events: none; // Không thể tương tác khi ẩn
+
+          // --- Định vị Tooltip ---
+          left: 100%; // Đặt ngay bên phải của .menu-item
+          top: 50%; // Căn giữa theo chiều dọc (bước 1)
+          transform: translateY(-50%); // Căn giữa theo chiều dọc (bước 2)
+          margin-left: 8px; // Khoảng cách nhỏ giữa icon và tooltip
+
+          // --- Kiểu dáng Ngoại hình Tooltip ---
+          background-color: $tooltip-bg;
+          color: $tooltip-color;
+          padding: 5px 10px;
+          border-radius: 4px;
+          font-size: 14px;
+          white-space: nowrap; // Đảm bảo văn bản không xuống dòng
+          box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+          z-index: 1100; // Đảm bảo tooltip hiển thị trên các phần tử khác
+
+          // --- Hiệu ứng chuyển động ---
+          transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+        }
+
+        // --- Hiệu ứng HOVER ---
+        // Khi hover vào .menu-item (và sidebar KHÔNG ở trạng thái .is-open)
+        &:hover .menu-link-text {
+          opacity: 1; // Làm cho tooltip hiện rõ
+          visibility: visible; // Làm cho tooltip hiển thị
+          width: auto; // Chiều rộng tự động theo nội dung
+          pointer-events: auto; // Cho phép tương tác nếu cần (thường không cần cho tooltip tĩnh)
+        }
+      }
+    }
+
+    // --- Quan trọng: Reset trong trạng thái Mở rộng (.is-open) ---
+    // Đảm bảo các kiểu tooltip không áp dụng khi sidebar được mở rộng
+    &.is-open {
+      .menu-item {
+        overflow: hidden; // Ẩn overflow trở lại khi mở rộng
+
+        .menu-link-text {
+          // Reset về kiểu văn bản bình thường
+          opacity: 1;
+          visibility: visible;
+          width: auto;
+          position: static; // Quay lại luồng bình thường
+          transform: none;
+          background-color: transparent;
+          color: $menu-color; // Reset màu (sẽ được ghi đè bởi :hover/:active của cha)
+          padding: 0;
+          border-radius: 0;
+          font-size: 16px; // Kích thước font bình thường
+          box-shadow: none;
+          margin-left: 0;
+          pointer-events: auto;
+          white-space: normal; // Cho phép xuống dòng nếu cần
+          transition: none; // Xóa transition của tooltip
+        }
+
+        // Đảm bảo màu chữ đúng khi hover/active lúc sidebar mở rộng
+        &:hover .menu-link-text { color: inherit; }
+        &.active .menu-link-text { /* màu active */ }
+        &:hover:not(.active) .menu-link-text { /* màu hover */ }
+      }
+    }
+  }
+}
+
+// --- Reset trên Desktop ---
+// Đảm bảo tooltip không hoạt động trên desktop
+@media (min-width: 769px) {
+  .sidebar .menu .menu-item {
+    overflow: hidden; // Luôn ẩn overflow trên desktop
+
+    .menu-link-text {
+      // Reset hoàn toàn các kiểu tooltip
+      opacity: 1;
+      visibility: visible;
+      width: auto;
+      position: static;
+      transform: none;
+      background-color: transparent;
+      // color: $menu-color; // Màu cơ bản
+      padding: 0;
+      border-radius: 0;
+      font-size: 16px;
+      box-shadow: none;
+      margin-left: 0;
+      pointer-events: auto;
+      white-space: nowrap; // Hoặc normal tùy thiết kế desktop
+      transition: color 0.3s, opacity 0.3s ease-in-out; // Transition bình thường
+    }
+
+    // Reset hover effect trên text
+    &:hover .menu-link-text { color: inherit; }
+    // Các màu active/hover khác cho desktop
   }
 }

@@ -94,7 +94,16 @@
             "successMessage": "Đăng xuất thành công!"
         },
         "dashboard": {
-            "title": "Tổng quan"
+            "title": "Tổng quan",
+            "totalUsers": "Tổng số người dùng",
+            "totalMovies": "Tổng số phim",
+            "totalDirectors": "Tổng số đạo diễn",
+            "totalActors": "Tổng số diễn viên",
+            "totalCategories": "Tổng số danh mục",
+            "totalMembershipPackets": "Tổng số gói thành viên",
+            "totalEpisodes": "Tổng số tập phim",
+            "totalArticles": "Tổng số bài viết",
+            "totalBanners": "Tổng số biểu ngữ"
         },
         "account": {
             "title": "Tài khoản",

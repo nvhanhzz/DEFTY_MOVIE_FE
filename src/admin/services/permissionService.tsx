@@ -1,23 +1,22 @@
 import {Permission} from "../pages/Permission/Create";
 import {del, get, patchJson, postJson} from "../utils/request";
+import handleRequest from "../utils/handleRequest.tsx";
+import {getWithParams} from "../utils/getWithParams.tsx";
 
 const PREFIX_PERMISSION: string = import.meta.env.VITE_PREFIX_PERMISSION as string;
 
-export const getPermissions = async (page?: number, pageSize?: number): Promise<Response> => {
-    try {
-        let url = `${PREFIX_PERMISSION}`;
-
-        if (page !== undefined && pageSize !== undefined) {
-            const queryParams = new URLSearchParams();
-            queryParams.append("page", (page - 1).toString());
-            queryParams.append("size", pageSize.toString());
-            url += `?${queryParams.toString()}`;
-        }
-        return await get(url);
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+export const getPermissions = async (
+    page?: number,
+    size?: number,
+    filters?: Record<string, string | number>
+): Promise<Response> => {
+    const url = `${PREFIX_PERMISSION}`;
+    const params = {
+        page,
+        size,
+        ...filters,
+    };
+    return handleRequest(getWithParams(url, params));
 };
 
 export const postPermission = async (option: Permission): Promise<Response> => {

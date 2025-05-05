@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, message, Spin, Switch} from 'antd';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import OutletTemplate from '../../templates/Outlet';
+import type {DataListConfig} from '../../templates/DataList';
 import DataListTemplate from '../../templates/DataList';
-import type { DataListConfig } from '../../templates/DataList';
-import { LoadingOutlined } from '@ant-design/icons';
+import {LoadingOutlined} from '@ant-design/icons';
 import {deleteAccounts, getAccounts, switchStatusAccount} from '../../services/accountService.tsx';
 import {Role} from "../Role";
+import SearchFormTemplate from "../../templates/Search";
 
 const PREFIX_URL_ADMIN: string = import.meta.env.VITE_PREFIX_URL_ADMIN as string;
 
@@ -31,16 +32,26 @@ const AccountPage: React.FC = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
-    const [searchKeyword, setSearchKeyword] = useState<string>(''); // Thêm state lưu từ khóa tìm kiếm
+    const [filters, setFilters] = useState<Record<string, string>>({});
+    const [showFilter, setShowFilter] = useState(false);
+    const [initialValues, setInitialValues] = useState<Record<string, any>>({});
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
 
-    // Hàm fetch dữ liệu, bao gồm cả tìm kiếm
-    const fetchData = async (page: number, pageSize: number, keyword?: string) => {
+    const searchFields = [
+        {
+            type: 'input',
+            label: t('admin.account.username'),
+            name: 'username',
+            placeholder: t('admin.account.username'),
+        }
+    ];
+
+    const fetchData = async (page: number, pageSize: number, filters: Record<string, string>) => {
         setIsLoading(true);
         try {
-            const response = await getAccounts(page, pageSize, 'username', keyword);
+            const response = await getAccounts(page, pageSize, filters);
             if (!response.ok) {
                 message.error(t('admin.message.fetchError'));
                 return;
@@ -65,15 +76,28 @@ const AccountPage: React.FC = () => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
         const pageSizeFromUrl = parseInt(searchParams.get('pageSize') || '10', 10);
-        const keywordFromUrl = searchParams.get('keyword') || ''; // Lấy từ khóa tìm kiếm từ URL
+        const filtersFromUrl: Record<string, string> = {};
+        const initialSearchValues: Record<string, any> = {};
+
+        searchParams.forEach((value, key) => {
+            if (key !== 'page' && key !== 'size') {
+                filtersFromUrl[key] = value;
+                const field = searchFields.find((f) => f.name === key);
+                if (field) {
+                    initialSearchValues[key] = value;
+                }
+            }
+        });
 
         setCurrentPage(pageFromUrl);
         setPageSize(pageSizeFromUrl);
-        setSearchKeyword(keywordFromUrl); // Đặt từ khóa tìm kiếm trong state
-
-        // Fetch dữ liệu ban đầu
-        fetchData(pageFromUrl, pageSizeFromUrl, keywordFromUrl);
+        setFilters(filtersFromUrl);
+        setInitialValues(initialSearchValues);
     }, [location.search]);
+
+    useEffect(() => {
+        fetchData(currentPage, pageSize, filters);
+    }, [currentPage, pageSize, filters]);
 
     const handleUpdate = (id: string) => {
         navigate(`update/${id}`);
@@ -125,17 +149,26 @@ const AccountPage: React.FC = () => {
             setIsLoading(false);
         }
     };
+
     const onPageChange = (page: number, pageSize?: number) => {
-        const keyword = searchKeyword || '';
         setCurrentPage(page);
         setPageSize(pageSize || 10);
-        navigate(`?page=${page}&pageSize=${pageSize || 10}&keyword=${keyword}`);
+        navigate(`?page=${page}&pageSize=${pageSize || 10}`);
     };
 
-    const handleSearch = (keyword: string) => {
-        setSearchKeyword(keyword);
-        setCurrentPage(1); // Reset lại trang hiện tại về trang 1 khi tìm kiếm
-        navigate(`?page=1&pageSize=${pageSize}&keyword=${keyword}`);
+    const handleSearch = (newFilters: Record<string, any>) => {
+        setCurrentPage(1);
+        setFilters(newFilters);
+
+        const queryParams = new URLSearchParams();
+        queryParams.append('page', '1');
+        queryParams.append('size', pageSize.toString());
+
+        Object.entries(newFilters).forEach(([key, value]) => {
+            if (value) queryParams.append(key, value.toString());
+        });
+
+        navigate(`?${queryParams.toString()}`);
     };
 
     const dataListConfig: DataListConfig<Account> = {
@@ -215,7 +248,6 @@ const AccountPage: React.FC = () => {
                 dataIndex: 'status',
                 key: 'status',
                 align: 'center',
-                sorter: (a: Role, b: Role) => a.status - b.status,
                 render: (status, record) => (
                     <Switch
                         checked={status === 1}
@@ -230,16 +262,13 @@ const AccountPage: React.FC = () => {
         onUpdate: handleUpdate,
         // Bỏ onDelete đi vì xóa tất cả thông qua onDeleteSelected
         onDeleteSelected: handleDeleteSelected,
-        search: {
-            keyword: searchKeyword,
-            onSearch: handleSearch,
-        },
         pagination: {
-            currentPage: currentPage,
-            totalItems: totalItems,
-            pageSize: pageSize,
+            currentPage,
+            totalItems,
+            pageSize,
             onPaginationChange: onPageChange,
         },
+        onToggleFilter: () => setShowFilter(prev => !prev),
     };
 
     return (
@@ -249,6 +278,9 @@ const AccountPage: React.FC = () => {
                 { path: `${PREFIX_URL_ADMIN}/accounts`, name: t('admin.account.title') },
             ]}
         >
+            {showFilter && (
+                <SearchFormTemplate fields={searchFields} onSearch={handleSearch} initialValues={initialValues} />
+            )}
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '75vh' }}>
                     <Spin indicator={<LoadingOutlined spin />} />
