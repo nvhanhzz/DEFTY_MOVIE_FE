@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./Profile.scss"; // Import SCSS
 import Sidebar from "./Sidebar"; // Import Sidebar component
-import { Outlet } from "react-router-dom";
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons'; // Icons cho nút toggle
+import {Outlet, useNavigate} from "react-router-dom";
+import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
+import useUserStore from "../../store/UserStore.tsx"; // Icons cho nút toggle
 
 const Profile: React.FC = () => {
+    const user = useUserStore(state => state.user);
+    const isLoading = useUserStore(state => state.isLoading);
+    const navigate = useNavigate();
     // State quản lý trạng thái mở/đóng của sidebar trên mobile
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     // State xác định có phải màn hình mobile không
@@ -19,6 +23,14 @@ const Profile: React.FC = () => {
             setIsSidebarOpen(false);
         }
     }, []);
+
+    useEffect(() => {
+        // Chỉ thực hiện kiểm tra KHI loading đã hoàn thành (isLoading = false)
+        if (!isLoading && !user) {
+            console.log("Profile: Not loading and no user, redirecting to /");
+            navigate('/');
+        }
+    }, [user, isLoading, navigate]);
 
     // Lắng nghe sự kiện resize
     useEffect(() => {
@@ -46,6 +58,18 @@ const Profile: React.FC = () => {
             document.body.style.overflow = '';
         };
     }, [isSidebarOpen, isMobile]);
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                Loading Profile Information...
+            </div>
+        );
+    }
+
+    if (!user) {
+        return null;
+    }
 
     return (
         <>

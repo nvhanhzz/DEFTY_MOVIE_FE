@@ -1,214 +1,284 @@
-.card,
- .vip-card,
- .account-info {
-   background-color: #1a1c22;
-   padding: 20px;
-   margin: 0 80px 50px;
-   border-radius: 8px;
- }
+// --- Variables (Define or import from your project's theme) ---
+$card-background: #1a1c22;
+$text-primary: #ffffff;
+$text-secondary: #73757A;
+$text-muted: #cccccc;
+$border-color: #333333;
+$button-primary-bg: #b35438;
+$button-primary-hover-bg: #e64a19;
+$button-delete-bg: #cc2233; // Example delete button color
+$button-delete-hover-bg: #ac1120;
+$vip-card-bg: #ECBF82;
+$vip-card-text: #000;
+$vip-button-bg: #ffffff;
+$vip-button-hover-bg: #f0f0f0;
+$avatar-size: 60px; // Variable for avatar size
+$placeholder-bg: #2e2e2e; // Background for placeholder
+$placeholder-text: #ffffff; // Text color for placeholder initial
 
-.cardContainer {
-  .cardTitle {
-    font-size: 14px;
-    margin-left: 80px;
-    margin-bottom: 10px;
-    color: #FFFFFF;
+// --- Base Styles & Title ---
+.personal-settings { // Optional top-level wrapper if needed
+
+  &__title {
+    font-size: 24px; // Example size
+    color: $text-primary;
+    margin-bottom: 30px;
+    margin-left: 80px; // Keep consistent margin if desired
   }
 
-  .card {
-    background-color: #1a1c22;
-    border-radius: 10px;
+  // --- Common Card Styles ---
+  &__card,
+  &__vip-card,
+  &__account-info {
+    background-color: $card-background;
     padding: 20px;
-    color: #ffffff;
+    margin: 0 80px 50px; // Keep consistent margin if desired
+    border-radius: 8px;
+  }
+
+  // --- Personal Info Card Section ---
+  &__card-container {
+    .personal-settings__card-title { // Target title within this container
+      font-size: 14px;
+      margin-left: 80px;
+      margin-bottom: 10px;
+      color: $text-primary;
+    }
+  }
+
+  &__card { // Specific styles for the personal info card
+    color: $text-primary;
+    display: flex;
+    flex-direction: column; // Should contain info-container
+  }
+
+  &__info-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  // --- Avatar Styles (Updated) ---
+  &__avatar-container {
+    width: $avatar-size;
+    height: $avatar-size;
+    border-radius: 50%;
+    margin-right: 20px;
+    flex-shrink: 0; // Prevent shrinking
+    position: relative; // For placeholder positioning
+    overflow: hidden; // Clip contents to circle
+    background-color: $placeholder-bg; // Background shown before image loads or if it fails
+  }
+
+  &__avatar-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block; // Remove extra space
+  }
+
+  &__avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: $placeholder-bg; // Same as container background
+    color: $placeholder-text;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: calc($avatar-size * 0.5); // Adjust font size relative to avatar
+    text-transform: uppercase;
+    position: absolute; // Overlay the image area
+    top: 0;
+    left: 0;
+    display: none; // Hidden by default, shown via inline style
+  }
+  // --- End Avatar Styles ---
+
+
+  &__details {
+    flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 5px;
+  }
 
-    .infoContainer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+  &__details-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: $text-primary;
+    margin-bottom: 5px;
+  }
 
-      .avatar {
-        margin-right: 20px;
+  &__details-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
 
-        .avatarImage {
-          width: 60px;
-          height: 60px;
-          border-radius: 50%;
-          object-fit: cover;
-          background-color: #2e2e2e;
-        }
-      }
+    p {
+      margin: 0;
+      font-size: 14px;
+      color: $text-secondary;
 
-      .details {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-
-        .details-name {
-          font-size: 16px;
-          font-weight: bold;
-          color: #ffffff;
-          margin-bottom: 5px;
-        }
-
-        .details-info {
-          display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          gap: 10px;
-
-          p {
-            margin: 0;
-            font-size: 14px;
-            color: #73757A;
-
-            span {
-              color: #ffffff;
-            }
-          }
-
-          .separator {
-            color: #666666;
-          }
-        }
-      }
-
-      .editButton {
-        margin-left: 20px;
-        background-color: #b35438;
-        color: #ffffff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 15px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-
-        &:hover {
-          background-color: #e64a19;
-        }
+      span {
+        color: $text-primary;
       }
     }
   }
-}
-.vip-container {
 
-  .vip-title {
-    font-size: 14px;
-    color: #ffffff;
-    margin-left: 80px;
+  &__separator { // Specific class for separator
+    color: #666666; // Or use a variable
   }
 
-  .vip-card {
+  &__edit-button {
+    margin-left: 20px;
+    background-color: $button-primary-bg;
+    color: $text-primary;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: $button-primary-hover-bg;
+    }
+  }
+
+
+  // --- VIP Section ---
+  &__vip-container {
+    .personal-settings__vip-title { // Target title within this container
+      font-size: 14px;
+      color: $text-primary;
+      margin-left: 80px;
+      margin-bottom: 10px; // Add margin like other titles
+    }
+  }
+
+  &__vip-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #ECBF82;
+    background: $vip-card-bg;
     border-radius: 10px;
     padding: 15px;
-    color: #000;
-    font-family: Arial, sans-serif;
+    color: $vip-card-text;
+    font-family: Arial, sans-serif; // Consider using project font
+  }
 
-    .vip-card-content {
-      h3 {
-        margin: 8px 0 8px 15px;
-        font-size: 18px;
-        font-weight: bold;
-      }
-
-      p {
-        margin: 8px 0 8px 15px;
-        //margin: 5px 0 0;
-        font-size: 16px;
-      }
-    }
-
-    .vip-card-button {
-      background: #ffffff;
-      color: #000;
-      border: none;
-      border-radius: 5px;
-      padding: 10px 20px;
-      font-size: 16px;
+  &__vip-card-content {
+    h3 {
+      margin: 8px 0 8px 15px;
+      font-size: 18px;
       font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    }
 
-      &:hover {
-        background: #f0f0f0;
-      }
+    p {
+      margin: 8px 0 8px 15px;
+      font-size: 16px;
     }
   }
-}
 
-
-.account-info-container {
-  margin-top: 20px;
-  margin-bottom: 60px;
-
-  .account-info-title {
-    font-size: 14px;
+  &__vip-card-button {
+    background: $vip-button-bg;
+    color: $vip-card-text;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
     font-weight: bold;
-    margin-left: 80px;
-    color: #FFFFFF;
-    margin-bottom: 10px;
+    cursor: pointer;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s; // Add transition
+
+    &:hover {
+      background: $vip-button-hover-bg;
+    }
   }
 
-  .account-info {
-    background-color: #1A1C22;
+  // --- Account Info Section ---
+  &__account-info-container {
+    margin-top: 20px;
+    margin-bottom: 60px;
+
+    .personal-settings__account-info-title { // Target title within this container
+      font-size: 14px;
+      font-weight: bold;
+      margin-left: 80px;
+      color: $text-primary;
+      margin-bottom: 10px;
+    }
+  }
+
+  &__account-info { // Styles for the card itself
+    background-color: $card-background; // Re-use card background
     border-radius: 10px;
     padding: 20px;
+  }
 
-    .account-info-table {
-      width: 100%;
-      border-collapse: collapse;
+  &__account-info-table {
+    width: 100%;
+    border-collapse: collapse;
 
+    td {
+      padding: 15px 10px; // Increased padding for better spacing
+      font-size: 16px;
+      color: $text-muted;
+      border-bottom: 1px solid $border-color; // Use variable
 
-      td {
-        padding: 10px;
+      p { // Style for the label text within the first td
+        margin: 0;
         font-size: 16px;
-        color: #cccccc;
-        border-bottom: 1px solid #333333;
-
-        p {
-          margin: 0;
-          font-size: 16px;
-          color: #73757A;
-        }
-
-        &:first-child {
-          width: 30%;
-          font-weight: bold;
-          color: #ffffff;
-        }
-
-        &:last-child {
-          text-align: right;
-          width: 20%;
-        }
+        color: $text-secondary; // Use secondary text color for labels
       }
 
-      tr:last-child td {
-        border-bottom: none;
+      &:first-child { // Label column
+        width: 30%;
+        font-weight: normal; // Remove bold from td itself
+        color: $text-secondary; // Use secondary text color
+        // p inside first-child is already styled above
+      }
+
+      &:nth-child(2) { // Value column
+        color: $text-primary; // Make value text white
+      }
+
+      &:last-child { // Button column
+        text-align: right;
+        width: 20%;
       }
     }
 
-    .action-button {
-      background-color: #b35438;
-      color: #ffffff;
-      border: none;
-      border-radius: 5px;
-      padding: 8px 12px;
-      cursor: pointer;
-      width: 85px;
+    tr:last-child td {
+      border-bottom: none;
+    }
+  }
 
+  &__action-button {
+    background-color: $button-primary-bg;
+    color: $text-primary;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    width: 85px; // Keep fixed width if desired
+    text-align: center; // Ensure text is centered
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: $button-primary-hover-bg;
+    }
+
+    // Modifier for delete button
+    &--delete {
+      background-color: $button-delete-bg;
       &:hover {
-        background-color: #e64a19;
+        background-color: $button-delete-hover-bg;
       }
     }
   }
-}
-
-
-
+} // End of .personal-settings wrapper
