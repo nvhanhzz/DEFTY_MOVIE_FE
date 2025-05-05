@@ -16,7 +16,7 @@ import {
 } from "react-icons/fi"; // Added more icons
 import { FaGoogle, FaFacebook, FaRegUserCircle, FaTransgender } from "react-icons/fa"; // Added more icons
 import './Auth.scss';
-import {getCurrentAccount, postLogin, postLogout, postRegister} from "../../../services/auth.tsx";
+import {getCurrentAccount, postLogin, postLogout, postRegister} from "../../../services/authService.tsx";
 import {message} from "antd"; // Import file SCSS
 import useUserStore, { User } from "../../../store/UserStore.tsx";
 import {useNavigate} from "react-router-dom";

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {useNavigate} from "react-router-dom";
 import { UserOutlined, ClockCircleOutlined, HeartOutlined, BookOutlined, GlobalOutlined, LogoutOutlined } from "@ant-design/icons";
 import "./Sidebar.scss";
-import {postLogout} from "../../../services/auth.tsx";
+import {postLogout} from "../../../services/authService.tsx";
 import {message} from "antd";
 import useUserStore from "../../../store/UserStore.tsx";
 import {FiLoader} from "react-icons/fi"; // Assuming your SCSS file is named this
