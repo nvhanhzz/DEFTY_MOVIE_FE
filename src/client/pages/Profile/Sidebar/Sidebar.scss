@@ -27,7 +27,6 @@ $header-height-mobile: 60px; // Adjust if needed
   // Sticky positioning for desktop
   position: sticky;
   top: $header-height-desktop;
-  height: calc(100vh - #{$header-height-desktop});
   align-self: flex-start; // Important for sticky
 
   .box-vip {
@@ -258,7 +257,7 @@ $header-height-mobile: 60px; // Adjust if needed
     position: sticky; // Back to sticky
     left: auto; // Reset position
     width: $sidebar-width-desktop; // Restore desktop width
-    height: calc(100vh - #{$header-height-desktop});
+    height: calc(100vh - #{$header-height-desktop} + 3px);
     top: $header-height-desktop;
     padding: 20px 10px; // Restore padding
     align-items: center; // Restore alignment
