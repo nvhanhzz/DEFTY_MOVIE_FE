@@ -2,10 +2,12 @@ import {postJson, get, patchJson, del} from "../utils/request.tsx";
 import handleRequest from "../utils/handleRequest.tsx";
 
 const PREFIX_CLIENT_MOVIE_COMMENT: string = import.meta.env.VITE_PREFIX_CLIENT_MOVIE_COMMENT as string;
+const PREFIX_CLIENT_ACCESSIBLE: string = import.meta.env.VITE_PREFIX_CLIENT_ACCESSIBLE as string;
 
 export type Comment = {
     id: number,
     content: string,
+    createdAt: string,
     user: {
         id: number,
         fullName: string,
@@ -25,7 +27,7 @@ export type CommentUpdate = {
 }
 
 export const getCommentByEpisode= async (episodeId: number): Promise<Response> => {
-    return handleRequest(get(`${PREFIX_CLIENT_MOVIE_COMMENT}/${episodeId}`));
+    return handleRequest(get(`${PREFIX_CLIENT_ACCESSIBLE}/${PREFIX_CLIENT_MOVIE_COMMENT}/${episodeId}`));
 };
 
 export const postComment = async (comment: CommentRequest): Promise<Response> => {

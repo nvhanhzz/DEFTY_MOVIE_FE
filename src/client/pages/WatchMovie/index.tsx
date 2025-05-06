@@ -142,7 +142,7 @@ const WatchMovie: React.FC = () => {
                     </div>
 
                     <div className="watch-movie-comments">
-                        <Comments />
+                        <Comments episodeId={episode?.id as number} />
                     </div>
                 </div>
             </div>
